@@ -69,9 +69,19 @@ a:hover {
     color:black;
 }
 
+.collapse {
+  overflow: hidden;
+  max-height: 93vh;
+}
+.collapse .col {
+  overflow: auto;
+  
+}
+
   </style>
   <body class="bootstrap-fs-modal">
-    <div class="row sticky-top navHeader no-gutters">
+    <div class="sticky-top">
+    <div class="row  navHeader no-gutters">
       <div class="col-3 text-left navButton">
         <a href="" class="controlButton p-2">&laquo; Prev</a>
       </div>
@@ -84,7 +94,7 @@ a:hover {
       </div>
     </div>
 
-    <div class="row mx-0 collapse" id="collapseExample">
+    <div class="row mx-0 collapse border-bottom" id="collapseExample">
       <div class="col px-0">
         <div class="list-group list-group-flush">
         <a class="list-group-item list-group-item-action" href="#">Plaza</a>
@@ -102,7 +112,7 @@ a:hover {
         </div>
       </div>
     </div>
-
+</div>
 
       <div class="container mt-2">
 

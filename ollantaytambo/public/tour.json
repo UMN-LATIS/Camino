@@ -1,0 +1,49 @@
+[
+    {
+        "title": "Plaza",
+        "location": [44,45],
+        "stages": [
+        {
+            "type": "navigation",
+            "instructions": {
+                "en": ["This is some blah"],
+                "es": ["lfjkdklfjdka"]
+            },
+            "targetPoint": [44, 44]
+        },
+        {
+            "type": "guide",
+            "instructions": "Heeeeey"
+        },
+        {
+            "type": "gallery",
+            "content": [
+                "img.jpg"
+            ]
+        }
+        ]
+    },
+    {
+        "title": "Overlook 1",
+        "location": [46, 46],
+        "stages": [{
+                "type": "navigation",
+                "instructions": {
+                    "en": ["What the heck?"],
+                    "es": ["lfjkdklfjdka"]
+                },
+                "targetPoint": [44, 44]
+            },
+            {
+                "type": "guide",
+                "instructions": "Yoooo"
+            },
+            {
+                "type": "gallery",
+                "content": [
+                    "img.jpg"
+                ]
+            }
+        ]
+    }
+]

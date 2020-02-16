@@ -1,0 +1,85 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+@import '~bootstrap4-fs-modal/src/sass/bootstrap-fs-modal';
+
+.router-link-exact-active {
+    background-color: $cyan !important;
+}
+
+
+a {
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    /* padding: 8px 16px; */
+}
+
+a:hover {
+    background-color: #816C61;
+    color: white;
+}
+
+.controlButton {
+    color: white;
+}
+
+.navHeader {
+    background-color: #A89B9D;
+    border-bottom: 1px solid#525E3E;
+}
+
+.navToggle {
+    border-left: 1px solid #525E3E;
+    border-right: 1px solid #525E3E;
+
+}
+
+.navButton {}
+
+.navToggle a {
+    color: white;
+}
+
+.dropdown-menu a {
+    color: black;
+}
+
+.container {
+    background-color: white
+}
+
+.wrapper {
+    max-width: 500px;
+
+    width: 100%;
+}
+
+.carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+    display: block !important;
+}
+
+.carousel-caption {
+    position: relative;
+    left: auto;
+    right: auto;
+    color: black;
+}
+
+.collapse {
+    overflow: hidden;
+    max-height: 93vh;
+}
+
+.collapse .col {
+    overflow: auto;
+
+}

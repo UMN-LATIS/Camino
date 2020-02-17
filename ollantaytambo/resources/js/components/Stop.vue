@@ -1,5 +1,5 @@
 <template>
-    <div class="bootstrap-fs-modal">
+    <div class="bootstrap-fs-modal" v-if="tour">
        <navbar :tour="tour" :currentStop="currentStopWithDefault" />     
         <div class="container mt-2" v-if="tour.length > 0">
             <template v-for="(stage, index) in currentStopData.stages" >
@@ -48,7 +48,7 @@
         props: [ "currentStop"],
         data() {
             return {
-                tour: []
+                tour: false
             };
         },
         mounted() {
@@ -61,13 +61,16 @@
         },
         computed: {
             currentStopWithDefault: function() {
-                if(!this.currentStop) {
+                if(this.currentStop == undefined) {
                     return this.tour[0].title;
                 }
                 return this.currentStop;
             },
             currentStopData: function() {
-                return this.tour.find(elem =>  elem.title == this.currentStop);
+                if(this.tour) {
+                    return this.tour.find(elem =>  elem.title == this.currentStopWithDefault);
+                }
+                
             }
         },
         watch: {

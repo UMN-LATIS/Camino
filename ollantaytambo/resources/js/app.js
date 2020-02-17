@@ -34,6 +34,8 @@ Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
+Vue.component('hotwords', require('./components/Hotwords.vue').default);
+Vue.component('hotword', require('./components/Hotword.vue').default);
 
 
 /**

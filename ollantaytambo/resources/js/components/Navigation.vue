@@ -1,7 +1,7 @@
 <template>
     <div>
         <span class="text-muted">Navigation</span>
-        <p v-for="(instruction,index) in stage.instructions[$i18n.locale]" :key="index">
+        <p v-for="(instruction,index) in stage.text[$i18n.locale]" :key="index">
             {{ instruction }}
         </p>
     </div>

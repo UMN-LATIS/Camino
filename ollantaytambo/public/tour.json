@@ -1,26 +1,27 @@
-[
-    {
+[{
         "title": "Plaza",
-        "location": [44,45],
-        "stages": [
-        {
-            "type": "navigation",
-            "instructions": {
-                "en": ["This is some blah"],
-                "es": ["lfjkdklfjdka"]
+        "location": [44, 45],
+        "stages": [{
+                "type": "navigation",
+                "text": {
+                    "en": ["This is some blah", "more blah"],
+                    "es": ["lfjkdklfjdka"]
+                },
+                "targetPoint": [44, 44]
             },
-            "targetPoint": [44, 44]
-        },
-        {
-            "type": "guide",
-            "instructions": "Heeeeey"
-        },
-        {
-            "type": "gallery",
-            "content": [
-                "img.jpg"
-            ]
-        }
+            {
+                "type": "guide",
+                "text": {
+                    "en": ["this is a [test] of [more] things", "more [words] go here"],
+                    "es": ["ldkjfkdsjafs"]
+                }
+            },
+            {
+                "type": "gallery",
+                "content": [
+                    "img.jpg"
+                ]
+            }
         ]
     },
     {
@@ -28,7 +29,7 @@
         "location": [46, 46],
         "stages": [{
                 "type": "navigation",
-                "instructions": {
+                "text": {
                     "en": ["What the heck?"],
                     "es": ["lfjkdklfjdka"]
                 },
@@ -36,7 +37,10 @@
             },
             {
                 "type": "guide",
-                "instructions": "Yoooo"
+                "text": {
+                    "en": ["this is a [test] of things"],
+                    "es": ["ldkjfkdsjafs"]
+                }
             },
             {
                 "type": "gallery",

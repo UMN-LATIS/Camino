@@ -1,7 +1,7 @@
 <template>
     <div class="bootstrap-fs-modal">
        <navbar :tour="tour" :currentStop="currentStopWithDefault" />     
-        <div class="container mt-2">
+        <div class="container mt-2" v-if="tour.length > 0">
             <template v-for="(stage, index) in currentStopData.stages" >
                   <div class="row" :key="index">
                     <div class="col">

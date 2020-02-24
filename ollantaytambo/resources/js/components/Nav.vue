@@ -5,8 +5,7 @@
                 <router-link v-if="previousStop" :to="{ name: 'tour', params: { currentStop: previousStop }}" class="controlButton p-2">&laquo; {{ $t("nav.prev") }} </router-link>
             </div>
             <div class="col-6 text-center navToggle ">
-                <a class="p-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-                    aria-controls="collapseExample">{{ currentStop }}</a>
+                <a class="p-2" v-b-toggle.collapse-1 role="button" href="#" aria-expanded="false" >{{ currentStop }}</a>
 
             </div>
             <div class="col-3 text-right navButton" >
@@ -17,14 +16,14 @@
         <!-- https://medium.com/@maeganwilson_/how-to-create-a-navigation-bar-in-vue-js-8a70e7f29f80?source=-----8a70e7f29f80---------------------post_regwall-&skipOnboarding=1 -->
         <!-- https://www.codementor.io/@mblarsen/wordpress-shortcodes-vuejs-vue-js-5gv4op8sm -->
         <!-- https://gist.github.com/mblarsen/f628fc3c196b5f58d326242061922446 -->
-        <div class="row mx-0 collapse border-bottom" id="collapseExample">
+        <b-collapse id="collapse-1" class="row mx-0 border-bottom">
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
                     <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
                     <router-link v-for="(stop, index) in tour" :key="index" :to="{ name: 'tour', params: { currentStop: stop.title}}" class="list-group-item list-group-item-action">{{ stop.title }}</router-link>
                 </div>
             </div>
-        </div>
+        </b-collapse>
     </div>
 
 </template>

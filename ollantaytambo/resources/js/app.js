@@ -22,11 +22,13 @@ import i18n from './i18n';
 
 import {
     BButton,
-    ModalPlugin
+    ModalPlugin,
+    CollapsePlugin
 } from 'bootstrap-vue'
 
 Vue.component('b-button', BButton)
 Vue.use(ModalPlugin);
+Vue.use(CollapsePlugin)
 
 /**
  * The following block of code may be used to automatically register your

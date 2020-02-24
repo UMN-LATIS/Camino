@@ -56,7 +56,8 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-            $("#collapseExample").collapse('hide') // should this move to reactive props?
+            this.$root.$emit('bv::toggle::collapse', 'collapse-1')
+            // $("#collapseExample").collapse('hide') // should this move to reactive props?
         }
     }
 }

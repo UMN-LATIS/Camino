@@ -1,7 +1,15 @@
 {
+  "modalClose": "Close",
   "nav": {
     "next": "Next",
     "prev": "Prev",
     "home": "Home"
+  },
+  "stage": {
+    "navigation": {
+      "header": "Navigation Instruction",
+      "title": "Navigation",
+      "showmap": "Show me the map"
+    }
   }
 }

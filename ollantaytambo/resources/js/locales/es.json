@@ -1,7 +1,15 @@
 {
+    "modalClose": "CLOSE",
     "nav": {
         "next": "blarg",
         "prev": "blarg",
         "home": "blarg"
+    },
+    "stage": {
+        "navigation": {
+            "header": "NAV",
+            "title": "NAV",
+            "showmap": "MAP"
+        }
     }
 }

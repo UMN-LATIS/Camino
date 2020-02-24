@@ -1,16 +1,8 @@
 <template>
     <div class="bootstrap-fs-modal" v-if="tour">
-       <navbar :tour="tour" :currentStop="currentStopWithDefault" />     
-        <div class="container mt-2" v-if="tour.length > 0">
-            <template v-for="(stage, index) in currentStopData.stages" >
-                  <div class="row" :key="index">
-                    <div class="col">
-                        <component  :is="stage.type" :stage="stage" :tour="tour" >
-                        </component>
-                    </div>
-                </div>
-            </template>
-        </div>
+       <navbar :tour="tour" :currentStop="currentStop" />     
+        <stop-content :tour="tour" :currentStop="currentStop"  :key="currentStop" />
+
     </div>
 </template>
 
@@ -45,7 +37,7 @@
     // });
 
     export default {
-        props: [ "currentStop"],
+        props: [ "currentStop", "status"],
         data() {
             return {
                 tour: false
@@ -55,23 +47,14 @@
           axios.get("/tour.json" + "?" + this.$i18n.locale)
             .then( response => {
                 this.tour = response.data
+                if(this.currentStop == undefined) {
+                    this.$router.replace({ "name": "tour", params: {"currentStop": this.tour[0].title}})
+                }
             })
             .catch (error => console.log(error))
-          
+            
         },
         computed: {
-            currentStopWithDefault: function() {
-                if(this.currentStop == undefined) {
-                    return this.tour[0].title;
-                }
-                return this.currentStop;
-            },
-            currentStopData: function() {
-                if(this.tour) {
-                    return this.tour.find(elem =>  elem.title == this.currentStopWithDefault);
-                }
-                
-            }
         },
         watch: {
             '$route' (to, from) {

@@ -10,10 +10,23 @@ window.Vue = require('vue');
 
 
 import VueRouter from 'vue-router'
-
 Vue.use(VueRouter)
 
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
 import i18n from './i18n';
+
+
+// TODO: if we're going to import bootstrap vue, can we ditch our other import?
+
+import {
+    BButton,
+    ModalPlugin
+} from 'bootstrap-vue'
+
+Vue.component('b-button', BButton)
+Vue.use(ModalPlugin);
 
 /**
  * The following block of code may be used to automatically register your
@@ -31,11 +44,17 @@ import stop from './components/Stop.vue';
 
 
 Vue.component('navbar', require('./components/Nav.vue').default);
+Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
 Vue.component('hotword', require('./components/Hotword.vue').default);
+Vue.component('button-modal', require('./components/ButtonModal.vue').default);
+
+
+import { map } from "leaflet";
+import 'leaflet/dist/leaflet.css';
 
 
 /**
@@ -50,10 +69,10 @@ const routes = [{
         component: home
     },
     {
-        path: '/tour/:currentStop?',
+        path: '/tour/:currentStop?/:status?',
         name: "tour",
         component: stop,
-        props: true
+        props: true,
     }
 ];
 
@@ -62,7 +81,27 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
+
+const store = new Vuex.Store({
+    state: {
+        hotwords: []
+    },
+    mutations: {
+        addHotword(state, hotword) {
+            state.hotwords.push(hotword);
+        },
+        removeHotword(state, hotword) {
+            state.hotwords = state.hotwords.filter(w => w !== hotword);
+        }
+    },
+    getters: {
+        hotwords: state => state.hotwords
+    }
+});
+
+
 const app = new Vue({
+    store,
     router, 
     i18n,
     el: '#app',

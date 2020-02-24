@@ -6,13 +6,14 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-
+@import 'node_modules/bootstrap-vue/src/index.scss';
 @import '~bootstrap4-fs-modal/src/sass/bootstrap-fs-modal';
+
+
 
 .router-link-exact-active {
     background-color: $cyan !important;
 }
-
 
 a {
     text-decoration: none;

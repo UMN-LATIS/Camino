@@ -1,5 +1,5 @@
 <template>
-    <span v-bind:class="{ addedClass: active, emptyClass: !active}" class="hoverWord" @click="active = !active">
+    <span v-bind:class="{ addedClass: isActive, emptyClass: !isActive}" class="hoverWord" @click="toggleWord">
         {{ cleanedWord }}
     </span>
 </template>
@@ -11,7 +11,7 @@
 }
 
 .addedClass {
-    border: 1px solid yellow;
+    border: 3px solid blue;
 }
 
 .emptyClass {
@@ -28,11 +28,19 @@ export default {
         }
     },
     methods: {
-        alert: function(f) {
-            alert(f);
+        toggleWord: function() {
+            if(this.isActive) {
+                this.$store.commit('removeHotword', this.cleanedWord);
+            }
+            else {
+                this.$store.commit('addHotword', this.cleanedWord);
+            }
         }
     },
     computed: {
+        isActive: function() {
+            return this.$store.state.hotwords.filter(w => w == this.cleanedWord).length > 0;
+        },
         cleanedWord: function() {
             return this.text.replace(/[\[\]]/g, '');
         }

@@ -11,9 +11,9 @@
         </a-text>
          
  
-        <a-camera id="camera" 
-            :gps-camera="cameraSettings"
-            rotation-reader far=90000>
+        <a-camera id="camera"
+            gps-camera="simulateLatitude: -13.2584; simulateLongitude: -72.2643; simulateAltitude: 1000"
+            rotation-reader far=900000>
         </a-camera>
                 </a-scene>
 

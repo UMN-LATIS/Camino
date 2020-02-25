@@ -1,4 +1,8 @@
-[{
+{
+    "simulatedLatitude": "-13.2584",
+    "simulatedLongitude": "-72.2643",
+    "simulatedAltitude": 1000,
+    "stops": [{
         "title": "Plaza",
         "location": [44, 45],
         "stages": [{
@@ -17,7 +21,36 @@
                 }
             },
             {
-                "type": "ar"
+                "type": "ar",
+                "waypoints": [
+                    {
+                        "lat": "-13.253208",
+                        "lng": "-72.256074",
+                        "alt": "1000",
+                        "text": {
+                            "en": "Pinkuylluna",
+                            "es": "Pinkuylluna"
+                        }
+                    },
+                    {
+                        "lat": "-13.284595",
+                        "lng": "-72.229607",
+                        "alt": "1000",
+                        "text": {
+                            "en": "Naupa Iglesia",
+                            "es": "Naupa Iglesia"
+                        }
+                    },
+                    {
+                        "lat": "-13.267577",
+                        "lng": "-72.295041",
+                        "alt": "1000",
+                        "text": {
+                            "en": "Inca Quarries",
+                            "es": ""
+                        }
+                    }
+                ]
             },
             {
                 "type": "gallery",
@@ -52,5 +85,5 @@
                 ]
             }
         ]
-    }
-]
+    }]
+}

@@ -1,27 +1,22 @@
 <template>
  <div>
-      <a-scene  v-pre vr-mode-ui="enabled: false" 
-                    arjs='sourceType: webcam; sourceWidth:790; sourceHeight:670; displayWidth:790; displayHeight:670; debugUIEnabled: false;'>
-             
-        <a-text value="Elliot Hall" gps-entity-place="latitude: 44.97691; longitude: -93.23776;"
-            rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-            width="400">
-        </a-text>
-                <a-text value="Weisman" gps-entity-place="latitude: 44.97310; longitude: -93.23783;"
-                    rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-                    width="400">
-                </a-text>
+      <a-scene v-if="currentStopAR"  vr-mode-ui="enabled: false" 
+                    arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false'>
 
-        <a-text value="Andersen Library" gps-entity-place="latitude: 44.97322; longitude: -93.24298;"
+
+        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text.en" :gps-entity-place="'latitude: ' + waypoint.lat + '; longitude: ' + waypoint.lng + ';'" 
+        :position="'0 ' + waypoint.alt + ' 0'"
             rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-            width="200">
+            width="2400">
         </a-text>
-    <a-camera id="camera"
-            gps-camera
-            rotation-reader far=900000>
+         
+ 
+        <a-camera id="camera" 
+            :gps-camera="cameraSettings"
+            rotation-reader far=90000>
         </a-camera>
                 </a-scene>
-     {{ stage }}
+
  </div>    
 </template>
 
@@ -30,18 +25,40 @@
 </style>
 
 <script>
+
 export default {
-    props: ["stage"],
+    props: ["stage", "simulateLocation"],
     data()  {
         return {
-            tour: {},
+            tour: null,
+        }
+    },
+    computed: {
+        currentStop: function() {
+            if(!this.tour) {
+                return false;
+            }
+            return this.tour.stops.find(elem => elem.title == this.stage);
+        },
+        currentStopAR: function() {
+            if(!this.currentStop) {
+                return false;
+            }
+            return this.currentStop.stages.find(elem => elem.type =="ar");
+        },
+        cameraSettings: function() {
+            if(this.simulateLocation == "true" && this.tour) {
+                return 'simulateLatitude: ' + this.tour.simulatedLatitude +"; simulateLongitude: " + this.tour.simulatedLongitude + "; simulateAltitude: " + this.tour.simulatedAltitude +'s';
+            }
+            else {
+                return ""
+            }
         }
     },
     mounted() {
-        axios.get("/tour.json" + "?" + this.$i18n.locale)
+        axios.get("/tour.json")
         .then( response => {
             this.tour = response.data
-
         })
         .catch (error => console.log(error))
         

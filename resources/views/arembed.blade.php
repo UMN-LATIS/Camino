@@ -19,7 +19,7 @@
     </head>
     <body>
         <div id="app">
-            <ar-embed stage="{{$stage}}"></ar-embed>
+            <ar-embed stage="{{$stage}}" simulate-location="{{$simulateLocation}}"></ar-embed>
         </div>
         
     </body>

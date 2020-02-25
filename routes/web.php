@@ -13,4 +13,4 @@
 
 Route::get('/', "HomeController@index");
 
-Route::get('/ar/{stage}', "HomeController@ar");
+Route::get('/ar/{stage}/{simulateLocation?}', "HomeController@ar");

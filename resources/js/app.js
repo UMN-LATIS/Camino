@@ -91,10 +91,7 @@ const store = new Vuex.Store({
     state: {
         hotwords: [],
         config: { 
-            simulateLocation: false,
-            simulatedLatitude: "-13.2584",
-            simulatedLongitude: "-72.2643",
-            simulatedAltitude: 1000
+            simulateLocation: false
         }
     },
     mutations: {
@@ -112,7 +109,11 @@ const store = new Vuex.Store({
         hotwords: state => state.hotwords
     }
 });
-
+Vue.config.ignoredElements = [
+    "a-text",
+    "a-scene",
+    "a-camera"
+]
 
 const app = new Vue({
     store,

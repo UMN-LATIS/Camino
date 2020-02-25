@@ -20,7 +20,7 @@
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
                     <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
-                    <router-link v-for="(stop, index) in tour" :key="index" :to="{ name: 'tour', params: { currentStop: stop.title}}" class="list-group-item list-group-item-action">{{ stop.title }}</router-link>
+                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStop: stop.title}}" class="list-group-item list-group-item-action">{{ stop.title }}</router-link>
                 </div>
             </div>
         </b-collapse>
@@ -41,17 +41,17 @@ export default {
     },
     computed: {
         previousStop: function() {
-            for(var i=0; i<this.tour.length; i++) {
-                if(this.tour[i].title == this.currentStop && i !== 0) {
-                    return this.tour[i-1].title;
+            for(var i=0; i<this.tour.stops.length; i++) {
+                if(this.tour.stops[i].title == this.currentStop && i !== 0) {
+                    return this.tour.stops[i-1].title;
                 }
             }
             return false;
         },
         nextStop: function() {
-            for(var i=0; i<this.tour.length; i++) {
-                if(this.tour[i].title == this.currentStop && i + 1 < this.tour.length) {
-                    return this.tour[i+1].title;
+            for(var i=0; i<this.tour.stops.length; i++) {
+                if(this.tour.stops[i].title == this.currentStop && i + 1 < this.tour.stops.length) {
+                    return this.tour.stops[i+1].title;
 
                 }
             }

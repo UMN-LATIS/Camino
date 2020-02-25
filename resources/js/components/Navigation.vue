@@ -53,7 +53,7 @@ var map;
 var myLocation = null;
 
     export default {
-        props: ["stage"],
+        props: ["stage", "tour"],
         data() {
             return {
             }
@@ -103,8 +103,8 @@ var myLocation = null;
 
                     var targetLocation = e.latlng;
                     if(self.$store.state.config.simulateLocation) {
-                        targetLocation.lat = self.$store.state.config.simulatedLatitude;
-                        targetLocation.lng = self.$store.state.config.simulatedLongitude;
+                        targetLocation.lat = self.tour.simulatedLatitude;
+                        targetLocation.lng = self.tour.simulatedLongitude;
                     }
                     console.log(targetLocation)
                     if (!myLocation) {

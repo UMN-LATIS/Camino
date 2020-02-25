@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>AR.JS Demo with Location Simulation and Altitude</title>
+    <script
+        src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js">
+        </script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src='/aframe-ar.js'></script>
+    <script>
+        THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
+    </script>
+</head>
+
+<body style='margin: 0;'>
+
+    <a-scene vr-mode-ui="enabled: false" embedded
+        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+
+
+
+        <a-text value="boopter" gps-entity-place="latitude: -13.253208; longitude: -72.256074;" position="0 1000 0"
+            rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
+            width="1000">
+        </a-text>
+                <a-text value="pinky" gps-entity-place="latitude: -13.284595; longitude: -72.229607;"
+                    position="0 1000 0"
+                    rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
+                    width="5000">
+                </a-text>
+
+       
+        <a-camera id="camera"
+            gps-camera="simulateLatitude: -13.2584; simulateLongitude: -72.2643; simulateAltitude: 1000"
+            rotation-reader far=900000>
+        </a-camera>
+    </a-scene>
+
+</body>

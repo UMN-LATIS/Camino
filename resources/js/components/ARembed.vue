@@ -48,7 +48,7 @@ export default {
         },
         cameraSettings: function() {
             if(this.simulateLocation == "true" && this.tour) {
-                return 'simulateLatitude: ' + this.tour.simulatedLatitude +"; simulateLongitude: " + this.tour.simulatedLongitude + "; simulateAltitude: " + this.tour.simulatedAltitude +'s';
+                return 'simulateLatitude: ' + this.tour.simulatedLatitude +"; simulateLongitude: " + this.tour.simulatedLongitude + "; simulateAltitude: " + this.tour.simulatedAltitude +'';
             }
             else {
                 return ""

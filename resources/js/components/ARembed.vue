@@ -1,5 +1,5 @@
 <template>
- <div>
+ <div style="width:100%; height: 100%">
 
     <a-scene vr-mode-ui="enabled: false" embedded
         arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>

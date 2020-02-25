@@ -11,10 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', "HomeController@index");
 
-Route::get('/ar/{stage}', function ($stage) {
-    return view('arembed', ["stage"=>$stage]);
-});
+Route::get('/ar/{stage}', "HomeController@ar");

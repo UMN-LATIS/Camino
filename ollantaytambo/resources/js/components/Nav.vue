@@ -5,7 +5,7 @@
                 <router-link v-if="previousStop" :to="{ name: 'tour', params: { currentStop: previousStop }}" class="controlButton p-2">&laquo; {{ $t("nav.prev") }} </router-link>
             </div>
             <div class="col-6 text-center navToggle ">
-                <a class="p-2" v-b-toggle.collapse-1 role="button" href="#" aria-expanded="false" >{{ currentStop }}</a>
+                <a class="p-2" @click.prevent="collapseVisible = !collapseVisible" role="button" href="#" aria-expanded="false" >{{ currentStop }}</a>
 
             </div>
             <div class="col-3 text-right navButton" >
@@ -16,7 +16,7 @@
         <!-- https://medium.com/@maeganwilson_/how-to-create-a-navigation-bar-in-vue-js-8a70e7f29f80?source=-----8a70e7f29f80---------------------post_regwall-&skipOnboarding=1 -->
         <!-- https://www.codementor.io/@mblarsen/wordpress-shortcodes-vuejs-vue-js-5gv4op8sm -->
         <!-- https://gist.github.com/mblarsen/f628fc3c196b5f58d326242061922446 -->
-        <b-collapse id="collapse-1" class="row mx-0 border-bottom">
+        <b-collapse id="collapse-1" class="row mx-0 border-bottom" v-model="collapseVisible">
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
                     <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
@@ -34,6 +34,11 @@ export default {
     props: [
         'tour', 'currentStop'
     ],
+    data() {
+        return {
+            collapseVisible: false
+        }
+    },
     computed: {
         previousStop: function() {
             for(var i=0; i<this.tour.length; i++) {
@@ -56,8 +61,7 @@ export default {
     },
     watch: {
         '$route' (to, from) {
-            this.$root.$emit('bv::toggle::collapse', 'collapse-1')
-            // $("#collapseExample").collapse('hide') // should this move to reactive props?
+            this.collapseVisible = false
         }
     }
 }

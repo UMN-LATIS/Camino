@@ -17,6 +17,9 @@
                 }
             },
             {
+                "type": "ar"
+            },
+            {
                 "type": "gallery",
                 "content": [
                     "img.jpg"

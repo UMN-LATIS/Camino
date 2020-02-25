@@ -48,6 +48,8 @@ import stop from './components/Stop.vue';
 Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
+Vue.component('ar', require('./components/AR.vue').default);
+Vue.component('ar-embed', require('./components/ARembed.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
@@ -58,6 +60,7 @@ Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 import { map } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
+// require("aframe");
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

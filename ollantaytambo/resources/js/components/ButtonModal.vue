@@ -1,8 +1,8 @@
 <template>
     <div>
-        <b-button v-b-modal.view-modal>{{ buttonText }}</b-button>
+        <b-button v-b-modal="modalName">{{ buttonText }}</b-button>
 
-        <b-modal size="lg" id="view-modal" :title="modalTitle" ok-only modal-class="modal-fullscreen"
+        <b-modal size="lg" :id="modalName" :title="modalTitle" ok-only modal-class="modal-fullscreen"
             :ok-title='$t("modalClose")'>
             <slot></slot>
         </b-modal>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ["buttonText", "modalTitle"],
+        props: ["buttonText", "modalTitle", "modalName"],
         mounted() {
             if (this.$router.currentRoute.params.status !== undefined) {
                 this.$router.replace({
@@ -24,7 +24,10 @@
             }
 
             this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
-                this.$emit("modalShown");
+                if(modalId != this.modalName) {
+                    return;
+                }
+                this.$emit("modalShown", this.modalName);
                 // console.log('Modal is about to be shown', bvEvent, modalId)
                 // console.log(this.$router.currentRoute);
                 var hash = modalId;
@@ -37,6 +40,9 @@
                 })
             })
             this.$root.$on('bv::modal::hide', (bvEvent, modalId) => {
+                if(modalId != this.modalName) {
+                    return;
+                }
                 this.$emit("modalClosed");
                 if (bvEvent.trigger != "event") {
                     this.$router.go(-1)
@@ -51,9 +57,9 @@
         },
         watch: {
             $route(to, from) {
-                if (from && from.params.status && from.params.status == "view-modal" && !to.params.status || to.params
-                    .status !== "view-modal") {
-                    this.$bvModal.hide("view-modal")
+                if (from && from.params.status && from.params.status == this.modalName && !to.params.status || to.params
+                    .status !== this.modalName) {
+                    this.$bvModal.hide(this.modalName)
                 }
             }
         }

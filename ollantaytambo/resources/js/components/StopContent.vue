@@ -3,7 +3,7 @@
         <template v-for="(stage, index) in currentStopData.stages">
             <div class="row" :key="index">
                 <div class="col">
-                    <component :is="stage.type" :stage="stage" :tour="tour" >
+                    <component :is="stage.type" :stage="stage" :tour="tour" :currentStop="currentStopData">
                     </component>
                 </div>
             </div>

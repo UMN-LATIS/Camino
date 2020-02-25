@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/ar/{stage}', function ($stage) {
+    return view('arembed', ["stage"=>$stage]);
+});

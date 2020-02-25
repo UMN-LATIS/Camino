@@ -4,7 +4,7 @@
         <p v-for="(instruction,index) in stage.text[$i18n.locale]" :key="index">
             {{ instruction }}
         </p>
-        <button-modal :buttonText="$t('stage.navigation.showmap')" :modalTitle="$t('stage.navigation.title')"
+        <button-modal modalName="nav" :buttonText="$t('stage.navigation.showmap')" :modalTitle="$t('stage.navigation.title')"
             v-on:modalShown="renderMap" v-on:modalClosed="destroyMap">
             <div style="height: 70vh; width: 100%" id="map">
 
@@ -67,7 +67,9 @@ var myLocation = null;
                 map = null;
                 myLocation = null;
             },
-            renderMap: function () {
+            renderMap: function (e) {
+                console.log("nav");
+                console.log(e);
                 map = L.map('map').fitWorld();
                 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',

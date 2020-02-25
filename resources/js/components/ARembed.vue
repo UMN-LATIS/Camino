@@ -7,7 +7,7 @@
         <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text.en" :gps-entity-place="'latitude: ' + waypoint.lat + '; longitude: ' + waypoint.lng + ';'" 
         :position="'0 ' + waypoint.alt + ' 0'"
             rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-            width="2400">
+            width="5000">
         </a-text>
          
  

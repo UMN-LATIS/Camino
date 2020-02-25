@@ -1,26 +1,19 @@
 <template>
  <div style="width:100%; height: 100%">
-
-    <a-scene vr-mode-ui="enabled: false" embedded
-        arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
-
+      <a-scene v-if="currentStopAR"  vr-mode-ui="enabled: false" 
+                    arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false'>
 
 
-
-        <a-text value="boopter" gps-entity-place="latitude: -13.253208; longitude: -72.256074;" position="0 1000 0"
+        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text.en" :gps-entity-place="'latitude: ' + waypoint.lat + '; longitude: ' + waypoint.lng + ';'" 
+        :position="'0 ' + waypoint.alt + ' 0'"
             rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-            width="1000">
+            width="5000">
         </a-text>
-                <a-text value="pinky" gps-entity-place="latitude: -13.284595; longitude: -72.229607;"
-                    position="0 1000 0"
-                    rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-                    width="5000">
-                </a-text>
-
+         
  
-        <a-camera id="camera"
-            gps-camera="simulateLatitude: -13.2584; simulateLongitude: -72.2643; simulateAltitude: 1000"
-            rotation-reader far=900000>
+        <a-camera id="camera" 
+            :gps-camera="cameraSettings"
+            rotation-reader far=90000>
         </a-camera>
                 </a-scene>
 

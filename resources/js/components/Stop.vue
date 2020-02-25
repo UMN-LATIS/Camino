@@ -2,8 +2,13 @@
     <div class="bootstrap-fs-modal" v-if="tour">
        <navbar :tour="tour" :currentStop="currentStop" />     
         <stop-content :tour="tour" :currentStop="currentStop"  :key="currentStop" />
-
+     <div class="form-check form-check-inline">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="" id="" :checked="$store.state.config.simulateLocation" @change="$store.commit('setSimulateLocation', !$store.state.config.simulateLocation)"> Simulate Location
+            </label>
+        </div>
     </div>
+    
 </template>
 
 <script>

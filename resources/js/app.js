@@ -89,7 +89,13 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
     state: {
-        hotwords: []
+        hotwords: [],
+        config: { 
+            simulateLocation: false,
+            simulatedLatitude: "-13.2584",
+            simulatedLongitude: "-72.2643",
+            simulatedAltitude: 1000
+        }
     },
     mutations: {
         addHotword(state, hotword) {
@@ -97,6 +103,9 @@ const store = new Vuex.Store({
         },
         removeHotword(state, hotword) {
             state.hotwords = state.hotwords.filter(w => w !== hotword);
+        },
+        setSimulateLocation(state, simulateLocation) {
+            state.config.simulateLocation = simulateLocation;
         }
     },
     getters: {

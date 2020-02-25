@@ -10,6 +10,10 @@
       "header": "Navigation Instruction",
       "title": "Navigation",
       "showmap": "Show me the map"
+    },
+    "ar": {
+      "showar": "Look around",
+      "warning": "Augmented reality view is only available on mobile devices like smartphones and tablets"
     }
   }
 }

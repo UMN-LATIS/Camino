@@ -96,20 +96,26 @@ var myLocation = null;
                     // ,iconAnchor: [11,11]
                 });
 
-
+                var self = this;
                 function onLocationFound(e) {
                     console.log("location found");
                     var radius = e.accuracy;
 
+                    var targetLocation = e.latlng;
+                    if(self.$store.state.config.simulateLocation) {
+                        targetLocation.lat = self.$store.state.config.simulatedLatitude;
+                        targetLocation.lng = self.$store.state.config.simulatedLongitude;
+                    }
+                    console.log(targetLocation)
                     if (!myLocation) {
-                        myLocation = L.marker(e.latlng, {
+                        myLocation = L.marker(targetLocation, {
                             icon: cssIcon
                         });
                         myLocation.addTo(map);
-                        console.log(e.latlng);
-                        map.setView(e.latlng, 18);
+
+                        map.setView(targetLocation, 18);
                     } else {
-                        myLocation.setLatLng(e.latlng);
+                        myLocation.setLatLng(targetLocation);
 
                     }
 

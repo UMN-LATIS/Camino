@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button v-b-modal="modalName">{{ buttonText }}</b-button>
+        <b-button v-b-modal="modalName" v-bind:disabled="disabled">{{ buttonText }}</b-button>
 
         <b-modal size="lg" :id="modalName" :title="modalTitle" ok-only modal-class="modal-fullscreen"
             :ok-title='$t("modalClose")'>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ["buttonText", "modalTitle", "modalName"],
+        props: ["buttonText", "modalTitle", "modalName", "disabled"],
         mounted() {
             if (this.$router.currentRoute.params.status !== undefined) {
                 this.$router.replace({

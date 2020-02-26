@@ -55,6 +55,7 @@ Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
 Vue.component('hotword', require('./components/Hotword.vue').default);
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
+Vue.component('debug-bar', require('./components/DebugBar.vue').default);
 
 
 import { map } from "leaflet";

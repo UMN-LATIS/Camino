@@ -16,7 +16,7 @@ class HomeController extends Controller
         return view('welcome');
     }
 
-    public function ar($stage, $simulateLocation=false) {
-        return view('arembed', ["stage"=>$stage, "simulateLocation"=>$simulateLocation]);
+    public function ar($stage,$locale = "en", $simulateLocation=false) {
+        return view('arembed', ["stage"=>$stage, "simulateLocation"=>$simulateLocation, "locale"=> $locale]);
     }
 }

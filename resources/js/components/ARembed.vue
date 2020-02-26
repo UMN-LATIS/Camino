@@ -4,10 +4,10 @@
                     arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false'>
 
 
-        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text.en" :gps-entity-place="'latitude: ' + waypoint.lat + '; longitude: ' + waypoint.lng + ';'" 
+        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text[locale]" :gps-entity-place="'latitude: ' + waypoint.lat + '; longitude: ' + waypoint.lng + ';'" 
         :position="'0 ' + waypoint.alt + ' 0'"
             rotation="0 0 0" font="mozillavr" color="#e43e31" look-at="#camera" side="double" align="center"
-            width="5000">
+            width="2000">
         </a-text>
          
  
@@ -27,7 +27,7 @@
 <script>
 
 export default {
-    props: ["stage", "simulateLocation"],
+    props: ["stage", "simulateLocation", "locale"],
     data()  {
         return {
             tour: null,

@@ -1,6 +1,6 @@
 <template>
     <div class="mt-2">
-        <CoolLightBox :items="items" :index="index" @close="index = null">
+        <CoolLightBox ref="lightbox" :items="items" :index="index" @close="index = null; close()" @on-open="open()" :slideshow="false" :gallery="false" >
         </CoolLightBox>
 
         <div class="images-wrapper">
@@ -61,13 +61,37 @@ img, input, select {
         props: [ "stage", "currentStop"],
         data: function () {
             return {
-                
-                index: null
+                index: null,
+                modalName: "gallery"
             };
+        },
+        methods: {
+            close: function() {
+                if(this.$router.currentRoute.params.status == this.modalName) {
+                    this.$router.go(-1);
+                }
+            },
+            open: function() {
+                this.$router.push({
+                    name: 'tour',
+                    params: {
+                        "currentStop": this.$router.currentRoute.params.currentStop,
+                        "status": this.modalName
+                    }
+                })
+            }
         },
         computed: {
             items: function() {
                 return this.stage.images.map(i => { return {"title": i.title[this.$i18n.locale], "description": i.description[this.$i18n.locale], "src": "/images/" + i.image }});
+            }
+        },
+        watch: {
+            $route(to, from) {
+                if (from && from.params.status && from.params.status == this.modalName && !to.params.status || to.params
+                    .status !== this.modalName) {
+                    this.$refs.lightbox.close();
+                }
             }
         }
     };

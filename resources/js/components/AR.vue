@@ -33,8 +33,10 @@
             },
             isMobile: function() {
                 var isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));
-                return true;
-                return isMobile;
+                if(this.$store.state.config.simulateMobile || isMobile) {
+                    return true;
+                }
+                return false;
             }
         },
         methods: {

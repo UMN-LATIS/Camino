@@ -54,8 +54,29 @@
             },
             {
                 "type": "gallery",
-                "content": [
-                    "img.jpg"
+                "images": [
+                    {
+                        "image": "plaza_01.jpg",
+                        "title": {
+                            "en": "Lady Weaving",
+                            "es": "fdafsda"
+                        },
+                        "description": {
+                            "en": "Weaving is super cool",
+                            "es": "fdasf"
+                        }
+                    },
+                    {
+                        "image": "plaza_02.jpg",
+                        "title": {
+                            "en": "Grain stores",
+                            "es": "fdafsda"
+                        },
+                        "description": {
+                            "en": "Grain is tasty",
+                            "es": "fdasf"
+                        }
+                    }
                 ]
             }
         ]

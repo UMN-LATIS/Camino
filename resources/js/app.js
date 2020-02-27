@@ -18,6 +18,9 @@ Vue.use(Vuex)
 import i18n from './i18n';
 
 
+import CoolLightBox from 'vue-cool-lightbox'
+Vue.use(CoolLightBox);
+
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
 
 import {
@@ -92,7 +95,8 @@ const store = new Vuex.Store({
     state: {
         hotwords: [],
         config: { 
-            simulateLocation: false
+            simulateLocation: true,
+            simulateMobile: false
         }
     },
     mutations: {
@@ -104,6 +108,9 @@ const store = new Vuex.Store({
         },
         setSimulateLocation(state, simulateLocation) {
             state.config.simulateLocation = simulateLocation;
+        },
+        setSimulateMobile(state, simulateMobile) {
+            state.config.simulateMobile = simulateMobile;
         }
     },
     getters: {

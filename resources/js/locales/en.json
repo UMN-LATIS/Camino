@@ -8,7 +8,6 @@
   "stage": {
     "navigation": {
       "header": "Navigation Instruction",
-      "title": "Navigation",
       "showmap": "Show me the map"
     },
     "ar": {

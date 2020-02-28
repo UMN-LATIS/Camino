@@ -14,8 +14,8 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
  .options({
-     extractVueStyles: true,
-     globalVueStyles: 'resources/sass/_variables.scss',
+    //  extractVueStyles: true,
+    //  globalVueStyles: 'resources/sass/_variables.scss',
  })
     .sass('resources/sass/app.scss', 'public/css');
 

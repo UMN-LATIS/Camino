@@ -6,6 +6,13 @@
         "title": "Plaza",
         "location": [44, 45],
         "stages": [{
+                "type": "separator",
+                "text": {
+                    "en": "Navigation",
+                    "es": "guuu"
+                }
+            },
+            {
                 "type": "navigation",
                 "text": {
                     "en": ["This is some blah", "more blah"],
@@ -14,96 +21,19 @@
                 "targetPoint": [44, 44]
             },
             {
+                "type": "separator",
+                "text": {
+                    "en": "Guide",
+                    "es": "guuu"
+                }
+            },
+            {
                 "type": "guide",
                 "text": {
                     "en": ["this is a [test] of [more] things", "more [words] go here"],
                     "es": ["ldkjfkdsjafs"]
                 }
             },
-                        {
-                            "type": "guide",
-                            "text": {
-                                "en": [
-                                    "this is a [test] of [more] things",
-                                    "more [words] go here"
-                                ],
-                                "es": [
-                                    "ldkjfkdsjafs"
-                                ]
-                            }
-                        },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
-                                    {
-                                        "type": "guide",
-                                        "text": {
-                                            "en": [
-                                                "this is a [test] of [more] things",
-                                                "more [words] go here"
-                                            ],
-                                            "es": [
-                                                "ldkjfkdsjafs"
-                                            ]
-                                        }
-                                    },
             {
                 "type": "ar",
                 "waypoints": [
@@ -168,13 +98,27 @@
     {
         "title": "Overlook 1",
         "location": [46, 46],
-        "stages": [{
+        "stages": [
+            {
+                "type": "separator",
+                "text": {
+                    "en": "Navigation",
+                    "es": "guuu"
+                }
+            },{
                 "type": "navigation",
                 "text": {
                     "en": ["What the heck?"],
                     "es": ["lfjkdklfjdka"]
                 },
                 "targetPoint": [44, 44]
+            },
+            {
+                "type": "separator",
+                "text": {
+                    "en": "Guide",
+                    "es": "guuu"
+                }
             },
             {
                 "type": "guide",

@@ -1,6 +1,5 @@
 <template>
     <div>
-        <span class="text-muted">{{ $t("stage.navigation.title") }}</span>
         <p v-for="(instruction,index) in stage.text[$i18n.locale]" :key="index">
             {{ instruction }}
         </p>

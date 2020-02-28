@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-2" v-if="tour.stops.length > 0">
         <template v-for="(stage, index) in currentStopData.stages">
-            <div class="row" :key="index">
+            <div class="row mt-1" :key="index">
                 <div class="col">
                     <component :is="stage.type" :stage="stage" :tour="tour" :currentStop="currentStopData">
                     </component>

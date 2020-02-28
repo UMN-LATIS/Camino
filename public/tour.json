@@ -20,6 +20,90 @@
                     "es": ["ldkjfkdsjafs"]
                 }
             },
+                        {
+                            "type": "guide",
+                            "text": {
+                                "en": [
+                                    "this is a [test] of [more] things",
+                                    "more [words] go here"
+                                ],
+                                "es": [
+                                    "ldkjfkdsjafs"
+                                ]
+                            }
+                        },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "type": "guide",
+                                        "text": {
+                                            "en": [
+                                                "this is a [test] of [more] things",
+                                                "more [words] go here"
+                                            ],
+                                            "es": [
+                                                "ldkjfkdsjafs"
+                                            ]
+                                        }
+                                    },
             {
                 "type": "ar",
                 "waypoints": [

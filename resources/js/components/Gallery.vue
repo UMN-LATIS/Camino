@@ -1,6 +1,7 @@
 <template>
     <div class="mt-2">
         <CoolLightBox ref="lightbox" :items="items" :index="index" @close="index = null; close()" @on-open="open()" :slideshow="false" :gallery="false" >
+            <close
         </CoolLightBox>
 
         <div class="images-wrapper">
@@ -11,6 +12,13 @@
         </div>
     </div>
 </template>
+
+<style>
+.cool-lightbox-toolbar .cool-lightbox-toolbar__btn {
+    width: 55px !important;
+    height: 55px !important;
+}
+</style>
 
 <style scoped>
 .images-wrapper {

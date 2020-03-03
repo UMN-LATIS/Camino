@@ -18,7 +18,10 @@
                     "en": ["This is some blah", "more blah"],
                     "es": ["lfjkdklfjdka"]
                 },
-                "targetPoint": [44, 44]
+                "targetPoint": {
+                   "lat": -13.257656, 
+                   "lng": -72.263894
+                }
             },
             {
                 "type": "separator",
@@ -111,7 +114,10 @@
                     "en": ["What the heck?"],
                     "es": ["lfjkdklfjdka"]
                 },
-                "targetPoint": [44, 44]
+                "targetPoint": {
+                    "lat": -13.257056, 
+                    "lng": -72.262688
+                }
             },
             {
                 "type": "separator",

@@ -15,6 +15,12 @@ Vue.use(VueRouter)
 import Vuex from 'vuex'
 Vue.use(Vuex)
 
+import VuexPersistence from 'vuex-persist'
+const vuexLocal = new VuexPersistence({
+    storage: window.localStorage
+})
+
+
 import i18n from './i18n';
 
 
@@ -116,7 +122,8 @@ const store = new Vuex.Store({
     },
     getters: {
         hotwords: state => state.hotwords
-    }
+    },
+    plugins: [vuexLocal.plugin]
 });
 Vue.config.ignoredElements = [
     "a-text",

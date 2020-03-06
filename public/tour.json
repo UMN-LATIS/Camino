@@ -2,6 +2,10 @@
     "simulatedLatitude": "-13.2584",
     "simulatedLongitude": "-72.2643",
     "simulatedAltitude": 1000,
+    "region": {
+        "lat": "-13.2584",
+        "lng": "-72.2643"
+    },
     "stops": [{
         "title": "Plaza",
         "location": [44, 45],

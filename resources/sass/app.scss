@@ -15,42 +15,12 @@
     background-color: $cyan !important;
 }
 
-a {
-    text-decoration: none;
-    display: inline-block;
-    width: 100%;
-    /* padding: 8px 16px; */
-}
-
-a:hover {
-    background-color: #816C61;
-    color: white;
-}
 
 .controlButton {
     color: white;
 }
 
-.navHeader {
-    background-color: #A89B9D;
-    border-bottom: 1px solid#525E3E;
-}
 
-.navToggle {
-    border-left: 1px solid #525E3E;
-    border-right: 1px solid #525E3E;
-
-}
-
-.navButton {}
-
-.navToggle a {
-    color: white;
-}
-
-.dropdown-menu a {
-    color: black;
-}
 
 .stop-container {
     background-color: white

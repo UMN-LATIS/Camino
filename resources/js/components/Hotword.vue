@@ -11,12 +11,21 @@
 }
 
 .addedClass {
-    border: 3px solid blue;
+    /* border: 3px solid blue; */
 }
 
 .emptyClass {
     text-decoration: underline;
+    font-weight: bold
 }
+
+.addedClass:after {
+  content: "✭";
+  color: darkkhaki;
+  font-size: 100%; 
+}
+
+
 
 </style>
 <script>

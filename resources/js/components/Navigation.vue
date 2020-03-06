@@ -181,17 +181,24 @@ var otherLocationsCssIcon = null;
                 }).flat();
 
                 var otherLocation = null;
-                console.log(targetPoints);
+                var walkingPath = [];
                 targetPoints.forEach(targetPoint => {
                     if(targetPoint != this.stage.targetPoint) {
-                        console.log(targetPoint);
+
                         otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
                         icon: otherLocationsCssIcon
                         });
                         otherLocation.addTo(map);
                     }
+                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
+                    
+
                 });
 
+                var polyline = L.polyline(walkingPath, {
+                        color: 'gray',
+                        opacity: 0.4
+                    }).addTo(map);
                 map.on('locationfound', onLocationFound);
             }
         },

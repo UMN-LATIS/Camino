@@ -8,18 +8,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VueProgressBar from 'vue-progressbar'
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
-import Vuex from 'vuex'
-Vue.use(Vuex)
-
-import VuexPersistence from 'vuex-persist'
-const vuexLocal = new VuexPersistence({
-    storage: window.localStorage
+Vue.use(VueProgressBar, {
+    color: 'rgb(200, 100, 100)',
+    failedColor: 'red',
+    height: '2px',
+    position: "relative"
 })
-
 
 import i18n from './i18n';
 
@@ -50,9 +46,6 @@ Vue.use(CollapsePlugin)
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-import home from './components/Home.vue';
-import stop from './components/Stop.vue';
-
 
 Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
@@ -71,65 +64,15 @@ Vue.component('separator', require('./components/Separator.vue').default);
 import { map } from "leaflet";
 import 'leaflet/dist/leaflet.css';
 
-// require("aframe");
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-
-const routes = [{
-        path: '/',
-        component: home
-    },
-    {
-        path: '/tour/:currentStop?/:status?',
-        name: "tour",
-        component: stop,
-        props: true,
-    }
-];
-
-const router = new VueRouter({
-    // mode: 'history',
-    routes // short for `routes: routes`
-})
-
-
-const store = new Vuex.Store({
-    state: {
-        hotwords: [],
-        config: { 
-            simulateLocation: true,
-            simulateMobile: false
-        }
-    },
-    mutations: {
-        addHotword(state, hotword) {
-            state.hotwords.push(hotword);
-        },
-        removeHotword(state, hotword) {
-            state.hotwords = state.hotwords.filter(w => w !== hotword);
-        },
-        setSimulateLocation(state, simulateLocation) {
-            state.config.simulateLocation = simulateLocation;
-        },
-        setSimulateMobile(state, simulateMobile) {
-            state.config.simulateMobile = simulateMobile;
-        }
-    },
-    getters: {
-        hotwords: state => state.hotwords
-    },
-    plugins: [vuexLocal.plugin]
-});
 Vue.config.ignoredElements = [
     "a-text",
     "a-scene",
     "a-camera"
 ]
+
+import { store } from "./store";
+import { router } from "./route";
 
 const app = new Vue({
     store,

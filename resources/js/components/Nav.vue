@@ -11,7 +11,9 @@
             <div class="col-3 text-right navButton" >
                 <router-link v-if="nextStop" :to="{ name: 'tour', params: { currentStop: nextStop }}" class="controlButton p-2">{{ $t("nav.next") }} &raquo;</router-link>
             </div>
+        
         </div>
+        <vue-progress-bar></vue-progress-bar>
         <!-- https://stackoverflow.com/questions/40573011/dynamically-inject-vue-2-component-from-shortcode -->
         <!-- https://medium.com/@maeganwilson_/how-to-create-a-navigation-bar-in-vue-js-8a70e7f29f80?source=-----8a70e7f29f80---------------------post_regwall-&skipOnboarding=1 -->
         <!-- https://www.codementor.io/@mblarsen/wordpress-shortcodes-vuejs-vue-js-5gv4op8sm -->
@@ -24,6 +26,7 @@
                 </div>
             </div>
         </b-collapse>
+        
     </div>
 
 </template>
@@ -93,10 +96,25 @@ export default {
         }
 
     },
+    methods: {
+        setProgress: function() {
+            for(var i=0; i<this.tour.stops.length; i++) {
+                if(this.tour.stops[i].title == this.currentStop) {
+                    this.$Progress.set((i+1 / this.tour.stops.length) * 100);
+                }
+            }
+        }
+    },
     watch: {
         '$route' (to, from) {
             this.collapseVisible = false
+        },
+        currentStop: function(val) {
+            this.setProgress();
         }
+    },
+    mounted: function() {
+        this.setProgress();
     }
 }
 </script>

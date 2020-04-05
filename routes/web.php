@@ -14,3 +14,6 @@
 Route::get('/', "HomeController@index");
 
 Route::get('/ar/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Auth;
 class HomeController extends Controller
 {
     /**
@@ -25,4 +25,16 @@ class HomeController extends Controller
     {
         return view('welcome');
     }
+
+    public function login()
+    {
+        return view('auth.login');
+    }
+    
+    public function logout()
+    {
+        Auth::logout();
+        return redirect("/");
+    }
+    
 }

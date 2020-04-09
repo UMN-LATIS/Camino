@@ -23,3 +23,15 @@ mix.js('resources/js/app.js', 'public/js')
     if (mix.inProduction()) {
     mix.version();
     }
+
+mix.js('resources/js/edit.js', 'public/js')
+   .options({
+      //  extractVueStyles: true,
+      //  globalVueStyles: 'resources/sass/_variables.scss',
+   })
+   .sass('resources/sass/edit.scss', 'public/css');
+
+
+if (mix.inProduction()) {
+   mix.version();
+}

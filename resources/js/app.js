@@ -74,6 +74,7 @@ Vue.config.ignoredElements = [
 import { store } from "./store";
 import { router } from "./route";
 
+
 const app = new Vue({
     store,
     router, 

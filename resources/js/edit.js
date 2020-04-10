@@ -44,6 +44,8 @@ Vue.component('edit', edit);
 
 Vue.component('tour-stop', require('./components/edit/TourStop.vue').default);
 Vue.component('language-text', require('./components/edit/LanguageText.vue').default);
+Vue.component('stage', require('./components/edit/Stage.vue').default);
+Vue.component('seperator', require('./components/edit/Seperator.vue').default);
 
 
 const routes = [{

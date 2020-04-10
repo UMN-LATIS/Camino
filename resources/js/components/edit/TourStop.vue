@@ -1,14 +1,19 @@
 <template>
     <div>
         <div class="form-group">
-            <language-text :languages="languages" :title="title" @change="updated">
+            <language-text :languages="languages" :text.sync="stop.title">
                 Stop Title
             </language-text>
             
-          
+            <stage v-for="(stage,key) in stop.stages" :key='key' :stage="stage">
+                
+                <seperator :stage="stage" :languages="languages"></seperator>
+            
+            </stage>
+
           <!-- <location-selection v-model="location" @change="updated"></location-selection> -->
         </div>
-        {{ stop }}
+        <!-- {{ stop }} -->
     </div>
 </template>
 
@@ -17,25 +22,24 @@ export default {
     props: ["stop", "languages"],
     data() {
         return {
-            "title": {},
-            "location":{},
-            "stages":[]
+            // "title": {},
+            // "location":{},
+            // "stages":[]
         }
     },
     methods: {
         updated: function() {
-            var stop = {};
-            stop.title = this.title;
-            stop.location = this.location;
-            stop.stages = this.stages;
-            this.$emit('update:stop', stop);
+            // var stop = {};
+            // stop.title = this.title;
+            // stop.location = this.location;
+            // stop.stages = this.stages;
+            // this.$emit('update:stop', stop);
         }
     },
     created: function() {
-        if(this.stop) {
-            this.title = this.stop.title;
-            this.location = this.stop.location;
-            this.stages = this.stop.stages;
+        if(!this.stop.title) {
+            Vue.set(this.stop, "title", {});
+            Vue.set(this.stop, "stages", []);
         }
     }
 }

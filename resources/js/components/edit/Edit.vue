@@ -28,7 +28,7 @@
         </div>
 
         <tour-stop v-for="(stop, key) in tour.tour_content.stops" :key=key :stop.sync="tour.tour_content.stops[key]" :languages="tour.tour_content.languages"></tour-stop>
-        <button @click="tour.tour_content.stops.push('')">Add Stop</button>
+        <button @click="tour.tour_content.stops.push({})">Add Stop</button>
 
     <button @click="save">Save</button>
    edit

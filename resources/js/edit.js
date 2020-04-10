@@ -42,6 +42,9 @@ Vue.component('home',home);
 import edit from './components/edit/edit.vue';
 Vue.component('edit', edit);
 
+Vue.component('tour-stop', require('./components/edit/TourStop.vue').default);
+Vue.component('language-text', require('./components/edit/LanguageText.vue').default);
+
 
 const routes = [{
     path: '/edit',
@@ -54,7 +57,7 @@ const routes = [{
         props: true,
     },
     {
-        path: '/create',
+        path: '/edit/create',
         name: "createTour",
         component: edit,
     }

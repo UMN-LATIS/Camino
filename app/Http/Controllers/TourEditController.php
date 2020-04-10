@@ -39,7 +39,11 @@ class TourEditController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tour = new Tour;
+        $tour->user()->associate(Auth::user());
+        $tour->fill($request->all());
+        $tour->save();
+        return response()->json($tour);
     }
 
     /**
@@ -73,7 +77,9 @@ class TourEditController extends Controller
      */
     public function update(Request $request, Tour $tour)
     {
-        //
+        $tour->fill($request->all());
+        $tour->save();
+        return response()->json($tour);
     }
 
     /**

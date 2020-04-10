@@ -2,7 +2,7 @@
     <div class="">
         <ul>
             <li v-for="tour in tours" :key="tour.id">
-                <router-link :to='{name: "editTour", params: { tourId: tour.id }}'>Edit Tour</router-link>
+                <router-link :to='{name: "editTour", params: { tourId: tour.id }}'>Edit Tour {{ tour.title }}</router-link>
             </li>
         </ul>
     {{ tours }}

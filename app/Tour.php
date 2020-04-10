@@ -14,6 +14,8 @@ class Tour extends Model
         'start_location'
     ];
 
+    protected $fillable = ["public", "active", "title", "tour_content", "start_location"];
+
      protected $casts = [
          'tour_content' => 'json',
      ];

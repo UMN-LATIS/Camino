@@ -16,11 +16,13 @@ Route::get('/ar/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::group(['middleware' => ['auth']], function () {
 
+Route::group(['prefix'=>'edit', 'middleware' => ['auth']], function () {
+    Route::get('/', "TourEditController@index");
     Route::resource("edit", "TourEditController")->parameters([
-    'edit' => 'tour'
-]);;
+    'edit' => 'tour']);
+    
+    Route::any('{all}','TourEditController@index')->where(['all' => '.*']);
 
 });
 
@@ -51,3 +53,4 @@ if (config('shibboleth.emulate_idp') ) {
     });
 }
 
+Route::any('{all}','HomeController@index')->where(['all' => '.*']);

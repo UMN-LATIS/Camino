@@ -38,7 +38,7 @@ export default {
             if(!this.tour) {
                 return false;
             }
-            return this.tour.stops.find(elem => elem.title == this.stage);
+            return this.tour.stops[this.stage];
         },
         currentStopAR: function() {
             if(!this.currentStop) {

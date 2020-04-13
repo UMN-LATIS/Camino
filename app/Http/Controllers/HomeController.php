@@ -26,10 +26,9 @@ class HomeController extends Controller
         return view('welcome');
     }
 
-    // public function ar()
-    // {
-    //     return view('arembed');
-    // }
+    public function ar($stage,$locale = "en", $simulateLocation=false) {
+        return view('arembed', ["stage"=>$stage, "simulateLocation"=>$simulateLocation, "locale"=> $locale]);
+    }
 
     public function login()
     {

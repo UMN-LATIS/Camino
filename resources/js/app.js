@@ -51,6 +51,7 @@ Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
 Vue.component('ar', require('./components/AR.vue').default);
+Vue.component('embed-frame', require('./components/EmbedFrame.vue').default);
 Vue.component('ar-embed', require('./components/ARembed.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);

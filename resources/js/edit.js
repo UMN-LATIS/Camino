@@ -49,17 +49,17 @@ Vue.component('seperator', require('./components/edit/Seperator.vue').default);
 
 
 const routes = [{
-    path: '/edit',
+    path: '/creator',
         component: home
     },
     {
-        path: '/edit/:tourId',
+        path: '/creator/:tourId',
         name: "editTour",
         component: edit,
         props: true,
     },
     {
-        path: '/edit/create',
+        path: '/creator/create',
         name: "createTour",
         component: edit,
     }

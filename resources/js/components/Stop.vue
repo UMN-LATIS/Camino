@@ -1,7 +1,7 @@
 <template>
     <div class="bootstrap-fs-modal" v-if="tour">
-       <navbar :tour="tour" :currentStop="currentStop" />     
-        <stop-content class="stop-container" :tour="tour" :currentStop="currentStop"  :key="currentStop" />
+       <navbar :tour="tour" :currentStopId="currentStopId" />     
+        <stop-content class="stop-container" :tour="tour" :currentStop="tour.stops[currentStopId]"  :key="currentStopId" :currentStopId="currentStopId" />
         <debug-bar />
     </div>
     
@@ -9,18 +9,21 @@
 
 <script>
     export default {
-        props: [ "currentStop", "status"],
+        props: {
+            "currentStopId": Number, 
+            "status": String
+        },
         data() {
             return {
-                tour: false
+                tour: false,
             };
         },
         mounted() {
           axios.get("/tour.json" + "?" + this.$i18n.locale)
             .then( response => {
                 this.tour = response.data
-                if(this.currentStop == undefined) {
-                    this.$router.replace({ "name": "tour", params: {"currentStop": this.tour.stops[0].title}})
+                if(this.currentStopId == undefined) {
+                    this.$router.replace({ "name": "tour", params: {"currentStopId": 0}})
                 }
             })
             .catch (error => console.log(error))

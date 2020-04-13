@@ -83,7 +83,7 @@ img, input, select {
                 this.$router.push({
                     name: 'tour',
                     params: {
-                        "currentStop": this.$router.currentRoute.params.currentStop,
+                        "currentStopId": this.$router.currentRoute.params.currentStopId,
                         "status": this.modalName
                     }
                 })

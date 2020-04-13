@@ -11,13 +11,13 @@
 |
 */
 
-Route::get('/', "HomeController@index");
+Route::get('/tour', "HomeController@index");
 Route::get('/ar/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
 Route::get('/home', 'HomeController@index')->name('home');
 
 
 
-Route::group(['prefix'=>'edit', 'middleware' => ['auth']], function () {
+Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
     Route::get('/', "TourEditController@index");
     Route::resource("edit", "TourEditController")->parameters([
     'edit' => 'tour']);

@@ -37,6 +37,7 @@
 </template>
 
 <script>
+// Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
    
 
     export default {
@@ -58,13 +59,13 @@
         methods: {
             save: function() {
                 if(!this.tour.id) {
-                    axios.post("/edit/edit", this.tour)
+                    axios.post("/creator/edit", this.tour)
                     .then((res) => {
                         this.$router.replace("/edit/" + res.data.id);
                     });
                 }
                 else {
-                    axios.put("/edit/edit/" + this.tour.id, this.tour)
+                    axios.put("/creator/edit/" + this.tour.id, this.tour)
                     .then((res) => {
                         // todo: update info
                     });
@@ -73,7 +74,7 @@
         },
         mounted: function() {
             if(this.tourId) {
-                axios.get("/edit/edit/" + this.tourId )
+                axios.get("/creator/edit/" + this.tourId )
                 .then((res) => {
                     this.tour = res.data
                 });

@@ -2,14 +2,14 @@
     <div class="sticky-top">
         <div class="row  navHeader no-gutters">
             <div class="col-3 text-left navButton">
-                <router-link v-if="previousStop" :to="{ name: 'tour', params: { currentStop: previousStop }}" class="controlButton p-2">&laquo; {{ $t("nav.prev") }} </router-link>
+                <router-link v-if="previousStop !== false" :to="{ name: 'tour', params: { currentStopId: previousStop }}" class="controlButton p-2">&laquo; {{ $t("nav.prev") }} </router-link>
             </div>
             <div class="col-6 text-center navToggle ">
-                <a class="p-2" @click.prevent="collapseVisible = !collapseVisible" role="button" href="#" aria-expanded="false" >{{ currentStop }}</a>
+                <a class="p-2" @click.prevent="collapseVisible = !collapseVisible" role="button" href="#" aria-expanded="false" >{{ currentStop.title[$i18n.locale] }}</a>
 
             </div>
             <div class="col-3 text-right navButton" >
-                <router-link v-if="nextStop" :to="{ name: 'tour', params: { currentStop: nextStop }}" class="controlButton p-2">{{ $t("nav.next") }} &raquo;</router-link>
+                <router-link v-if="nextStop !== false" :to="{ name: 'tour', params: { currentStopId: nextStop }}" class="controlButton p-2">{{ $t("nav.next") }} &raquo;</router-link>
             </div>
         
         </div>
@@ -22,7 +22,7 @@
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
                     <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
-                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStop: stop.title}}" class="list-group-item list-group-item-action">{{ stop.title }}</router-link>
+                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.title[$i18n.locale] }}</router-link>
                 </div>
             </div>
         </b-collapse>
@@ -69,7 +69,7 @@ a:hover {
 <script>
 export default {
     props: [
-        'tour', 'currentStop'
+        'tour', 'currentStopId'
     ],
     data() {
         return {
@@ -78,38 +78,33 @@ export default {
     },
     computed: {
         previousStop: function() {
-            for(var i=0; i<this.tour.stops.length; i++) {
-                if(this.tour.stops[i].title == this.currentStop && i !== 0) {
-                    return this.tour.stops[i-1].title;
-                }
+            if(this.currentStopId == 0) {
+                return false;
+            }
+            else {
+                return this.currentStopId - 1;
+            }
+        },
+        nextStop: function() {
+            if(this.currentStopId + 1 < this.tour.stops.length) {
+                return this.currentStopId + 1
             }
             return false;
         },
-        nextStop: function() {
-            for(var i=0; i<this.tour.stops.length; i++) {
-                if(this.tour.stops[i].title == this.currentStop && i + 1 < this.tour.stops.length) {
-                    return this.tour.stops[i+1].title;
-
-                }
-            }
-            return false;
+        currentStop: function() {
+            return this.tour.stops[this.currentStopId];
         }
-
     },
     methods: {
         setProgress: function() {
-            for(var i=0; i<this.tour.stops.length; i++) {
-                if(this.tour.stops[i].title == this.currentStop) {
-                    this.$Progress.set((i+1 / this.tour.stops.length) * 100);
-                }
-            }
+            this.$Progress.set((this.currentStopId+1 / this.tour.stops.length) * 100);
         }
     },
     watch: {
         '$route' (to, from) {
             this.collapseVisible = false
         },
-        currentStop: function(val) {
+        currentStopId: function(val) {
             this.setProgress();
         }
     },

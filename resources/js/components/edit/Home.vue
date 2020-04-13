@@ -20,7 +20,7 @@
             }
         },
         mounted: function() {
-            axios.get("/edit?" + Math.random()) // someday do .json routes in laravel
+            axios.get("/creator?" + Math.random()) // someday do .json routes in laravel
             .then((res) => {
                 this.tours = res.data
             });

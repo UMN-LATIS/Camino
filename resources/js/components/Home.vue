@@ -1,7 +1,7 @@
 <template>
     <div class="bootstrap-fs-modal">
         
-        <router-link to="/tour">Start the tour</router-link>
+        <router-link to="/tour/0">Start the tour</router-link>
         <debug-bar />
     </div>
 </template>

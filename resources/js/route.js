@@ -7,15 +7,22 @@ import home from './components/Home.vue';
 import stop from './components/Stop.vue';
 
 const routes = [{
-        path: '/',
+        path: '/tour/',
         component: home
     },
     {
-        path: '/tour/:currentStop?/:status?',
+        path: '/tour/:currentStopId?/:status?',
         name: "tour",
         component: stop,
-        props: true,
+        props(route) {
+            const props = {
+                ...route.params
+            }
+            props.currentStopId = +props.currentStopId
+            return props
+        }
     }
+
 ];
 
 export const router = new VueRouter({

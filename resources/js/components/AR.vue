@@ -29,7 +29,7 @@
                 if(this.closing) {
                     return "";
                 }
-                return '/ar/' + this.currentStop.title + '/' + this.$i18n.locale +"/" + this.$store.state.config.simulateLocation;
+                return '/ar/' + this.$router.currentRoute.params.currentStopId + '/' + this.$i18n.locale +"/" + this.$store.state.config.simulateLocation;
             },
             isMobile: function() {
                 var isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));

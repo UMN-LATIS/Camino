@@ -26,6 +26,11 @@ class HomeController extends Controller
         return view('welcome');
     }
 
+    // public function ar()
+    // {
+    //     return view('arembed');
+    // }
+
     public function login()
     {
         return view('auth.login');

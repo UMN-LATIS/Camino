@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Tour;
+use App\Stop;
 use Illuminate\Http\Request;
 use Auth;
+use App\Http\Resources\Tour as TourResource;
+
 class TourEditController extends Controller
 {
     /**
@@ -16,7 +19,7 @@ class TourEditController extends Controller
     {
         if($req->ajax()){
 
-            return response()->json(Auth::user()->tours);
+            return response()->json(TourResource::collection(Auth::user()->tours));
         }
         return view("edit.index");
     }
@@ -46,6 +49,17 @@ class TourEditController extends Controller
         return response()->json($tour);
     }
 
+    public function createStop(Request $request, Tour $tour)
+    {
+        $stop = new Stop;
+        $stop->fill($request->all());
+        $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray()) + 1;
+
+        $tour->stops()->save($stop);
+
+        return response()->json($stop);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -54,7 +68,7 @@ class TourEditController extends Controller
      */
     public function show(Tour $tour)
     {
-        return response()->json($tour);
+        return new TourResource($tour);
     }
 
     /**
@@ -80,6 +94,13 @@ class TourEditController extends Controller
         $tour->fill($request->all());
         $tour->save();
         return response()->json($tour);
+    }
+    
+    public function updateStop(Request $request, Tour $tour, Stop $stop)
+    {
+        $stop->fill($request->all());
+        $stop->save();
+        return response()->json($stop);
     }
 
     /**

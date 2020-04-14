@@ -27,12 +27,21 @@
           <button @click="tour.tour_content.languages.push('')">Add Langauge</button>
         </div>
 
-        <tour-stop v-for="(stop, key) in tour.tour_content.stops" :key=key :stop.sync="tour.tour_content.stops[key]" :languages="tour.tour_content.languages"></tour-stop>
-        <button @click="tour.tour_content.stops.push({})">Add Stop</button>
+        <div>
+            <location-selector :location.sync="tour.tour_content.location"></location-selector>
+        </div>
+
+        <ul>
+            <li v-for="stop in tour.stops" :key="stop.id">
+                <router-link :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}">{{ stop.stop_content.title[tour.tour_content.languages[0]] }} </router-link>
+            </li>
+        </ul>
+        <!-- <tour-stop v-for="(stop, key) in tour.stops" :key=key :stop.sync="tour.stops[key]" :languages="tour.tour_content.languages"></tour-stop> -->
+        <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary">Add Stop</router-link>
 
     <button @click="save">Save</button>
-   edit
-   {{ tour.tour_content }}
+
+
     </div>
 </template>
 
@@ -50,8 +59,9 @@
                     title: "",
                     tour_content: {
                         languages: ["English"],
-                        stops: []
-                    }
+                        location: null
+                    },
+                    stops: []
                     
                 }
             }
@@ -62,15 +72,24 @@
                     axios.post("/creator/edit", this.tour)
                     .then((res) => {
                         this.$router.replace("/edit/" + res.data.id);
+                        this.savedAlert();
                     });
                 }
                 else {
                     axios.put("/creator/edit/" + this.tour.id, this.tour)
                     .then((res) => {
-                        // todo: update info
+                        this.savedAlert();
                     });
                 }
-            }
+            },
+            savedAlert: function() {
+                this.$bvToast.toast('Stop saved', {
+                    title: `Saved`,
+                    variant: "success",
+                    autoHideDelay: 3000,
+                    solid: true
+                })
+        }
         },
         mounted: function() {
             if(this.tourId) {

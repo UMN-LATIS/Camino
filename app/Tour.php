@@ -16,11 +16,15 @@ class Tour extends Model
 
     protected $fillable = ["public", "active", "title", "tour_content", "start_location"];
 
-     protected $casts = [
-         'tour_content' => 'json',
-     ];
+    protected $casts = [
+        'tour_content' => 'json',
+    ];
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+    
+    public function stops() {
+        return $this->hasMany(Stop::class);
     }
 }

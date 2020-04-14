@@ -29,6 +29,7 @@
         "bootstrap-vue": "^2.4.2",
         "bootstrap4-fs-modal": "^0.1.5",
         "leaflet": "^1.6.0",
+        "leaflet.locatecontrol": "^0.71.1",
         "three": "^0.113.2",
         "vue-cool-lightbox": "^1.0.13",
         "vue-i18n": "^8.15.3",

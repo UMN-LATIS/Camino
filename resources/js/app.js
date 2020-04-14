@@ -63,7 +63,10 @@ Vue.component('separator', require('./components/Separator.vue').default);
 
 
 import { map } from "leaflet";
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
+
 import 'leaflet/dist/leaflet.css';
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 
 Vue.config.ignoredElements = [

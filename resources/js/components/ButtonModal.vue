@@ -3,7 +3,7 @@
         <b-button v-b-modal="randomizedModalName" v-bind:disabled="disabled">{{ buttonText }}</b-button>
 
         <b-modal size="lg" :id="randomizedModalName" :title="modalTitle" ok-only modal-class="modal-fullscreen"
-            :ok-title='$t("modalClose")'>
+            ok-title='Close'>
             <slot></slot>
         </b-modal>
     </div>

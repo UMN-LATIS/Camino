@@ -1,7 +1,7 @@
 <template>
     <div>
         <language-text :text="stage.text" :languages="languages">
-            Header Title
+            Seperator Title
         </language-text>
     </div>
 

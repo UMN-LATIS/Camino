@@ -22,12 +22,6 @@
     z-index: 10;
 }
 
-.gps-css-icon {
-    border: 3px solid blue;
-    background-color: blue;
-
-}
-
 .target-css-icon {
     border: 3px solid red;
     background-color: red;
@@ -40,25 +34,6 @@
     height: 10px;
 }
 
-.gps_ring {
-    left: -12px;
-    top: -12px;
-    z-index: 1;
-    position: absolute;
-    border: 3px solid #999;
-    -webkit-border-radius: 30px;
-    height: 40px;
-    width: 40px;
-    -webkit-animation: pulsate 1s ease-out;
-    -webkit-animation-iteration-count: infinite;
-    /*opacity: 0.0*/
-}
-
-@-webkit-keyframes pulsate {
-0% {-webkit-transform: scale(0.1, 0.1); opacity: 0.0;}
-50% {opacity: 1.0;}
-100% {-webkit-transform: scale(1.2, 1.2); opacity: 0.0;}
-}
 </style>
 
 
@@ -66,6 +41,7 @@
 
 var cssIcon;
 var map;
+var lc;
 var myLocation = null;
 var myLocationCssIcon = null;
 var targetLocationCssIcon = null;
@@ -80,8 +56,10 @@ var otherLocationsCssIcon = null;
         methods: {
             destroyMap: function() {
                 if(map) {
+                    lc.stop();
                     map.off("locationfound");
                     map.remove();
+                    
                 }
                 map = null;
                 myLocation = null;
@@ -90,7 +68,7 @@ var otherLocationsCssIcon = null;
 
                 console.log("nav");
                 console.log(e);
-                map = L.map('map').fitWorld();
+                map = L.map('map');
                 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                     // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                     maxZoom: 18,
@@ -104,16 +82,8 @@ var otherLocationsCssIcon = null;
                 //      L.imageOverlay(imageUrl, imageBounds).addTo(map);
                 //
                 //
-
                 
-                myLocationCssIcon = L.divIcon({
-                    // Specify a class name we can refer to in CSS.
-                    className: 'gps-css-icon css-icon',
-                    html: '<div class="gps_ring"></div>'
-                        ,
-                    iconSize: [22, 22]
-                    // ,iconAnchor: [11,11]
-                });
+                
                 targetLocationCssIcon = L.divIcon({
                     // Specify a class name we can refer to in CSS.
                     className: 'target-css-icon css-icon',
@@ -129,36 +99,36 @@ var otherLocationsCssIcon = null;
                     iconSize: [15, 15]
                 });
 
-                var self = this;
-                function onLocationFound(e) {
-                    console.log("location found");
-                    var radius = e.accuracy;
+                // var self = this;
+                // function onLocationFound(e) {
+                //     console.log("location found");
+                //     var radius = e.accuracy;
 
-                    var targetLocation = e.latlng;
-                    if(self.$store.state.config.simulateLocation) {
-                        targetLocation.lat = self.tour.simulatedLatitude;
-                        targetLocation.lng = self.tour.simulatedLongitude;
-                    }
-                    console.log(targetLocation)
-                    if (!myLocation) {
-                        myLocation = L.marker(targetLocation, {
-                            icon: myLocationCssIcon
-                        });
-                        myLocation.addTo(map);
+                //     var targetLocation = e.latlng;
+                //     if(self.$store.state.config.simulateLocation) {
+                //         targetLocation.lat = self.tour.simulatedLatitude;
+                //         targetLocation.lng = self.tour.simulatedLongitude;
+                //     }
+                //     console.log(targetLocation)
+                //     if (!myLocation) {
+                //         myLocation = L.marker(targetLocation, {
+                //             icon: myLocationCssIcon
+                //         });
+                //         myLocation.addTo(map);
 
-                        map.setView(targetLocation, 18);
-                    } else {
-                        myLocation.setLatLng(targetLocation);
+                //         map.setView(targetLocation, 18);
+                //     } else {
+                //         myLocation.setLatLng(targetLocation);
 
-                    }
+                //     }
 
-                }
-                map.locate({
-                    setView: false,
-                    maxZoom: 18,
-                    watch: true,
-                    enableHighAccuracy: true
-                });
+                // }
+                // map.locate({
+                //     setView: false,
+                //     maxZoom: 18,
+                //     watch: true,
+                //     enableHighAccuracy: true
+                // });
 
                 // todo
                 // var latlngs = [
@@ -175,6 +145,7 @@ var otherLocationsCssIcon = null;
                     var targetLocation = L.marker([this.stage.targetPoint.lat, this.stage.targetPoint.lng], {
                         icon: targetLocationCssIcon
                     });
+                    map.setView(new L.LatLng(this.stage.targetPoint.lat, this.stage.targetPoint.lng), 17);
                     targetLocation.addTo(map);
                 }
                 var targetPoints = this.tour.stops.map(stop => stop.stages).map(stages=>{
@@ -200,7 +171,18 @@ var otherLocationsCssIcon = null;
                         color: 'gray',
                         opacity: 0.4
                     }).addTo(map);
-                map.on('locationfound', onLocationFound);
+                // map.on('locationfound', onLocationFound);
+                lc = L.control.locate({
+                    showCompass: true,
+                    locateOptions: {
+                        enableHighAccuracy: true,
+                        maxZoom: 18
+                    }
+                }).addTo(map);
+
+                if(!this.$store.state.config.simulateLocation) {
+                    lc.start();
+                }
             }
         },
 

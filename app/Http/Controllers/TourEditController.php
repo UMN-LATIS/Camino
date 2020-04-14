@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 use App\Tour;
 use App\Stop;
 use Illuminate\Http\Request;
@@ -44,6 +44,11 @@ class TourEditController extends Controller
     {
         $tour = new Tour;
         $tour->user()->associate(Auth::user());
+        $request = $request->all();
+        if($request["start_location"]) {
+            $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
+        } 
+        
         $tour->fill($request->all());
         $tour->save();
         return response()->json($tour);
@@ -91,7 +96,12 @@ class TourEditController extends Controller
      */
     public function update(Request $request, Tour $tour)
     {
-        $tour->fill($request->all());
+        $request = $request->all();
+        if($request["start_location"]) {
+            $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
+        } 
+        
+        $tour->fill($request);
         $tour->save();
         return response()->json($tour);
     }

@@ -1,5 +1,7 @@
 <?php
 
+// howto search within a distance of a point: \App\Tour::distanceSphere("start_location", new Point( "44.9282", "-93.1463" ), 10)->get();
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +12,7 @@ class Tour extends Model
 {
     Use SoftDeletes;
     use SpatialTrait;
+
     protected $spatialFields = [
         'start_location'
     ];

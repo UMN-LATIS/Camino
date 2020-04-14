@@ -14,7 +14,7 @@
             <template v-slot:modal-footer="{ ok }" :locationAvailable="locationAvailable">
                 <div class="w-100">
       <!-- Emulate built in modal footer ok and cancel button actions -->
-      <b-button @click="useCurrentLocation" v-bind:disabled="!locationAvailable" class="float-left">Use Current Location</b-button>
+      <b-button @click="useCurrentLocation" v-if="locationAvailable" class="float-left">Use Current Location</b-button>
 
       <b-button  variant="success" @click="ok()" class="float-right">
         Close

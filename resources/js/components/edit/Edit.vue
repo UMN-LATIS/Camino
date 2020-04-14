@@ -28,7 +28,7 @@
         </div>
 
         <div>
-            <location-selector :location.sync="tour.tour_content.location"></location-selector>
+            <location-selector :location.sync="tour.start_location"></location-selector>
         </div>
 
         <ul>
@@ -57,9 +57,9 @@
                     public: false,
                     active: false,
                     title: "",
+                    start_location: null,
                     tour_content: {
-                        languages: ["English"],
-                        location: null
+                        languages: ["English"]
                     },
                     stops: []
                     

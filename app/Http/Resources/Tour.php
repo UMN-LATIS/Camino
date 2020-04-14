@@ -19,7 +19,7 @@ class Tour extends JsonResource
             'active' => $this->active,
             'title' => $this->title,
             'tour_content' => $this->tour_content,
-            'start_location' => $this->start_location,
+            'start_location' =>$this->start_location?["lat"=>$this->start_location->getLat(), "lng"=>$this->start_location->getLng()]:null,
             'stops' => $this->stops
         ];
     }

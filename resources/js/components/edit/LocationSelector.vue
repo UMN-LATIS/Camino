@@ -1,7 +1,5 @@
 <template>
-    <div>
-        <p>General location for tour: {{ location }}</p>
-        
+    <div>        
         <b-button v-b-modal="randomizedModalName">Set Location</b-button>
         
         <b-modal size="lg" :id="randomizedModalName" title="Set Location" ok-only modal-class="modal-fullscreen"
@@ -13,7 +11,7 @@
             </div>
             <template v-slot:modal-footer="{ ok }" :locationAvailable="locationAvailable">
                 <div class="w-100">
-      <!-- Emulate built in modal footer ok and cancel button actions -->
+
       <b-button @click="useCurrentLocation" v-if="locationAvailable" class="float-left">Use Current Location</b-button>
 
       <b-button  variant="success" @click="ok()" class="float-right">
@@ -55,21 +53,31 @@ var otherLocationsCssIcon = null;
 var marker;
 
     export default {
-        props: ["location"],
+        props: ["location", "generalarea"],
         data() {
             return {
                 currentLocation: null,
                 locationAvailable: false,
-                randomizedModalName: "navModal"
+                randomIdentifier: Math.round(Math.random() * 100000)
             }
         },
         mounted() {
             this.$root.$on('bv::modal::shown', (bvEvent, modalId) => {
-                this.renderMap();
+                if(modalId == this.randomizedModalName) {
+                    this.renderMap();
+                }
+                
             })
              this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
-                this.destroyMap();
+                 if(modalId == this.randomizedModalName) {
+                    this.destroyMap();
+                 }
             })            
+        },
+        computed: {
+            randomizedModalName: function() {
+                return "navModal" + this.randomIdentifier;
+            }
         },
         watch: {
             location: function(newLocation) {
@@ -154,7 +162,9 @@ var marker;
                     });
                     marker.addTo(map);
                     map.setView(new L.LatLng(this.location.lat, this.location.lng), 17);
-
+                }
+                else if(this.generalarea) {
+                    map.setView(new L.LatLng(this.generalarea.lat, this.generalarea.lng), 17);
                 }
                
                 map.on('locationfound', onLocationFound);

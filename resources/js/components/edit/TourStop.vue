@@ -8,7 +8,7 @@
             </language-text>
             
             <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage" v-on:remove="stop.stop_content.stages.splice(key)">
-                <seperator :stage="stage" :languages="tour.tour_content.languages"></seperator>
+                <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages" :tour="tour"></component>
             </stage>
 
             <div class="form-group">
@@ -50,7 +50,7 @@ export default {
     },
     methods: {
         addStage: function() {
-            this.stop.stop_content.stages.push({"type": this.newStageType});
+            this.stop.stop_content.stages.push({"type": this.newStageType.toLowerCase()});
         },
         goBack: function() {
             this.$router.go(-1);

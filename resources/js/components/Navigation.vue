@@ -1,7 +1,7 @@
 <template>
     <div>
-        <p v-for="(instruction,index) in stage.text[$i18n.locale]" :key="index">
-            {{ instruction }}
+        <p>
+            {{  stage.text[$i18n.locale] }}
         </p>
         <button-modal modalName="nav" :buttonText="stage.buttonTitle[$i18n.locale]" :modalTitle="stage.buttonTitle[$i18n.locale]"
             v-on:modalShown="renderMap" v-on:modalClosed="destroyMap">

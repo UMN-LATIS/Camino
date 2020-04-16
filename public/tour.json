@@ -22,8 +22,8 @@
             {
                 "type": "navigation",
                 "text": {
-                    "en": ["This is some blah", "more blah"],
-                    "es": ["lfjkdklfjdka"]
+                    "en": "This is some blah",
+                    "es": "lfjkdklfjdka"
                 },
                 "buttonTitle": {
                     "en": "show map",
@@ -52,8 +52,8 @@
             {
                 "type": "guide",
                 "text": {
-                    "en": ["this is a [test] of [more] things", "more [words] go here"],
-                    "es": ["ldkjfkdsjafs"]
+                    "en": "this is a [test] of [more] <br/>things more [words] go here",
+                    "es": "ldkjfkdsjafs"
                 }
             },
             {
@@ -137,8 +137,8 @@
             },{
                 "type": "navigation",
                 "text": {
-                    "en": ["What the heck?"],
-                    "es": ["lfjkdklfjdka"]
+                    "en": "What the heck?",
+                    "es": "lfjkdklfjdka"
                 },
                 "buttonTitle": {
                     "en": "show map",
@@ -159,8 +159,8 @@
             {
                 "type": "guide",
                 "text": {
-                    "en": ["this is a [test] of things"],
-                    "es": ["ldkjfkdsjafs"]
+                    "en": "this is a [test] of things",
+                    "es": "ldkjfkdsjafs"
                 }
             },
             {

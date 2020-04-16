@@ -63,7 +63,9 @@ Vue.component('stage', require('./components/edit/Stage.vue').default);
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 
 Vue.component('seperator', require('./components/edit/Seperator.vue').default);
+Vue.component('navigation', require('./components/edit/Navigation.vue').default);
 Vue.component('location-selector', require('./components/edit/LocationSelector.vue').default);
+Vue.component('initial-location', require('./components/edit/LocationSelector.vue').default);
 
 
 const routes = [{

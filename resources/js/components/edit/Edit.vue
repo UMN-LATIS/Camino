@@ -28,7 +28,7 @@
         </div>
 
         <div>
-            <location-selector :location.sync="tour.start_location"></location-selector>
+            <initial-location :location.sync="tour.start_location"></initial-location>
         </div>
 
         <ul>

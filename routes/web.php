@@ -22,12 +22,13 @@ Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
     Route::resource("edit", "TourEditController")->parameters([
     'edit' => 'tour']);
 
+    Route::post('/image/store', 'ImageController@store');
     Route::post("/edit/{tour}/stop", "TourEditController@createStop");
     Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
     Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");
 
     Route::any('{all}','TourEditController@index')->where(['all' => '.*']);
-
+    
 });
 
 

@@ -49,7 +49,7 @@ class TourEditController extends Controller
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
         } 
         
-        $tour->fill($request->all());
+        $tour->fill($request);
         $tour->save();
         return response()->json($tour);
     }
@@ -58,7 +58,14 @@ class TourEditController extends Controller
     {
         $stop = new Stop;
         $stop->fill($request->all());
-        $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray()) + 1;
+        $sortOrder = $tour->stops->pluck("sort_order")->toArray();
+        if(count($sortOrder) == 0) {
+            $stop->sort_order = 0;
+        }
+        else {
+            $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray()) + 1;
+        }
+        
 
         $tour->stops()->save($stop);
 

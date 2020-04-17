@@ -51,7 +51,7 @@ export default {
             return this.$store.state.hotwords.filter(w => w == this.cleanedWord).length > 0;
         },
         cleanedWord: function() {
-            return this.text.replace(/[\[\]]/g, '');
+            return this.text.replace(/[\|\|]/g, '');
         }
     }
 }

@@ -69,6 +69,25 @@ import 'leaflet/dist/leaflet.css';
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 
+var marked = require('marked');
+Vue.mixin({
+    methods: {
+        marked: function (input) {
+            return marked(input);
+        }
+    }
+});
+
+import DOMPurify from 'dompurify';
+Vue.mixin({
+    methods: {
+        purify: function (input) {
+            return DOMPurify.sanitize(input);
+        }
+    }
+});
+
+
 Vue.config.ignoredElements = [
     "a-text",
     "a-scene",

@@ -12,7 +12,7 @@ export default {
         //   .join('')
 
             // var regex = /\[(.*)\]/g, result = []; searchText.match(/\[(.*?)\]/)
-            var matches = this.text.match(/\[(.*?)\]/g);
+            var matches = this.text.match(/\|(.*?)\|/g);
             var localText = this.text;
             if(matches) {
                 matches.forEach((match) => {
@@ -20,7 +20,7 @@ export default {
                 })
             }
             
-            return "<p>" + localText + "</p>";
+            return "<div>" + localText + "</div>";
          } catch (err) {
         // TODO use error component
             console.error(err)

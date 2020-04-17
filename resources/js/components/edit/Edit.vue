@@ -18,6 +18,13 @@
           </label>
         </div>
 
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template">
+            Start stops with standard template
+          </label>
+        </div>
+
         <div class="form-group">
           <label for="">Languages</label>
           <div v-for="(language, key) in tour.tour_content.languages" :key="key">
@@ -29,6 +36,39 @@
 
         <div>
             <initial-location :location.sync="tour.start_location"></initial-location>
+        </div>
+
+        <div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.custom_base_map" value="checkedValue" checked>
+                Custom base Map
+              </label>
+            </div>
+            <div v-if="tour.tour_content.custom_base_map">
+                <img :src="'/storage/' + tour.tour_content.custom_base_map_image" v-if="tour.tour_content.custom_base_map_image" class="img-responsive">
+                <image-upload v-if="!tour.tour_content.custom_base_map_image" v-on:imageuploaded="imageUploaded($event)"></image-upload>
+                <div class="form-group">
+                  <label for="">Upper Left Latitude</label>
+                  <input type="text"
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lat" aria-describedby="helpId" placeholder="">
+                </div>
+                <div class="form-group">
+                  <label for="">Upper Left Longitude</label>
+                  <input type="text"
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lng" aria-describedby="helpId" placeholder="">
+                </div>
+                    <div class="form-group">
+                  <label for="">Lower Right Latitude</label>
+                  <input type="text"
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lat" aria-describedby="helpId" placeholder="">
+                </div>
+                <div class="form-group">
+                  <label for="">Lower Right Longitude</label>
+                  <input type="text"
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lng" aria-describedby="helpId" placeholder="">
+                </div>
+            </div>
         </div>
 
         <ul>
@@ -59,7 +99,21 @@
                     title: "",
                     start_location: null,
                     tour_content: {
-                        languages: ["English"]
+                        use_template: false,
+                        languages: ["English"],
+                        custom_base_map: false,
+                        custom_base_map_image: null,
+                        custom_base_map_coords: {
+                            "upperleft":{
+                            "lat": null,
+                            "lng": null
+                            },
+                            "lowerright":{
+                            "lat": null,
+                            "lng": null
+                            }
+                        }
+
                     },
                     stops: []
                     
@@ -67,11 +121,14 @@
             }
         },
         methods: {
+            imageUploaded: function(value) {
+                this.tour.tour_content.custom_base_map_image = value;
+            },
             save: function() {
                 if(!this.tour.id) {
                     axios.post("/creator/edit", this.tour)
                     .then((res) => {
-                        this.$router.replace("/edit/" + res.data.id);
+                        this.$router.replace("/creator/" + res.data.id);
                         this.savedAlert();
                     });
                 }

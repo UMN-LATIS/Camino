@@ -52,7 +52,7 @@
             {
                 "type": "guide",
                 "text": {
-                    "en": "this is a [test] of [more] <br/>things more [words] go here",
+                    "en": "fdasfsrfd  \n fds  \n**af**\ndaf\n|sdafsdafsd<script src='fdafs'></script>a| safsda sdfaf",
                     "es": "ldkjfkdsjafs"
                 }
             },
@@ -64,27 +64,33 @@
                 },
                 "waypoints": [
                     {
-                        "lat": "-13.253208",
-                        "lng": "-72.256074",
-                        "alt": "1900",
+                        "location": {
+                            "lat": "-13.253208",
+                            "lng": "-72.256074"
+                        },
+                        "altitude": "1900",
                         "text": {
                             "en": "Pinkuylluna",
                             "es": "Pinkuylluna"
                         }
                     },
                     {
+                        "location": {
                         "lat": "-13.284595",
-                        "lng": "-72.229607",
-                        "alt": "1000",
+                        "lng": "-72.229607"
+                        },
+                        "altitude": "1000",
                         "text": {
                             "en": "Naupa Iglesia",
                             "es": "Naupa Iglesia"
                         }
                     },
                     {
+                        "location": {
                         "lat": "-13.267577",
-                        "lng": "-72.295041",
-                        "alt": "1000",
+                        "lng": "-72.295041"
+                        },
+                        "altitude": "1000",
                         "text": {
                             "en": "Inca Quarries",
                             "es": ""

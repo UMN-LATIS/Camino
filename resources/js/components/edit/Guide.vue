@@ -1,13 +1,9 @@
 <template>
     <div>
         <language-text :text="stage.text" :languages="languages" :largetext="true">
-            Navigation Text
+            Guide Text
         </language-text>
-        <language-text :text="stage.buttonTitle" :languages="languages">
-            Map Button Title
-        </language-text>
-        <p>Location for Stop: {{ stage.targetPoint }}</p>
-        <location-selector :location.sync="stage.targetPoint" :generalarea="tour.start_location"></location-selector>
+
     </div>
 
 </template>
@@ -35,8 +31,6 @@ export default {
     created() {
         if(!this.stage.text) {
             Vue.set(this.stage, "text", {"placeholder": null});
-            Vue.set(this.stage, "buttonTitle", {"English":"Show Map"});
-            Vue.set(this.stage, "targetPoint", null);
         }
     }
 }

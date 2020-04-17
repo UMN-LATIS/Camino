@@ -1,8 +1,7 @@
 <template>
     <div>
-        <p>
-            {{  stage.text[$i18n.locale] }}
-        </p>
+        <hotwords :text="formattedText" >
+        </hotwords>
         <button-modal modalName="nav" :buttonText="stage.buttonTitle[$i18n.locale]" :modalTitle="stage.buttonTitle[$i18n.locale]"
             v-on:modalShown="renderMap" v-on:modalClosed="destroyMap">
             <div style="height: 70vh; width: 100%" id="map">
@@ -53,6 +52,14 @@ var otherLocationsCssIcon = null;
             return {
             }
         },
+        computed: {
+            formattedText: function() {
+                if(this.stage) {
+                    return this.marked(this.purify(this.stage.text[this.$i18n.locale]))
+                }
+                
+            }
+        },
         methods: {
             destroyMap: function() {
                 if(map) {
@@ -76,14 +83,6 @@ var otherLocationsCssIcon = null;
                     accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
                 }).addTo(map);
 
-                // Actual map strategy
-                // var imageUrl = 'map.png',
-                //imageBounds = [[44.95134, -93.133163], [44.99134, -93.173163]];
-                //      L.imageOverlay(imageUrl, imageBounds).addTo(map);
-                //
-                //
-                
-                
                 targetLocationCssIcon = L.divIcon({
                     // Specify a class name we can refer to in CSS.
                     className: 'target-css-icon css-icon',
@@ -98,48 +97,6 @@ var otherLocationsCssIcon = null;
                         ,
                     iconSize: [15, 15]
                 });
-
-                // var self = this;
-                // function onLocationFound(e) {
-                //     console.log("location found");
-                //     var radius = e.accuracy;
-
-                //     var targetLocation = e.latlng;
-                //     if(self.$store.state.config.simulateLocation) {
-                //         targetLocation.lat = self.tour.simulatedLatitude;
-                //         targetLocation.lng = self.tour.simulatedLongitude;
-                //     }
-                //     console.log(targetLocation)
-                //     if (!myLocation) {
-                //         myLocation = L.marker(targetLocation, {
-                //             icon: myLocationCssIcon
-                //         });
-                //         myLocation.addTo(map);
-
-                //         map.setView(targetLocation, 18);
-                //     } else {
-                //         myLocation.setLatLng(targetLocation);
-
-                //     }
-
-                // }
-                // map.locate({
-                //     setView: false,
-                //     maxZoom: 18,
-                //     watch: true,
-                //     enableHighAccuracy: true
-                // });
-
-                // todo
-                // var latlngs = [
-                //     [44.9720, -93.2423],
-                //     [44.97278, -93.23806],
-                //     [44.9764, -93.2354]
-                // ];
-                // var polyline = L.polyline(latlngs, {
-                //     color: 'red',
-                //     opacity: 0.4
-                // }).addTo(map);
 
                 if(this.stage.targetPoint) {
                     var targetLocation = L.marker([this.stage.targetPoint.lat, this.stage.targetPoint.lng], {

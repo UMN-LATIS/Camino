@@ -43,6 +43,9 @@ Vue.config.ignoredElements = [
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
+
+
+
 import home from './components/edit/Home.vue';
 Vue.component('home',home);
 
@@ -52,6 +55,10 @@ Vue.component('edit', edit);
 
 import tourStop from './components/edit/TourStop.vue';
 Vue.component('tour-stop', tourStop);
+
+import hotwordEditor from './components/edit/HotwordEditor.vue';
+Vue.component('hotword-editor', hotwordEditor);
+
 
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Editor from 'v-markdown-editor'
@@ -67,6 +74,7 @@ Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 
 Vue.component('custom-markdown', require('./components/edit/CustomMarkdown.vue').default);
 Vue.component('image-upload', require('./components/edit/ImageUpload.vue').default);
+Vue.component('save-alert', require('./components/edit/SaveAlert.vue').default);
 
 Vue.component('seperator', require('./components/edit/Seperator.vue').default);
 Vue.component('navigation', require('./components/edit/Navigation.vue').default);
@@ -104,6 +112,12 @@ const routes = [{
         path: '/creator/:tourId?/edit/:stopId',
         name: "editStop",
         component: tourStop,
+        props: true,
+    },
+    {
+        path: '/creator/:tourId?/hotwords',
+        name: "editHotwords",
+        component: hotwordEditor,
         props: true,
     }
     

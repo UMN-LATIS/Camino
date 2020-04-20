@@ -72,28 +72,40 @@
         </div>
 
         <ul>
-            <li v-for="stop in tour.stops" :key="stop.id">
-                <router-link :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}">{{ stop.stop_content.title[tour.tour_content.languages[0]] }} </router-link>
-            </li>
+            <draggable v-model="tour.stops"> 
+              <li v-for="stop in tour.stops" :key="stop.id">
+                  <router-link :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}">{{ stop.stop_content.title[tour.tour_content.languages[0]] }} </router-link>
+              </li>
+            </draggable>
         </ul>
+
+        You have  {{ hotwords.length }} hotwords.  
+        <router-link :to="{ name: 'editHotwords', params: { tourId: tourId }}">Define</router-link>
+        
+
         <!-- <tour-stop v-for="(stop, key) in tour.stops" :key=key :stop.sync="tour.stops[key]" :languages="tour.tour_content.languages"></tour-stop> -->
-        <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary">Add Stop</router-link>
-
-    <button @click="save">Save</button>
-
-
+        <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary" v-if="this.tour.id">Add Stop</router-link>
+        
+    <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
+ 
     </div>
 </template>
 
+
 <script>
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
-   
+   import draggable from 'vuedraggable'        
 
     export default {
         props: ["tourId"],
+        components: {
+            draggable
+        },
         data() {
             return {
+                showAlert: false,
                 tour: {
+                    id: null,
                     public: false,
                     active: false,
                     title: "",
@@ -101,6 +113,7 @@
                     tour_content: {
                         use_template: false,
                         languages: ["English"],
+                        hotWords: {},
                         custom_base_map: false,
                         custom_base_map_image: null,
                         custom_base_map_coords: {
@@ -120,6 +133,24 @@
                 }
             }
         },
+        computed: {
+            hotwords: function () {
+                return this.tour.stops.map(s => { 
+                    return s.stop_content.stages.map(stage => {
+                            var cleanedMatches = [];
+                            Object.entries(stage.text).forEach(([key, value]) => {
+                                if(value) {
+                                    var matches = value.match(/\|(.*?)\|/g);
+                                    if(matches) {
+                                        cleanedMatches.push(matches.map(w=>w.replace(/[\|\|]/g, '')));
+                                    }
+                                }
+                            });
+                            return cleanedMatches;
+                        });
+                    }).flat(4);
+            }
+        },
         methods: {
             imageUploaded: function(value) {
                 this.tour.tour_content.custom_base_map_image = value;
@@ -129,24 +160,17 @@
                     axios.post("/creator/edit", this.tour)
                     .then((res) => {
                         this.$router.replace("/creator/" + res.data.id);
-                        this.savedAlert();
+                        this.tour.id = res.data.id;
+                        this.showAlert = true;
                     });
                 }
                 else {
                     axios.put("/creator/edit/" + this.tour.id, this.tour)
                     .then((res) => {
-                        this.savedAlert();
+                        this.showAlert = true;
                     });
                 }
-            },
-            savedAlert: function() {
-                this.$bvToast.toast('Stop saved', {
-                    title: `Saved`,
-                    variant: "success",
-                    autoHideDelay: 3000,
-                    solid: true
-                })
-        }
+            }
         },
         mounted: function() {
             if(this.tourId) {

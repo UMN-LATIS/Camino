@@ -6,11 +6,13 @@
                 Stop Title
             </language-text>
 
-            <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage"
-                v-on:remove="stop.stop_content.stages.splice(key)">
-                <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages" :tour="tour">
-                </component>
-            </stage>
+            <draggable v-model="stop.stop_content.stages" handle=".handle">
+                <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage"
+                    v-on:remove="stop.stop_content.stages.splice(key)">
+                    <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages" :tour="tour">
+                    </component>
+                </stage>
+            </draggable>
 
             <div class="form-group">
                 <div class="row">
@@ -28,16 +30,22 @@
 
         </div>
         <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-primary">Back to Tour
-        </router-link> <button @click="save" class="btn btn-primary">Save</button>
+        </router-link> <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
         <!-- {{ stop }} -->
     </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+
     export default {
         props: ["stopId", "tourId"],
+        components: {
+            draggable
+        },
         data() {
             return {
+                showAlert: false,
                 newStageType: null,
                 stageTypes: {
                     "seperator": "Seperator",
@@ -108,23 +116,14 @@
                                     stopId: this.stop.id
                                 }
                             })
-                            this.savedAlert()
+                            this.showAlert = true;
                         });
                 } else {
                     axios.put("/creator/edit/" + this.tour.id + "/stop/" + this.stop.id, this.stop)
                         .then((res) => {
-
-                            this.savedAlert()
+                            this.showAlert = true;
                         });
                 }
-            },
-            savedAlert: function () {
-                this.$bvToast.toast('Stop saved', {
-                    title: `Saved`,
-                    variant: "success",
-                    autoHideDelay: 3000,
-                    solid: true
-                })
             }
         },
         mounted: function () {

@@ -110,6 +110,14 @@ class TourEditController extends Controller
         
         $tour->fill($request);
         $tour->save();
+
+        for($i=0; $i<count($request["stops"]); $i++) {
+            $stop = $request["stops"][$i];
+            $loadedStop = Stop::find($stop["id"]);
+            $loadedStop->sort_order = $i;
+            $loadedStop->save();
+        }
+
         return response()->json($tour);
     }
     

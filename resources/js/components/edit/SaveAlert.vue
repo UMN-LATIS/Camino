@@ -23,7 +23,7 @@
 <script>
 export default {
     props: ["showAlert"],
-    watched: {
+    watch: {
         showAlert: function(value) {
             if(value == true) {
                 setTimeout(() => { this.$emit("update:showAlert", false)}, 1500);

@@ -106,4 +106,4 @@ const app = new Vue({
     el: '#app',
 });
 
-i18n.locale = 'en';
+i18n.locale = 'English';

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use App\Tour;
+use App\Http\Resources\Tour as TourResource;
 class HomeController extends Controller
 {
     /**
@@ -24,6 +26,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('welcome');
+    }
+
+    public function loadTour(Tour $tour) {
+        return new TourResource($tour);
     }
 
     public function ar($stage,$locale = "en", $simulateLocation=false) {

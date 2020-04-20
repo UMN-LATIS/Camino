@@ -9,20 +9,21 @@
 
 <script>
     export default {
-        props: {
-            "currentStopId": Number, 
-            "status": String
-        },
+        props: [
+            "currentStopId", 
+            "status",
+            "tourId"
+        ],
         data() {
             return {
                 tour: false,
             };
         },
         mounted() {
-          axios.get("/tour.json" + "?" + this.$i18n.locale)
+          axios.get("/api/tour/" + this.tourId)
             .then( response => {
                 this.tour = response.data
-                if(this.currentStopId == undefined) {
+                if(this.currentStopId == undefined || isNaN(this.currentStopId)) {
                     this.$router.replace({ "name": "tour", params: {"currentStopId": 0}})
                 }
             })

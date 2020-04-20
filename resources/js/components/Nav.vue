@@ -22,7 +22,7 @@
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
                     <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
-                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.title[$i18n.locale] }}</router-link>
+                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.stop_content.title[$i18n.locale] }}</router-link>
                 </div>
             </div>
         </b-collapse>
@@ -92,7 +92,7 @@ export default {
             return false;
         },
         currentStop: function() {
-            return this.tour.stops[this.currentStopId];
+            return this.tour.stops[this.currentStopId].stop_content;
         }
     },
     methods: {

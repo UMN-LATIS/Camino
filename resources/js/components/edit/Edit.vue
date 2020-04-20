@@ -85,9 +85,8 @@
 
         <!-- <tour-stop v-for="(stop, key) in tour.stops" :key=key :stop.sync="tour.stops[key]" :languages="tour.tour_content.languages"></tour-stop> -->
         <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary" v-if="this.tour.id">Add Stop</router-link>
-        
     <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
- 
+    <a :href="'/tour/' + tour.id" v-if="tour.id">Preview</a>
     </div>
 </template>
 
@@ -137,6 +136,9 @@
             hotwords: function () {
                 return this.tour.stops.map(s => { 
                     return s.stop_content.stages.map(stage => {
+                            if(!stage.text) {
+                                return [];
+                            }
                             var cleanedMatches = [];
                             Object.entries(stage.text).forEach(([key, value]) => {
                                 if(value) {

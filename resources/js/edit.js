@@ -76,7 +76,7 @@ Vue.component('custom-markdown', require('./components/edit/CustomMarkdown.vue')
 Vue.component('image-upload', require('./components/edit/ImageUpload.vue').default);
 Vue.component('save-alert', require('./components/edit/SaveAlert.vue').default);
 
-Vue.component('seperator', require('./components/edit/Seperator.vue').default);
+Vue.component('separator', require('./components/edit/Separator.vue').default);
 Vue.component('navigation', require('./components/edit/Navigation.vue').default);
 Vue.component('guide', require('./components/edit/Guide.vue').default);
 Vue.component('ar', require('./components/edit/AR.vue').default);

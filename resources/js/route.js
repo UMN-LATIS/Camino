@@ -11,7 +11,7 @@ const routes = [{
         component: home
     },
     {
-        path: '/tour/:currentStopId?/:status?',
+        path: '/tour/:tourId/:currentStopId?/:status?',
         name: "tour",
         component: stop,
         props(route) {

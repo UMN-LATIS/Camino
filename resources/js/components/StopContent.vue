@@ -1,9 +1,10 @@
 <template>
     <div class="container mt-2" v-if="tour.stops.length > 0">
-        <template v-for="(stage, index) in currentStop.stages">
+        <template v-for="(stage, index) in currentStop.stop_content.stages">
             <div class="row mt-1" :key="index">
                 <div class="col">
-                    <component :is="stage.type" :stage="stage" :tour="tour" :currentStop="currentStop" :currentStopId="currentStopId">
+
+                    <component :is="stage.type" :stage="stage" :tour="tour" :currentStop="currentStop.stop_content" :currentStopId="currentStopId">
                     </component>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div  v-if="tour && stop" >
 
-        <div v-if="tour">
+        <div>
             <language-text :languages="tour.tour_content.languages" :text.sync="stop.stop_content.title">
                 Stop Title
             </language-text>
@@ -46,10 +46,11 @@ import draggable from 'vuedraggable'
         },
         data() {
             return {
+                localStop: this.stopId,
                 showAlert: false,
                 newStageType: null,
                 stageTypes: {
-                    "seperator": "Seperator",
+                    "separator": "Separator",
                     "ar": "AR",
                     "embed-frame": "Embed",
                     "guide": "Guide",
@@ -70,7 +71,7 @@ import draggable from 'vuedraggable'
                                 "text": {
                                     "English": "Navigation"
                                 },
-                                "type": "seperator"
+                                "type": "Separator"
                             },
                             {
                                 "text": {"placeholder": null},
@@ -84,7 +85,7 @@ import draggable from 'vuedraggable'
                                 "text": {
                                     "English": "Guide"
                                 },
-                                "type": "seperator"
+                                "type": "Separator"
                             },
                             {
                                 "text": {"placeholder": null},
@@ -98,7 +99,7 @@ import draggable from 'vuedraggable'
         computed: {
             previewLink: function() {
 
-                return "/tour/" + this.tour.id + "/" + this.tour.stops.indexOf(this.stop);
+                return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
             }
         },
         methods: {
@@ -111,11 +112,11 @@ import draggable from 'vuedraggable'
                 this.$router.go(-1);
             },
             save: function () {
-                console.log(this.stop);
                 if (!this.stop.id) {
                     axios.post("/creator/edit/" + this.tour.id + "/stop/", this.stop)
                         .then((res) => {
                             this.stop.id = res.data.id;
+                            this.stop.sort_order = res.data.sort_order;
                             this.$router.replace({
                                 name: 'editStop',
                                 params: {
@@ -134,7 +135,8 @@ import draggable from 'vuedraggable'
             }
         },
         mounted: function () {
-            axios.get("/creator/edit/" + this.tourId)
+            // cache bust because otherwise we won't reload the tour when using the back button
+            axios.get("/creator/edit/" + this.tourId + "?" + Math.random())
                 .then((res) => {
                     this.tour = res.data
                     if (this.stopId) {

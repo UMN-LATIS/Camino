@@ -31,6 +31,7 @@
         </div>
         <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-primary">Back to Tour
         </router-link> <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
+        <a :href="previewLink" v-if="stop.id">Preview</a>
         <!-- {{ stop }} -->
     </div>
 </template>
@@ -92,6 +93,12 @@ import draggable from 'vuedraggable'
                         ]
                     }
                 }
+            }
+        },
+        computed: {
+            previewLink: function() {
+
+                return "/tour/" + this.tour.id + "/" + this.tour.stops.indexOf(this.stop);
             }
         },
         methods: {

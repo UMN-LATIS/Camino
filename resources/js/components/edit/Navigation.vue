@@ -6,8 +6,16 @@
         <language-text :text="stage.buttonTitle" :languages="languages">
             Map Button Title
         </language-text>
-        <p>Location for Stop: {{ stage.targetPoint }}</p>
-        <location-selector :location.sync="stage.targetPoint" :generalarea="tour.start_location"></location-selector>
+
+        <div class="form-group row">
+          <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
+          <div class="col-sm-6">
+              <div v-if="stage.targetPoint">
+                  <b>Latitude:</b> {{ stage.targetPoint.lat}}, <b>Longitude:</b> {{ stage.targetPoint.lng}}
+                </div>
+                <location-selector :location.sync="stage.targetPoint" :generalarea="tour.start_location"></location-selector>
+            </div>
+        </div>
     </div>
 
 </template>

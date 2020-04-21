@@ -1,6 +1,6 @@
 <template>
     <div>        
-        <b-button v-b-modal="randomizedModalName">Set Location</b-button>
+        <b-button v-b-modal="randomizedModalName" variant="outline-primary"><i class="fas fa-map-marker-alt"></i>  Set Location</b-button>
         
         <b-modal size="lg" :id="randomizedModalName" title="Set Location" ok-only modal-class="modal-fullscreen"
             ok-title='Close'>
@@ -103,7 +103,10 @@ var marker;
         },
         methods: {
             useCurrentLocation: function() {
-                this.$emit("update:location", this.currentLocation);
+                this.$emit("update:location", this.roundCoordinates(this.currentLocation));
+            },
+            roundCoordinates: function(coordinates) {
+                return {"lat": Math.round( coordinates.lat * 100000 + Number.EPSILON ) / 100000, "lng": Math.round( coordinates.lng * 100000 + Number.EPSILON ) / 100000}
             },
             destroyMap: function() {
                 if(map) {
@@ -153,7 +156,7 @@ var marker;
                 }
 
                 function clickEvent(e) {
-                    self.$emit("update:location", e.latlng);
+                    self.$emit("update:location", self.roundCoordinates(e.latlng));
                 }
 
                 if(this.location) {
@@ -171,6 +174,7 @@ var marker;
                 map.on('click', clickEvent); 
                 lc = L.control.locate({
                     showCompass: true,
+                    icon: "fa fa-map-marker-alt",
                     locateOptions: {
                         enableHighAccuracy: true,
                         maxZoom: 18

@@ -2,7 +2,7 @@
     <div>
         <hotwords :text="formattedText" >
         </hotwords>
-        <button-modal modalName="nav" :buttonText="stage.buttonTitle[$i18n.locale]" :modalTitle="stage.buttonTitle[$i18n.locale]"
+        <button-modal v-if="stage.targetPoint" modalName="nav" :buttonText="stage.buttonTitle[$i18n.locale]" :modalTitle="stage.buttonTitle[$i18n.locale]"
             v-on:modalShown="renderMap" v-on:modalClosed="destroyMap">
             <div style="height: 70vh; width: 100%" id="map">
 
@@ -105,7 +105,7 @@ var otherLocationsCssIcon = null;
                     map.setView(new L.LatLng(this.stage.targetPoint.lat, this.stage.targetPoint.lng), 17);
                     targetLocation.addTo(map);
                 }
-                var targetPoints = this.tour.stops.map(stop => stop.stages).map(stages=>{
+                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
                     return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
                 }).flat();
 

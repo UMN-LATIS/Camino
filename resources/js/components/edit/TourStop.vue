@@ -1,43 +1,62 @@
 <template>
-    <div  v-if="tour && stop" >
+    <div v-if="tour && stop">
+        <div class="row mb-2">
+            <div class="col">
+                <router-link :to="{'name': 'editTour', params: { tourId: tourId }}">{{tour.title }}</router-link>
+                >
+                {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <language-text :languages="tour.tour_content.languages" :text.sync="stop.stop_content.title">
+                    Stop Title
+                </language-text>
+                <hr />
+                <draggable v-model="stop.stop_content.stages" handle=".handle">
+                    <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage"
+                        v-on:remove="stop.stop_content.stages.splice(key)">
+                        <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages"
+                            :tour="tour">
+                        </component>
+                    </stage>
+                </draggable>
 
-        <div>
-            <language-text :languages="tour.tour_content.languages" :text.sync="stop.stop_content.title">
-                Stop Title
-            </language-text>
 
-            <draggable v-model="stop.stop_content.stages" handle=".handle">
-                <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage"
-                    v-on:remove="stop.stop_content.stages.splice(key)">
-                    <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages" :tour="tour">
-                    </component>
-                </stage>
-            </draggable>
 
-            <div class="form-group">
-                <div class="row">
-                    <label class="col-2 col-form-label text-right" for="">New Stage Type</label>
-                    <select class="form-control col-2" v-model="newStageType">
+
+
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <span>
+                    <a :href="previewLink" v-if="stop.id" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>
+                    <button @click="save" class="btn btn-primary">Save</button>
+                    <save-alert :showAlert.sync="showAlert" />
+                </span>
+
+                <div class="col-6">
+                    <div class="row d-flex justify-content-end">
+                    <select class="form-control col-3" v-model="newStageType">
                         <option disabled></option>
                         <option v-for="(stageType, key) in stageTypes" :key="key" :value="key">{{ stageType }}</option>
                     </select>
-                    <div class="col-2">
-                        <button class="btn btn-primary" @click="addStage">Add Stage</button>
+
+                        <button class="btn btn-primary" @click="addStage" :disabled="!newStageType"><i class="fas fa-plus"></i> Add a
+                            Stage</button>
                     </div>
                 </div>
+
             </div>
-
-
         </div>
-        <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-primary">Back to Tour
-        </router-link> <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
-        <a :href="previewLink" v-if="stop.id">Preview</a>
-        <!-- {{ stop }} -->
+
     </div>
+
 </template>
 
 <script>
-import draggable from 'vuedraggable'
+    import draggable from 'vuedraggable'
 
     export default {
         props: ["stopId", "tourId"],
@@ -60,21 +79,27 @@ import draggable from 'vuedraggable'
                 tour: null,
                 stop: {
                     stop_content: {
-                        "title": {},
+                        "title": {
+                             "placeholder": null
+                        },
                         "stages": []
                     }
                 },
                 stop_template: {
                     stop_content: {
-                        "title": {},
+                        "title": { 
+                             "placeholder": null
+                        },
                         "stages": [{
                                 "text": {
                                     "English": "Navigation"
                                 },
-                                "type": "Separator"
+                                "type": "separator"
                             },
                             {
-                                "text": {"placeholder": null},
+                                "text": {
+                                    "placeholder": null
+                                },
                                 "type": "navigation",
                                 "buttonTitle": {
                                     "English": "Show Map"
@@ -85,10 +110,12 @@ import draggable from 'vuedraggable'
                                 "text": {
                                     "English": "Guide"
                                 },
-                                "type": "Separator"
+                                "type": "separator"
                             },
                             {
-                                "text": {"placeholder": null},
+                                "text": {
+                                    "placeholder": null
+                                },
                                 "type": "guide"
                             }
                         ]
@@ -97,7 +124,7 @@ import draggable from 'vuedraggable'
             }
         },
         computed: {
-            previewLink: function() {
+            previewLink: function () {
 
                 return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
             }
@@ -107,9 +134,7 @@ import draggable from 'vuedraggable'
                 this.stop.stop_content.stages.push({
                     "type": this.newStageType
                 });
-            },
-            goBack: function () {
-                this.$router.go(-1);
+                this.newStageType = null;
             },
             save: function () {
                 if (!this.stop.id) {
@@ -141,8 +166,7 @@ import draggable from 'vuedraggable'
                     this.tour = res.data
                     if (this.stopId) {
                         this.stop = this.tour.stops.find(s => s.id == this.stopId);
-                    }
-                    else if(this.tour.tour_content.use_template) {
+                    } else if (this.tour.tour_content.use_template) {
                         this.stop = this.stop_template;
                     }
                 });

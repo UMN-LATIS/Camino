@@ -1,44 +1,34 @@
 <template>
-    <div class="">
-        <div class="form-group">
-          <label for="">Tour Title</label>
-          <input type="text"
-            class="form-control" v-model="tour.title" placeholder="">
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="tour.public">
-            Public
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="tour.active">
-            Active
-          </label>
-        </div>
-
-        <div class="form-check">
-          <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template">
-            Start stops with standard template
-          </label>
-        </div>
-
-        <div class="form-group">
-          <label for="">Languages</label>
-          <div v-for="(language, key) in tour.tour_content.languages" :key="key">
-          <input v-model="tour.tour_content.languages[key]" type="text" class="form-control">
-          <button @click="tour.tour_content.languages.splice(key, 1)">Remove</button>
+    <div>
+        <h1>{{ tour.title }}</h1>
+        <div class="form-group row">
+          <label for="tourTitle" class="col-sm-1 col-form-label">Tour Title</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" v-model="tour.title" placeholder="" id="tourTitle">
           </div>
-          <button @click="tour.tour_content.languages.push('')">Add Langauge</button>
         </div>
-
-        <div>
-            <initial-location :location.sync="tour.start_location"></initial-location>
+        
+        <div class="form-group row">
+          <label class="col-sm-1 "><b>Languages</b></label>
+          <div class="col-sm-10 flex-wrap flex-column language-container">
+                <div v-for="(language, key) in languages" :key="key" class="form-check">
+                    <label class="form-check-label">
+                    <input :value="key" v-model="tour.tour_content.languages" type="checkbox" class="form-check-input">          
+                    {{ key }}
+                    </label>
+                </div>
+            </div>
         </div>
-
-        <div>
+        <div class="form-group row">
+          <label for="tourTitle" class="col-sm-1 col-form-label">Location</label>
+          <div class="col-sm-6">
+              <div v-if="tour.start_location">
+                  <b>Latitude:</b> {{ tour.start_location.lat}}, <b>Longitude:</b> {{ tour.start_location.lng}}
+                </div>
+                <initial-location :location.sync="tour.start_location"></initial-location>
+            </div>
+        </div>
+         <div>
             <div class="form-check">
               <label class="form-check-label">
                 <input type="checkbox" class="form-check-input" v-model="tour.tour_content.custom_base_map" value="checkedValue" checked>
@@ -46,50 +36,111 @@
               </label>
             </div>
             <div v-if="tour.tour_content.custom_base_map">
-                <img :src="'/storage/' + tour.tour_content.custom_base_map_image" v-if="tour.tour_content.custom_base_map_image" class="img-responsive">
+               
                 <image-upload v-if="!tour.tour_content.custom_base_map_image" v-on:imageuploaded="imageUploaded($event)"></image-upload>
-                <div class="form-group">
-                  <label for="">Upper Left Latitude</label>
+                <div class="row">
+                <div class="form-group col-sm-2">
+                  <label for="upper-left-latitude">Upper Left Latitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lat" aria-describedby="helpId" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lat" id="upper-left-latitude" placeholder="">
                 </div>
-                <div class="form-group">
-                  <label for="">Upper Left Longitude</label>
+                <div class="form-group col-sm-2">
+                  <label for="upper-left-latitude">Upper Left Longitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lng" aria-describedby="helpId" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lng" id="upper-left-latitude" placeholder="">
                 </div>
-                    <div class="form-group">
-                  <label for="">Lower Right Latitude</label>
+                <div class="form-group col-sm-2">
+                  <label for="upper-left-latitude">Lower Right Latitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lat" aria-describedby="helpId" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lat" id="upper-left-latitude" placeholder="">
                 </div>
-                <div class="form-group">
-                  <label for="">Lower Right Longitude</label>
+                <div class="form-group col-sm-2">
+                  <label for="upper-left-latitude">Lower Right Longitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lng" aria-describedby="helpId" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lng" id="upper-left-latitude" placeholder="">
+                </div>
+                <div class="col-sm-2">
+                     <img :src="'/storage/' + tour.tour_content.custom_base_map_image" v-if="tour.tour_content.custom_base_map_image" class="img-thumbnail rounded">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <ul>
-            <draggable v-model="tour.stops"> 
-              <li v-for="stop in tour.stops" :key="stop.id">
-                  <router-link :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}">{{ stop.stop_content.title[tour.tour_content.languages[0]] }} </router-link>
-              </li>
-            </draggable>
-        </ul>
 
-        You have  {{ hotwords.length }} hotwords.  
-        <router-link :to="{ name: 'editHotwords', params: { tourId: tourId }}">Define</router-link>
+        <!-- <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" v-model="tour.public">
+            Public
+          </label>
+        </div> -->
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template">
+            Use standard template
+          </label>
+        </div>
+
+        <div class="form-check">
+          <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" v-model="tour.active">
+            Active
+          </label>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col d-flex justify-content-between align-items-center">
+                <h3>Tour Stops</h3>
+                <div>
+                    <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary" v-if="tour.id"><i class="fas fa-plus"></i> Add a Stop</router-link>
+                </div>
+            </div>
+        </div>
+       <draggable v-model="tour.stops"> 
+        <div class="card mt-2" v-for="stop in tour.stops" :key="stop.id">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <h5 class="card-title"><i class="fas fa-grip-vertical handle"></i> {{ stop.stop_content.title[tour.tour_content.languages[0]] }}</h5> 
+                    <div class="controls">
+                        <a href="#" @click="deleteStop(stop.id)" class="btn btn-outline-danger">Delete <i class="fas fa-trash"></i></a>
+                        <a :href="'/tour/' + tour.id + '/' + stop.sort_order" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>
+                        <router-link  :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}" class="btn btn-outline-primary">Edit <i class="fas fa-edit"></i></router-link>
+                        
+                    </div>
+                </div>
+            </div>
+        </draggable>
+       
+        <div class="form-group row mt-2">
+          <label for="" class="col-sm-1 col-form-label">Hotwords</label>
+          <div class="col-sm-6">
+            <div class="col-form-label">You have  {{ hotwords.length }} hotwords.</div>
+            <router-link v-if="hotwords.length" :to="{ name: 'editHotwords', params: { tourId: tourId }}" class="btn btn-outline-primary">Manage Hotwords <i class="fas fa-edit"></i></router-link> 
+          </div>
+        </div>
         
-
-        <!-- <tour-stop v-for="(stop, key) in tour.stops" :key=key :stop.sync="tour.stops[key]" :languages="tour.tour_content.languages"></tour-stop> -->
-        <router-link :to="{ name: 'createStop', params: { tourId: tourId }}" class="btn btn-primary" v-if="this.tour.id">Add Stop</router-link>
+        
+    <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>    
     <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
-    <a :href="'/tour/' + tour.id" v-if="tour.id">Preview</a>
+    
     </div>
 </template>
 
+<style scoped>
+.handle {
+    cursor: move;
+}
+.col-form-label {
+    font-weight: bold;
+}
+.language-container {
+    /* column-count: 3 */
+}
+
+.card-title {
+    margin-bottom: 0px;
+}
+
+</style>
 
 <script>
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
@@ -110,7 +161,7 @@
                     title: "",
                     start_location: null,
                     tour_content: {
-                        use_template: false,
+                        use_template: true,
                         languages: ["English"],
                         hotWords: {},
                         custom_base_map: false,
@@ -154,6 +205,15 @@
             }
         },
         methods: {
+            deleteStop: function(stopId) {
+                if(confirm("Are you sure you wish to delete this stop?")) {
+                    axios.delete("/creator/edit/" + this.tour.id + "/stop/" + stopId)
+                    .then((res) => {
+                        this.loadTour();
+                    });
+                }
+                
+            },
             imageUploaded: function(value) {
                 this.tour.tour_content.custom_base_map_image = value;
             },
@@ -172,15 +232,18 @@
                         this.showAlert = true;
                     });
                 }
+            },
+            loadTour: function() {
+                if(this.tourId) {
+                    axios.get("/creator/edit/" + this.tourId )
+                    .then((res) => {
+                        this.tour = res.data
+                    });
+                }
             }
         },
         mounted: function() {
-            if(this.tourId) {
-                axios.get("/creator/edit/" + this.tourId )
-                .then((res) => {
-                    this.tour = res.data
-                });
-            }
+            this.loadTour();
             
         }
     }

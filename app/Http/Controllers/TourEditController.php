@@ -128,6 +128,10 @@ class TourEditController extends Controller
         return response()->json($stop);
     }
 
+    public function deleteStop(Request $request, Tour $tour, Stop $stop) {
+        $stop->delete();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -136,6 +140,6 @@ class TourEditController extends Controller
      */
     public function destroy(Tour $tour)
     {
-        //
+        $tour->delete();
     }
 }

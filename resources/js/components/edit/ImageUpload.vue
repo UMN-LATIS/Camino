@@ -1,21 +1,26 @@
 <template>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card card-default">
-                    <div class="card-header">File Upload Component</div>
-                    <div class="card-body">
-                       <div class="row">
-                          <div class="col-md-3" v-if="image">
-                              <img :src="image" class="img-responsive" height="70" width="90">
-                           </div>
-                          <div class="col-md-6">
-                              <input type="file" ref="file" v-on:change="onImageChange" class="form-control">
-                          </div>
-                          <div class="col-md-3">
-                             <button class="btn btn-success btn-block" @click="uploadImage">Upload Image</button>
-                          </div>
-                       </div>
+    <div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3" v-if="image">
+                            <img :src="image" class="img-responsive" height="70" width="90">
+                        </div>
+                        <div class="col">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" ref="file" v-on:change="onImageChange" class="custom-file-input"
+                                        id="inputGroupFile02">
+                                    <label class="custom-file-label" for="inputGroupFile02"
+                                        aria-describedby="inputGroupFileAddon02">Choose an image</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-success" id="inputGroupFileAddon02" @click="uploadImage">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -25,7 +30,7 @@
 
 <script>
     export default {
-        data(){
+        data() {
             return {
                 image: ''
             }
@@ -45,13 +50,13 @@
                 };
                 reader.readAsDataURL(file);
             },
-            uploadImage(){
+            uploadImage() {
                 let data = new FormData()
                 data.append('image', this.$refs.file.files[0])
-                axios.post('/creator/image/store',data).then(response => {
-                   if (response.data.success) {
-                     this.$emit("imageuploaded", response.data.image);
-                   }
+                axios.post('/creator/image/store', data).then(response => {
+                    if (response.data.success) {
+                        this.$emit("imageuploaded", response.data.image);
+                    }
                 });
             }
         }

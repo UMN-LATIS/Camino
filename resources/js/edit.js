@@ -46,6 +46,7 @@ Vue.use(VueRouter);
 
 
 
+
 import home from './components/edit/Home.vue';
 Vue.component('home',home);
 
@@ -122,6 +123,9 @@ const routes = [{
     }
     
 ];
+
+import { languages } from './languages';
+Vue.prototype.languages= languages;
 
 const router = new VueRouter({
     mode: 'history',

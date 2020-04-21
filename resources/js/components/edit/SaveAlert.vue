@@ -1,6 +1,6 @@
 <template>
     <transition name="slide-fade">
-        <p class="saveAlert" v-if="showAlert"><slot>Saved</slot></p>
+        <p class="saveAlert" v-if="showAlert"><slot><b>Saved</b></slot></p>
     </transition>
 </template>
 <style scoped>

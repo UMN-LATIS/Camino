@@ -164,10 +164,10 @@ var marker;
                         icon: targetLocationCssIcon
                     });
                     marker.addTo(map);
-                    map.setView(new L.LatLng(this.location.lat, this.location.lng), 17);
+                    map.setView(new L.LatLng(this.location.lat, this.location.lng), 16);
                 }
                 else if(this.generalarea) {
-                    map.setView(new L.LatLng(this.generalarea.lat, this.generalarea.lng), 17);
+                    map.setView(new L.LatLng(this.generalarea.lat, this.generalarea.lng), 16);
                 }
                
                 map.on('locationfound', onLocationFound);

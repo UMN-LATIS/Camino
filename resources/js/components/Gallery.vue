@@ -1,9 +1,8 @@
 <template>
     <div>
         <CoolLightBox ref="lightbox" :items="items" :index="index" @close="index = null; close()" @on-open="open()" :slideshow="false" :gallery="false" >
-            <close
-        </CoolLightBox>
 
+        </CoolLightBox>
         <div class="images-wrapper">
             <div class="image-wrapper" v-for="(image, imageIndex) in items" :key="imageIndex">
             <div class="image"  @click="index = imageIndex"
@@ -70,7 +69,7 @@ img, input, select {
         data: function () {
             return {
                 index: null,
-                modalName: "gallery"
+                modalName: "gallery" + Math.round(Math.random() * 10000)
             };
         },
         methods: {
@@ -91,7 +90,7 @@ img, input, select {
         },
         computed: {
             items: function() {
-                return this.stage.images.map(i => { return {"title": i.title[this.$i18n.locale], "description": i.description[this.$i18n.locale], "src": "/images/" + i.image }});
+                return this.stage.images.map(i => { return {"title": i.text[this.$i18n.locale], "src": "/storage/" + i.src }});
             }
         },
         watch: {

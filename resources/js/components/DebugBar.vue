@@ -23,13 +23,13 @@
                 <h6 class="mt2">Language</h6>
                 <div class="form-check">
                     <label class="form-check-label">
-                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" id="" value="en">
+                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" id="" value="English">
                     English
                   </label>
                 </div>
                 <div class="form-check">
                     <label class="form-check-label">
-                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" value="es">
+                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" value="Español">
                     Spanish
                   </label>
                 </div>

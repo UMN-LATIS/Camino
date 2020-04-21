@@ -1,14 +1,15 @@
 <template>
     <div>
-        <div v-for="(image,key) in stage.images" :key="key">
+        <div v-for="(image,key) in stage.images" :key="key" class="border rounded p-2 m-2">
             <image-upload v-if="!image.src" v-on:imageuploaded="imageUploaded(key, $event)"></image-upload>
-            <img :src="'/storage/' + image.src" class="img-responsive" v-if="image.src" width="200">
+            <button @click="stage.images.splice(key)" class="btn btn-outline-danger float-right" v-if="image.src"><i class="fas fa-trash"></i> Remove Image</button>
+            <img :src="'/storage/' + image.src" class="img-thumbnail mb-2" v-if="image.src" width="200">
                     <language-text :text="image.text" :languages="languages" :largetext="false">
                         Image Description
                     </language-text>
-                    <button @click="stage.images.splice(key)">Remove</button>
+                    
         </div>
-        <button @click="stage.images.push({'src':null, 'text':{'placeholder':null}})">Add image</button>
+        <button @click="stage.images.push({'src':null, 'text':{'placeholder':null}})" class="btn btn-outline-primary"><i class="fas fa-image"></i> Add image</button>
     </div>
 
 </template>

@@ -4,8 +4,8 @@
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="card-title"><i class="fas fa-grip-vertical handle"></i> {{ stage.type }}</h5>
                 <div class="controls">
-                    <button @click='$emit("remove", stage)' class="btn btn-outline-danger">Remove Stage <i
-                            class="fas fa-trash"></i></button>
+                    <button @click='$emit("remove", stage)' class="btn btn-outline-danger"><i
+                            class="fas fa-trash"></i> Remove Stage</button>
                 </div>
             </div>
             <slot />

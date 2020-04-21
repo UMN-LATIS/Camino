@@ -1,14 +1,18 @@
 <template>
     <div v-if="tour">
+        <router-link :to="{'name': 'editTour', params: { tourId: tourId }}">{{tour.title }}</router-link>
         <div v-for="(language, key) in hotWords" :key="key">
-            {{ key }}
+            <h2>{{ key }}</h2>
+            
             <div v-for="(hotword, hwkey) in language" :key="hwkey">
-            {{ hotword }}
-            <textarea :value="tour.tour_content.hotWords[hotword]" @input="tour.tour_content.hotWords[hotword] = $event.target.value"></textarea>
+            
+            <label :for="'field' + hwkey" class="">{{ hotword }}</label>
+            <custom-markdown :text.sync="tour.tour_content.hotWords[hotword]" :idkey="'field' + hwkey" :allowHotwords="false"></custom-markdown>
+            <!-- <textarea :value="tour.tour_content.hotWords[hotword]" @input="tour.tour_content.hotWords[hotword] = $event.target.value"></textarea> -->
             </div>
+            <hr />
         </div>
-      <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-primary">Back to Tour
-        </router-link> <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
+<button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
  
     </div>
  
@@ -31,6 +35,9 @@ export default {
             var foundHotwords = this.tour.stops.map(s => { 
                 return s.stop_content.stages.map(stage => {
                         var cleanedMatches = [];
+                        if(!stage.text) {
+                            return [];
+                        }
                         Object.entries(stage.text).forEach(([key, value]) => {
                             if(value) {
                                 var matches = value.match(/\|(.*?)\|/g);

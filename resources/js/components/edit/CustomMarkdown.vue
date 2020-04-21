@@ -1,10 +1,20 @@
 <template>
-     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" toolbar="bold italic | numlist bullist quote | link hotword | preview" :extend="custom" theme="outline-secondary btn-sm"></markdown-editor>
+     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" :toolbar="toolbar" :extend="custom" theme="outline-secondary btn-sm"></markdown-editor>
 </template>
 
 <script>
 export default {
-    props: ["text", "idkey"],
+    props: {
+        "text": {
+
+        }, 
+        "idkey": {
+
+        }, 
+        "allowHotwords": {
+            default: true
+        }
+    },
     data() {
         return {
             identifier: "md" + this.idkey,
@@ -15,6 +25,17 @@ export default {
                     title: 'Mark as hotword'
                 }
             }
+        }
+    },
+    computed: {
+        toolbar: function() {
+            if(this.allowHotwords) {
+                return "bold italic | numlist bullist quote | link hotword | preview";
+            }
+            else {
+                return "bold italic | numlist bullist quote | link | preview";
+            }
+            
         }
     },
     methods: {

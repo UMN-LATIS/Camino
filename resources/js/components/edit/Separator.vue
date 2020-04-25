@@ -11,7 +11,7 @@ export default {
     props: ["stage", "languages"],
     created() {
         if(!this.stage.text) {
-            Vue.set(this.stage, "text", {});
+            Vue.set(this.stage, "text", {"placeholder": null});
         }
     }
 }

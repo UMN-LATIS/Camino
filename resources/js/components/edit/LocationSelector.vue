@@ -53,7 +53,7 @@ var otherLocationsCssIcon = null;
 var marker;
 
     export default {
-        props: ["location", "generalarea"],
+        props: ["location", "generalarea", "basemap"],
         data() {
             return {
                 currentLocation: null,
@@ -122,17 +122,23 @@ var marker;
                 console.log("nav");
 
                 map = L.map('map').fitWorld();
-                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                    // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                    maxZoom: 18,
-                    id: 'mapbox/streets-v11',
-                    accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
-                }).addTo(map);
+                
+                if(this.basemap.use_basemap) {
+                    var imageUrl = '/storage/' + this.basemap.image,
+                imageBounds = [[this.basemap.coords.upperleft.lat, this.basemap.coords.upperleft.lng], [this.basemap.coords.lowerright.lat, this.basemap.coords.lowerright.lng]];
+                     L.imageOverlay(imageUrl, imageBounds).addTo(map);
 
+                }
+                else {
+                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox/streets-v11',
+                        accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
+                    }).addTo(map);
+
+                }
                 // Actual map strategy
-                // var imageUrl = 'map.png',
-                //imageBounds = [[44.95134, -93.133163], [44.99134, -93.173163]];
-                //      L.imageOverlay(imageUrl, imageBounds).addTo(map);
                 //
                 //
 

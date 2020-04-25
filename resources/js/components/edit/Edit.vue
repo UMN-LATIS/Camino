@@ -25,43 +25,44 @@
               <div v-if="tour.start_location">
                   <b>Latitude:</b> {{ tour.start_location.lat}}, <b>Longitude:</b> {{ tour.start_location.lng}}
                 </div>
-                <initial-location :location.sync="tour.start_location"></initial-location>
+                <initial-location :location.sync="tour.start_location" :basemap="tour.tour_content.custom_base_map"></initial-location>
             </div>
         </div>
          <div>
             <div class="form-check">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.custom_base_map" value="checkedValue" checked>
+                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.custom_base_map.use_basemap" value="checkedValue" checked>
                 Custom base Map
               </label>
             </div>
-            <div v-if="tour.tour_content.custom_base_map">
+            <div v-if="tour.tour_content.custom_base_map.use_basemap">
                
-                <image-upload v-if="!tour.tour_content.custom_base_map_image" v-on:imageuploaded="imageUploaded($event)"></image-upload>
+                <image-upload v-if="!tour.tour_content.custom_base_map.image" v-on:imageuploaded="imageUploaded($event)"></image-upload>
                 <div class="row">
                 <div class="form-group col-sm-2">
                   <label for="upper-left-latitude">Upper Left Latitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lat" id="upper-left-latitude" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map.coords.upperleft.lat" id="upper-left-latitude" placeholder="">
                 </div>
                 <div class="form-group col-sm-2">
-                  <label for="upper-left-latitude">Upper Left Longitude</label>
+                  <label for="upper-left-longitude">Upper Left Longitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.upperleft.lng" id="upper-left-latitude" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map.coords.upperleft.lng" id="upper-left-latitude" placeholder="">
                 </div>
                 <div class="form-group col-sm-2">
-                  <label for="upper-left-latitude">Lower Right Latitude</label>
+                  <label for="lower-right-latitude">Lower Right Latitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lat" id="upper-left-latitude" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map.coords.lowerright.lat" id="upper-left-latitude" placeholder="">
                 </div>
                 <div class="form-group col-sm-2">
-                  <label for="upper-left-latitude">Lower Right Longitude</label>
+                <label for="lower-right-latitude">Lower Right Longitude</label>
                   <input type="text"
-                    class="form-control" v-model="tour.tour_content.custom_base_map_coords.lowerright.lng" id="upper-left-latitude" placeholder="">
+                    class="form-control" v-model="tour.tour_content.custom_base_map.coords.lowerright.lng" id="upper-left-latitude" placeholder="">
                 </div>
                 <div class="col-sm-2">
-                     <img :src="'/storage/' + tour.tour_content.custom_base_map_image" v-if="tour.tour_content.custom_base_map_image" class="img-thumbnail rounded">
-                    </div>
+                     <img :src="'/storage/' + tour.tour_content.custom_base_map.image" v-if="tour.tour_content.custom_base_map.image" class="img-thumbnail rounded">
+                            <button @click="tour.tour_content.custom_base_map.image = null" class="btn btn-outline-danger float-right" v-if="tour.tour_content.custom_base_map.image"><i class="fas fa-trash"></i> Remove basemap</button>
+                </div>
                 </div>
             </div>
         </div>
@@ -164,21 +165,25 @@
                         use_template: true,
                         languages: ["English"],
                         hotWords: {},
-                        custom_base_map: false,
-                        custom_base_map_image: null,
-                        custom_base_map_coords: {
-                            "upperleft":{
-                            "lat": null,
-                            "lng": null
-                            },
-                            "lowerright":{
-                            "lat": null,
-                            "lng": null
+                        custom_base_map: {
+                            use_basemap: false,
+                            image: null,
+                            coords: {
+                                "upperleft":{
+                                    "lat": null,
+                                    "lng": null
+                                },
+                                "lowerright":{
+                                    "lat": null,
+                                    "lng": null
+                                }
                             }
                         }
 
                     },
-                    stops: []
+                    stops: [
+                        
+                    ]
                     
                 }
             }
@@ -215,7 +220,7 @@
                 
             },
             imageUploaded: function(value) {
-                this.tour.tour_content.custom_base_map_image = value;
+                this.tour.tour_content.custom_base_map.image = value;
             },
             save: function() {
                 if(!this.tour.id) {

@@ -37,7 +37,7 @@
 export default {
     props: ["stage", "languages", "tour"],
     created() {
-        if(!this.stage.text) {
+        if(!this.stage.buttonTitle) {
             Vue.set(this.stage, "buttonTitle", {"English":"Show Embed"});
             Vue.set(this.stage, "url", null);
         }

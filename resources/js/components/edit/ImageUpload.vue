@@ -5,24 +5,28 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3" v-if="image">
-                            <img :src="image" class="img-responsive" height="70" width="90">
+                            <img :src="image" class="img-fluid" height="70" width="90">
                         </div>
                         <div class="col">
                             <div class="input-group mb-3">
                                 <div class="custom-file">
                                     <input type="file" ref="file" v-on:change="onImageChange" class="custom-file-input"
-                                        id="inputGroupFile02">
+                                        id="inputGroupFile02" @change="uploadImage">
                                     <label class="custom-file-label" for="inputGroupFile02"
                                         aria-describedby="inputGroupFileAddon02">Choose an image</label>
                                 </div>
-                                <div class="input-group-append">
+                                <!-- <div class="input-group-append">
                                     <button class="btn btn-outline-success" id="inputGroupFileAddon02" @click="uploadImage">Upload</button>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 
                     </div>
+                   <div class="row alert alert-danger mt-2" role="alert" v-if="errorText">
+                        <strong>Error: </strong> {{ errorText }}
+                    </div>
                 </div>
+                 
             </div>
         </div>
     </div>
@@ -32,7 +36,8 @@
     export default {
         data() {
             return {
-                image: ''
+                image: '',
+                errorText: null
             }
         },
         methods: {
@@ -52,11 +57,16 @@
             },
             uploadImage() {
                 let data = new FormData()
+                this.errorText = null;
                 data.append('image', this.$refs.file.files[0])
                 axios.post('/creator/image/store', data).then(response => {
                     if (response.data.success) {
                         this.$emit("imageuploaded", response.data.image);
                     }
+                })
+                .catch((error) => {
+
+                    this.errorText = error.response.data.error.image;
                 });
             }
         }

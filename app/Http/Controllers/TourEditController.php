@@ -63,7 +63,8 @@ class TourEditController extends Controller
             $stop->sort_order = 0;
         }
         else {
-            $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray()) + 1;
+            // remove the "end" item - we don't let them make that not the end.
+            $stop->sort_order = max(array_diff($tour->stops->pluck("sort_order")->toArray(), [9999])) + 1;
         }
         
 

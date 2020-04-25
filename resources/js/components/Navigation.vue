@@ -76,13 +76,21 @@ var otherLocationsCssIcon = null;
                 console.log("nav");
                 console.log(e);
                 map = L.map('map');
-                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                    // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                    maxZoom: 18,
-                    id: 'mapbox/streets-v11',
-                    accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
-                }).addTo(map);
+                if(this.tour.tour_content.custom_base_map.use_basemap) {
+                    var imageUrl = '/storage/' + this.tour.tour_content.custom_base_map.image,
+                imageBounds = [[this.tour.tour_content.custom_base_map.coords.upperleft.lat, this.tour.tour_content.custom_base_map.coords.upperleft.lng], [this.tour.tour_content.custom_base_map.coords.lowerright.lat, this.tour.tour_content.custom_base_map.coords.lowerright.lng]];
+                     L.imageOverlay(imageUrl, imageBounds).addTo(map);
+                }
+                else {
+                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox/streets-v11',
+                        accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
+                    }).addTo(map);
 
+                }
+                
                 targetLocationCssIcon = L.divIcon({
                     // Specify a class name we can refer to in CSS.
                     className: 'target-css-icon css-icon',

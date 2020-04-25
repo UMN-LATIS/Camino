@@ -26,7 +26,6 @@
                 </div>
             </div>
         </b-collapse>
-        
     </div>
 
 </template>
@@ -97,7 +96,7 @@ export default {
     },
     methods: {
         setProgress: function() {
-            this.$Progress.set((this.currentStopId+1 / this.tour.stops.length) * 100);
+            this.$Progress.set(( (this.currentStopId+1) / this.tour.stops.length) * 100);
         }
     },
     watch: {

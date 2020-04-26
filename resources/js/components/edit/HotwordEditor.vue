@@ -59,11 +59,12 @@ export default {
                 }, {})
 
             // if there are hotwords that aren't already in the tour, create them.
-            
-            Object.values(groupedHotwords).forEach((hw) => {
-                if(!this.tour.tour_content.hotWords.hasOwnProperty(hw)) {
-                    this.tour.tour_content.hotWords[hw] = "";
-                }
+            Object.values(groupedHotwords).forEach((language) => {
+                language.forEach((hw) =>{
+                    if(!this.tour.tour_content.hotWords.hasOwnProperty(hw)) {
+                        this.tour.tour_content.hotWords[hw] = "";
+                    }
+                })
             });
             return groupedHotwords;
 

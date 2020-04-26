@@ -31,8 +31,11 @@
         <div class="row mt-2">
             <div class="col-12 d-flex justify-content-between align-items-center">
                 <span>
-                    <a :href="previewLink" v-if="stop.id" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>
-                    <button @click="save" class="btn btn-primary">Save</button>
+                    <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Tour</router-link>
+                    <a :href="previewLink" v-if="stop.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview</a>
+                    <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
                     <save-alert :showAlert.sync="showAlert" />
                 </span>
 

@@ -5,11 +5,23 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Models\Permission;
+use Auth;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function($user) {
+            $user->assignRole("external_user");
+        });
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +33,16 @@ class User extends Authenticatable
 
     public function tours() {
         return $this->hasMany(Tour::class);
+    }
+
+    public function getAllPermissionsAttribute() {
+        $permissions = [];
+        foreach (Permission::all() as $permission) {
+            if ($this->can($permission->name)) {
+                $permissions[] = $permission->name;
+            }
+        }
+        return $permissions;
     }
 
 }

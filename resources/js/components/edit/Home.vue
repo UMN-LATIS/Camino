@@ -8,11 +8,11 @@
         </div>
         <div class="card mt-2" v-for="tour in sortedTitles" :key="tour.id">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title">{{ tour.title }}</h5> 
+                <h5 class="card-title"><i class="fas fa-check-circle mr-2" v-if="tour.active"></i>{{ tour.title }}</h5> 
                 <div class="controls">
-                    <a href="#" @click="deleteTour(tour.id)" class="btn btn-outline-danger">Delete <i class="fas fa-trash"></i></a>
-                    <a :href="'/tour/' + tour.id" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>
-                    <router-link :to='{name: "editTour", params: { tourId: tour.id }}' class="btn btn-outline-primary">Edit <i class="fas fa-edit"></i></router-link>
+                    <a href="#" @click="deleteTour(tour.id)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>
+                    <a :href="'/tour/' + tour.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview</a>
+                    <router-link :to='{name: "editTour", params: { tourId: tour.id }}' class="btn btn-outline-primary"><i class="fas fa-edit"></i> Edit</router-link>
                     
                 </div>
             </div>
@@ -26,6 +26,10 @@
 .card-title {
     margin-bottom: 0px;
 }
+.fa-check-circle {
+    color: green;
+  }
+
 </style>
 
 <script>

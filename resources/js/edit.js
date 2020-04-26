@@ -65,6 +65,8 @@ import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
 
+import Permissions from './mixins/Permissions';
+Vue.mixin(Permissions);
 
 Vue.component('tour-stop', require('./components/edit/TourStop.vue').default);
 Vue.component('language-text', require('./components/edit/LanguageText.vue').default);
@@ -83,6 +85,7 @@ Vue.component('guide', require('./components/edit/Guide.vue').default);
 Vue.component('ar', require('./components/edit/AR.vue').default);
 Vue.component('embed-frame', require('./components/edit/Embed.vue').default);
 Vue.component('gallery', require('./components/edit/Gallery.vue').default);
+Vue.component('hotwords-summary', require('./components/edit/HotwordsSummary.vue').default);
 
 Vue.component('location-selector', require('./components/edit/LocationSelector.vue').default);
 Vue.component('initial-location', require('./components/edit/LocationSelector.vue').default);

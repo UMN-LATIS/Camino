@@ -43,6 +43,12 @@
     </footer>
     
 </body>
-
+<script>
+  @auth
+    window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+  @else
+    window.Permissions = [];
+  @endauth
+</script>
 <script src="{{ mix('/js/edit.js') }}"></script>
 </html>

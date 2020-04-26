@@ -68,12 +68,12 @@
         </div>
 
 
-        <!-- <div class="form-check">
+        <div class="form-check" v-if="$can('publish publicly')">
           <label class="form-check-label">
             <input type="checkbox" class="form-check-input" v-model="tour.public">
             Public
           </label>
-        </div> -->
+        </div>
 
         <div class="form-check">
           <label class="form-check-label">
@@ -97,14 +97,14 @@
                 </div>
             </div>
         </div>
-       <draggable v-model="tour.stops"> 
+       <draggable v-model="tour.stops" :move="checkMove">  
         <div class="card mt-2" v-for="stop in tour.stops" :key="stop.id">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title"><i class="fas fa-grip-vertical handle"></i> {{ stop.stop_content.title[tour.tour_content.languages[0]] }}</h5> 
+                    <h5 class="card-title"><i class="fas fa-grip-vertical handle" v-if="!isFinalItem(stop)"></i> {{ stop.stop_content.title[tour.tour_content.languages[0]] }}</h5> 
                     <div class="controls">
-                        <a href="#" @click="deleteStop(stop.id)" class="btn btn-outline-danger">Delete <i class="fas fa-trash"></i></a>
-                        <a :href="'/tour/' + tour.id + '/' + stop.sort_order" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>
-                        <router-link  :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}" class="btn btn-outline-primary">Edit <i class="fas fa-edit"></i></router-link>
+                        <a href="#" @click="deleteStop(stop.id)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>
+                        <a :href="'/tour/' + tour.id + '/' + stop.sort_order" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview </a>
+                        <router-link  :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}" class="btn btn-outline-primary"><i class="fas fa-edit"></i> Edit</router-link>
                         
                     </div>
                 </div>
@@ -120,8 +120,8 @@
         </div>
         
         
-    <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank">Preview <i class="fas fa-eye"></i></a>    
-    <button @click="save" class="btn btn-primary">Save</button><save-alert :showAlert.sync="showAlert" />
+    <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview</a>    
+    <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button><save-alert :showAlert.sync="showAlert" />
     
     </div>
 </template>
@@ -228,6 +228,7 @@
                     .then((res) => {
                         this.$router.replace("/creator/" + res.data.id);
                         this.tour.id = res.data.id;
+                        Vue.set(this.tour, "stops", res.data.stops);
                         this.showAlert = true;
                     });
                 }
@@ -245,6 +246,16 @@
                         this.tour = res.data
                     });
                 }
+            },
+            checkMove(e) {
+                return this.isDraggable(e.draggedContext);
+            },
+            isDraggable(context) {
+                const { index, futureIndex } = context
+                return !(this.isFinalItem(this.tour.stops[index]) || this.isFinalItem(this.tour.stops[futureIndex]));
+            },
+            isFinalItem(stop) {
+                return stop.sort_order == (this.tour.stops.length - 1);
             }
         },
         mounted: function() {

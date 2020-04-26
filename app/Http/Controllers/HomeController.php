@@ -29,7 +29,10 @@ class HomeController extends Controller
     }
 
     public function loadTour(Tour $tour) {
-        return new TourResource($tour);
+        if($this->authorize('view', $tour)) {
+            return new TourResource($tour);
+        }
+        
     }
 
     public function ar($stage,$locale = "en", $simulateLocation=false) {

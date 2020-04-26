@@ -24,15 +24,6 @@ class TourEditController extends Controller
         return view("edit.index");
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -42,6 +33,8 @@ class TourEditController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Tour::class);
+        
         $tour = new Tour;
         $tour->user()->associate(Auth::user());
         $request = $request->all();
@@ -49,22 +42,63 @@ class TourEditController extends Controller
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
         } 
         
+        if(!Auth::user()->can("publish publicly")) {
+            $request["public"] = false;
+        }
+
         $tour->fill($request);
         $tour->save();
+
+        $stop = new Stop;
+        $stop->stop_content = json_decode('{
+    "title": {
+        "English": "Finish",
+        "placeholder": null
+    },
+    "stages": [
+        {
+            "text": {
+                "English": "Finish"
+            },
+            "type": "separator"
+        },
+        {
+            "text": {
+                "placeholder": null
+            },
+            "type": "guide"
+        },
+        {
+            "text": {
+                "placeholder": null,
+                "English": "Enter your email below to have your hotwords emailed to you."
+            },
+            "type": "hotwords-summary"
+        }
+    ]
+}');
+        $stop->sort_order = 0;
+        $tour->stops()->save($stop);
+        $tour->load("stops");
         return response()->json($tour);
     }
 
     public function createStop(Request $request, Tour $tour)
     {
+        $this->authorize('update', $tour);
         $stop = new Stop;
         $stop->fill($request->all());
         $sortOrder = $tour->stops->pluck("sort_order")->toArray();
+        // we should always have a finish
         if(count($sortOrder) == 0) {
             $stop->sort_order = 0;
         }
         else {
+            $finish = $tour->stops->last();
             // remove the "end" item - we don't let them make that not the end.
-            $stop->sort_order = max(array_diff($tour->stops->pluck("sort_order")->toArray(), [9999])) + 1;
+            $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray());
+            $finish->sort_order = $stop->sort_order + 1;
+            $finish->save();
         }
         
 
@@ -81,18 +115,8 @@ class TourEditController extends Controller
      */
     public function show(Tour $tour)
     {
+        $this->authorize('view', $tour);
         return new TourResource($tour);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tour  $tour
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tour $tour)
-    {
-        //
     }
 
     /**
@@ -104,11 +128,16 @@ class TourEditController extends Controller
      */
     public function update(Request $request, Tour $tour)
     {
+        $this->authorize('update', $tour);
         $request = $request->all();
         if($request["start_location"]) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
         } 
         
+        if(!Auth::user()->can("publish publicly")) {
+            $request["public"] = false;
+        }
+
         $tour->fill($request);
         $tour->save();
 
@@ -124,12 +153,14 @@ class TourEditController extends Controller
     
     public function updateStop(Request $request, Tour $tour, Stop $stop)
     {
+        $this->authorize('update', $tour);
         $stop->fill($request->all());
         $stop->save();
         return response()->json($stop);
     }
 
     public function deleteStop(Request $request, Tour $tour, Stop $stop) {
+        $this->authorize('delete', $tour);
         $stop->delete();
     }
 
@@ -141,6 +172,7 @@ class TourEditController extends Controller
      */
     public function destroy(Tour $tour)
     {
+        $this->authorize('delete', $tour);
         $tour->delete();
     }
 }

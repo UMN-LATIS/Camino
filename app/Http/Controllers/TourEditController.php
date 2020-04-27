@@ -17,8 +17,8 @@ class TourEditController extends Controller
      */
     public function index(Request $req)
     {
+        
         if($req->ajax()){
-
             return response()->json(TourResource::collection(Auth::user()->tours));
         }
         return view("edit.index");

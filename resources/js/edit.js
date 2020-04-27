@@ -74,6 +74,7 @@ Vue.component('stage', require('./components/edit/Stage.vue').default);
 
 
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
+Vue.component('error', require('./components/error.vue').default);
 
 Vue.component('custom-markdown', require('./components/edit/CustomMarkdown.vue').default);
 Vue.component('image-upload', require('./components/edit/ImageUpload.vue').default);

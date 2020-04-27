@@ -6,6 +6,7 @@
                      <label :for="'field' + key + randomIdentifier" class=""><slot/> ({{ language }})</label>
                     <custom-markdown v-if="largetext" :text.sync="text[language]" :idkey="'field' + key + randomIdentifier"></custom-markdown>
                 </div>
+                
             </div>
         
         </template>
@@ -15,6 +16,9 @@
                     <label :for="'field' + key + randomIdentifier" class="col-sm-2 col-form-label"><slot/> ({{ language }})</label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" v-model="text[language]" placeholder="" :id="'field' + key + randomIdentifier">
+                    </div>
+                    <div class="col-sm-4">
+                        <slot name="languageaddon"></slot>
                     </div>
                 </div>
             </div>

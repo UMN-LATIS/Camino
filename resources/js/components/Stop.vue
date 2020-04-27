@@ -1,9 +1,11 @@
 <template>
     <div class="bootstrap-fs-modal" v-if="tour">
+         
        <navbar :tour="tour" :currentStopId="currentStopId" />     
         <stop-content class="stop-container" :tour="tour" :currentStop="tour.stops[currentStopId]"  :key="currentStopId" :currentStopId="currentStopId" />
         <debug-bar />
     </div>
+    <error v-else :error="error"/>
     
 </template>
 
@@ -17,6 +19,7 @@
         data() {
             return {
                 tour: false,
+                error: null
             };
         },
         mounted() {
@@ -27,7 +30,7 @@
                     this.$router.replace({ "name": "tour", params: {"currentStopId": 0}})
                 }
             })
-            .catch (error => console.log(error))
+            .catch (error => this.error = error)
             
         },
         computed: {

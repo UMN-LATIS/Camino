@@ -1,5 +1,6 @@
 <template>
     <div v-if="tour && stop">
+         <error :error="error"/>
         <div class="row mb-2">
             <div class="col">
                 <router-link :to="{'name': 'editTour', params: { tourId: tourId }}">{{tour.title }}</router-link>
@@ -153,11 +154,15 @@
                                 }
                             })
                             this.showAlert = true;
+                        }).catch(res => {
+                            this.error = res;
                         });
                 } else {
                     axios.put("/creator/edit/" + this.tour.id + "/stop/" + this.stop.id, this.stop)
                         .then((res) => {
                             this.showAlert = true;
+                        }).catch(res => {
+                            this.error = res;
                         });
                 }
             }
@@ -172,6 +177,8 @@
                     } else if (this.tour.tour_content.use_template) {
                         this.stop = this.stop_template;
                     }
+                }).catch(res => {
+                    this.error = res;
                 });
 
 

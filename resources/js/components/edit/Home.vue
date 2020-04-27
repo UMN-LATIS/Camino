@@ -1,5 +1,6 @@
 <template>
     <div>
+        <error :error="error"/>
         <div class="row d-flex justify-content-between align-items-center">
             <h1>My Tours</h1>
             <div>
@@ -38,7 +39,8 @@
     export default {
         data() {
             return {
-                tours: []
+                tours: [],
+                error: null
             }
         },
         computed: {
@@ -52,6 +54,8 @@
                     axios.delete("/creator/edit/" + tour)
                     .then((res) => {
                         this.loadTours();
+                    }).catch(res => {
+                    this.error = res;
                     });
                 }
             },
@@ -59,6 +63,9 @@
                 axios.get("/creator?" + Math.random()) // someday do .json routes in laravel
                 .then((res) => {
                     this.tours = res.data
+                })
+                .catch(res => {
+                    this.error = res;
                 });
             }
         },

@@ -1,5 +1,6 @@
 <template>
     <div>
+         <error :error="error"/>
         <h1>{{ tour.title }}</h1>
         <div class="form-group row">
           <label for="tourTitle" class="col-sm-1 col-form-label">Tour Title</label>
@@ -86,6 +87,7 @@
           <label class="form-check-label">
             <input type="checkbox" class="form-check-input" v-model="tour.active">
             Active
+            <p id="activeHelpId" class="form-text" v-if="tour.active">Tour URL: <strong><a :href="tourURL">{{ tourURL }}</a></strong></p>
           </label>
         </div>
 
@@ -154,6 +156,7 @@
         },
         data() {
             return {
+                error: null,
                 showAlert: false,
                 tour: {
                     id: null,
@@ -189,6 +192,9 @@
             }
         },
         computed: {
+            tourURL: function() {
+                return "https://" + location.hostname + "/tour/" + this.tourId;
+            },
             hotwords: function () {
                 return this.tour.stops.map(s => { 
                     return s.stop_content.stages.map(stage => {
@@ -215,6 +221,8 @@
                     axios.delete("/creator/edit/" + this.tour.id + "/stop/" + stopId)
                     .then((res) => {
                         this.loadTour();
+                    }).catch(res => {
+                        this.error = res;
                     });
                 }
                 
@@ -230,12 +238,16 @@
                         this.tour.id = res.data.id;
                         Vue.set(this.tour, "stops", res.data.stops);
                         this.showAlert = true;
+                    }).catch(res => {
+                        this.error = res;
                     });
                 }
                 else {
                     axios.put("/creator/edit/" + this.tour.id, this.tour)
                     .then((res) => {
                         this.showAlert = true;
+                    }).catch(res => {
+                        this.error = res;
                     });
                 }
             },
@@ -244,6 +256,8 @@
                     axios.get("/creator/edit/" + this.tourId )
                     .then((res) => {
                         this.tour = res.data
+                    }).catch(res => {
+                        this.error = res;
                     });
                 }
             },

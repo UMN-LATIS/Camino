@@ -59,6 +59,8 @@ Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
 Vue.component('hotword', require('./components/Hotword.vue').default);
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
+Vue.component('error', require('./components/error.vue').default);
+
 Vue.component('debug-bar', require('./components/DebugBar.vue').default);
 Vue.component('separator', require('./components/Separator.vue').default);
 Vue.component('hotwords-summary', require('./components/HotwordsSummary.vue').default);

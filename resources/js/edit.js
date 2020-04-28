@@ -87,6 +87,7 @@ Vue.component('ar', require('./components/edit/AR.vue').default);
 Vue.component('embed-frame', require('./components/edit/Embed.vue').default);
 Vue.component('gallery', require('./components/edit/Gallery.vue').default);
 Vue.component('hotwords-summary', require('./components/edit/HotwordsSummary.vue').default);
+Vue.component('feedback', require('./components/edit/Feedback.vue').default);
 
 Vue.component('location-selector', require('./components/edit/LocationSelector.vue').default);
 Vue.component('initial-location', require('./components/edit/LocationSelector.vue').default);

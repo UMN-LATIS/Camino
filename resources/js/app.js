@@ -28,7 +28,7 @@ Vue.use(CoolLightBox);
 import {
     BButton,
     ModalPlugin,
-    CollapsePlugin
+    CollapsePlugin,
 } from 'bootstrap-vue'
 
 Vue.component('b-button', BButton)
@@ -58,6 +58,9 @@ Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
 Vue.component('hotword', require('./components/Hotword.vue').default);
+Vue.component('feedback', require('./components/feedback.vue').default);
+
+
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 Vue.component('error', require('./components/error.vue').default);
 
@@ -90,6 +93,9 @@ Vue.mixin({
         }
     }
 });
+
+import Permissions from './mixins/Permissions';
+Vue.mixin(Permissions);
 
 
 Vue.config.ignoredElements = [

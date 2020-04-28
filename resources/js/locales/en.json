@@ -14,6 +14,14 @@
     "ar": {
       "showar": "Look around",
       "warning": "Augmented reality view is only available on mobile devices like smartphones and tablets"
+    },
+    "hotwords": {
+      "email": "Send me a copy",
+      "disclaimer": "We promise not to do terrible things with your email",
+      "none": "No hotwords selected"
+    },
+    "feedback": {
+      "button": "Leave Feedback"
     }
   }
 }

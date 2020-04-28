@@ -30,4 +30,8 @@ class Tour extends Model
     public function stops() {
         return $this->hasMany(Stop::class);
     }
+        
+    public function feedbacks() {
+        return $this->hasMany(Feedback::class);
+    }
 }

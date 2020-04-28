@@ -3,7 +3,7 @@
          
        <navbar :tour="tour" :currentStopId="currentStopId" />     
         <stop-content class="stop-container" :tour="tour" :currentStop="tour.stops[currentStopId]"  :key="currentStopId" :currentStopId="currentStopId" />
-        <debug-bar />
+        <debug-bar v-if='$can("edit own tours")'/>
     </div>
     <error v-else :error="error"/>
     

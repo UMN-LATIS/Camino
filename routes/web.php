@@ -15,6 +15,8 @@ Route::get('/tour', "HomeController@index");
 Route::get('/api/tour/{tour}', "HomeController@loadTour");
 Route::get('/ar/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/emailHotwords', 'HomeController@emailHotwords');
+Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
 
 

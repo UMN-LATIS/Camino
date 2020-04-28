@@ -70,6 +70,18 @@ class TourEditController extends Controller
         },
         {
             "text": {
+                "placeholder": null
+            },
+            "type": "feedback"
+        },
+        {
+            "text": {
+                "English": "Hotwords"
+            },
+            "type": "separator"
+        },
+        {
+            "text": {
                 "placeholder": null,
                 "English": "Enter your email below to have your hotwords emailed to you."
             },

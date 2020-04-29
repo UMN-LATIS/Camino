@@ -40,6 +40,22 @@ class TourPolicy
         return $user->id == $tour->user_id;
     }
 
+    public function viewFeedback(?User $user, Tour $tour)
+        {
+        // visitors cannot view unpublished items
+        if ($user === null) {
+            return false;
+        }
+
+        // admin overrides published status
+        if ($user->can('view all feedback')) {
+            return true;
+        }
+
+        // authors can view their own unpublished posts
+        return $user->id == $tour->user_id;
+    }
+
 
     public function update(User $user, Tour $tour)
     {

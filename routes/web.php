@@ -11,10 +11,13 @@
 |
 */
 
-Route::get('/tour', "HomeController@index");
+Route::get('/', "HomeController@index");
+
 Route::get('/api/tour/{tour}', "HomeController@loadTour");
+Route::get('/api/tours/', "HomeController@loadTours");
 Route::get('/ar/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/findTours', 'HomeController@findTours');
 Route::post('/emailHotwords', 'HomeController@emailHotwords');
 Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
@@ -29,7 +32,7 @@ Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
     Route::post("/edit/{tour}/stop", "TourEditController@createStop");
     Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
     Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");
-
+    Route::get('/{tour}/feedback/', "TourEditController@getFeedback");
     Route::any('{all}','TourEditController@index')->where(['all' => '.*']);
     
 });
@@ -61,4 +64,4 @@ if (config('shibboleth.emulate_idp') ) {
     });
 }
 
-Route::any('{all}','HomeController@index')->where(['all' => '.*']);
+Route::any('/tour/{all}','HomeController@tour')->where(['all' => '.*']);

@@ -21,7 +21,6 @@
         <b-collapse id="collapse-1" class="row mx-0 border-bottom" v-model="collapseVisible">
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
-                    <router-link  to="/" class="list-group-item list-group-item-action">{{ $t("nav.home") }}</router-link>
                     <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.stop_content.title[$i18n.locale] }}</router-link>
                 </div>
             </div>

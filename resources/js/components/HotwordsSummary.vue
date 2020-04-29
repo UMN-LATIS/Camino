@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$store.state.hotwords.length > 0 && assembledHotwords > 0">
+    <div v-if="$store.state.hotwords.length > 0 && Object.keys(assembledHotwords).length > 0">
         <div v-html="formattedText">
         </div>
 

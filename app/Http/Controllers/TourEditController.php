@@ -176,6 +176,11 @@ class TourEditController extends Controller
         $stop->delete();
     }
 
+    public function getFeedback(Request $request, Tour $tour) {
+        $this->authorize('viewFeedback', $tour);
+        return response()->json($tour->feedback);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

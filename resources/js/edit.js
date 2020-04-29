@@ -53,6 +53,9 @@ Vue.component('home',home);
 import edit from './components/edit/edit.vue';
 Vue.component('edit', edit);
 
+import feedbackView from './components/edit/FeedbackView.vue';
+Vue.component('feedback-view', feedbackView);
+
 
 import tourStop from './components/edit/TourStop.vue';
 Vue.component('tour-stop', tourStop);
@@ -75,6 +78,7 @@ Vue.component('stage', require('./components/edit/Stage.vue').default);
 
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 Vue.component('error', require('./components/error.vue').default);
+Vue.component('transport-icon', require('./components/TransportIcon.vue').default);
 
 Vue.component('custom-markdown', require('./components/edit/CustomMarkdown.vue').default);
 Vue.component('image-upload', require('./components/edit/ImageUpload.vue').default);
@@ -124,6 +128,12 @@ const routes = [{
         path: '/creator/:tourId?/hotwords',
         name: "editHotwords",
         component: hotwordEditor,
+        props: true,
+    }, 
+    {
+        path: '/creator/:tourId?/viewFeedback',
+        name: "tourFeedback",
+        component: feedbackView,
         props: true,
     }
     

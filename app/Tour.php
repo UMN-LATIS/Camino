@@ -17,7 +17,7 @@ class Tour extends Model
         'start_location'
     ];
 
-    protected $fillable = ["public", "active", "title", "tour_content", "start_location"];
+    protected $fillable = ["public", "active", "title", "tour_content", "start_location", "transport_type"];
 
     protected $casts = [
         'tour_content' => 'json',
@@ -31,7 +31,7 @@ class Tour extends Model
         return $this->hasMany(Stop::class);
     }
         
-    public function feedbacks() {
+    public function feedback() {
         return $this->hasMany(Feedback::class);
     }
 }

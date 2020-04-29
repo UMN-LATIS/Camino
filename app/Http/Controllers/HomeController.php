@@ -7,6 +7,7 @@ use Auth;
 use App\Tour;
 use App\Feedback;
 
+
 use App\Http\Resources\Tour as TourResource;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\HotwordDigest;
@@ -31,7 +32,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        return view('index');
+    }
+
+    public function tour() {
+        return view ("tour");
+    }
+
+    public function findTours() {
+        return view ("findTours");
+    }
+
+    public function loadTours() {
+        $tours = Tour::where("active", 1)->where("public", 1)->get();
+        return TourResource::collection($tours);
     }
 
     public function loadTour(Tour $tour) {

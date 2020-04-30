@@ -29,7 +29,7 @@
         </div>
 
         <div class="row mt-2">
-            <div class="col d-flex justify-content-center">
+            <div class="col d-flex justify-content-center" style="font-size:1.4em">
                 <div class="form-check form-check-inline">
                     <label class="form-check-label">
                         <input type="checkbox" class="form-check-input" v-model="walk">
@@ -59,6 +59,7 @@
 <script>
     var map;
     var lc;
+    var markerGroup;
     export default {
         data() {
             return {
@@ -77,41 +78,20 @@
         },
         watch: {
             walk: function() {
-                this.renderMap();
+                this.updateMarkers();
             },
             bike: function() {
-                this.renderMap();
+                this.updateMarkers();
             },
             drive: function() {
-                this.renderMap();
+                this.updateMarkers();
             },
         },
         methods: {
-            renderMap: function () {
-                if(map) {
-                    lc.stop();
-                    map.off("locationfound");
-                    map.remove();
-                    
-                }
-                map = null;
+            updateMarkers: function() {
 
-                map = L.map('map');
-
-                L.tileLayer(
-                    'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-                        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                        maxZoom: 18,
-                        id: 'mapbox/streets-v11',
-                        accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
-                    }).addTo(map);
-
-
-
+                var markers = [];
                 var otherLocation = null;
-                var walkingPath = [];
-                var markers = []
-
                 this.tours.filter(tour => { return ((this.walk && tour.transport_type == 0) || (this.bike && tour.transport_type == 1) || (this.drive && tour.transport_type == 2))}).forEach(targetPoint => {
 
                     var myIcon = L.icon({
@@ -142,15 +122,44 @@
                     }
                     otherLocation.bindPopup('<p>' + targetPoint.title + '</p>' + iconAppend + '<a href="/tour/' + targetPoint
                         .id + '">Start tour</a>');
-                    otherLocation.addTo(map);
+                    // otherLocation.addTo(map);
 
 
                     markers.push(otherLocation);
 
                 });
-                console.log(markers);
-                var group = new L.featureGroup(markers);
-                map.fitBounds(group.getBounds());
+
+                if(markerGroup) {
+                    markerGroup.clearLayers();
+                }
+                markerGroup = new L.featureGroup(markers);
+                markerGroup.addTo(map);
+            },
+            renderMap: function () {
+                if(map) {
+                    lc.stop();
+                    map.off("locationfound");
+                    map.remove();
+                    
+                }
+                map = null;
+
+                map = L.map('map');
+
+                L.tileLayer(
+                    'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox/streets-v11',
+                        accessToken: 'pk.eyJ1IjoiY21jZmFkZGVuIiwiYSI6ImNqN2RycmdtejBlNHgyd3BkZjE3amI4aHAifQ.UTQUqpEmgN0ZEEwZzTbalw'
+                    }).addTo(map);
+
+
+
+                
+                var walkingPath = [];
+                this.updateMarkers();
+                map.fitBounds(markerGroup.getBounds());
                 lc = L.control.locate({
                     showCompass: true,
                     locateOptions: {

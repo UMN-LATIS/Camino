@@ -39,6 +39,10 @@ class HomeController extends Controller
         return view ("tour");
     }
 
+    public function about() {
+        return view ("about");
+    }
+
     public function findTours() {
         return view ("findTours");
     }

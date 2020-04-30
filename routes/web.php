@@ -12,6 +12,7 @@
 */
 
 Route::get('/', "HomeController@index");
+Route::get('/about', "HomeController@about");
 
 Route::get('/api/tour/{tour}', "HomeController@loadTour");
 Route::get('/api/tours/', "HomeController@loadTours");

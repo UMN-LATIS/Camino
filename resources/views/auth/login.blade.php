@@ -3,11 +3,11 @@
 @section("content")
 
 {{-- @section('content') --}}
-<div class="container">
+<div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Login</div>
+                <div class="card-header">Log In to Camino</div>
 
                 <div class="card-body">
                       <div class="form-group row">
@@ -15,6 +15,11 @@
                                 <a href="{{ url('/shiblogin') }}" class="btn university btn-lg d-flex align-items-center justify-content-center text-light"><i class="fa fa-university fa-2x fa-inverse  mr-2"></i> University of Minnesota</a>
                             </div>
                         </div>
+                         {{-- <div class="form-group row">
+                            <div class="col-md-6 offset-md-3 text-center">
+                                <p class="display-4">or</p>
+                            </div>
+                        </div> --}}
                         <div class="form-group row">
                             <div class="col-md-4">
                                 <a href="{{ url('/socialite/github') }}" class="btn github btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-github fa-2x fa-inverse  mr-2"></i> GitHub Login</a>

@@ -48,7 +48,7 @@ export default {
     },
     computed: {
         isActive: function() {
-            return this.$store.state.hotwords.filter(w => w == this.cleanedWord).length > 0;
+            return this.$store.getters.hotwords.filter(w => w == this.cleanedWord).length > 0;
         },
         cleanedWord: function() {
             return this.text.replace(/[\|\|]/g, '');

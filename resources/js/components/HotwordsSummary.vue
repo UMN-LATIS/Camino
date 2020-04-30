@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$store.state.hotwords.length > 0 && Object.keys(assembledHotwords).length > 0">
+    <div v-if="$store.getters.hotwords.length > 0 && Object.keys(assembledHotwords).length > 0">
         <div v-html="formattedText">
         </div>
 
@@ -57,7 +57,7 @@
 
                 return Object.keys(this.tour.tour_content.hotWords)
                     .sort()
-                    .filter(key => this.$store.state.hotwords.includes(key))
+                    .filter(key => this.$store.getters.hotwords.includes(key))
                     .reduce((obj, key) => {
                         obj[key] = this.tour.tour_content.hotWords[key];
                         return obj;

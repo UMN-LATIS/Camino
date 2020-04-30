@@ -33,9 +33,9 @@
                     Spanish
                   </label>
                 </div>
-                <h6 class="mt-2" v-if="$store.state.hotwords.length > 0">Hotwords</h6>
+                <h6 class="mt-2" v-if="$store.getters.hotwords.length > 0">Hotwords</h6>
                 <ul class="list-group">
-                    <li class="list-group-item" v-for="(hotword, index) in $store.state.hotwords" :key="index">{{hotword}}</li>
+                    <li class="list-group-item" v-for="(hotword, index) in $store.getters.hotwords" :key="index">{{hotword}}</li>
                 </ul>
             </div>
         </div>

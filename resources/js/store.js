@@ -4,6 +4,9 @@ import Vue from 'vue';
 
 Vue.use(Vuex)
 
+import {
+    router
+} from "./route";
 
 import VuexPersistence from 'vuex-persist'
 const vuexLocal = new VuexPersistence({
@@ -20,10 +23,14 @@ export const store = new Vuex.Store({
     },
     mutations: {
         addHotword(state, hotword) {
-            state.hotwords.push(hotword);
+            if (!Array.isArray(state.hotwords[router.currentRoute.params.tourId])) {
+                Vue.set(state.hotwords, router.currentRoute.params.tourId, []);
+            }
+            state.hotwords[router.currentRoute.params.tourId].push(hotword);
         },
         removeHotword(state, hotword) {
-            state.hotwords = state.hotwords.filter(w => w !== hotword);
+            Vue.set(state.hotwords, router.currentRoute.params.tourId, state.hotwords[router.currentRoute.params.tourId].filter(w => w !== hotword))
+
         },
         setSimulateLocation(state, simulateLocation) {
             state.config.simulateLocation = simulateLocation;
@@ -33,7 +40,12 @@ export const store = new Vuex.Store({
         }
     },
     getters: {
-        hotwords: state => state.hotwords
+        hotwords: state => {
+            if (!Array.isArray(state.hotwords[router.currentRoute.params.tourId]) ) {
+                return [];
+            }
+            return state.hotwords[router.currentRoute.params.tourId];
+        }
     },
     plugins: [vuexLocal.plugin]
 });

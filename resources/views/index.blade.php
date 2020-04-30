@@ -1,21 +1,6 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title></title>
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-    {{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> --}}
-    <link rel="stylesheet" href="{{ mix('css/edit.css') }}">
-    <!-- Styles -->
-    
-</head>
-<body>
+@extends('base')
+
+@section('content')
 
     <style>
 .camino-backdrop {
@@ -84,18 +69,8 @@
         <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
         <h2>Build Yours</h2>
         <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <p><a class="btn btn-secondary" href="#" role="button">View details »</a></p>
+        <p><a class="btn btn-secondary" href="/creator" role="button">View details »</a></p>
       </div><!-- /.col-lg-4 -->
     </div>
 </div>
-
-    <footer class="footer mt-2">
-        <div class="container d-flex align-items-center justify-content-between">
-            <p class="mb-0">
-                <a href="#">Back to top</a>
-            </p>
-            <p class="mb-0">Camino Footer</p>
-        </div>
-    </footer>
-    
-</body>
+@endsection

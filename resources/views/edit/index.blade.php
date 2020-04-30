@@ -50,5 +50,6 @@
     window.Permissions = [];
   @endauth
 </script>
+<script src="{{ mix('js/edit.js') }}"></script>
 
 </html>

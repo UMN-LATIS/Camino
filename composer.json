@@ -14,13 +14,15 @@
     "require": {
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
+        "geocoder-php/mapbox-provider": "^1.0",
         "grimzy/laravel-mysql-spatial": "^2.2",
         "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
         "laravel/helpers": "^1.2",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
-        "spatie/laravel-permission": "^3.11"
+        "spatie/laravel-permission": "^3.11",
+        "toin0u/geocoder-laravel": "^4.3"
     },
     "require-dev": {
         "deployer/deployer": "^6.7",

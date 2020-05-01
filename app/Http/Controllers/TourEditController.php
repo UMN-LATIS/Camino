@@ -167,8 +167,12 @@ class TourEditController extends Controller
     {
         $this->authorize('update', $tour);
         $request = $request->all();
+        $locationDirty = false;
         if($request["start_location"]) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
+            if($request["start_location"] != $tour->start_location) {
+                $locationDirty = true;
+            }
         } 
         
         if(!Auth::user()->can("publish publicly")) {
@@ -176,7 +180,22 @@ class TourEditController extends Controller
         }
 
         $tour->fill($request);
+
+        if($locationDirty){
+            $geocoded = app('geocoder')->reverse($tour->start_location->getLat(), $tour->start_location->getLng())->get();
+            if($geocoded) {
+                $firstGeocode = $geocoded[0];
+                $neighborhood = $firstGeocode->getNeighborhood();
+                $locality = $firstGeocode->getLocality();
+                $postalCode = $firstGeocode->getPostalCode();
+                $country = $firstGeocode->getCountry();
+                $adminLevels = $firstGeocode->getAdminLevels();
+                $city = $adminLevels->get(1)->getName();
+                $state = $adminLevels->get(2)->getName();
+            }
+        }
         $tour->save();
+
 
         for($i=0; $i<count($request["stops"]); $i++) {
             $stop = $request["stops"][$i];

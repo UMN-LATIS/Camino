@@ -145,7 +145,7 @@
         <draggable v-model="tour.stops" :move="checkMove">
             <div class="card mt-2" v-for="stop in tour.stops" :key="stop.id">
                 <div class="card-body d-flex justify-content-between align-items-center">
-                    <h5 class="card-title"><i class="fas fa-grip-vertical handle" v-if="!isFinalItem(stop)"></i>
+                    <h5 class="card-title"><i class="fas fa-grip-vertical handle" v-if="!isLockedItem(stop)"></i>
                         {{ stop.stop_content.title[tour.tour_content.languages[0]] }}</h5>
                     <div class="controls">
                         <a href="#" @click="deleteStop(stop.id)" class="btn btn-outline-danger"><i
@@ -169,6 +169,15 @@
             </div>
         </div>
 
+
+        <div class="alert alert-danger" role="alert" v-if="errors.length > 0">
+            <strong>Errors</strong>
+            <ul>
+                <li v-for="(error, key) in errors" :key="key">
+                    {{ error }}
+                </li>
+            </ul>
+        </div>
 
         <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank"><i
                 class="fas fa-eye"></i> Preview</a>
@@ -209,6 +218,7 @@
             return {
                 error: null,
                 showAlert: false,
+                errors: [],
                 tour: {
                     id: null,
                     public: false,
@@ -283,7 +293,27 @@
             imageUploaded: function (value) {
                 this.tour.tour_content.custom_base_map.image = value;
             },
+            validate: function() {
+                this.errors = [];
+                if(!this.tour.title) {
+                    this.errors.push("A title is required");
+                }
+                if(!this.tour.start_location) {
+                    this.errors.push("A start location is required");
+                }
+                if(this.tour.tour_content.languages.length == 0) { 
+                    this.errors.push("At least one language is required");
+                }
+                if(this.errors.length > 0) {
+                    return false;
+                }
+                return true;
+
+            },
             save: function () {
+                if(!this.validate()) {
+                    return;
+                }
                 if (!this.tour.id) {
                     axios.post("/creator/edit", this.tour)
                         .then((res) => {
@@ -321,10 +351,10 @@
                     index,
                     futureIndex
                 } = context
-                return !(this.isFinalItem(this.tour.stops[index]) || this.isFinalItem(this.tour.stops[futureIndex]));
+                return !(this.isLockedItem(this.tour.stops[index]) || this.isLockedItem(this.tour.stops[futureIndex]));
             },
-            isFinalItem(stop) {
-                return stop.sort_order == (this.tour.stops.length - 1);
+            isLockedItem(stop) {
+                return (stop.sort_order == 0 || stop.sort_order == (this.tour.stops.map(s=>s.sort_order).reduce((a,b)=> Math.max(a,b))));
             }
         },
         mounted: function () {

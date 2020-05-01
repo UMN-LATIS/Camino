@@ -59,8 +59,8 @@ class HomeController extends Controller
         
     }
 
-    public function ar($stage,$locale = "en", $simulateLocation=false) {
-        return view('arembed', ["stage"=>$stage, "simulateLocation"=>$simulateLocation, "locale"=> $locale]);
+    public function ar(Tour $tour, $stage,$locale = "en", $simulateLocation=false) {
+        return view('arembed', ["tour"=>$tour, "stage"=>$stage, "simulateLocation"=>$simulateLocation, "locale"=> $locale]);
     }
 
     public function login()

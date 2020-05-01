@@ -16,7 +16,7 @@
                 <hr />
                 <draggable v-model="stop.stop_content.stages" handle=".handle">
                     <stage v-for="(stage,key) in stop.stop_content.stages" :key='key' :stage="stage"
-                        v-on:remove="stop.stop_content.stages.splice(key)">
+                        v-on:remove="stop.stop_content.stages.splice(key, 1)">
                         <component :is="stage.type" :stage="stage" :languages="tour.tour_content.languages"
                             :tour="tour">
                         </component>
@@ -69,6 +69,7 @@
         },
         data() {
             return {
+                error: null,
                 localStop: this.stopId,
                 showAlert: false,
                 newStageType: null,

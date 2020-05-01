@@ -21,7 +21,7 @@
     </head>
     <body>
         <div id="app" style="width:100%; height:100%">
-            <ar-embed stage="{{$stage}}" simulate-location="{{$simulateLocation}}" locale="{{$locale}}"></ar-embed>
+            <ar-embed stage="{{$stage}}" simulate-location="{{$simulateLocation}}" locale="{{$locale}}" tour-id="{{$tour->id}}"></ar-embed>
         </div>
         
     </body>

@@ -52,6 +52,31 @@ class TourEditController extends Controller
         $stop = new Stop;
         $stop->stop_content = json_decode('{
     "title": {
+        "English": "Start",
+        "placeholder": null
+    },
+    "stages": [
+        {
+            "text": {
+                "English": "Start"
+            },
+            "type": "separator"
+        },
+        {
+            "text": {
+                "English": "Go for a walk!"
+            },
+            "type": "guide"
+        }
+    ]
+}');
+        $stop->sort_order = 0;
+        $tour->stops()->save($stop);
+
+
+        $stop = new Stop;
+        $stop->stop_content = json_decode('{
+    "title": {
         "English": "Finish",
         "placeholder": null
     },
@@ -89,7 +114,7 @@ class TourEditController extends Controller
         }
     ]
 }');
-        $stop->sort_order = 0;
+        $stop->sort_order = 1;
         $tour->stops()->save($stop);
         $tour->load("stops");
         return response()->json($tour);

@@ -2,7 +2,7 @@
     <div>
         <div v-for="(image,key) in stage.images" :key="key" class="border rounded p-2 m-2">
             <image-upload v-if="!image.src" v-on:imageuploaded="imageUploaded(key, $event)"></image-upload>
-            <button @click="stage.images.splice(key)" class="btn btn-outline-danger float-right" v-if="image.src"><i class="fas fa-trash"></i> Remove Image</button>
+            <button @click="stage.images.splice(key,1 )" class="btn btn-outline-danger float-right" v-if="image.src"><i class="fas fa-trash"></i> Remove Image</button>
             <img :src="'/storage/' + image.src" class="img-thumbnail mb-2" v-if="image.src" width="200">
                     <language-text :text="image.text" :languages="languages" :largetext="false">
                         Image Description

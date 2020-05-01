@@ -16,7 +16,7 @@
                     <language-text :text="waypoint.text" :languages="languages">
                         Text
                         <template v-slot:languageaddon>
-                            <button @click="stage.waypoints.splice(key)" class="btn btn-outline-danger float-right"><i class="fas fa-trash"></i> Remove Waypoint</button>
+                            <button @click="stage.waypoints.splice(key, 1)" class="btn btn-outline-danger float-right"><i class="fas fa-trash"></i> Remove Waypoint</button>
                         </template>
 
                     </language-text>

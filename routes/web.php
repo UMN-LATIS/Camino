@@ -11,6 +11,8 @@
 |
 */
 
+Route::impersonate();
+
 Route::get('/', "HomeController@index");
 Route::get('/about', "HomeController@about");
 
@@ -39,7 +41,6 @@ Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
 });
 
 
-
 // Auth stuff
 
 Route::get("/login", "HomeController@login")->name("login");
@@ -66,3 +67,7 @@ if (config('shibboleth.emulate_idp') ) {
 }
 
 Route::any('/tour/{all}','HomeController@tour')->where(['all' => '.*']);
+
+Route::group(['prefix'=>'admin', 'middleware' => ['auth', 'permission:administer site']], function () {
+    Route::resource('users', 'Admin\\UsersController');
+});

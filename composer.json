@@ -17,6 +17,7 @@
         "geocoder-php/mapbox-provider": "^1.0",
         "grimzy/laravel-mysql-spatial": "^2.2",
         "intervention/image": "^2.5",
+        "lab404/laravel-impersonate": "^1.6",
         "laravel/framework": "^7.0",
         "laravel/helpers": "^1.2",
         "laravel/socialite": "^4.3",
@@ -25,6 +26,7 @@
         "toin0u/geocoder-laravel": "^4.3"
     },
     "require-dev": {
+        "appzcoder/crud-generator": "^3.2",
         "deployer/deployer": "^6.7",
         "deployer/dist": "^6.7",
         "deployer/recipes": "^6.2",

@@ -21,6 +21,7 @@
         <h5 class="my-0 mr-md-auto font-weight-normal"><a class="text-reset" href="/">Camino</a></h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-dark" href="/creator">My Tours</a>
+            <a class="" href="/impersonate/leave" v-if="user.impersonating">End Impersonation</a>
         </nav>
         @if (Auth::user())
         <a class="btn btn-outline-primary" href="/logout">Sign Out</a>

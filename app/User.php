@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use \Lab404\Impersonate\Models\Impersonate;
 
     protected static function boot()
     {

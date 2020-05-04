@@ -188,10 +188,11 @@ class TourEditController extends Controller
                 $neighborhood = $firstGeocode->getNeighborhood();
                 $locality = $firstGeocode->getLocality();
                 $postalCode = $firstGeocode->getPostalCode();
-                $country = $firstGeocode->getCountry();
+                $country = $firstGeocode->getCountry()->getName();
                 $adminLevels = $firstGeocode->getAdminLevels();
                 $city = $adminLevels->get(1)->getName();
                 $state = $adminLevels->get(2)->getName();
+                $tour->geocoded = ["neighborhood" => $neighborhood, "locality" => $locality, "postalCode" => $postalCode, "country" => $country, "city" => $city, "state" => $state];
             }
         }
         $tour->save();

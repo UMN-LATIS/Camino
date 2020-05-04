@@ -70,7 +70,7 @@
         <img src="/images/create.jpg" class="bd-placeholder-img rounded-circle border" width="140" />
         <h2>Build Yours</h2>
         <p>Anyone can create a tour with Camino.  Just log in and get started.</p>
-        <p><a class="btn btn-secondary" href="/creator" role="button">View details »</a></p>
+        <p><a class="btn btn-secondary" href="/creator" role="button">Create a tour »</a></p>
       </div><!-- /.col-lg-4 -->
     </div>
 </div>

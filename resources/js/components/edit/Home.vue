@@ -9,7 +9,7 @@
         </div>
         <div class="card mt-2" v-for="tour in sortedTitles" :key="tour.id">
             <div class="card-body d-flex justify-content-between align-items-center">
-                <h5 class="card-title"><i class="fas fa-check-circle mr-2" v-if="tour.active"></i><transport-icon :transport_type="tour.transport_type" class="mr-2" />{{ tour.title }}</h5> 
+                <h5 class="card-title"><i class="fas fa-check-circle mr-2" v-if="tour.active"></i><i class="fas fa-globe mr-2" v-if="tour.public"></i><transport-icon :transport_type="tour.transport_type" class="mr-2" />{{ tour.title }}</h5> 
                 <div class="controls">
                     <router-link :to='{name: "tourFeedback", params: { tourId: tour.id }}' class="btn btn-outline-info"><i class="fas fa-comment"></i> Feedback</router-link>
                     <a href="#" @click="deleteTour(tour.id)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>

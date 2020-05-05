@@ -4,7 +4,18 @@
                     arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false'>
 
 
-        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" :value="waypoint.text[locale]" :gps-entity-place="'latitude: ' +  waypoint.location.lat  + '; longitude: ' + waypoint.location.lng + ';'" :position="'0 ' + waypoint.altitude?waypoint.altitude:0 + ' 0'" rotation="0 0 0" font="roboto" color="#e43e31" look-at="#camera" side="double" align="center" :width="getSizeForPoint(waypoint)">
+        <a-text v-for="(waypoint, index) in currentStopAR.waypoints" :key="index" 
+            :value="waypoint.text[locale]" :gps-entity-place="'latitude: ' +  waypoint.location.lat  + '; longitude: ' + waypoint.location.lng + ';'" 
+            :position="'0 ' + (waypoint.altitude?waypoint.altitude:0) + ' 0'" 
+            rotation="0 0 0" 
+            font="roboto" 
+            color="#e43e31" 
+            look-at="#camera" 
+            side="double" 
+            align="center" 
+            :z-offset="getDistanceFromWaypoint(waypoint) * .1"
+            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) + '; height: 220'" material="color: #eee; opacity: 0.6"
+            :width="getSizeForPoint(waypoint)">
 
         </a-text>
          
@@ -54,7 +65,10 @@ export default {
         }
     },
     methods: {
-        getSizeForPoint(waypoint) {
+        getTextWidth(waypoint) {
+            return waypoint.text[this.locale].length * 100
+        },
+        getDistanceFromWaypoint(waypoint) {
             var nav = this.currentStop.stages.find(elem => elem.type =="navigation");
             if(!nav) {
                 return 2000;
@@ -65,7 +79,11 @@ export default {
             var a = waypoint.location.lat - stageLocation.lat;
             var b = waypoint.location.lng - stageLocation.lng;
             var distance = Math.sqrt( a*a + b*b ) * 111139; //meters per degree
-            return distance * 2;
+            return distance;
+        },
+        getSizeForPoint(waypoint) {
+            var distance = this.getDistanceFromWaypoint(waypoint);
+            return Math.log(distance) * 500;
         }
     },
     mounted() {

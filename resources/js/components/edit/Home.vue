@@ -31,7 +31,9 @@
 .fa-check-circle {
     color: green;
   }
-
+.fa-globe  {
+    color: darkblue;
+}
 </style>
 
 <script>

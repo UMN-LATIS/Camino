@@ -29,14 +29,14 @@
   <select class="form-control" name="roles[]" id="" multiple>
     @foreach ( \Spatie\Permission\Models\Role::all() as $role)
     <option value={{ $role->id }} {{ ($users->roles->contains($role->id))?"SELECTED":null }}>{{ $role->name }}</option>
-  
+
     @endforeach
     </select>
 </div>
 
 <div class="form-group">
   <label for="">Permissions</label>
-  <select class="form-control" name="roles[]" id="" multiple>
+  <select class="form-control" name="permissions[]" id="" multiple>
     @foreach ( \Spatie\Permission\Models\Permission::all() as $permission)
     <option value={{ $permission->id }} {{ ($users->permissions->contains($permission->id))?"SELECTED":null }}>{{ $permission->name }}</option>
   

@@ -50,7 +50,7 @@ Vue.use(VueRouter);
 import home from './components/edit/Home.vue';
 Vue.component('home',home);
 
-import edit from './components/edit/edit.vue';
+import edit from './components/edit/Edit.vue';
 Vue.component('edit', edit);
 
 import feedbackView from './components/edit/FeedbackView.vue';

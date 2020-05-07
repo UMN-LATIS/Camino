@@ -18,7 +18,7 @@ add('writable_dirs', []);
 // Servers
 
 host('dev')
-    ->hostname("cla-peru-dev.oit.umn.edu")
+    ->hostname("cla-camino-dev.oit.umn.edu")
     ->user('mcfa0086')
     ->stage('development')
     // ->identityFile()
@@ -26,7 +26,7 @@ host('dev')
 	->set('deploy_path', '/swadm/var/www/html/');
 
 host('stage')
-    ->hostname("cla-peru-tst.oit.umn.edu")
+    ->hostname("cla-camino-tst.oit.umn.edu")
     ->user('mcfa0086')
     ->stage('stage')
     // ->identityFile()
@@ -34,7 +34,7 @@ host('stage')
     ->set('deploy_path', '/swadm/var/www/html/');
 
 host('prod')
-    ->hostname("cla-peru-prd.oit.umn.edu")
+    ->hostname("cla-camino-prd.oit.umn.edu")
     ->user('mcfa0086')
     ->stage('production')
     // ->identityFile()

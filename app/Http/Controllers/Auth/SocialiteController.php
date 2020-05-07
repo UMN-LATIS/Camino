@@ -39,7 +39,7 @@ class SocialiteController extends Controller
                 'provider'      => $provider,
             ]);
             Auth::login($user);
-            return redirect("/");
+            return redirect("/creator");
         }
     }
 }

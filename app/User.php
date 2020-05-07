@@ -19,7 +19,7 @@ class User extends Authenticatable
         parent::boot();
 
         static::created(function($user) {
-            $user->assignRole("external_user");
+            $user->assignRole("user");
         });
     }
 

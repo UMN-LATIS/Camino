@@ -58,7 +58,7 @@ Vue.component('guide', require('./components/Guide.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
 Vue.component('hotwords', require('./components/Hotwords.vue').default);
 Vue.component('hotword', require('./components/Hotword.vue').default);
-Vue.component('feedback', require('./components/feedback.vue').default);
+Vue.component('feedback', require('./components/Feedback.vue').default);
 Vue.component('find-tour', require('./components/FindTour.vue').default);
 
 

@@ -14,7 +14,7 @@ return array(
 
     'idp_login'     => '/Shibboleth.sso/Login',
     'idp_logout'    => '/Shibboleth.sso/Logout',
-    'authenticated' => '/home',
+    'authenticated' => '/creator',
     'authfield'     => 'unique_id',
     /*
     |--------------------------------------------------------------------------
@@ -69,7 +69,7 @@ return array(
         // fillable user model attribute => server variable
         'email'       => 'mail',
         'name'        => 'displayName',
-        'unique_id'  => 'umnDID',
+        'unique_id'  => 'eppn',
     ],
 
     /*

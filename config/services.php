@@ -34,5 +34,10 @@ return [
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('APP_URL') . '/socialite/github/callback',
     ],
+    'facebook' => [
+        'client_id' => env('FACEBOOK_KEY'),
+        'client_secret' => env('FACEBOOK_SECRET'),
+        'redirect' => env('APP_URL') . '/socialite/facebook/callback',
+    ],
 
 ];

@@ -22,9 +22,10 @@
         "laravel/helpers": "^1.2",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
+        "razorbacks/laravel-shibboleth": "dev-umn",
+        "socialiteproviders/facebook": "^1.0",
         "spatie/laravel-permission": "^3.11",
-        "toin0u/geocoder-laravel": "^4.3",
-        "razorbacks/laravel-shibboleth": "dev-umn"
+        "toin0u/geocoder-laravel": "^4.3"
     },
     "require-dev": {
         "appzcoder/crud-generator": "^3.2",

@@ -67,9 +67,9 @@ return array(
 
     'user' => [
         // fillable user model attribute => server variable
-        'email'       => 'mail',
+        'unique_id'       => 'mail',
         'name'        => 'displayName',
-        'unique_id'  => 'eppn',
+        'umnDID'  => 'eppn',
     ],
 
     /*

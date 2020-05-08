@@ -6,15 +6,15 @@
         <b-button v-b-toggle.collapse-feedback variant="primary">{{ $t("stage.feedback.button") }}</b-button>
         <b-collapse id="collapse-feedback" class="mt-2">
             <div>
-                <div class="form-group col-4">
+                <div class="form-group col-md-4 col-sm-12">
                   <label for="">Your Name</label>
                   <input type="text" class="form-control" name="" v-model="name" id="" aria-describedby="helpId" placeholder="">
                 </div>
-                <div class="form-group col-4">
+                <div class="form-group col-md-4 col-sm-12">
                   <label for="">Your E-mail</label>
                   <input type="email" class="form-control" name="" v-model="email" id="" aria-describedby="emailHelpId" placeholder="">
                 </div>
-                <div class="form-group col-6">
+                <div class="form-group col-md-6 col-sm-12">
                   <label for="">Feedback</label>
                   <textarea class="form-control" name="" id="" v-model="feedback" rows="3"></textarea>
                 </div>

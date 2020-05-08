@@ -24,6 +24,7 @@
         "laravel/tinker": "^2.0",
         "razorbacks/laravel-shibboleth": "dev-umn",
         "socialiteproviders/facebook": "^1.0",
+        "socialiteproviders/google": "^3.0",
         "spatie/laravel-permission": "^3.11",
         "toin0u/geocoder-laravel": "^4.3"
     },

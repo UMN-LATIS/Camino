@@ -30,7 +30,7 @@
                                 <span class="hidden-xs"></span>
                             </div>
                              <div class="col-md-4">
-                                <a href="{{ url('/socialite/github') }}" class="btn google btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-google fa-2x fa-inverse  mr-2"></i> Google Login</a>
+                                <a href="{{ url('/socialite/google') }}" class="btn google btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-google fa-2x fa-inverse  mr-2"></i> Google Login</a>
                                 <span class="hidden-xs"></span>
                             </div>
                         </div>

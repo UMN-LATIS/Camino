@@ -39,5 +39,10 @@ return [
         'client_secret' => env('FACEBOOK_SECRET'),
         'redirect' => env('APP_URL') . '/socialite/facebook/callback',
     ],
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT'),
+        'client_secret' => env('GOOGLE_SECRET'),
+        'redirect' => env('APP_URL') . '/socialite/google/callback',
+    ],
 
 ];

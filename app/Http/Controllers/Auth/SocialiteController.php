@@ -30,7 +30,7 @@ class SocialiteController extends Controller
         $users       =   \App\User::where(['email' => $userSocial->getEmail()])->first();
         if($users){
             Auth::login($users);
-            return redirect('/');
+            return redirect('/creator');
         }else{
             $user = \App\User::create([
                 'name'          => $userSocial->getName(),

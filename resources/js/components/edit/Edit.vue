@@ -255,7 +255,7 @@
         },
         computed: {
             tourURL: function () {
-                return location.protocol + "//" + location.hostname + (location.port?":":null)+location.port + "/tour/" + this.tourId;
+                return location.protocol + "//" + location.hostname + (location.port?":":"")+location.port + "/tour/" + this.tourId;
             },
             hotwords: function () {
                 return this.tour.stops.map(s => {

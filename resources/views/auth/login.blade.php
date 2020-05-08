@@ -26,7 +26,7 @@
                                 <span class="hidden-xs"></span>
                             </div>
                              <div class="col-md-4">
-                                <a href="{{ url('/socialite/github') }}" class="btn facebook btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-facebook fa-2x fa-inverse mr-2"></i> Facebook Login</a>
+                                <a href="{{ url('/socialite/facebook') }}" class="btn facebook btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-facebook fa-2x fa-inverse mr-2"></i> Facebook Login</a>
                                 <span class="hidden-xs"></span>
                             </div>
                              <div class="col-md-4">

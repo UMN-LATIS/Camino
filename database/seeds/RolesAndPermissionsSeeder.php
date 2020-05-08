@@ -24,6 +24,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name' => 'create tours']);
         Permission::create(['name' => 'publish publicly']);
         Permission::create(['name' => 'view all feedback']);
+        Permission::create(['name' => 'administer site']);
 
         // create roles and assign created permissions
 
@@ -33,7 +34,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // or may be done by chaining
         $role = Role::create(['name' => 'administrator'])
-            ->givePermissionTo(['view unpublished tours', 'edit all tours', 'delete any tours', 'publish publicly', 'view all feedback']);
+            ->givePermissionTo(['view unpublished tours', 'edit all tours', 'delete any tours', 'publish publicly', 'view all feedback', 'administer site']);
 
         $role = Role::create(['name' => 'super-admin']);
         $role->givePermissionTo(Permission::all());

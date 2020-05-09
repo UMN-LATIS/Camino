@@ -29,11 +29,13 @@ import {
     BButton,
     ModalPlugin,
     CollapsePlugin,
+    NavbarPlugin
 } from 'bootstrap-vue'
 
 Vue.component('b-button', BButton)
 Vue.use(ModalPlugin);
 Vue.use(CollapsePlugin)
+Vue.use(NavbarPlugin)
 
 
 /**
@@ -49,6 +51,7 @@ Vue.use(CollapsePlugin)
 
 
 Vue.component('navbar', require('./components/Nav.vue').default);
+Vue.component('site-nav', require('./components/SiteNav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
 Vue.component('ar', require('./components/AR.vue').default);

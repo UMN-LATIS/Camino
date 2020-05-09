@@ -36,7 +36,7 @@ return array(
             'displayName' => 'Admin User',
             'givenName'   => 'Admin',
             'sn'          => 'User',
-            'mail'        => 'admin@uwm.edu',
+            'eppn'        => 'admin@uwm.edu',
         ),
         'staff' => array(
             'umnDID'         => 'staff',

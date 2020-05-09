@@ -1,10 +1,10 @@
 @extends('base')
 
 @section('content')
-     @include('navbar') 
 
     <div id="app" >
-        <find-tour />
+        <site-nav current-route={{ Route::current()->uri() }}></site-nav>
+        <find-tour></find-tour>
     </div>
 
 @endsection

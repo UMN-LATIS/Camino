@@ -1,7 +1,9 @@
 @extends('base')
 
 @section('content')
-@include('navbar') 
+<div id="app" >
+        <site-nav current-route={{ Route::current()->uri() }}></site-nav>
+</div>
 <div class="container">
 <div class="row">
 

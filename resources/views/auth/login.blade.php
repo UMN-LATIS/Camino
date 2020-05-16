@@ -22,15 +22,15 @@
                         </div> --}}
                         <div class="form-group row">
                             <div class="col-12  col-md-12 col-lg-4 ">
-                                <a href="{{ url('/socialite/github') }}" class="m-1 m-lg-0 btn github btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-github fa-2x fa-inverse  mr-2"></i> GitHub Login</a>
+                                <a href="{{ url('/socialite/google') }}" class="m-1 m-lg-0 btn google btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-google fa-2x fa-inverse  mr-2"></i> Google Login</a>
+                                <span class="hidden-xs"></span>
+                            </div>
+                            <div class="col-12  col-md-12 col-lg-4 ">
+                                <a href="{{ url('/socialite/live') }}" class="m-1 m-lg-0 btn github btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-microsoft fa-2x fa-inverse  mr-2"></i> Microsoft Login</a>
                                 <span class="hidden-xs"></span>
                             </div>
                              <div class="col-12  col-md-12 col-lg-4 ">
                                 <a href="{{ url('/socialite/facebook') }}" class="m-1 m-lg-0 btn facebook btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-facebook fa-2x fa-inverse mr-2"></i> Facebook Login</a>
-                                <span class="hidden-xs"></span>
-                            </div>
-                             <div class="col-12  col-md-12 col-lg-4 ">
-                                <a href="{{ url('/socialite/google') }}" class="m-1 m-lg-0 btn google btn-lg d-flex align-items-center justify-content-center text-light"><i class="fab fa-google fa-2x fa-inverse  mr-2"></i> Google Login</a>
                                 <span class="hidden-xs"></span>
                             </div>
                         </div>

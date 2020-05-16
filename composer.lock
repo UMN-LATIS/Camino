@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60ac5f68e09be9ecf94380f9706cea68",
+    "content-hash": "8d3f019f7a85ca86e27f52364d81bb84",
     "packages": [
         {
             "name": "brick/math",
@@ -3512,6 +3512,44 @@
             ],
             "description": "Easily add new or override built-in providers in Laravel Socialite.",
             "time": "2020-03-08T16:54:44+00:00"
+        },
+        {
+            "name": "socialiteproviders/microsoft-live",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SocialiteProviders/Microsoft-Live.git",
+                "reference": "2c4b415c4ff5299b428dbca8e288272037145895"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SocialiteProviders/Microsoft-Live/zipball/2c4b415c4ff5299b428dbca8e288272037145895",
+                "reference": "2c4b415c4ff5299b428dbca8e288272037145895",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^5.6 || ^7.0",
+                "socialiteproviders/manager": "~2.0 || ~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SocialiteProviders\\Live\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Faust",
+                    "email": "hello@brianfaust.de"
+                }
+            ],
+            "description": "Microsoft Live OAuth2 Provider for Laravel Socialite",
+            "time": "2020-04-30T23:01:40+00:00"
         },
         {
             "name": "spatie/laravel-permission",

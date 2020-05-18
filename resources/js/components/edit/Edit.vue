@@ -58,11 +58,12 @@
             </div>
         </div>
 
-        <div class="form-check" v-if="$can('publish publicly')">
-            <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" v-model="tour.public">
-                Public
+        <div class="form-check">
+            <label class="form-check-label" >
+                <input type="checkbox" class="form-check-input" v-model="tour.public" :disabled="!$can('publish publicly')">
+                Public <span v-if="!$can('publish publicly')"  class="help-text">(<a href="mailto:mcfa0086@umn.edu">Contact us</a> for permission to publish tour publicly)</span>
             </label>
+            
         </div>
 
 

@@ -9,6 +9,7 @@
         <b-nav-item href="/about" :active="currentRoute=='about'">About</b-nav-item>
         <b-nav-item href="/findTours" :active="currentRoute=='findTours'">Find Tours</b-nav-item>
         <b-nav-item href="/creator">Create</b-nav-item>
+        <b-nav-item href="https://umn-latis.github.io/Camino/">Help</b-nav-item>
       </b-navbar-nav>
 
     </b-collapse>

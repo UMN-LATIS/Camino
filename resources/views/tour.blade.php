@@ -34,7 +34,7 @@
     @else
         window.Permissions = [];
     @endauth
-     
+     window.mapbox = "{{ config('services.mapbox') }}";
     </script>
     <script src="{{ mix('/js/app.js') }}"></script>
 </html>

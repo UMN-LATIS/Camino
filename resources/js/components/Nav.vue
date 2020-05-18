@@ -1,6 +1,6 @@
 <template>
     <div class="sticky-top">
-        <div class="row  navHeader no-gutters">
+        <div class="row  navHeader no-gutters navbar-light">
             <div class="col-3 text-left navButton">
                 <router-link v-if="previousStop !== false" :to="{ name: 'tour', params: { currentStopId: previousStop }}" class="controlButton p-2">&laquo; {{ $t("nav.prev") }} </router-link>
             </div>
@@ -35,29 +35,34 @@ a {
     text-decoration: none;
     display: inline-block;
     width: 100%;
+    color: black;
     /* padding: 8px 16px; */
 }
 
 a:hover {
-    background-color: #816C61;
-    color: white;
+    background-color: #d3e2ed;
+    /* color: white; */
 }
 
 .navHeader {
-    background-color: #A89B9D;
-    border-bottom: 1px solid#525E3E;
+    background-color: #e3f2fd;
+    /* background-color: #A89B9D; */
+    border-bottom: 1px solid rgba(0,0,0,.5);
 }
 
 .navToggle {
-    border-left: 1px solid #525E3E;
-    border-right: 1px solid #525E3E;
+    border-left: 1px solid rgba(0,0,0,.5);
+    border-right: 1px solid rgba(0,0,0,.5);
 
 }
 
+.router-link-exact-active {
+    background-color: #d3e2ed;
+}
 .navButton {}
 
 .navToggle a {
-    color: white;
+    /* color: white; */
 }
 
 .dropdown-menu a {

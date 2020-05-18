@@ -35,7 +35,8 @@
                     <div class="form-group row">
                         <label for="altitude" class="col-sm-2 col-form-label">Altitude (optional)</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control"  v-model="waypoint.altitude" id="altitude" />
+                            <input type="text" class="form-control" aria-describedby="altitudeHelp"  v-model="waypoint.altitude" id="altitude" />
+                             <small id="altitudeHelp" class="form-text text-muted">In meters, relative to this stop's elevation.</small>
                         </div>
 
                         

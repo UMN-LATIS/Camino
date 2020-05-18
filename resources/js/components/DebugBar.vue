@@ -21,18 +21,15 @@
                     </label>
                 </div>
                 <h6 class="mt2">Language</h6>
+                <div v-for="(language, key) in languages" :key="key" class="form-check">
                 <div class="form-check">
                     <label class="form-check-label">
-                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" id="" value="English">
-                    English
+                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" id="" :value="key">
+                    {{ key }}
                   </label>
                 </div>
-                <div class="form-check">
-                    <label class="form-check-label">
-                    <input type="radio" class="form-check-input" v-model="$i18n.locale" name="locale" value="Español">
-                    Spanish
-                  </label>
                 </div>
+              
                 <h6 class="mt-2" v-if="$store.getters.hotwords.length > 0">Hotwords</h6>
                 <ul class="list-group">
                     <li class="list-group-item" v-for="(hotword, index) in $store.getters.hotwords" :key="index">{{hotword}}</li>

@@ -181,7 +181,9 @@
                 }).catch(res => {
                     this.error = res;
                 });
-
+            if(this.$can('administer site')) {
+                this.stageTypes.language = "Language";
+            }
 
         },
         // created: function() {

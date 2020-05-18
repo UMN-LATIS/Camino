@@ -85,6 +85,7 @@ Vue.component('image-upload', require('./components/edit/ImageUpload.vue').defau
 Vue.component('save-alert', require('./components/edit/SaveAlert.vue').default);
 
 Vue.component('separator', require('./components/edit/Separator.vue').default);
+Vue.component('language', require('./components/edit/LanguageSelector.vue').default);
 Vue.component('navigation', require('./components/edit/Navigation.vue').default);
 Vue.component('guide', require('./components/edit/Guide.vue').default);
 Vue.component('ar', require('./components/edit/AR.vue').default);

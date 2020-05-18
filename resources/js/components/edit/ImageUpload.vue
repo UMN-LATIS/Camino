@@ -4,8 +4,8 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3" v-if="image">
-                            <img :src="image" class="img-fluid" height="70" width="90">
+                        <div class="col-md-3 fa-3x" v-if="image">
+                            <i class="fas fa-spinner fa-spin"></i>
                         </div>
                         <div class="col">
                             <div class="input-group mb-3">
@@ -61,7 +61,8 @@
                 data.append('image', this.$refs.file.files[0])
                 axios.post('/creator/image/store', data).then(response => {
                     if (response.data.success) {
-                        this.$emit("imageuploaded", response.data.image);
+                        this.$emit("imageuploaded", response.data.image);    
+                        
                     }
                 })
                 .catch((error) => {

@@ -1,5 +1,8 @@
 {
   "modalClose": "Close",
+  "tour": {
+    "language_selector": "Select your Language"
+  },
   "nav": {
     "next": "Next",
     "prev": "Prev",

@@ -21,12 +21,19 @@
         </div>
         
     </body>
+    <footer class="footer mt-2">
+        <div class="container d-flex align-items-center justify-content-between">
+            <p class="mb-0"><a href="/">Powered by Camino</a></p>
+            <p class="mb-0">Built at the University of Minnesota</p>
+        </div>
+    </footer>
     <script>
     @auth
         window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
     @else
         window.Permissions = [];
     @endauth
+     
     </script>
     <script src="{{ mix('/js/app.js') }}"></script>
 </html>

@@ -49,71 +49,18 @@ class TourEditController extends Controller
         $tour->fill($request);
         $tour->save();
 
+        $template = Tour::where("template", true)->first();
+        $startContent = $template->stops->first();
+        $endContent = $template->stops->last();
+
         $stop = new Stop;
-        $stop->stop_content = json_decode('{
-    "title": {
-        "English": "Start",
-        "placeholder": null
-    },
-    "stages": [
-        {
-            "text": {
-                "English": "Start"
-            },
-            "type": "separator"
-        },
-        {
-            "text": {
-                "English": "Go for a walk!"
-            },
-            "type": "guide"
-        }
-    ]
-}');
+        $stop->stop_content = $startContent->stop_content;
         $stop->sort_order = 0;
         $tour->stops()->save($stop);
 
 
         $stop = new Stop;
-        $stop->stop_content = json_decode('{
-    "title": {
-        "English": "Finish",
-        "placeholder": null
-    },
-    "stages": [
-        {
-            "text": {
-                "English": "Finish"
-            },
-            "type": "separator"
-        },
-        {
-            "text": {
-                "placeholder": null
-            },
-            "type": "guide"
-        },
-        {
-            "text": {
-                "placeholder": null
-            },
-            "type": "feedback"
-        },
-        {
-            "text": {
-                "English": "Hotwords"
-            },
-            "type": "separator"
-        },
-        {
-            "text": {
-                "placeholder": null,
-                "English": "Enter your email below to have your hotwords emailed to you."
-            },
-            "type": "hotwords-summary"
-        }
-    ]
-}');
+        $stop->stop_content = $endContent->stop_content;
         $stop->sort_order = 1;
         $tour->stops()->save($stop);
         $tour->load("stops");

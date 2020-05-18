@@ -1,7 +1,7 @@
 module.exports = {
     plugins: ['vuepress-plugin-export'],
     title: 'Camino Documentation',
-    base: '/camino/',
+    base: '/Camino/',
     themeConfig: {
             // Assumes GitHub. Can also be a full GitLab url.
             

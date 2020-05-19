@@ -70,6 +70,7 @@
         data() {
             return {
                 error: null,
+                isDirty: false,
                 localStop: this.stopId,
                 showAlert: false,
                 newStageType: null,
@@ -134,6 +135,14 @@
                 return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
             }
         },
+        watch: {
+            stop: {
+                handler: function(){
+                    this.isDirty = true;
+                },
+                deep: true
+            }
+        },
         methods: {
             addStage: function () {
                 this.stop.stop_content.stages.push({
@@ -155,6 +164,7 @@
                                 }
                             })
                             this.showAlert = true;
+                            this.isDirty = false;
                         }).catch(res => {
                             this.error = res;
                         });
@@ -162,10 +172,16 @@
                     axios.put("/creator/edit/" + this.tour.id + "/stop/" + this.stop.id, this.stop)
                         .then((res) => {
                             this.showAlert = true;
+                            this.isDirty = false;
                         }).catch(res => {
                             this.error = res;
                         });
                 }
+            },
+            preventNav(event) {
+                if (!this.isDirty) return
+                event.preventDefault()
+                event.returnValue = ""
             }
         },
         mounted: function () {
@@ -178,6 +194,10 @@
                     } else if (this.tour.tour_content.use_template) {
                         this.stop = this.stop_template;
                     }
+                    Vue.nextTick( () => {
+                        this.isDirty = false;
+                    })
+                    
                 }).catch(res => {
                     this.error = res;
                 });
@@ -186,6 +206,21 @@
             }
 
         },
+        beforeMount() {
+            window.addEventListener("beforeunload", this.preventNav)
+            this.$once("hook:beforeDestroy", () => {
+                window.removeEventListener("beforeunload", this.preventNav);
+            })
+        },
+        beforeRouteLeave(to, from, next) {
+            if (this.isDirty) {
+                if (!window.confirm("Leave without saving?")) {
+                    return;
+                }
+            }
+            next();
+        }
+
         // created: function() {
         //     if(!this.stop.title) {
         //         Vue.set(this.stop, "title", {});

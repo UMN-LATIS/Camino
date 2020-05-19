@@ -38,6 +38,13 @@
     background-color: red;
 }
 
+.other-css-icon {
+    border: 3px solid gray;
+    background-color: rgba(194, 143, 143, 0.514); 
+    width: 10px;
+    height: 10px;
+}
+
 
 </style>
 
@@ -53,7 +60,7 @@ var otherLocationsCssIcon = null;
 var marker;
 
     export default {
-        props: ["location", "generalarea", "basemap"],
+        props: ["location", "generalarea", "basemap", "tour"],
         data() {
             return {
                 currentLocation: null,
@@ -178,6 +185,35 @@ var marker;
                
                 map.on('locationfound', onLocationFound);
                 map.on('click', clickEvent); 
+
+
+                otherLocationsCssIcon = L.divIcon({
+                    // Specify a class name we can refer to in CSS.
+                    className: 'other-css-icon css-icon',
+                    html: '<div class="other_ring"></div>'
+                        ,
+                    iconSize: [15, 15]
+                });
+                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
+                    return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
+                }).flat();
+                var otherLocation = null;
+                var walkingPath = [];
+                targetPoints.forEach(targetPoint => {
+                    if(targetPoint != this.location) {
+                        otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
+                        icon: otherLocationsCssIcon
+                        });
+                        otherLocation.addTo(map);
+                    }
+                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
+                });
+                var polyline = L.polyline(walkingPath, {
+                    color: 'gray',
+                    opacity: 0.4
+                }).addTo(map);
+
+
                 lc = L.control.locate({
                     showCompass: true,
                     icon: "fa fa-map-marker-alt",

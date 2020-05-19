@@ -50,7 +50,7 @@ export default {
     computed: {
         previousStop: function() {
             if(this.stop.id) {
-                var currentStop = this.tour.stops.findIndex(this.stop);
+                var currentStop = this.tour.stops.findIndex((e)=> e.id == this.stop.id);
                 var targetIndex = (currentStop>0)?currentStop - 1:null;
             }
             else {

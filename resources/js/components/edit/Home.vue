@@ -11,10 +11,10 @@
             <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
                 <h5 class="card-title"><i class="fas fa-check-circle mr-2" v-if="tour.active"></i><i class="fas fa-globe mr-2" v-if="tour.public"></i><transport-icon :transport_type="tour.transport_type" class="mr-2" />{{ tour.title }}</h5> 
                 <div class="controls pt-2 pt-sm-0">
-                    <router-link :to='{name: "tourFeedback", params: { tourId: tour.id }}' class="btn btn-outline-info"><i class="fas fa-comment"></i> Feedback</router-link>
-                    <a href="#" @click="deleteTour(tour.id)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</a>
-                    <a :href="'/tour/' + tour.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview</a>
-                    <router-link :to='{name: "editTour", params: { tourId: tour.id }}' class="btn btn-outline-primary"><i class="fas fa-edit"></i> Edit</router-link>
+                    <router-link :to='{name: "tourFeedback", params: { tourId: tour.id }}' class="btn btn-outline-info"><i class="fas fa-comment"></i> <span class="d-none d-sm-inline">Feedback</span></router-link>
+                    <a href="#" @click="deleteTour(tour.id)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span></a>
+                    <a :href="'/tour/' + tour.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> <span class="d-none d-sm-inline">Preview</span></a>
+                    <router-link :to='{name: "editTour", params: { tourId: tour.id }}' class="btn btn-outline-primary"><i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit</span></router-link>
                     
                 </div>
             </div>

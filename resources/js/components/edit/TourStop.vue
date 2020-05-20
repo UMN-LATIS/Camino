@@ -34,9 +34,9 @@
                 <span>
                     <router-link :to="{'name': 'editTour', params: { tourId: tourId }}" class="btn btn-outline-secondary">
                         <i class="fas fa-arrow-left"></i>
-                        Back to Tour</router-link>
-                    <a :href="previewLink" v-if="stop.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> Preview</a>
-                    <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+                        <span class="d-none d-sm-inline">Back to Tour</span></router-link>
+                    <a :href="previewLink" v-if="stop.id" class="btn btn-outline-success" target="_blank"><i class="fas fa-eye"></i> <span class="d-none d-sm-inline">Preview</span></a>
+                    <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> <span class="d-none d-sm-inline">Save</span></button>
                     <save-alert :showAlert.sync="showAlert" />
                 </span>
 

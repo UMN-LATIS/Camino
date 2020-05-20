@@ -143,18 +143,18 @@
                 </div>
             </div>
         </div>
-        <draggable v-model="tour.stops" :move="checkMove">
+        <draggable v-model="tour.stops" :move="checkMove" handle=".handle">
             <div class="card mt-2" v-for="stop in tour.stops" :key="stop.id">
                 <div class="card-body d-flex justify-content-between align-items-center">
                     <h5 class="card-title"><i class="fas fa-grip-vertical handle" v-if="!isLockedItem(stop)"></i>
                         {{ stop.stop_content.title[tour.tour_content.languages[0]] }}</h5>
                     <div class="controls">
                         <a href="#" @click="deleteStop(stop.id)" class="btn btn-outline-danger"><i
-                                class="fas fa-trash"></i> Delete</a>
+                                class="fas fa-trash"></i> <span class="d-none d-sm-inline">Delete</span></a>
                         <a :href="'/tour/' + tour.id + '/' + stop.sort_order" class="btn btn-outline-success"
-                            target="_blank"><i class="fas fa-eye"></i> Preview </a>
+                            target="_blank"><i class="fas fa-eye"></i> <span class="d-none d-sm-inline">Preview</span> </a>
                         <router-link :to="{ name: 'editStop', params: { tourId: tourId, stopId: stop.id }}"
-                            class="btn btn-outline-primary"><i class="fas fa-edit"></i> Edit</router-link>
+                            class="btn btn-outline-primary"><i class="fas fa-edit"></i> <span class="d-none d-sm-inline">Edit</span></router-link>
 
                     </div>
                 </div>

@@ -45,6 +45,9 @@ var myLocation = null;
 var myLocationCssIcon = null;
 var targetLocationCssIcon = null;
 var otherLocationsCssIcon = null;
+var marker;
+var polyline;
+var otherMarkerGroup;
 
     export default {
         props: ["stage", "tour"],
@@ -70,6 +73,108 @@ var otherLocationsCssIcon = null;
                 }
                 map = null;
                 myLocation = null;
+            },
+            allLocations: function() {
+                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
+                    return stages.filter(stage=> stage.type=="navigation")
+                }).flat();
+                return targetPoints;
+            },
+            drawWalkingPath: function() {
+                var targetNavs = this.allLocations();
+                var localPolyline;
+                var decorator;
+                var decorator2;
+                var layerGroupItems = [];
+                var previousPoint = null;
+                targetNavs.forEach(targetPoint => {
+
+                    if(!targetPoint.route) {
+                        previousPoint = targetPoint;
+                        return;
+                    }
+                    
+                    // make sure the path is contiguous
+                    if(previousPoint) {
+                        targetPoint.route[0] = previousPoint.targetPoint;
+                    }
+
+                    localPolyline = L.polyline(targetPoint.route, {
+                        color: 'gray',
+                        opacity: 0.4
+                    });
+                    
+                    decorator = L.polylineDecorator(localPolyline, {
+                    patterns: [
+                            // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                            {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
+                        ]
+                    });
+                    decorator2 = L.polylineDecorator(localPolyline, {
+                    patterns: [
+                            // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                            {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
+                        ]
+                    });
+
+                    
+                    layerGroupItems.push(localPolyline, decorator, decorator2);
+                    previousPoint = targetPoint;
+                });
+
+                
+                if(polyline) {
+                    polyline.clearLayers();
+                }
+
+                polyline = L.layerGroup(layerGroupItems);
+                polyline.addTo(map);
+
+            },
+            drawMarker: function() {
+                
+                targetLocationCssIcon = L.divIcon({
+                    // Specify a class name we can refer to in CSS.
+                    className: 'target-css-icon css-icon',
+                    html: '<div class="target_ring"></div>'
+                        ,
+                    iconSize: [22, 22]
+                });
+                if(marker) {
+                    marker.remove();
+                }             
+                
+                marker = L.marker([this.stage.targetPoint.lat,this.stage.targetPoint.lng], {
+                    icon: targetLocationCssIcon
+                });
+                marker.addTo(map);
+            },
+            drawOtherPoints: function() {
+                var targetNavs = this.allLocations();
+                otherLocationsCssIcon = L.divIcon({
+                    // Specify a class name we can refer to in CSS.
+                    className: 'other-css-icon css-icon',
+                    html: '<div class="other_ring"></div>'
+                        ,
+                    iconSize: [15, 15]
+                });
+                var otherLocation = null;
+                var otherLocations = [];
+                targetNavs.forEach(targetPoint => {
+                    if(targetPoint.targetPoint != this.stage.targetPoint) {
+                        otherLocation = L.marker([targetPoint.targetPoint.lat, targetPoint.targetPoint.lng], {
+                        icon: otherLocationsCssIcon
+                        });
+                        otherLocations.push(otherLocation);
+                    }
+                });
+                if(otherMarkerGroup) {
+                    otherMarkerGroup.clearLayers();
+                }
+                otherMarkerGroup = L.layerGroup(otherLocations);
+                otherMarkerGroup.addTo(map);
+
+
             },
             renderMap: function (e) {
 
@@ -111,41 +216,11 @@ var otherLocationsCssIcon = null;
                     map.setView(new L.LatLng(this.stage.targetPoint.lat, this.stage.targetPoint.lng), 17);
                     targetLocation.addTo(map);
                 }
-                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
-                    return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
-                }).flat();
+                
+                this.drawWalkingPath();
+                this.drawMarker();
+                this.drawOtherPoints();
 
-                var otherLocation = null;
-                var walkingPath = [];
-                targetPoints.forEach(targetPoint => {
-                    if(targetPoint != this.stage.targetPoint) {
-
-                        otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
-                        icon: otherLocationsCssIcon
-                        });
-                        otherLocation.addTo(map);
-                    }
-                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
-                    
-
-                });
-
-                var polyline = L.polyline(walkingPath, {
-                        color: 'gray',
-                        opacity: 0.4
-                    }).addTo(map);
-                var decorator = L.polylineDecorator(polyline, {
-                patterns: [
-                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
-                        {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
-                    ]
-                }).addTo(map);
-                decorator = L.polylineDecorator(polyline, {
-                patterns: [
-                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
-                        {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
-                    ]
-                }).addTo(map);
                 // map.on('locationfound', onLocationFound);
                 lc = L.control.locate({
                     showCompass: true,

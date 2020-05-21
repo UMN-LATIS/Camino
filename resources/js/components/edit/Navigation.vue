@@ -13,7 +13,7 @@
               <div v-if="stage.targetPoint">
                   <b>Latitude:</b> {{ stage.targetPoint.lat}}, <b>Longitude:</b> {{ stage.targetPoint.lng}}
                 </div>
-                <location-selector :location.sync="stage.targetPoint" :generalarea="previousStop" :tour="tour" :basemap="tour.tour_content.custom_base_map"></location-selector>
+                <location-selector :location.sync="stage.targetPoint" :route.sync="stage.route" :generalarea="previousStop" :tour="tour" :basemap="tour.tour_content.custom_base_map" :stop="stop"></location-selector>
             </div>
         </div>
     </div>

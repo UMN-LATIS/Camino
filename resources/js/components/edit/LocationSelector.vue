@@ -40,7 +40,7 @@
 
 .other-css-icon {
     border: 3px solid gray;
-    background-color: rgba(194, 143, 143, 0.514); 
+    background-color: rgba(194, 143, 143, 1); 
     width: 10px;
     height: 10px;
 }
@@ -62,7 +62,7 @@ var polyline;
 var otherMarkerGroup;
 
     export default {
-        props: ["location", "generalarea", "basemap", "tour"],
+        props: ["location", "generalarea", "basemap", "tour", "route", "stop"],
         data() {
             return {
                 currentLocation: null,
@@ -93,25 +93,58 @@ var otherMarkerGroup;
                 if(!map) {
                     return;
                 }
-                targetLocationCssIcon = L.divIcon({
-                    // Specify a class name we can refer to in CSS.
-                    className: 'target-css-icon css-icon',
-                    html: '<div class="target_ring"></div>'
-                        ,
-                    iconSize: [22, 22]
-                });
-                if(marker) {
-                    marker.remove();
-                }             
+
+                if(!this.route) {
+                    var allLocations = this.allLocations();
+                    var previousStop = null;
+                    if(!this.stop.id) {
+                        // this is a new stop, we know it's at the end
+                        previousStop = this.tour.stops[this.tour.stops.length - 2];
+                    }
+                    else {
+
+                        previousStop = this.tour.stops[this.tour.stops.findIndex((i)=> i == this.stop) - 1];
+                    }
+
+                    var targetNav = previousStop.stop_content.stages.filter(stage=>{
+                        return stage.type=="navigation"
+                    });
+                    if(targetNav.length == 0) {
+                        this.$emit("update:route", []);
+                        return;
+                    }
+                    var previousTarget = targetNav[0].targetPoint;
+                    
+                    var route = [previousTarget, this.location];
+                    console.log(route);
+                    this.$emit("update:route", route);
+                }
+                else {
+                    var oldRoute = this.route;
+                    oldRoute.pop();
+                    oldRoute.push(this.location);
+                    this.$emit("update:route", oldRoute);
+                }
                 
-                marker = L.marker([newLocation.lat, newLocation.lng], {
-                    icon: targetLocationCssIcon
-                });
-                marker.addTo(map);
+
+
+            },
+            route: function(route) {
+                if(!map) {
+                    return;
+                }
                 this.drawWalkingPath();
+                this.drawMarker();
+                this.drawOtherPoints();
             }
         },
         methods: {
+            allLocations: function() {
+                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
+                    return stages.filter(stage=> stage.type=="navigation")
+                }).flat();
+                return targetPoints;
+            },
             useCurrentLocation: function() {
                 this.$emit("update:location", this.roundCoordinates(this.currentLocation));
             },
@@ -127,7 +160,26 @@ var otherMarkerGroup;
                 map = null;
                 myLocation = null;
             },
-            drawWalkingPath: function() {
+            drawMarker: function() {
+                
+                targetLocationCssIcon = L.divIcon({
+                    // Specify a class name we can refer to in CSS.
+                    className: 'target-css-icon css-icon',
+                    html: '<div class="target_ring"></div>'
+                        ,
+                    iconSize: [22, 22]
+                });
+                if(marker) {
+                    marker.remove();
+                }             
+                
+                marker = L.marker([this.location.lat, this.location.lng], {
+                    icon: targetLocationCssIcon
+                });
+                marker.addTo(map);
+            },
+            drawOtherPoints: function() {
+                var targetNavs = this.allLocations();
                 otherLocationsCssIcon = L.divIcon({
                     // Specify a class name we can refer to in CSS.
                     className: 'other-css-icon css-icon',
@@ -135,35 +187,16 @@ var otherMarkerGroup;
                         ,
                     iconSize: [15, 15]
                 });
-                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
-                    return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
-                }).flat();
-
-                
-
                 var otherLocation = null;
-                var walkingPath = [];
                 var otherLocations = [];
-                var foundLocalPoint = false;
-                targetPoints.forEach(targetPoint => {
-                    if(targetPoint != this.location) {
-                        otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
+                targetNavs.forEach(targetPoint => {
+                    if(targetPoint.targetPoint != this.location) {
+                        otherLocation = L.marker([targetPoint.targetPoint.lat, targetPoint.targetPoint.lng], {
                         icon: otherLocationsCssIcon
                         });
                         otherLocations.push(otherLocation);
                     }
-                    else {
-                        foundLocalPoint = true;
-                    }
-                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
                 });
-
-
-                if(!foundLocalPoint && this.location) {
-                    // we must be an unsaved  item
-                    walkingPath.push([this.location.lat, this.location.lng]);
-                }
-
                 if(otherMarkerGroup) {
                     otherMarkerGroup.clearLayers();
                 }
@@ -171,36 +204,66 @@ var otherMarkerGroup;
                 otherMarkerGroup.addTo(map);
 
 
-                var localPolyline = L.polyline(walkingPath, {
-                    color: 'gray',
-                    opacity: 0.4
+            },
+            drawWalkingPath: function() {
+                var targetNavs = this.allLocations();
+                var localPolyline;
+                var decorator;
+                var decorator2;
+                var layerGroupItems = [];
+                var previousPoint = null;
+                targetNavs.forEach(targetPoint => {
+
+                    if(!targetPoint.route) {
+                        previousPoint = targetPoint;
+                        return;
+                    }
+                    
+                    // make sure the path is contiguous
+                    if(previousPoint) {
+                        targetPoint.route[0] = previousPoint.targetPoint;
+                    }
+
+                    localPolyline = L.polyline(targetPoint.route, {
+                        color: 'gray',
+                        opacity: 0.4
+                    });
+
+                    if(targetPoint.route == this.route) {
+                        localPolyline.editing.enable();
+                    }
+                    
+                    decorator = L.polylineDecorator(localPolyline, {
+                    patterns: [
+                            // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                            {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
+                        ]
+                    });
+                    decorator2 = L.polylineDecorator(localPolyline, {
+                    patterns: [
+                            // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                            {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
+                        ]
+                    });
+
+                    
+                    layerGroupItems.push(localPolyline, decorator, decorator2);
+                    previousPoint = targetPoint;
                 });
-                var decorator = L.polylineDecorator(localPolyline, {
-                patterns: [
-                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
-                        {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
-                    ]
-                });
-                var decorator2 = L.polylineDecorator(localPolyline, {
-                patterns: [
-                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
-                        {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
-                    ]
-                });
+
                 
                 if(polyline) {
                     polyline.clearLayers();
                 }
 
-                polyline = L.layerGroup([localPolyline, decorator, decorator2]);
+                polyline = L.layerGroup(layerGroupItems);
                 polyline.addTo(map);
 
             },
             renderMap: function () {
 
-                console.log("nav");
 
-                map = L.map('map').fitWorld();
+                map = L.map('map', {drawControl: false}).fitWorld();
                 
                 if(this.basemap.use_basemap) {
                     var imageUrl = '/storage/' + this.basemap.image,
@@ -217,38 +280,24 @@ var otherMarkerGroup;
                     }).addTo(map);
 
                 }
-                // Actual map strategy
-                //
-                //
 
-            
-                targetLocationCssIcon = L.divIcon({
-                    // Specify a class name we can refer to in CSS.
-                    className: 'target-css-icon css-icon',
-                    html: '<div class="target_ring"></div>'
-                        ,
-                    iconSize: [22, 22]
-                });
-             
 
                 var self = this;
-               
-
+            
                 function onLocationFound(e) {
                     self.currentLocation = e.latlng;
                     self.locationAvailable = true;
-                    
                 }
 
                 function clickEvent(e) {
                     self.$emit("update:location", self.roundCoordinates(e.latlng));
                 }
 
+                function vertexEdit(e) {
+                    self.$emit("update:route", e.poly.getLatLngs())
+                }
+
                 if(this.location) {
-                    marker = L.marker([this.location.lat, this.location.lng], {
-                        icon: targetLocationCssIcon
-                    });
-                    marker.addTo(map);
                     map.setView(new L.LatLng(this.location.lat, this.location.lng), 16);
                 }
                 else if(this.generalarea) {
@@ -257,9 +306,11 @@ var otherMarkerGroup;
                
                 map.on('locationfound', onLocationFound);
                 map.on('click', clickEvent); 
-
-
+                map.on('draw:editvertex', vertexEdit);
+                
                 this.drawWalkingPath();
+                this.drawMarker();
+                this.drawOtherPoints();
 
                 lc = L.control.locate({
                     showCompass: true,

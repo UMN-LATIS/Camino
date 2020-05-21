@@ -32,6 +32,7 @@
         "bootstrap4-fs-modal": "^0.1.5",
         "dompurify": "^2.0.8",
         "leaflet": "^1.6.0",
+        "leaflet-draw": "^1.0.4",
         "leaflet-polylinedecorator": "^1.6.0",
         "leaflet.locatecontrol": "^0.71.1",
         "marked": "^0.8.2",

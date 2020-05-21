@@ -77,9 +77,11 @@ Vue.component('hotwords-summary', require('./components/HotwordsSummary.vue').de
 
 import { map } from "leaflet";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
+import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js"
 
 import 'leaflet/dist/leaflet.css';
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
+
 
 
 var marked = require('marked');

@@ -73,8 +73,6 @@ var otherLocationsCssIcon = null;
             },
             renderMap: function (e) {
 
-                console.log("nav");
-                console.log(e);
                 map = L.map('map');
                 if(this.tour.tour_content.custom_base_map.use_basemap) {
                     var imageUrl = '/storage/' + this.tour.tour_content.custom_base_map.image,
@@ -136,6 +134,18 @@ var otherLocationsCssIcon = null;
                         color: 'gray',
                         opacity: 0.4
                     }).addTo(map);
+                var decorator = L.polylineDecorator(polyline, {
+                patterns: [
+                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                        {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
+                    ]
+                }).addTo(map);
+                decorator = L.polylineDecorator(polyline, {
+                patterns: [
+                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                        {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
+                    ]
+                }).addTo(map);
                 // map.on('locationfound', onLocationFound);
                 lc = L.control.locate({
                     showCompass: true,

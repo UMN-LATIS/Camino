@@ -58,6 +58,8 @@ var myLocationCssIcon = null;
 var targetLocationCssIcon = null;
 var otherLocationsCssIcon = null;
 var marker;
+var polyline;
+var otherMarkerGroup;
 
     export default {
         props: ["location", "generalarea", "basemap", "tour"],
@@ -106,6 +108,7 @@ var marker;
                     icon: targetLocationCssIcon
                 });
                 marker.addTo(map);
+                this.drawWalkingPath();
             }
         },
         methods: {
@@ -123,6 +126,75 @@ var marker;
                 }
                 map = null;
                 myLocation = null;
+            },
+            drawWalkingPath: function() {
+                otherLocationsCssIcon = L.divIcon({
+                    // Specify a class name we can refer to in CSS.
+                    className: 'other-css-icon css-icon',
+                    html: '<div class="other_ring"></div>'
+                        ,
+                    iconSize: [15, 15]
+                });
+                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
+                    return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
+                }).flat();
+
+                
+
+                var otherLocation = null;
+                var walkingPath = [];
+                var otherLocations = [];
+                var foundLocalPoint = false;
+                targetPoints.forEach(targetPoint => {
+                    if(targetPoint != this.location) {
+                        otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
+                        icon: otherLocationsCssIcon
+                        });
+                        otherLocations.push(otherLocation);
+                    }
+                    else {
+                        foundLocalPoint = true;
+                    }
+                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
+                });
+
+
+                if(!foundLocalPoint && this.location) {
+                    // we must be an unsaved  item
+                    walkingPath.push([this.location.lat, this.location.lng]);
+                }
+
+                if(otherMarkerGroup) {
+                    otherMarkerGroup.clearLayers();
+                }
+                otherMarkerGroup = L.layerGroup(otherLocations);
+                otherMarkerGroup.addTo(map);
+
+
+                var localPolyline = L.polyline(walkingPath, {
+                    color: 'gray',
+                    opacity: 0.4
+                });
+                var decorator = L.polylineDecorator(localPolyline, {
+                patterns: [
+                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                        {offset: 0, repeat: 20, symbol: L.Symbol.dash({pixelSize: 10})}
+                    ]
+                });
+                var decorator2 = L.polylineDecorator(localPolyline, {
+                patterns: [
+                        // defines a pattern of 10px-wide dashes, repeated every 20px on the line
+                        {offset: "100", repeat: 200, symbol: L.Symbol.arrowHead({pixelSize: 15, polygon: false, pathOptions: {stroke: true}})}
+                    ]
+                });
+                
+                if(polyline) {
+                    polyline.clearLayers();
+                }
+
+                polyline = L.layerGroup([localPolyline, decorator, decorator2]);
+                polyline.addTo(map);
+
             },
             renderMap: function () {
 
@@ -187,32 +259,7 @@ var marker;
                 map.on('click', clickEvent); 
 
 
-                otherLocationsCssIcon = L.divIcon({
-                    // Specify a class name we can refer to in CSS.
-                    className: 'other-css-icon css-icon',
-                    html: '<div class="other_ring"></div>'
-                        ,
-                    iconSize: [15, 15]
-                });
-                var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
-                    return stages.filter(stage=> stage.type=="navigation").map(nav => nav.targetPoint)
-                }).flat();
-                var otherLocation = null;
-                var walkingPath = [];
-                targetPoints.forEach(targetPoint => {
-                    if(targetPoint != this.location) {
-                        otherLocation = L.marker([targetPoint.lat, targetPoint.lng], {
-                        icon: otherLocationsCssIcon
-                        });
-                        otherLocation.addTo(map);
-                    }
-                    walkingPath.push([targetPoint.lat, targetPoint.lng]);
-                });
-                var polyline = L.polyline(walkingPath, {
-                    color: 'gray',
-                    opacity: 0.4
-                }).addTo(map);
-
+                this.drawWalkingPath();
 
                 lc = L.control.locate({
                     showCompass: true,

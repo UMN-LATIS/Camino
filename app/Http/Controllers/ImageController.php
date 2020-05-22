@@ -22,7 +22,7 @@ class ImageController extends Controller
                 return response()->json(['error' => $validator->errors()->getMessages()], 500);
             }
             $image = $request->file('image');
-            \Image::configure(array('driver' => 'gd'));
+            \Image::configure(array('driver' => 'imagick'));
             $image_resized = \Image::make($image);
             $image_resized->resize(2048, 2048, function ($constraint) {
                 $constraint->aspectRatio();

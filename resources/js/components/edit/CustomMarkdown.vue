@@ -30,7 +30,7 @@ export default {
                 autocorrect: true,
                 spellcheck: true,
                 autocapitalize: true,
-                inputStyle: "contenteditable"
+                inputStyle: "textarea"
             }
         }
     },

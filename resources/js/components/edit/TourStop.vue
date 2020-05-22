@@ -156,6 +156,7 @@
                         .then((res) => {
                             this.stop.id = res.data.id;
                             this.stop.sort_order = res.data.sort_order;
+                            this.isDirty = false;
                             this.$router.replace({
                                 name: 'editStop',
                                 params: {
@@ -164,7 +165,7 @@
                                 }
                             })
                             this.showAlert = true;
-                            this.isDirty = false;
+                            
                         }).catch(res => {
                             this.error = res;
                         });

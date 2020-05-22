@@ -1,5 +1,5 @@
 <template>
-     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" :toolbar="toolbar" :extend="custom" theme="outline-secondary btn-sm"></markdown-editor>
+     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" :toolbar="toolbar" :extend="custom" :options="options" theme="outline-secondary btn-sm"></markdown-editor>
 </template>
 
 <script>
@@ -24,6 +24,13 @@ export default {
                     ico: 'fas fa-fire',
                     title: 'Mark as hotword'
                 }
+            },
+            options: {
+                lineWrapping: true,
+                autocorrect: true,
+                spellcheck: true,
+                autocapitalize: true,
+                inputStyle: "contenteditable"
             }
         }
     },

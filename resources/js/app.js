@@ -97,7 +97,9 @@ import DOMPurify from 'dompurify';
 Vue.mixin({
     methods: {
         purify: function (input) {
-            return DOMPurify.sanitize(input);
+            return DOMPurify.sanitize(input, {
+                ALLOWED_TAGS: ["hotword"]
+            });
         }
     }
 });

@@ -71,6 +71,13 @@ import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
 
+
+import HotwordsTextEditor from "hotwords-text-editor"
+import "hotwords-text-editor/dist/hotwordsTextEditor.css";
+// Vue.use(HotwordsTextEditor);
+Vue.component('hotwords-text-editor', HotwordsTextEditor);
+
+
 import Permissions from './mixins/Permissions';
 Vue.mixin(Permissions);
 

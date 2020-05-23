@@ -1,6 +1,6 @@
 <template>
     <span v-bind:class="{ addedClass: isActive, emptyClass: !isActive}" class="hoverWord" @click="toggleWord">
-        {{ cleanedWord }}
+        <slot></slot>
     </span>
 </template>
 
@@ -51,7 +51,7 @@ export default {
             return this.$store.getters.hotwords.filter(w => w == this.cleanedWord).length > 0;
         },
         cleanedWord: function() {
-            return this.text.replace(/[\|\|]/g, '');
+            return this.$slots.default[0].text
         }
     }
 }

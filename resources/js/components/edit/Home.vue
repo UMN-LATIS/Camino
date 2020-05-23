@@ -7,6 +7,7 @@
                 <router-link :to='{name: "createTour"}' class="btn btn-primary"><i class="fas fa-plus"></i> Create a New Tour</router-link>
             </div>
         </div>
+        
         <div class="card mt-2" v-for="tour in sortedTitles" :key="tour.id">
             <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
                 <h5 class="card-title"><i class="fas fa-check-circle mr-2" v-if="tour.active"></i><i class="fas fa-globe mr-2" v-if="tour.public"></i><transport-icon :transport_type="tour.transport_type" class="mr-2" />{{ tour.title }}</h5> 
@@ -36,6 +37,13 @@
 }
 .controls {
     white-space: nowrap;
+}
+
+</style>
+
+<style >
+.ck-editor__editable:not(.ck-editor__nested-editable) { 
+    min-height: 150px;
 }
 </style>
 

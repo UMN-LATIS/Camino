@@ -29,8 +29,7 @@ export default {
                 lineWrapping: true,
                 autocorrect: true,
                 spellcheck: true,
-                autocapitalize: true,
-                inputStyle: "textarea"
+                autocapitalize: true
             }
         }
     },

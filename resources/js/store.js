@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
     state: {
         hotwords: [],
         config: { 
-            simulateLocation: true,
+            simulateLocation: false,
             simulateMobile: false
         }
     },

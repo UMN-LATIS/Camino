@@ -99,7 +99,7 @@ Vue.mixin({
         purify: function (input) {
             return DOMPurify.sanitize(input, {
                 ALLOWED_TAGS: ["hotword"]
-            });
+            }).replace(/&gt;+/g, '>'); // convert gt back to > so markdown can do its thing
         }
     }
 });

@@ -94,6 +94,11 @@ var otherMarkerGroup;
                     return;
                 }
 
+                if(!this.tour) {
+                    this.drawMarker();
+                    return;
+                }
+
                 if(!this.route) {
                     var allLocations = this.allLocations();
                     var previousStop = null;
@@ -140,6 +145,9 @@ var otherMarkerGroup;
         },
         methods: {
             allLocations: function() {
+                if(!this.tour) {
+                    return [];
+                }
                 var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
                     return stages.filter(stage=> stage.type=="navigation")
                 }).flat();

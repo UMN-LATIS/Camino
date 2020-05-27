@@ -7,7 +7,7 @@
             <div v-for="(hotword, hwkey) in language" :key="hwkey">
             
             <label :for="'field' + hwkey" class="">{{ hotword }}</label>
-            <custom-markdown :text.sync="tour.tour_content.hotWords[hotword]" :idkey="'field' + hwkey" :allowHotwords="false"></custom-markdown>
+            <hotwords-text-editor :editorData.sync="tour.tour_content.hotWords[hotword]" :idkey="'field' + hwkey"></hotwords-text-editor>
             <!-- <textarea :value="tour.tour_content.hotWords[hotword]" @input="tour.tour_content.hotWords[hotword] = $event.target.value"></textarea> -->
             </div>
             <hr />
@@ -40,9 +40,14 @@ export default {
                         }
                         Object.entries(stage.text).forEach(([key, value]) => {
                             if(value) {
-                                var matches = value.match(/\|(.*?)\|/g);
-                                if(matches) {
-                                    cleanedMatches.push({[key]: matches.map(w=>w.replace(/[\|\|]/g, ''))});
+                                var root = document.createElement("div");
+                                root.innerHTML = value;
+                                var texts = [].map.call( root.querySelectorAll("hotword"), function(v){
+                                    return v.textContent || v.innerText || "";
+                                });
+                                
+                                if(texts) {
+                                    cleanedMatches.push({[key]: texts});
                                 }
                             }
                         });

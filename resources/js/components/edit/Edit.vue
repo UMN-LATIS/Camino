@@ -267,7 +267,7 @@
                         var cleanedMatches = [];
                         Object.entries(stage.text).forEach(([key, value]) => {
                             if (value) {
-                                var matches = value.match(/\|(.*?)\|/g);
+                                var matches = value.match(/<hotword/g);
                                 if (matches) {
                                     cleanedMatches.push(matches.map(w => w.replace(
                                         /[\|\|]/g, '')));

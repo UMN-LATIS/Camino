@@ -161,7 +161,9 @@ var otherMarkerGroup;
                 myLocation = null;
             },
             drawMarker: function() {
-                
+                if(!this.location) {
+                    return;
+                }
                 targetLocationCssIcon = L.divIcon({
                     // Specify a class name we can refer to in CSS.
                     className: 'target-css-icon css-icon',

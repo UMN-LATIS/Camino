@@ -225,12 +225,14 @@ var otherMarkerGroup;
                 var layerGroupItems = [];
                 var previousPoint = null;
 
-                if(!this.stop.id) {
+                if(!this.stop.id && this.location) {
                     targetNavs.push({"targetPoint": this.location, "route": this.route})
                 }
 
                 targetNavs.forEach(targetPoint => {
-
+                    if(!targetPoint.targetPoint) {
+                        return;
+                    }
                     if(!targetPoint.route) {
                         previousPoint = targetPoint;
                         return;

@@ -21,6 +21,7 @@ import i18n from './i18n';
 
 
 import CoolLightBox from 'vue-cool-lightbox'
+import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css'
 Vue.use(CoolLightBox);
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?

@@ -151,6 +151,7 @@ var otherMarkerGroup;
                 var targetPoints = this.tour.stops.map(stop => stop.stop_content.stages).map(stages=>{
                     return stages.filter(stage=> stage.type=="navigation")
                 }).flat();
+                
                 return targetPoints;
             },
             useCurrentLocation: function() {
@@ -216,12 +217,18 @@ var otherMarkerGroup;
 
             },
             drawWalkingPath: function() {
+
                 var targetNavs = this.allLocations();
                 var localPolyline;
                 var decorator;
                 var decorator2;
                 var layerGroupItems = [];
                 var previousPoint = null;
+
+                if(!this.stop.id) {
+                    targetNavs.push({"targetPoint": this.location, "route": this.route})
+                }
+
                 targetNavs.forEach(targetPoint => {
 
                     if(!targetPoint.route) {

@@ -225,7 +225,7 @@ var otherMarkerGroup;
                 var layerGroupItems = [];
                 var previousPoint = null;
 
-                if(!this.stop.id && this.location) {
+                if(this.location && !this.stop.id) {
                     targetNavs.push({"targetPoint": this.location, "route": this.route})
                 }
 

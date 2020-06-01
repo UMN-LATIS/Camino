@@ -59,13 +59,11 @@ export default {
         cameraSettings: function() {
             if(this.simulateLocation == "true" && this.tour) {
                 var currentStopLocation = this.currentStop.stages.find(elem => elem.type =="navigation");
+                var startLocation = this.tour.start_location;
                 if(currentStopLocation) {
-                    startLocation = currentStopLocation[0].targetPoint;
+                    startLocation = currentStopLocation.targetPoint;
                 }
-                else {
-                    startLocation = this.tour.start_location;
-                }
-
+                
                 return 'simulateLatitude: ' + startLocation.lat +"; simulateLongitude: " + startLocation.lng + "; simulateAltitude: " + 0 +'';
             }
             else {

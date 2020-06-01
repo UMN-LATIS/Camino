@@ -22,7 +22,7 @@
  
         <a-camera id="camera" 
             :gps-camera="cameraSettings"
-            rotation-reader far=90000>
+            rotation-reader maxDistance=10000 far=90000>
         </a-camera>
                 </a-scene>
 
@@ -55,9 +55,18 @@ export default {
             }
             return this.currentStop.stages.find(elem => elem.type =="ar");
         },
+        
         cameraSettings: function() {
             if(this.simulateLocation == "true" && this.tour) {
-                return 'simulateLatitude: ' + this.tour.start_location.lat +"; simulateLongitude: " + this.tour.start_location.lng + "; simulateAltitude: " + 0 +'';
+                var currentStopLocation = this.currentStop.stages.find(elem => elem.type =="navigation");
+                if(currentStopLocation) {
+                    startLocation = currentStopLocation[0].targetPoint;
+                }
+                else {
+                    startLocation = this.tour.start_location;
+                }
+
+                return 'simulateLatitude: ' + startLocation.lat +"; simulateLongitude: " + startLocation.lng + "; simulateAltitude: " + 0 +'';
             }
             else {
                 return ""

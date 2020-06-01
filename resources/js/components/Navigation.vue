@@ -230,8 +230,7 @@ var otherMarkerGroup;
                     }
                 }).addTo(map);
 
-                if(!this.$store.state.config.simulateLocation) {
-                    console.log("starting lookup");
+                if(!this.$can("edit own tours") || !this.$store.state.config.simulateLocation) {
                     lc.start();
                 }
             }

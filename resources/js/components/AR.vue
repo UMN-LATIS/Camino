@@ -29,7 +29,9 @@
                 if(this.closing) {
                     return "";
                 }
-                return '/ar/' + this.tour.id +"/" + this.$router.currentRoute.params.currentStopId + '/' + this.$i18n.locale +"/" + this.$store.state.config.simulateLocation;
+                var simulateLocation = this.$can("edit own tours")?this.$store.state.config.simulateLocation:false;
+
+                return '/ar/' + this.tour.id +"/" + this.$router.currentRoute.params.currentStopId + '/' + this.$i18n.locale +"/" + simulateLocation;
             },
             isMobile: function() {
                 var isMobile = ('ontouchstart' in document.documentElement && navigator.userAgent.match(/Mobi/));

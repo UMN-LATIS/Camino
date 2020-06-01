@@ -14,7 +14,7 @@
             side="double" 
             align="center" 
             :z-offset="getDistanceFromWaypoint(waypoint) * .1"
-            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) + '; height: 220'" material="color: #eee; opacity: 0.6"
+            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) * 2 + '; height: 75'" material="color: #eee; opacity: 0.6"
             :width="getSizeForPoint(waypoint)">
 
         </a-text>
@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         getTextWidth(waypoint) {
-            return waypoint.text[this.locale].length * 100
+            return waypoint.text[this.locale].length * 12
         },
         getDistanceFromWaypoint(waypoint) {
             var nav = this.currentStop.stages.find(elem => elem.type =="navigation");
@@ -83,7 +83,11 @@ export default {
         },
         getSizeForPoint(waypoint) {
             var distance = this.getDistanceFromWaypoint(waypoint);
-            return Math.log(distance) * 500;
+            // if(distance > 2000) {
+            //     distance = 1000;
+            // }
+            console.log(distance);
+            return Math.log(distance) * 5 * waypoint.text[this.locale].length;
         }
     },
     mounted() {

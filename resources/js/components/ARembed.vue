@@ -83,9 +83,6 @@ export default {
         },
         getSizeForPoint(waypoint) {
             var distance = this.getDistanceFromWaypoint(waypoint);
-            // if(distance > 2000) {
-            //     distance = 1000;
-            // }
             console.log(distance);
             return Math.log(distance) * 5 * waypoint.text[this.locale].length;
         }

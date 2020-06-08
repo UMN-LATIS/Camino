@@ -26,7 +26,7 @@ class CreateToursUsersTable extends Migration
             ]);
         }
         Schema::table("tours", function(Blueprint $table) {
-            // $table->dropForeign("tours_user_id_foreign");
+            $table->dropForeign("tours_user_id_foreign");
             $table->dropColumn("user_id");
         });
     }

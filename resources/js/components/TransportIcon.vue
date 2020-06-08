@@ -1,11 +1,11 @@
 <template>
-    <i class="fas fa-walking" v-if="transport_type==0"></i>
-    <i class="fas fa-biking" v-else-if="transport_type==1"></i>
-    <i class="fas fa-car" v-else-if="transport_type==2"></i>
+    <i class="fas fa-walking" v-if="tour.walking==1"></i>
+    <i class="fas fa-biking" v-else-if="tour.biking==1"></i>
+    <i class="fas fa-car" v-else-if="tour.driving==1"></i>
 </template>
 
 <script>
 export default {
-    props: ["transport_type"]
+    props: ["tour"]
 }
 </script>

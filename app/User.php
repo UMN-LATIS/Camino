@@ -33,7 +33,7 @@ class User extends Authenticatable
     ];
 
     public function tours() {
-        return $this->hasMany(Tour::class);
+        return $this->belongsToMany(Tour::class);
     }
 
     public function getAllPermissionsAttribute() {

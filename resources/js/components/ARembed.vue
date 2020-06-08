@@ -14,7 +14,7 @@
             side="double" 
             align="center" 
             :z-offset="getDistanceFromWaypoint(waypoint) * .1"
-            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) * 2 + '; height: 75'" material="color: #eee; opacity: 0.6"
+            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) * 2 + '; height: 75'" material="color: #eee; opacity: 0.6; transparent: true"
             :width="getSizeForPoint(waypoint)">
 
         </a-text>

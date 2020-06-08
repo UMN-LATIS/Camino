@@ -37,7 +37,7 @@ class TourPolicy
         }
 
         // authors can view their own unpublished posts
-        return $user->id == $tour->user_id;
+        return $tour->users->contains($user->id);
     }
 
     public function viewFeedback(?User $user, Tour $tour)
@@ -53,14 +53,14 @@ class TourPolicy
         }
 
         // authors can view their own unpublished posts
-        return $user->id == $tour->user_id;
+        return $tour->users->contains($user->id);
     }
 
 
     public function update(User $user, Tour $tour)
     {
         if ($user->can('edit own tours')) {
-            return $user->id == $tour->user_id;
+            return $tour->users->contains($user->id);
         }
 
         if ($user->can('edit all tours')) {
@@ -71,7 +71,7 @@ class TourPolicy
     public function delete(User $user, Tour $tour)
     {
         if ($user->can('delete own tours')) {
-            return $user->id == $tour->user_id;
+            return $tour->users->contains($user->id);
         }
 
         if ($user->can('delete any tours')) {

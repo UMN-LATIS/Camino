@@ -21,7 +21,9 @@ class Tour extends JsonResource
             'title' => $this->title,
             'tour_content' => $this->tour_content,
             'geocoded' => $this->geocoded,
-            'transport_type' => $this->transport_type,
+            'walking' => $this->walking,
+            'driving' => $this->driving,
+            'biking' => $this->biking,
             'start_location' =>$this->start_location?["lat"=>$this->start_location->getLat(), "lng"=>$this->start_location->getLng()]:null,
             'stops' => $this->stops
         ];

@@ -70,7 +70,7 @@
 
                 var markers = [];
                 var otherLocation = null;
-                this.tours.filter(tour => { return ((this.walk && tour.transport_type == 0) || (this.bike && tour.transport_type == 1) || (this.drive && tour.transport_type == 2))}).forEach(targetPoint => {
+                this.tours.filter(tour => { return ((this.walk && tour.walking == 1) || (this.bike && tour.biking == 1) || (this.drive && tour.driving == 1))}).forEach(targetPoint => {
 
                     var myIcon = L.icon({
                         // iconSize: [38, 95],

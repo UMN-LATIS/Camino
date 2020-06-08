@@ -42,6 +42,8 @@ Vue.config.ignoredElements = [
     "a-camera"
 ]
 
+import VueQRCodeComponent from 'vue-qrcode-component'
+Vue.component('qr-code', VueQRCodeComponent)
 
 import VueRouter from 'vue-router'
 Vue.use(VueRouter);

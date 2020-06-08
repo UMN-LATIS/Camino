@@ -38,19 +38,19 @@
             <div class="col-sm-6 ">
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input type="radio" class="form-check-input" v-model="tour.transport_type" value="0">
+                        <input type="checkbox" class="form-check-input" v-model="tour.walking" value="1">
                         Walk
                     </label>
                 </div>
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input type="radio" class="form-check-input" v-model="tour.transport_type" value="1">
+                        <input type="checkbox" class="form-check-input" v-model="tour.biking" value="1">
                         Bike
                     </label>
                 </div>
                 <div class="form-check">
                     <label class="form-check-label">
-                        <input type="radio" class="form-check-input" v-model="tour.transport_type" value="2">
+                        <input type="checkbox" class="form-check-input" v-model="tour.driving" value="1">
                         Drive
                     </label>
                 </div>
@@ -130,7 +130,7 @@
                 <input type="checkbox" class="form-check-input" v-model="tour.active">
                 Active
                 <p id="activeHelpId" class="form-text" v-if="tour.active">Tour URL: <strong><a
-                            :href="tourURL">{{ tourURL }}</a></strong></p>
+                            :href="tourURL">{{ tourURL }}</a></strong><qr-code :size="120" :text="tourURL"></qr-code></p>
             </label>
         </div>
 
@@ -226,7 +226,9 @@
                     active: false,
                     title: "",
                     start_location: null,
-                    transport_type: 0,
+                    walking: 0,
+                    biking: 0,
+                    driving: 0,
                     tour_content: {
                         use_template: true,
                         languages: ["English"],

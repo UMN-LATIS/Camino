@@ -17,15 +17,15 @@ class Tour extends Model
         'start_location'
     ];
 
-    protected $fillable = ["public", "active", "title", "tour_content", "start_location", "transport_type"];
+    protected $fillable = ["public", "active", "title", "tour_content", "start_location", "driving", "biking","walking"];
 
     protected $casts = [
         'tour_content' => 'json',
         'geocoded' => 'json'
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function users() {
+        return $this->belongsToMany(User::class);
     }
     
     public function stops() {
@@ -35,4 +35,5 @@ class Tour extends Model
     public function feedback() {
         return $this->hasMany(Feedback::class);
     }
+
 }

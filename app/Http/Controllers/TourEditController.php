@@ -36,7 +36,7 @@ class TourEditController extends Controller
         $this->authorize('create', Tour::class);
         
         $tour = new Tour;
-        $tour->user()->associate(Auth::user());
+        
         $request = $request->all();
         if($request["start_location"]) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
@@ -47,6 +47,8 @@ class TourEditController extends Controller
         }
 
         $tour->fill($request);
+        $tour->save();
+        $tour->users()->attach(Auth::user());
         $tour->save();
 
         $template = Tour::where("template", true)->first();

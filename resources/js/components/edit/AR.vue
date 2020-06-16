@@ -27,7 +27,7 @@
                                 <b>Latitude:</b> {{ waypoint.location.lat}}, <b>Longitude:</b>
                                 {{ waypoint.location.lng}}
                             </div>
-                            <location-selector :location.sync="waypoint.location" :generalarea="tour.start_location" :basemap="tour.tour_content.custom_base_map">
+                            <location-selector :location.sync="waypoint.location" :generalarea="currentLocation" :basemap="tour.tour_content.custom_base_map">
                             </location-selector>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
 
 <script>
     export default {
-        props: ["stage", "languages", "tour"],
+        props: ["stage", "languages", "tour", "stop"],
         created() {
             if (!this.stage.text && !this.stage.waypoints) {
                 Vue.set(this.stage, "text", {
@@ -68,6 +68,20 @@
                     "English": "Show AR"
                 });
                 Vue.set(this.stage, "waypoints", []);
+            }
+        },
+        computed: {
+            currentLocation: function() {
+                if(this.stop.id) {
+                    var nav = this.stop.stop_content.stages.filter(s=> s.type == "navigation");
+                    if(nav.length > 0 && nav[0].targetPoint) {
+                        return nav[0].targetPoint;
+                    }
+                }
+                else {
+                    return this.tour.start_location;
+                }
+
             }
         }
     }

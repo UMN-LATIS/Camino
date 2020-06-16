@@ -1,6 +1,7 @@
 <template>
  <div style="width:100%; height: 100%">
       <a-scene v-if="currentStopAR"  vr-mode-ui="enabled: false" 
+        device-orientation-permission-ui="enabled: true"
                     arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false'>
 
 
@@ -14,7 +15,7 @@
             side="double" 
             align="center" 
             :z-offset="getDistanceFromWaypoint(waypoint) * .1"
-            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint) * 2 + '; height: 75'" material="color: #eee; opacity: 0.6; transparent: true"
+            :geometry="'primitive: plane; width: ' + getTextWidth(waypoint)  + '; height: ' + getTextHeight(waypoint)" material="color: #eee; opacity: 0.6; transparent: true"
             :width="getSizeForPoint(waypoint)">
 
         </a-text>
@@ -73,7 +74,11 @@ export default {
     },
     methods: {
         getTextWidth(waypoint) {
-            return waypoint.text[this.locale].length * 12
+            return this.getSizeForPoint(waypoint) / 1.5
+        },
+        getTextHeight(waypoint) {
+            var distance = this.getDistanceFromWaypoint(waypoint);
+            return Math.pow(Math.log(distance), 2) * 1.5
         },
         getDistanceFromWaypoint(waypoint) {
             var nav = this.currentStop.stages.find(elem => elem.type =="navigation");
@@ -82,7 +87,6 @@ export default {
             }
             var stageLocation = nav.targetPoint;
 
-
             var a = waypoint.location.lat - stageLocation.lat;
             var b = waypoint.location.lng - stageLocation.lng;
             var distance = Math.sqrt( a*a + b*b ) * 111139; //meters per degree
@@ -90,8 +94,8 @@ export default {
         },
         getSizeForPoint(waypoint) {
             var distance = this.getDistanceFromWaypoint(waypoint);
-            console.log(distance);
-            return Math.log(distance) * 5 * waypoint.text[this.locale].length;
+            console.log(Math.pow(Math.log(distance), 2)  * waypoint.text[this.locale].length)
+            return (Math.pow(Math.log(distance), 2)  * waypoint.text[this.locale].length) / 1.2;
         }
     },
     mounted() {

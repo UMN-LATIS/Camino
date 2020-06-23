@@ -43,14 +43,14 @@ return array(
             'displayName' => 'Staff User',
             'givenName'   => 'Staff',
             'sn'          => 'User',
-            'mail'        => 'staff@uwm.edu',
+            'eppn'        => 'sith33@mac.com',
         ),
         'user'  => array(
             'umnDID'         => 'user',
             'displayName' => 'User User',
             'givenName'   => 'User',
             'sn'          => 'User',
-            'mail'        => 'user@uwm.edu',
+            'eppn'        => 'cmcfadden@gmail.com',
         ),
     ),
 

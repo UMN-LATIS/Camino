@@ -22,6 +22,7 @@
         "laravel/helpers": "^1.2",
         "laravel/socialite": "^4.3",
         "laravel/tinker": "^2.0",
+        "owen-it/laravel-auditing": "^10.0",
         "razorbacks/laravel-shibboleth": "dev-umn",
         "socialiteproviders/facebook": "^1.0",
         "socialiteproviders/google": "^3.0",

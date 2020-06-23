@@ -37,6 +37,8 @@ Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
     Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
     Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");
     Route::get('/{tour}/feedback/', "TourEditController@getFeedback");
+    Route::post("/{tour}/share/", "TourEditController@shareTour");
+    Route::get("/{tour}/join/{tourHash}", "TourEditController@joinTour");
     Route::any('{all}','TourEditController@index')->where(['all' => '.*']);
     
 });

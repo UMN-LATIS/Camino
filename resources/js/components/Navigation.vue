@@ -185,12 +185,23 @@ var otherMarkerGroup;
                      L.imageOverlay(imageUrl, imageBounds).addTo(map);
                 }
                 else {
-                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    var streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
                         // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                         maxZoom: 18,
                         id: 'mapbox/streets-v11',
                         accessToken: window.mapbox
                     }).addTo(map);
+                    var satellite = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                        // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                        maxZoom: 18,
+                        id: 'mapbox/satellite-v9',
+                        accessToken: window.mapbox
+                    });
+                    var baseMaps = {
+                        "Streets": streets,
+                        "Satellite": satellite
+                    };
+                    L.control.layers(baseMaps).addTo(map);
 
                 }
                 

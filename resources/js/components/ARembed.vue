@@ -74,7 +74,7 @@ export default {
     },
     methods: {
         getTextWidth(waypoint) {
-            return this.getSizeForPoint(waypoint) / 1.5
+            return this.getSizeForPoint(waypoint) / 1.5;
         },
         getTextHeight(waypoint) {
             var distance = this.getDistanceFromWaypoint(waypoint);
@@ -92,10 +92,12 @@ export default {
             var distance = Math.sqrt( a*a + b*b ) * 111139; //meters per degree
             return distance;
         },
+        getScaledDistanceFromWaypoint(waypoint) {
+            return (Math.pow(Math.log(this.getDistanceFromWaypoint(waypoint)), 2));
+        },
         getSizeForPoint(waypoint) {
-            var distance = this.getDistanceFromWaypoint(waypoint);
-            console.log(Math.pow(Math.log(distance), 2)  * waypoint.text[this.locale].length)
-            return (Math.pow(Math.log(distance), 2)  * waypoint.text[this.locale].length) / 1.2;
+            var scaledDistance = this.getScaledDistanceFromWaypoint(waypoint);
+            return scaledDistance *  waypoint.text[this.locale].length;
         }
     },
     mounted() {

@@ -7,6 +7,8 @@ use App\Stop;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Resources\Tour as TourResource;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TourInvite;
 
 class TourEditController extends Controller
 {
@@ -43,7 +45,7 @@ class TourEditController extends Controller
         } 
         
         if(!Auth::user()->can("publish publicly")) {
-            $request["public"] = false;
+            $request["public"] = $tour->public;
         }
 
         $tour->fill($request);
@@ -125,7 +127,7 @@ class TourEditController extends Controller
         } 
         
         if(!Auth::user()->can("publish publicly")) {
-            $request["public"] = false;
+            $request["public"] = $tour->public;
         }
 
         $tour->fill($request);
@@ -173,6 +175,33 @@ class TourEditController extends Controller
     public function getFeedback(Request $request, Tour $tour) {
         $this->authorize('viewFeedback', $tour);
         return response()->json($tour->feedback);
+    }
+
+
+    public function shareTour(Request $request, Tour $tour) {
+         $this->validate($request, [
+			'email' => 'required|email',
+			// 'description' => 'required'
+        ]);
+        
+        $tourURL = url("/creator/" . $tour->id . "/join/" . sha1($request->input("email") . $tour->id));
+
+        Mail::to($request->input("email"))->send(new TourInvite($tour, $tourURL));
+        return response()->json(["success"=>"success"]);
+
+
+    }
+
+    public function joinTour(Tour $tour, $tourCode) {
+        if(sha1(Auth::user()->email . $tour->id) == $tourCode) {
+            $tour->users()->attach(Auth::user());
+            $tour->save();
+            return redirect("/creator/" . $tour->id);
+        }
+        else {
+            abort(403, 'Access denied');
+        }
+
     }
 
     /**

@@ -58,6 +58,29 @@
             </div>
         </div>
 
+             <div class="form-group row">
+            <label for="sharing" class="col-sm-1"><b>Sharing</b></label>
+            <div class="col-sm-6 ">
+                <div class="input-group">
+                  <input type="text"
+                    class="form-control" name="" id="" v-model="shareAddress" aria-describedby="helpId" placeholder="">
+                     <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" @click="share" type="button">Share</button>
+                    </div>
+                    </div>
+                    
+                  <small id="helpId" class="form-text text-muted">Enter a full email address</small>
+                  <strong v-if="invitationSent">Invitation Sent</strong>
+                  <div v-if="tour.users.length > 0 " >
+                  <p class="mb-0">Shared With:</p>
+                  <ul class="mt-0">
+                      <li v-for="user in tour.users" :key="user.id">{{ user.email }}</li>
+                   </ul>
+                   </div>
+                      
+            </div>
+        </div>
+
         <div class="form-check">
             <label class="form-check-label" >
                 <input type="checkbox" class="form-check-input" v-model="tour.public" :disabled="!$can('publish publicly')">
@@ -133,6 +156,8 @@
                             :href="tourURL">{{ tourURL }}</a></strong><qr-code :size="120" :text="tourURL"></qr-code></p>
             </label>
         </div>
+
+        
 
         <div class="row mt-2">
             <div class="col d-flex justify-content-between align-items-center">
@@ -220,6 +245,8 @@
                 error: null,
                 showAlert: false,
                 errors: [],
+                shareAddress: "",
+                invitationSent: false,
                 tour: {
                     id: null,
                     public: false,
@@ -312,6 +339,16 @@
                 }
                 return true;
 
+            },
+            share: function() {
+                axios.post("/creator/" + this.tour.id + "/share", { email: this.shareAddress})
+                .then((res) => {
+                    this.shareAddress = "";
+                    this.invitationSent = true;
+                    setTimeout(() => {
+                        this.invitationSent = false;
+                    }, 2000);
+                })
             },
             save: function () {
                 if(!this.validate()) {

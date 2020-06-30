@@ -1,5 +1,5 @@
 <template>
-    <div class="container mt-2 components-block" v-if="tour.stops.length > 0">
+    <div class="container mt-2 mb-2 pb-2 pt-1 components-block" v-if="tour.stops.length > 0">
         <template v-for="(stage, index) in currentStop.stop_content.stages">
             <div class="row mt-1 component-row" :key="index">
                 <div class="col component-column">

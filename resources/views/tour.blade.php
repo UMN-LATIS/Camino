@@ -15,7 +15,7 @@
         <!-- Styles -->
        
     </head>
-    <body>
+    <body style="background-color: #D7D7D9">
         <div id="app">
             <router-view />
         </div>

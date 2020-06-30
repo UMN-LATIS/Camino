@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-button v-b-modal="randomizedModalName" v-bind:disabled="disabled">{{ buttonText }}</b-button>
+        <b-button variant="outline-primary" v-b-modal="randomizedModalName" v-bind:disabled="disabled"><i :class="buttonIcon" v-if="buttonIcon"></i> {{ buttonText }}</b-button>
 
         <b-modal size="lg" :id="randomizedModalName" :title="modalTitle" ok-only modal-class="modal-fullscreen"
             ok-title='Close'>
@@ -11,7 +11,7 @@
 
 <script>
     export default {
-        props: ["buttonText", "modalTitle", "modalName", "disabled"],
+        props: ["buttonText", "modalTitle", "modalName", "disabled", "buttonIcon"],
         data() {
             return {
                 randomIdentifier: null

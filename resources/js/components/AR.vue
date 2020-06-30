@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button-modal modalName="ar" :buttonText="$t('stage.ar.showar')"
+        <button-modal buttonIcon="fas fa-binoculars" modalName="ar" :buttonText="$t('stage.ar.showar')"
             :modalTitle="$t('stage.ar.showar')" v-on:modalShown="startAR" v-on:modalClosed="endAR" :disabled="!isMobile">
             <div style="height: 70vh; width: 100%; overflow: hidden" v-if="stage">
                <iframe height="100%" width="100%" frameBorder="0" :src="source"></iframe>

@@ -11,9 +11,9 @@ window.Vue = require('vue');
 import VueProgressBar from 'vue-progressbar'
 
 Vue.use(VueProgressBar, {
-    color: 'rgb(200, 100, 100)',
+    color: '#8C2F1B',
     failedColor: 'red',
-    height: '2px',
+    thickness: '3px',
     position: "relative"
 })
 

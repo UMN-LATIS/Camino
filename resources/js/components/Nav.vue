@@ -35,17 +35,17 @@ a {
     text-decoration: none;
     display: inline-block;
     width: 100%;
-    color: black;
+    color: white;
     /* padding: 8px 16px; */
 }
 
 a:hover {
-    background-color: #d3e2ed;
-    /* color: white; */
+    background-color: #024873;
+    color: white;
 }
 
 .navHeader {
-    background-color: #e3f2fd;
+    background-color: #608BA6;
     /* background-color: #A89B9D; */
     border-bottom: 1px solid rgba(0,0,0,.5);
 }
@@ -56,8 +56,12 @@ a:hover {
 
 }
 
+.list-group-item-action {
+    background-color: #608BA6;
+}
+
 .router-link-exact-active {
-    background-color: #d3e2ed;
+    background-color: #024873;
 }
 .navButton {}
 

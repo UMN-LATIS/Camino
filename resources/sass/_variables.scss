@@ -1,5 +1,5 @@
 // Body
-$body-bg: #f8fafc;
+$body-bg: #D7D7D9;
 
 // Typography
 $font-family-sans-serif: 'Nunito', sans-serif;
@@ -7,7 +7,7 @@ $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 // Colors
-$blue: #3490dc;
+$blue: #BF7B3F;
 $indigo: #6574cd;
 $purple: #9561e2;
 $pink: #f66d9b;
@@ -17,3 +17,25 @@ $yellow: #ffed4a;
 $green: #38c172;
 $teal: #4dc0b5;
 $cyan: #6cb2eb;
+
+
+/* Color Theme Swatches in Hex */
+$Travel-1-hex: #D7D7D9;
+$Travel-2-hex: #024873;
+$Travel-3-hex: #608BA6;
+$Travel-4-hex: #BF7B3F;
+$Travel-5-hex: #8C2F1B;
+
+/* Color Theme Swatches in RGBA */
+$Travel-1-rgba: rgba(214, 214, 216, 1);
+$Travel-2-rgba: rgba(2, 71, 114, 1);
+$Travel-3-rgba: rgba(96, 139, 165, 1);
+$Travel-4-rgba: rgba(191, 122, 63, 1);
+$Travel-5-rgba: rgba(140, 47, 26, 1);
+
+/* Color Theme Swatches in HSLA */
+$Travel-1-hsla: hsla(247, 2, 84, 1);
+$Travel-2-hsla: hsla(202, 96, 22, 1);
+$Travel-3-hsla: hsla(202, 28, 51, 1);
+$Travel-4-hsla: hsla(28, 50, 49, 1);
+$Travel-5-hsla: hsla(11, 68, 32, 1);

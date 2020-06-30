@@ -1,5 +1,6 @@
 <template>
     <div>
+        <hr class="separator-bar"/>
         <span class="font-weight-light"> {{ this.stage.text[$i18n.locale]}} </span>
     </div>
 </template>

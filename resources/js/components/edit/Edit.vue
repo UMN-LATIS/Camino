@@ -71,7 +71,7 @@
                     
                   <small id="helpId" class="form-text text-muted">Enter a full email address</small>
                   <strong v-if="invitationSent">Invitation Sent</strong>
-                  <div v-if="tour.users.length > 0 " >
+                  <div v-if="tour.users.length > 1 " >
                   <p class="mb-0">Shared With:</p>
                   <ul class="mt-0">
                       <li v-for="user in tour.users" :key="user.id">{{ user.email }}</li>
@@ -278,7 +278,8 @@
                     },
                     stops: [
 
-                    ]
+                    ],
+                    users: []
 
                 }
             }

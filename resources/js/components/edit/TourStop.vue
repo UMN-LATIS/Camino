@@ -154,9 +154,9 @@
                 if (!this.stop.id) {
                     axios.post("/creator/edit/" + this.tour.id + "/stop/", this.stop)
                         .then((res) => {
-                            this.stop.id = res.data.id;
-                            this.stop.sort_order = res.data.sort_order;
                             this.isDirty = false;
+                            this.stop.id = res.data.id;
+                            this.loadTour();
                             this.$router.replace({
                                 name: 'editStop',
                                 params: {
@@ -183,28 +183,31 @@
                 if (!this.isDirty) return
                 event.preventDefault()
                 event.returnValue = ""
+            },
+            loadTour: function() {
+                // cache bust because otherwise we won't reload the tour when using the back button
+                axios.get("/creator/edit/" + this.tourId + "?" + Math.random())
+                    .then((res) => {
+                        this.tour = res.data
+                        if (this.stopId) {
+                            this.stop = this.tour.stops.find(s => s.id == this.stopId);
+                        } else if (this.tour.tour_content.use_template) {
+                            this.stop = this.stop_template;
+                        }
+                        Vue.nextTick( () => {
+                            this.isDirty = false;
+                        })
+                        
+                    }).catch(res => {
+                        this.error = res;
+                    });
+                if(this.$can('administer site')) {
+                    this.stageTypes.language = "Language";
+                }
             }
         },
         mounted: function () {
-            // cache bust because otherwise we won't reload the tour when using the back button
-            axios.get("/creator/edit/" + this.tourId + "?" + Math.random())
-                .then((res) => {
-                    this.tour = res.data
-                    if (this.stopId) {
-                        this.stop = this.tour.stops.find(s => s.id == this.stopId);
-                    } else if (this.tour.tour_content.use_template) {
-                        this.stop = this.stop_template;
-                    }
-                    Vue.nextTick( () => {
-                        this.isDirty = false;
-                    })
-                    
-                }).catch(res => {
-                    this.error = res;
-                });
-            if(this.$can('administer site')) {
-                this.stageTypes.language = "Language";
-            }
+            this.loadTour();
 
         },
         beforeMount() {

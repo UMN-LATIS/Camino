@@ -201,7 +201,7 @@ var otherMarkerGroup;
                 var otherLocation = null;
                 var otherLocations = [];
                 targetNavs.forEach(targetPoint => {
-                    if(targetPoint.targetPoint != this.location) {
+                    if(targetPoint.targetPoint != this.location && targetPoint.targetPoint) {
                         otherLocation = L.marker([targetPoint.targetPoint.lat, targetPoint.targetPoint.lng], {
                         icon: otherLocationsCssIcon
                         });
@@ -237,7 +237,7 @@ var otherMarkerGroup;
                         previousPoint = targetPoint;
                         return;
                     }
-                    
+
                     // make sure the path is contiguous
                     if(previousPoint) {
                         targetPoint.route[0] = previousPoint.targetPoint;

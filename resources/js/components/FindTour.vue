@@ -74,8 +74,8 @@
 
                     var myIcon = L.icon({
                         // iconSize: [38, 95],
-                        iconAnchor: [12, 0],
-                        // popupAnchor: [-3, -76],
+                        iconAnchor: [12, 40],
+                        popupAnchor: [0, -30],
                         iconUrl: '/images/vendor/leaflet/dist/marker-icon.png',
                         shadowUrl: '/images/vendor/leaflet/dist/marker-shadow.png',
                         // shadowSize: [68, 95],
@@ -155,7 +155,7 @@
                     }
                 }).addTo(map);
 
-                lc.start();
+                // lc.start();
             }
         }
     }

@@ -57,20 +57,20 @@
         <img src="/images/about.jpg" class="bd-placeholder-img rounded-circle border" width="140" />
         <h2>About Camino</h2>
         <p>Why did we build Camino, and who is it for?</p>
-        <p><a class="btn btn-secondary" href="/about" role="button">Learn More »</a></p>
+        <p><a class="btn btn-outline-primary" href="/about" role="button">Learn More »</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img src="/images/browse.jpg" class="bd-placeholder-img rounded-circle border" width="140" />
         {{-- <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"></rect><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg> --}}
         <h2>Browse Tours</h2>
         <p>Find a tour near you, or go on a "virtual" tour anywhere in the world.</p>
-        <p><a class="btn btn-secondary" href="/findTours" role="button">Explore Tours »</a></p>
+        <p><a class="btn btn-outline-primary" href="/findTours" role="button">Explore Tours »</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img src="/images/create.jpg" class="bd-placeholder-img rounded-circle border" width="140" />
         <h2>Build Yours</h2>
         <p>Anyone can create a tour with Camino.  Just log in and get started.</p>
-        <p><a class="btn btn-secondary" href="/creator" role="button">Create a tour »</a></p>
+        <p><a class="btn btn-outline-primary" href="/creator" role="button">Create a tour »</a></p>
       </div><!-- /.col-lg-4 -->
     </div>
 </div>

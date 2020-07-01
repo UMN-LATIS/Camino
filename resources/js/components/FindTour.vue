@@ -155,7 +155,7 @@
                     }
                 }).addTo(map);
 
-                // lc.start();
+                lc.start();
             }
         }
     }

@@ -37,6 +37,7 @@
         },
         watch: {
             '$route' (to, from) {
+                document.title = this.tour.title + " : " + this.tour.stops[this.currentStopId].stop_content.title[this.$i18n.locale];
                 // todo: scroll to stop
             // react to route changes...
             }

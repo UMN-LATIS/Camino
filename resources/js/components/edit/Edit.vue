@@ -379,6 +379,7 @@
                     axios.get("/creator/edit/" + this.tourId)
                         .then((res) => {
                             this.tour = res.data
+                            document.title = "Editing : " + this.tour.title
                         }).catch(res => {
                             this.error = res;
                         });

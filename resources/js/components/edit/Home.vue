@@ -77,6 +77,7 @@
                 axios.get("/creator?" + Math.random()) // someday do .json routes in laravel
                 .then((res) => {
                     this.tours = res.data
+                    document.title = "Camino: My Tours";
                 })
                 .catch(res => {
                     this.error = res;

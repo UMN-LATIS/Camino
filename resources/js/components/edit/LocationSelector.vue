@@ -104,11 +104,19 @@ var otherMarkerGroup;
                     var previousStop = null;
                     if(!this.stop.id) {
                         // this is a new stop, we know it's at the end
-                        previousStop = this.tour.stops[this.tour.stops.length - 2];
+                        if(this.tour.stops.length >= 2) {
+                            previousStop = this.tour.stops[this.tour.stops.length - 2];
+                        }
+                        
                     }
                     else {
 
                         previousStop = this.tour.stops[this.tour.stops.findIndex((i)=> i == this.stop) - 1];
+                    }
+
+                    if(!previousStop) {
+                        this.$emit("update:route", []);
+                        return;
                     }
 
                     var targetNav = previousStop.stop_content.stages.filter(stage=>{

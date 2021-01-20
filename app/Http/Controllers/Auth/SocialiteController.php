@@ -27,6 +27,7 @@ class SocialiteController extends Controller
     public function handleProviderCallback($provider)
     {
         $userSocial = Socialite::driver($provider)->user();
+        // dd($userSocial);
         // $userSocial =   Socialite::driver($provider)->stateless()->user();
         $users       =   \App\User::where(['email' => $userSocial->getEmail()])->first();
         if($users){

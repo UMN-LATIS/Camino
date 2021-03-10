@@ -1,6 +1,6 @@
 <template>
     <div class="bootstrap-fs-modal" v-if="tour">
-         
+
        <navbar :tour="tour" :currentStopId="currentStopId" />     
         <stop-content class="stop-container" :tour="tour" :currentStop="tour.stops[currentStopId]"  :key="currentStopId" :currentStopId="currentStopId" />
         <debug-bar v-if='$can("edit own tours")'/>
@@ -23,7 +23,7 @@
             };
         },
         mounted() {
-          axios.get("/api/tour/" + this.tourId)
+            axios.get("/api/tour/" + this.tourId)
             .then( response => {
                 this.tour = response.data
                 if(this.currentStopId == undefined || isNaN(this.currentStopId)) {
@@ -31,7 +31,6 @@
                 }
             })
             .catch (error => this.error = error)
-            
         },
         computed: {
         },

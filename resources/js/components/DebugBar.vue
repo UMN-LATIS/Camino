@@ -20,6 +20,10 @@
                         Simulate Mobile
                     </label>
                 </div>
+                <div>
+                    <p>{{ $store.state.locks }}</p>
+                    <button class="btn btn-outline-primary" @click="$store.commit('resetLocks')">Reset Locks</button>
+                </div>
                 <h6 class="mt2">Language</h6>
                 <div v-for="(language, key) in languages" :key="key" class="form-check">
                 <div class="form-check">
@@ -29,7 +33,7 @@
                   </label>
                 </div>
                 </div>
-              
+                
                 <h6 class="mt-2" v-if="$store.getters.hotwords.length > 0">Hotwords</h6>
                 <ul class="list-group">
                     <li class="list-group-item" v-for="(hotword, index) in $store.getters.hotwords" :key="index">{{hotword}}</li>

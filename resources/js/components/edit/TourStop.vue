@@ -80,7 +80,8 @@
                     "embed-frame": "Embed",
                     "guide": "Guide",
                     "gallery": "Gallery",
-                    "navigation": "Navigation"
+                    "navigation": "Navigation",
+                    "quiz": "Quiz"
                 },
                 tour: null,
                 stop: {

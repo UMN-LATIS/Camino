@@ -25,6 +25,7 @@ class Tour extends JsonResource
             'driving' => $this->driving,
             'biking' => $this->biking,
             'start_location' =>$this->start_location?["lat"=>$this->start_location->getLat(), "lng"=>$this->start_location->getLng()]:null,
+            'style' => $this->style,
             'stops' => $this->stops,
             'users' => $this->users
         ];

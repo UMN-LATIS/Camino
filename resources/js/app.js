@@ -55,6 +55,7 @@ Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('site-nav', require('./components/SiteNav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
+Vue.component('quiz', require('./components/Quiz.vue').default);
 Vue.component('ar', require('./components/AR.vue').default);
 Vue.component('embed-frame', require('./components/EmbedFrame.vue').default);
 Vue.component('ar-embed', require('./components/ARembed.vue').default);
@@ -65,7 +66,7 @@ Vue.component('hotword', require('./components/Hotword.vue').default);
 Vue.component('language', require('./components/Language.vue').default);
 Vue.component('feedback', require('./components/Feedback.vue').default);
 Vue.component('find-tour', require('./components/FindTour.vue').default);
-
+Vue.component('save-alert', require('./components/edit/SaveAlert.vue').default);
 
 Vue.component('button-modal', require('./components/ButtonModal.vue').default);
 Vue.component('error', require('./components/error.vue').default);

@@ -16,12 +16,17 @@ const vuexLocal = new VuexPersistence({
 export const store = new Vuex.Store({
     state: {
         hotwords: [],
+        maxStop: 0,
         config: { 
             simulateLocation: false,
             simulateMobile: false
-        }
+        },
+        locks: []
     },
     mutations: {
+        setMaxStop(state, maxStop) {
+            state.maxStop = maxStop;
+        },
         addHotword(state, hotword) {
             if (!Array.isArray(state.hotwords[router.currentRoute.params.tourId])) {
                 Vue.set(state.hotwords, router.currentRoute.params.tourId, []);
@@ -37,6 +42,32 @@ export const store = new Vuex.Store({
         },
         setSimulateMobile(state, simulateMobile) {
             state.config.simulateMobile = simulateMobile;
+        },
+        unlockStop(state, {stop, text}) {
+
+            var element = state.locks[stop].find(element => element.text == text);
+            if(element) {
+                element.locked = false;
+            }
+        },
+        lockStop(state, {stop, text}) {
+            if(!state.locks[stop]) {
+                Vue.set(state.locks, stop, []);
+            }
+
+            var element = state.locks[stop].find(element => element.text == text);
+            if(element) {
+                element.locked = true;
+            }
+            else {
+                element = { "text": text, "locked": true};
+                state.locks[stop].push(element);
+            }
+
+
+        },
+        resetLocks(state) {
+            Vue.set(state, "locks", []);
         }
     },
     getters: {

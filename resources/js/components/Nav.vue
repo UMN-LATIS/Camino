@@ -8,10 +8,10 @@
                 <a class="p-2" @click.prevent="collapseVisible = !collapseVisible" role="button" href="#" aria-expanded="false" >{{ currentStop.title[$i18n.locale] }}</a>
 
             </div>
-            <div class="col-3 text-right navButton" >
-                <router-link v-if="nextStop !== false" :to="{ name: 'tour', params: { currentStopId: nextStop }}" class="controlButton p-2">{{ $t("nav.next") }} &raquo;</router-link>
+            <div class="col-3 text-right navButton">
+                <router-link v-if="nextStop !== false && showNextButton" :to="{ name: 'tour', params: { currentStopId: nextStop }}" class="controlButton p-2">{{ $t("nav.next") }} &raquo;</router-link>
             </div>
-        
+
         </div>
         <vue-progress-bar></vue-progress-bar>
         <!-- https://stackoverflow.com/questions/40573011/dynamically-inject-vue-2-component-from-shortcode -->
@@ -21,7 +21,7 @@
         <b-collapse id="collapse-1" class="row mx-0 border-bottom" v-model="collapseVisible">
             <div class="col px-0">
                 <div class="list-group list-group-flush" >
-                    <router-link v-for="(stop, index) in tour.stops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.stop_content.title[$i18n.locale] }}</router-link>
+                    <router-link v-for="(stop, index) in fileredTourStops" :key="index" :to="{ name: 'tour', params: { currentStopId: index}}" class="list-group-item list-group-item-action">{{ stop.stop_content.title[$i18n.locale] }}</router-link>
                 </div>
             </div>
         </b-collapse>
@@ -80,7 +80,8 @@ export default {
     ],
     data() {
         return {
-            collapseVisible: false
+            collapseVisible: false,
+            maxStop: 0
         }
     },
     computed: {
@@ -100,6 +101,23 @@ export default {
         },
         currentStop: function() {
             return this.tour.stops[this.currentStopId].stop_content;
+        },
+        fileredTourStops: function() {
+            if(this.tour.style == "entire_tour") {
+                return this.tour.stops;
+            }
+            else {
+                return this.tour.stops.filter((s,i) => i <= this.maxStop);
+            }
+        },
+        showNextButton: function() {
+            if(this.tour.style == "entire_tour") {
+                return true;
+            }
+            if(this.$store.state.locks[this.currentStopId] && this.$store.state.locks[this.currentStopId].filter(e => e.locked).length > 0) {
+                return false;
+            }
+            return true;
         }
     },
     methods: {
@@ -112,11 +130,17 @@ export default {
             this.collapseVisible = false
         },
         currentStopId: function(val) {
+
             this.setProgress();
+            this.maxStop = Math.max(val, this.maxStop);
+        },
+        maxStop: function(val) {
+            this.$store.commit('setMaxStop', val);
         }
     },
     mounted: function() {
         this.setProgress();
+        this.maxStop = Math.max(this.currentStopId, this.maxStop);
     }
 }
 </script>

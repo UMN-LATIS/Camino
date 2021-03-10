@@ -98,8 +98,8 @@ var otherMarkerGroup;
                     this.drawMarker();
                     return;
                 }
-
-                if(!this.route) {
+                // a route with less than two points is obviously invalid, just rebuild it
+                if(!this.route || this.route.length < 2) {
                     var allLocations = this.allLocations();
                     var previousStop = null;
                     if(!this.stop.id) {

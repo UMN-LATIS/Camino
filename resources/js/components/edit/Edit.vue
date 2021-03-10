@@ -58,6 +58,24 @@
             </div>
         </div>
 
+        
+        <div class="form-group row">
+            <label for="tourStyle" class="col-sm-1"><b>Tour Style</b></label>
+            <div class="col-sm-6 ">
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" name="tourStyle" class="form-check-input" v-model="tour.style" value="entire_tour">
+                        Reveal entire tour
+                    </label>
+                </div>
+                <div class="form-check">
+                    <label class="form-check-label">
+                        <input type="radio" name="tourStyle" class="form-check-input" v-model="tour.style" value="next_stop">
+                        Only reveal next stop
+                    </label>
+                </div>
+            </div>
+        </div>
              <div class="form-group row">
             <label for="sharing" class="col-sm-1"><b>Sharing</b></label>
             <div class="col-sm-6 ">
@@ -256,6 +274,7 @@
                     walking: 0,
                     biking: 0,
                     driving: 0,
+                    style: "entire_tour",
                     tour_content: {
                         use_template: true,
                         languages: ["English"],

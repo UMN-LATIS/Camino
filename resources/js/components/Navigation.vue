@@ -86,8 +86,10 @@ var otherMarkerGroup;
                 var decorator2;
                 var layerGroupItems = [];
                 var previousPoint = null;
-                targetNavs.forEach(targetPoint => {
-
+                targetNavs.forEach((targetPoint, index) => {
+                    if(this.tour.style !== "entire_tour" && index >= this.$store.state.maxStop) {
+                        return;
+                    }
                     if(!targetPoint.route) {
                         previousPoint = targetPoint;
                         return;
@@ -159,7 +161,10 @@ var otherMarkerGroup;
                 });
                 var otherLocation = null;
                 var otherLocations = [];
-                targetNavs.forEach(targetPoint => {
+                targetNavs.forEach((targetPoint, index) => {
+                    if(this.tour.style !== "entire_tour" && index >= this.$store.state.maxStop) {
+                        return;
+                    }
                     if(targetPoint.targetPoint != this.stage.targetPoint) {
                         otherLocation = L.marker([targetPoint.targetPoint.lat, targetPoint.targetPoint.lng], {
                         icon: otherLocationsCssIcon

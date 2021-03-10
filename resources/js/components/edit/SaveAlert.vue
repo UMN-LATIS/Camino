@@ -7,6 +7,7 @@
 .saveAlert {
     display: inline-block;
     margin-left: 10px;
+    margin-bottom: 0px;
 }
 .slide-fade-enter-active {
   transition: all .3s ease;

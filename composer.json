@@ -24,6 +24,7 @@
         "laravel/tinker": "^2.0",
         "owen-it/laravel-auditing": "^10.0",
         "razorbacks/laravel-shibboleth": "dev-umn",
+        "sentry/sentry-laravel": "^2.4",
         "socialiteproviders/facebook": "^1.0",
         "socialiteproviders/google": "^3.0",
         "socialiteproviders/microsoft-live": "^3.1",

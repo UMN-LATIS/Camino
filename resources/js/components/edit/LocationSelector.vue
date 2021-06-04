@@ -290,7 +290,10 @@ var otherMarkerGroup;
             renderMap: function () {
 
 
-                map = L.map('map', {drawControl: false}).fitWorld();
+                map = L.map('map', {
+                    drawControl: false,
+                    tap: false
+                }).fitWorld();
                 
                 if(this.basemap.use_basemap) {
                     var imageUrl = '/storage/' + this.basemap.image,

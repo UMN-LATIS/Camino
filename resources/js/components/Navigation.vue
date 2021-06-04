@@ -182,7 +182,9 @@ var otherMarkerGroup;
             },
             renderMap: function (e) {
 
-                map = L.map('map');
+                map = L.map('map', {
+                    tap: false
+                });
                 if(this.tour.tour_content.custom_base_map.use_basemap) {
                     var imageUrl = '/storage/' + this.tour.tour_content.custom_base_map.image,
                 imageBounds = [[this.tour.tour_content.custom_base_map.coords.upperleft.lat, this.tour.tour_content.custom_base_map.coords.upperleft.lng], [this.tour.tour_content.custom_base_map.coords.lowerright.lat, this.tour.tour_content.custom_base_map.coords.lowerright.lng]];

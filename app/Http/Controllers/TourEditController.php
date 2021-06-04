@@ -45,29 +45,33 @@ class TourEditController extends Controller
         } 
         
         if(!Auth::user()->can("publish publicly")) {
-            $request["public"] = $tour->public;
+            $request["public"] = $tour->public??false;
         }
+        
 
         $tour->fill($request);
         $tour->save();
         $tour->users()->attach(Auth::user());
         $tour->save();
 
-        $template = Tour::where("template", true)->first();
-        $startContent = $template->stops->first();
-        $endContent = $template->stops->last();
+        if($tour->tour_content["use_template"]) {
+            $template = Tour::where("template", true)->first();
+            $startContent = $template->stops->first();
+            $endContent = $template->stops->last();
 
-        $stop = new Stop;
-        $stop->stop_content = $startContent->stop_content;
-        $stop->sort_order = 0;
-        $tour->stops()->save($stop);
+            $stop = new Stop;
+            $stop->stop_content = $startContent->stop_content;
+            $stop->sort_order = 0;
+            $tour->stops()->save($stop);
 
 
-        $stop = new Stop;
-        $stop->stop_content = $endContent->stop_content;
-        $stop->sort_order = 1;
-        $tour->stops()->save($stop);
+            $stop = new Stop;
+            $stop->stop_content = $endContent->stop_content;
+            $stop->sort_order = 1;
+            $tour->stops()->save($stop);
+        }
         $tour->load("stops");
+        
         return response()->json($tour);
     }
 

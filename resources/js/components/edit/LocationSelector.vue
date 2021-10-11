@@ -238,6 +238,9 @@ var otherMarkerGroup;
                 }
 
                 targetNavs.forEach(targetPoint => {
+                    if(!targetPoint) {
+                        return;
+                    }
                     if(!targetPoint.targetPoint) {
                         return;
                     }

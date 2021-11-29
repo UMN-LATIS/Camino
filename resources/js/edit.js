@@ -65,19 +65,10 @@ Vue.component('feedback-view', feedbackView);
 import tourStop from './components/edit/TourStop.vue';
 Vue.component('tour-stop', tourStop);
 
-import hotwordEditor from './components/edit/HotwordEditor.vue';
-Vue.component('hotword-editor', hotwordEditor);
-
 
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
-
-
-import HotwordsTextEditor from "hotwords-text-editor"
-import "hotwords-text-editor/dist/hotwordsTextEditor.css";
-// Vue.use(HotwordsTextEditor);
-Vue.component('hotwords-text-editor', HotwordsTextEditor);
 
 
 import Permissions from './mixins/Permissions';

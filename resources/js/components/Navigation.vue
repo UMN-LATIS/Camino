@@ -1,7 +1,6 @@
 <template>
     <div>
-        <hotwords :text="formattedText" >
-        </hotwords>
+        <div>{{ formattedText }}</div>
         <button-modal v-if="stage.targetPoint" modalName="nav" :buttonText="stage.buttonTitle[$i18n.locale]" buttonIcon="far fa-map" :modalTitle="stage.buttonTitle[$i18n.locale]" v-on:modalShown="renderMap" v-on:modalClosed="destroyMap">
             <div style="height: 70vh; width: 100%" id="map">
 

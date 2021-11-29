@@ -29,7 +29,6 @@
         "bootstrap-vue": "^2.21.2",
         "bootstrap4-fs-modal": "^0.1.5",
         "dompurify": "^2.2.6",
-        "hotwords-text-editor": "git+https://github.com/UMN-LATIS/HotwordsTextEditor.git",
         "leaflet": "^1.7.1",
         "leaflet-draw": "^1.0.4",
         "leaflet-polylinedecorator": "git+https://github.com/UMN-LATIS/Leaflet.PolylineDecorator.git",

@@ -7,19 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class HotwordDigest extends Mailable
+class DeepDiveDigest extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $hotwords;
+    public $deepdives;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($hotwords)
+    public function __construct($deepdives)
     {
-        $this->hotwords = $hotwords;
+        $this->deepdives = $deepdives;
     }
 
     /**
@@ -29,6 +29,6 @@ class HotwordDigest extends Mailable
      */
     public function build()
     {
-        return $this->from('mcfa0086@umn.edu')->view('emails.hotwords');
+        return $this->from('mcfa0086@umn.edu')->view('emails.deepdives');
     }
 }

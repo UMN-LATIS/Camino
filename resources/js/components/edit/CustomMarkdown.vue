@@ -11,20 +11,10 @@ export default {
         "idkey": {
 
         }, 
-        "allowHotwords": {
-            default: true
-        }
     },
     data() {
         return {
             identifier: "md" + this.idkey,
-            custom: {
-                'hotword': {
-                    cmd: 'hotword',
-                    ico: 'fas fa-fire',
-                    title: 'Mark as hotword'
-                }
-            },
             options: {
                 lineWrapping: true,
                 autocorrect: true,
@@ -35,12 +25,7 @@ export default {
     },
     computed: {
         toolbar: function() {
-            if(this.allowHotwords) {
-                return "bold italic | numlist bullist quote | link hotword | preview";
-            }
-            else {
-                return "bold italic | numlist bullist quote | link | preview";
-            }
+            return "bold italic | numlist bullist quote | link | preview";
             
         }
     },
@@ -50,14 +35,5 @@ export default {
             this.$emit('update:text', value);
         }
     },
-    created() {
-        this.$root.$on('markdown-editor:hotword',  (md) => {
-            if(md.id == this.identifier) {
-                var text = md.editor.getSelection();
-                md.editor.replaceSelection("|" + text + "|");
-            }
-            
-        });
-    }
 }
 </script>

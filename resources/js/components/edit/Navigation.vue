@@ -13,6 +13,7 @@
               <div v-if="stage.targetPoint">
                   <b>Latitude:</b> {{ stage.targetPoint.lat}}, <b>Longitude:</b> {{ stage.targetPoint.lng}}
                 </div>
+
                 <location-selector :location.sync="stage.targetPoint" :route.sync="stage.route" :generalarea="previousStop" :tour="tour" :basemap="tour.tour_content.custom_base_map" :stop="stop"></location-selector>
             </div>
         </div>
@@ -42,21 +43,21 @@ export default {
     props: ["stage", "languages", "tour", "stop"],
     created() {
         if(!this.stage.text) {
-            Vue.set(this.stage, "text", {"placeholder": null});
-            Vue.set(this.stage, "buttonTitle", {"English":"Show Map"});
-            Vue.set(this.stage, "targetPoint", null);
+            this.$set(this.stage, "text", {"placeholder": null});
+            this.$set(this.stage, "buttonTitle", {"English":"Show Map"});
+            this.$set(this.stage, "targetPoint", null);
         }
     },
     computed: {
         previousStop: function() {
             if(this.stop.id) {
                 var currentStop = this.tour.stops.findIndex((e)=> e.id == this.stop.id);
-                var targetIndex = (currentStop>0)?currentStop - 1:null;
+                var targetIndex = (currentStop>0)?currentStop - 1:false;
             }
             else {
-                var targetIndex = (this.tour.stops.length>2)?this.tour.stops.length - 2:null;
+                var targetIndex = (this.tour.stops.length>1)?this.tour.stops.length - 1:false;
             }
-            if(!targetIndex) {
+            if(targetIndex === false) {
                 return this.tour.start_location;
             }
             else {

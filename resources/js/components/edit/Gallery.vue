@@ -20,7 +20,7 @@
         props: ["stage", "languages", "tour"],
         created() {
             if (!this.stage.images) {
-                Vue.set(this.stage, "images",[]);
+                this.$set(this.stage, "images",[]);
             }
         },
         methods: {

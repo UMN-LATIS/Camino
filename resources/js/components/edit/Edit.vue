@@ -379,7 +379,7 @@
                         .then((res) => {
                             this.$router.replace("/creator/" + res.data.id);
                             this.tour.id = res.data.id;
-                            Vue.set(this.tour, "stops", res.data.stops);
+                            this.$set(this.tour, "stops", res.data.stops);
                             this.showAlert = true;
                         }).catch(res => {
                             this.error = res;

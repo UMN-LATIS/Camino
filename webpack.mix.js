@@ -16,16 +16,14 @@ mix.webpackConfig({
    }
 });
 
-mix.js('resources/js/app.js', 'public/js')
-.sass('resources/sass/app.scss', 'public/css');
+mix.js('resources/js/app.js', 'public/js').vue().sass('resources/sass/app.scss', 'public/css');
 
 
 if (mix.inProduction()) {
    mix.version();
 }
 
-mix.js('resources/js/edit.js', 'public/js')
-.sass('resources/sass/edit.scss', 'public/css');
+mix.js('resources/js/edit.js', 'public/js').vue().sass('resources/sass/edit.scss', 'public/css');
 
 
 if (mix.inProduction()) {

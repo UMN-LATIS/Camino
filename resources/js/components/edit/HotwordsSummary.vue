@@ -20,8 +20,8 @@ export default {
     props: ["stage", "languages", "tour"],
     created() {
         if(!this.stage.text) {
-            Vue.set(this.stage, "text", {"placeholder": null});
-            Vue.set(this.stage, "request_email", true);
+            this.$set(this.stage, "text", {"placeholder": null});
+            this.$set(this.stage, "request_email", true);
         }
     }
 }

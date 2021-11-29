@@ -88,7 +88,7 @@ export default {
             .then((res) => {
     
                 if(res.data.tour_content.hotWords.length == 0 ) {
-                    Vue.set(res.data.tour_content, "hotWords", {});
+                    this.$set(res.data.tour_content, "hotWords", {});
                 }
                 this.tour = res.data
             });

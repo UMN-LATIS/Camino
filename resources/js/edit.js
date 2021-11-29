@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue' 
 
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?

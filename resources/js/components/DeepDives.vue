@@ -1,6 +1,10 @@
 <template>
     <ul>
-        <li v-for="deepdive, index in stage.deepdives" :key="index"><input type="checkbox" :value="deepdive" @change="change($event.target.checked, deepdive)" :checked="checked(deepdive)">{{ deepdive.title[$i18n.locale] }}</li>
+        <li v-for="deepdive, index in stage.deepdives" :key="index" class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" :value="deepdive" @change="change($event.target.checked, deepdive)" :checked="checked(deepdive)">{{ deepdive.title[$i18n.locale] }}
+            </label>
+        </li>
     </ul>
 
 </template>

@@ -1,5 +1,5 @@
 <template>
-    <div>{{ formattedText }}</div>
+    <div v-html="formattedText"></div>
 
 </template>
 

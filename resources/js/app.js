@@ -60,9 +60,10 @@ Vue.component('ar', require('./components/AR.vue').default);
 Vue.component('embed-frame', require('./components/EmbedFrame.vue').default);
 Vue.component('ar-embed', require('./components/ARembed.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
+Vue.component('deepdives', require('./components/DeepDives.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
-Vue.component('hotwords', require('./components/Hotwords.vue').default);
-Vue.component('hotword', require('./components/Hotword.vue').default);
+// Vue.component('hotwords', require('./components/Hotwords.vue').default);
+// Vue.component('hotword', require('./components/Hotword.vue').default);
 Vue.component('language', require('./components/Language.vue').default);
 Vue.component('feedback', require('./components/Feedback.vue').default);
 Vue.component('find-tour', require('./components/FindTour.vue').default);
@@ -74,7 +75,7 @@ Vue.component('transport-icon', require('./components/TransportIcon.vue').defaul
 
 Vue.component('debug-bar', require('./components/DebugBar.vue').default);
 Vue.component('separator', require('./components/Separator.vue').default);
-Vue.component('hotwords-summary', require('./components/HotwordsSummary.vue').default);
+// Vue.component('hotwords-summary', require('./components/HotwordsSummary.vue').default);
 
 
 import { map } from "leaflet";

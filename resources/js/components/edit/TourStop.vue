@@ -77,6 +77,7 @@
                 stageTypes: {
                     "separator": "Separator",
                     "ar": "AR",
+                    "deepdives": "Deep Dives",
                     "embed-frame": "Embed",
                     "guide": "Guide",
                     "gallery": "Gallery",

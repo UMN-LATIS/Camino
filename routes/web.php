@@ -21,7 +21,7 @@ Route::get('/api/tours/', "HomeController@loadTours");
 Route::get('/ar/{tour}/{stage}/{locale}/{simulateLocation?}', "HomeController@ar");
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/findTours', 'HomeController@findTours');
-Route::post('/emailHotwords', 'HomeController@emailHotwords');
+Route::post('/emailDeepDives', 'HomeController@emailDeepDives');
 Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
 

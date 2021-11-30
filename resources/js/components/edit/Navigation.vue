@@ -55,7 +55,7 @@ export default {
                 var targetIndex = (currentStop>0)?currentStop - 1:false;
             }
             else {
-                var targetIndex = (this.tour.stops.length>1)?this.tour.stops.length - 1:false;
+                var targetIndex = (this.tour.stops.length>2)?this.tour.stops.length - 2:false;
             }
             if(targetIndex === false) {
                 return this.tour.start_location;

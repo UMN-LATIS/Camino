@@ -34,7 +34,7 @@ export const store = new Vuex.Store({
             state.deepdives[router.currentRoute.params.tourId].push(deepdive);
         },
         removeDeepDive(state, deepdive) {
-            Vue.set(state.deepdives, router.currentRoute.params.tourId, state.deepdives[router.currentRoute.params.tourId].filter(w => w !== deepdive))
+            Vue.set(state.deepdives, router.currentRoute.params.tourId, state.deepdives[router.currentRoute.params.tourId].filter(w =>  JSON.stringify(w) !=  JSON.stringify(deepdive)))
 
         },
         setSimulateLocation(state, simulateLocation) {

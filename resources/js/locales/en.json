@@ -18,10 +18,10 @@
       "showar": "Look around",
       "warning": "Augmented reality view is only available on mobile devices like smartphones and tablets"
     },
-    "hotwords": {
+    "deepdives": {
       "email": "Send me a copy",
       "disclaimer": "We promise not to do terrible things with your email",
-      "none": "No hotwords selected"
+      "none": "No deep dives selected"
     },
     "feedback": {
       "button": "Leave Feedback"

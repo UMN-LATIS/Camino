@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$store.getters.hotwords.length > 0 && Object.keys(assembledHotwords).length > 0">
+    <div v-if="$store.getters.deepdives.length > 0">
         <div v-html="formattedText">
         </div>
 
@@ -7,20 +7,20 @@
             <label for="email" class="sr-only">E-mail address</label>
             <input type="email" class="form-control mr-2 col-7 col-md-3" name="" v-model="email" id="email"
                 placeholder="E-mail address" aria-describedby="emailHelpId">
-            <button type="submit" class="btn btn-primary" @click="sendHotwords"
-                :disabled="success">{{ $t("stage.hotwords.email") }}</button>
+            <button type="submit" class="btn btn-primary" @click="sendDeepDives"
+                :disabled="success">{{ $t("stage.deepdives.email") }}</button>
             <i class="fas fa-check-circle ml-2" v-if="success"></i>
         </div>
-        <small id="emailHelpId" class="form-text text-muted">{{ $t("stage.hotwords.disclaimer") }}</small>
-        <div class="card mt-2 mb-2" v-for="(hotwordContent, key) in assembledHotwords" :key="key">
+        <small id="emailHelpId" class="form-text text-muted">{{ $t("stage.deepdives.disclaimer") }}</small>
+        <div class="card mt-2 mb-2" v-for="(deepdive, key) in $store.getters.deepdives" :key="key">
             <div class="card-body">
-                <h5 class="card-title">{{ key }}</h5>
-                <p class="card-text" v-html="hotwordContent"></p>
+                <h5 class="card-title">{{ deepdive.title[$i18n.locale] }}</h5>
+                <p class="card-text" v-html="deepdive.text[$i18n.locale]"></p>
             </div>
         </div>
     </div>
     <div v-else>
-        <p>{{ $t("stage.hotwords.none") }}</p>
+        <p>{{ $t("stage.deepdives.none") }}</p>
     </div>
 </template>
 
@@ -53,22 +53,13 @@
             formattedText: function () {
                 return this.marked(this.purify(this.stage.text[this.$i18n.locale]))
             },
-            assembledHotwords: function () {
-
-                return Object.keys(this.tour.tour_content.hotWords)
-                    .sort()
-                    .filter(key => this.$store.getters.hotwords.includes(key))
-                    .reduce((obj, key) => {
-                        obj[key] = this.tour.tour_content.hotWords[key];
-                        return obj;
-                    }, {});
-            }
+            
         },
         methods: {
-            sendHotwords: function () {
-                axios.post("/emailHotwords", {
+            sendDeepDives: function () {
+                axios.post("/emailDeepDives", {
                         email: this.email,
-                        hotwords: this.assembledHotwords
+                        deepDives: this.$store.getters.deepdives
                     })
                     .then(res => {
                         this.success = true;

@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h2>{{ $t('stage.deepdives.title') }}</h2>
-
     <ul>
         <li v-for="deepdive, index in stage.deepdives" :key="index" class="form-check">
             <label class="form-check-label">

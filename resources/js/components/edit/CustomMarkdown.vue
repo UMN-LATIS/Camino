@@ -1,5 +1,5 @@
 <template>
-     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" :toolbar="toolbar" :extend="custom" :options="options" theme="outline-secondary btn-sm"></markdown-editor>
+     <markdown-editor height="150" :value="text" v-on:input="inputUpdated($event)" :id="identifier" :toolbar="toolbar"  :options="options" theme="outline-secondary btn-sm"></markdown-editor>
 </template>
 
 <script>

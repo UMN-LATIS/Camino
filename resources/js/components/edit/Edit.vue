@@ -161,7 +161,7 @@
 
         <div class="form-check">
             <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template">
+                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template" disabled>
                 Use standard template
             </label>
         </div>

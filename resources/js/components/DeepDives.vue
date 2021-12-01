@@ -1,4 +1,7 @@
 <template>
+    <div>
+        <h2>{{ $t('stage.deepdives.title') }}</h2>
+
     <ul>
         <li v-for="deepdive, index in stage.deepdives" :key="index" class="form-check">
             <label class="form-check-label">
@@ -6,6 +9,7 @@
             </label>
         </li>
     </ul>
+    </div>
 
 </template>
 
@@ -17,7 +21,7 @@ export default {
     },
     methods: {
         checked(deepdive) {
-            return this.$store.getters.deepdives.map(d=>d.title[this.$i18n.locale]).includes(deepdive.title[this.$i18n.locale]);
+            return this.$store.getters.deepdives.map(d=>d.id).includes(deepdive.id);
         },
         change(status, deepdive) {
             if(status) {

@@ -38,6 +38,7 @@
                 <ul class="list-group">
                     <li class="list-group-item" v-for="(deepdive, index) in $store.getters.deepdives" :key="index">{{deepdive}}</li>
                 </ul>
+                <button class="btn btn-outline-primary" @click="$store.commit('resetDives')">Reset Deep Dives</button>
             </div>
         </div>
     </div>

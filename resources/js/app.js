@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue' 
 
 import VueProgressBar from 'vue-progressbar'
 
@@ -60,9 +60,8 @@ Vue.component('ar', require('./components/AR.vue').default);
 Vue.component('embed-frame', require('./components/EmbedFrame.vue').default);
 Vue.component('ar-embed', require('./components/ARembed.vue').default);
 Vue.component('guide', require('./components/Guide.vue').default);
+Vue.component('deepdives', require('./components/DeepDives.vue').default);
 Vue.component('navigation', require('./components/Navigation.vue').default);
-Vue.component('hotwords', require('./components/Hotwords.vue').default);
-Vue.component('hotword', require('./components/Hotword.vue').default);
 Vue.component('language', require('./components/Language.vue').default);
 Vue.component('feedback', require('./components/Feedback.vue').default);
 Vue.component('find-tour', require('./components/FindTour.vue').default);
@@ -74,7 +73,7 @@ Vue.component('transport-icon', require('./components/TransportIcon.vue').defaul
 
 Vue.component('debug-bar', require('./components/DebugBar.vue').default);
 Vue.component('separator', require('./components/Separator.vue').default);
-Vue.component('hotwords-summary', require('./components/HotwordsSummary.vue').default);
+Vue.component('deepdives-summary', require('./components/DeepDivesSummary.vue').default);
 
 
 import { map } from "leaflet";
@@ -100,7 +99,6 @@ Vue.mixin({
     methods: {
         purify: function (input) {
             return DOMPurify.sanitize(input, {
-                ALLOWED_TAGS: ["hotword"]
             }).replace(/&gt;+/g, '>'); // convert gt back to > so markdown can do its thing
         }
     }

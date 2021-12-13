@@ -6,7 +6,7 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+import Vue from 'vue' 
 
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
@@ -65,19 +65,10 @@ Vue.component('feedback-view', feedbackView);
 import tourStop from './components/edit/TourStop.vue';
 Vue.component('tour-stop', tourStop);
 
-import hotwordEditor from './components/edit/HotwordEditor.vue';
-Vue.component('hotword-editor', hotwordEditor);
-
 
 import 'v-markdown-editor/dist/v-markdown-editor.css';
 import Editor from 'v-markdown-editor'
 Vue.use(Editor);
-
-
-import HotwordsTextEditor from "hotwords-text-editor"
-import "hotwords-text-editor/dist/hotwordsTextEditor.css";
-// Vue.use(HotwordsTextEditor);
-Vue.component('hotwords-text-editor', HotwordsTextEditor);
 
 
 import Permissions from './mixins/Permissions';
@@ -100,10 +91,11 @@ Vue.component('separator', require('./components/edit/Separator.vue').default);
 Vue.component('language', require('./components/edit/LanguageSelector.vue').default);
 Vue.component('navigation', require('./components/edit/Navigation.vue').default);
 Vue.component('guide', require('./components/edit/Guide.vue').default);
+Vue.component('deepdives', require('./components/edit/DeepDives.vue').default);
 Vue.component('ar', require('./components/edit/AR.vue').default);
 Vue.component('embed-frame', require('./components/edit/Embed.vue').default);
 Vue.component('gallery', require('./components/edit/Gallery.vue').default);
-Vue.component('hotwords-summary', require('./components/edit/HotwordsSummary.vue').default);
+Vue.component('deep-dive-summary', require('./components/edit/DeepDiveSummary.vue').default);
 Vue.component('feedback', require('./components/edit/Feedback.vue').default);
 Vue.component('quiz', require('./components/edit/Quiz.vue').default);
 
@@ -138,12 +130,12 @@ const routes = [{
         component: tourStop,
         props: true,
     },
-    {
-        path: '/creator/:tourId?/hotwords',
-        name: "editHotwords",
-        component: hotwordEditor,
-        props: true,
-    }, 
+    // {
+    //     path: '/creator/:tourId?/hotwords',
+    //     name: "editHotwords",
+    //     component: hotwordEditor,
+    //     props: true,
+    // }, 
     {
         path: '/creator/:tourId?/viewFeedback',
         name: "tourFeedback",

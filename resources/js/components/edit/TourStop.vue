@@ -77,6 +77,7 @@
                 stageTypes: {
                     "separator": "Separator",
                     "ar": "AR",
+                    "deepdives": "Deep Dives",
                     "embed-frame": "Embed",
                     "guide": "Guide",
                     "gallery": "Gallery",
@@ -195,7 +196,7 @@
                         } else if (this.tour.tour_content.use_template) {
                             this.stop = this.stop_template;
                         }
-                        Vue.nextTick( () => {
+                        this.$nextTick( () => {
                             this.isDirty = false;
                         })
                         

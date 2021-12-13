@@ -1,6 +1,5 @@
 <template>
-    <hotwords :text="formattedText" >
-    </hotwords>
+    <div v-html="formattedText"></div>
 
 </template>
 

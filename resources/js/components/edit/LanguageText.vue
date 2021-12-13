@@ -4,7 +4,7 @@
              <div class="row">
                  <div v-for="(language, key) in languages" :key="key" class="form-group col-sm-6">
                      <label :for="'field' + key + randomIdentifier" class=""><slot/> ({{ language }})</label>
-                    <hotwords-text-editor v-if="largetext" :editorData.sync="text[language]" :idkey="'field' + key + randomIdentifier"></hotwords-text-editor>
+                    <custom-markdown v-if="largetext" :text.sync="text[language]" :idkey="'field' + key + randomIdentifier"></custom-markdown>
                 </div>
                 
             </div>

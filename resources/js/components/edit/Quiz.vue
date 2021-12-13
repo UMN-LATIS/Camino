@@ -73,14 +73,14 @@
         props: ["stage", "languages", "tour"],
         created() {
             if (!this.stage.questionText) {
-                Vue.set(this.stage, "questionText",{"placeholder": null});
-                Vue.set(this.stage, "hintText",{"placeholder": null});
-                Vue.set(this.stage, "quizType","multiple_choice");
-                Vue.set(this.stage, "responses", []);
-                Vue.set(this.stage, "requireCorrect", 0);
-                Vue.set(this.stage, "buttonText", {"placeholder": null, "English": "Check my Answer"});
-                Vue.set(this.stage, "answerPrompt", {"placeholder": null, "English": "Answer"});
-                Vue.set(this.stage, "hintPrompt", {"placeholder": null, "English": "Show Hint"});
+                this.$set(this.stage, "questionText",{"placeholder": null});
+                this.$set(this.stage, "hintText",{"placeholder": null});
+                this.$set(this.stage, "quizType","multiple_choice");
+                this.$set(this.stage, "responses", []);
+                this.$set(this.stage, "requireCorrect", 0);
+                this.$set(this.stage, "buttonText", {"placeholder": null, "English": "Check my Answer"});
+                this.$set(this.stage, "answerPrompt", {"placeholder": null, "English": "Answer"});
+                this.$set(this.stage, "hintPrompt", {"placeholder": null, "English": "Show Hint"});
             }
             
         },

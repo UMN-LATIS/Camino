@@ -15,7 +15,7 @@ const vuexLocal = new VuexPersistence({
 
 export const store = new Vuex.Store({
     state: {
-        hotwords: [],
+        deepdives: [],
         maxStop: 0,
         config: { 
             simulateLocation: false,
@@ -27,14 +27,14 @@ export const store = new Vuex.Store({
         setMaxStop(state, maxStop) {
             state.maxStop = maxStop;
         },
-        addHotword(state, hotword) {
-            if (!Array.isArray(state.hotwords[router.currentRoute.params.tourId])) {
-                Vue.set(state.hotwords, router.currentRoute.params.tourId, []);
+        addDeepDive(state, deepdive) {
+            if (!Array.isArray(state.deepdives[router.currentRoute.params.tourId])) {
+                Vue.set(state.deepdives, router.currentRoute.params.tourId, []);
             }
-            state.hotwords[router.currentRoute.params.tourId].push(hotword);
+            state.deepdives[router.currentRoute.params.tourId].push(deepdive);
         },
-        removeHotword(state, hotword) {
-            Vue.set(state.hotwords, router.currentRoute.params.tourId, state.hotwords[router.currentRoute.params.tourId].filter(w => w !== hotword))
+        removeDeepDive(state, deepdive) {
+            Vue.set(state.deepdives, router.currentRoute.params.tourId, state.deepdives[router.currentRoute.params.tourId].filter(w =>  w.id !=  deepdive.id))
 
         },
         setSimulateLocation(state, simulateLocation) {
@@ -68,14 +68,17 @@ export const store = new Vuex.Store({
         },
         resetLocks(state) {
             Vue.set(state, "locks", []);
+        },
+        resetDives(state) {
+            Vue.set(state, "deepdives", []);
         }
     },
     getters: {
-        hotwords: state => {
-            if (!Array.isArray(state.hotwords[router.currentRoute.params.tourId]) ) {
+        deepdives: state => {
+            if (!Array.isArray(state.deepdives[router.currentRoute.params.tourId]) ) {
                 return [];
             }
-            return state.hotwords[router.currentRoute.params.tourId];
+            return state.deepdives[router.currentRoute.params.tourId];
         }
     },
     plugins: [vuexLocal.plugin]

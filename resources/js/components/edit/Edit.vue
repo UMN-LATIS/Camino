@@ -161,7 +161,7 @@
 
         <div class="form-check">
             <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template">
+                <input type="checkbox" class="form-check-input" v-model="tour.tour_content.use_template" disabled>
                 Use standard template
             </label>
         </div>
@@ -204,14 +204,14 @@
             </div>
         </draggable>
 
-        <div class="form-group row mt-2">
+        <!-- <div class="form-group row mt-2">
             <label for="" class="col-sm-1 col-form-label">Hotwords</label>
             <div class="col-sm-6">
                 <div class="col-form-label">You have {{ hotwords.length }} hotwords.</div>
                 <router-link v-if="hotwords.length" :to="{ name: 'editHotwords', params: { tourId: tourId }}"
                     class="btn btn-outline-primary">Manage Hotwords <i class="fas fa-edit"></i></router-link>
             </div>
-        </div>
+        </div> -->
 
 
         <div class="alert alert-danger" role="alert" v-if="errors.length > 0">
@@ -222,12 +222,12 @@
                 </li>
             </ul>
         </div>
-
-        <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank"><i
-                class="fas fa-eye"></i> Preview</a>
-        <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
-        <save-alert :showAlert.sync="showAlert" />
-
+        <div class="mt-2">
+            <a :href="'/tour/' + tour.id" v-if="tour.id" class="btn btn-outline-success" target="_blank"><i
+                    class="fas fa-eye"></i> Preview</a>
+            <button @click="save" class="btn btn-primary"><i class="fas fa-save"></i> Save</button>
+            <save-alert :showAlert.sync="showAlert" />
+        </div>
     </div>
 </template>
 
@@ -278,7 +278,6 @@
                     tour_content: {
                         use_template: true,
                         languages: ["English"],
-                        hotWords: {},
                         custom_base_map: {
                             use_basemap: false,
                             image: null,
@@ -307,26 +306,6 @@
             tourURL: function () {
                 return location.protocol + "//" + location.hostname + (location.port?":":"")+location.port + "/tour/" + this.tourId;
             },
-            hotwords: function () {
-                return this.tour.stops.map(s => {
-                    return s.stop_content.stages.map(stage => {
-                        if (!stage.text) {
-                            return [];
-                        }
-                        var cleanedMatches = [];
-                        Object.entries(stage.text).forEach(([key, value]) => {
-                            if (value) {
-                                var matches = value.match(/<hotword/g);
-                                if (matches) {
-                                    cleanedMatches.push(matches.map(w => w.replace(
-                                        /[\|\|]/g, '')));
-                                }
-                            }
-                        });
-                        return cleanedMatches;
-                    });
-                }).flat(4);
-            }
         },
         methods: {
             deleteStop: function (stopId) {
@@ -379,7 +358,7 @@
                         .then((res) => {
                             this.$router.replace("/creator/" + res.data.id);
                             this.tour.id = res.data.id;
-                            Vue.set(this.tour, "stops", res.data.stops);
+                            this.$set(this.tour, "stops", res.data.stops);
                             this.showAlert = true;
                         }).catch(res => {
                             this.error = res;

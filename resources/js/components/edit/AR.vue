@@ -61,13 +61,13 @@
         props: ["stage", "languages", "tour", "stop"],
         created() {
             if (!this.stage.text && !this.stage.waypoints) {
-                Vue.set(this.stage, "text", {
+                this.$set(this.stage, "text", {
                     "placeholder": null
                 });
-                Vue.set(this.stage, "buttonTitle", {
+                this.$set(this.stage, "buttonTitle", {
                     "English": "Show AR"
                 });
-                Vue.set(this.stage, "waypoints", []);
+                this.$set(this.stage, "waypoints", []);
             }
         },
         computed: {

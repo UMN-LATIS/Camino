@@ -1,6 +1,9 @@
 <?php
 
+use Database\Seeders\DefaultTourSeeder;
+use Database\Seeders\RolesAndPermissionsSeeder;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Contracts\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        $this->call([
+            // UsersTableSeeder::class,
+            RolesAndPermissionsSeeder::class,
+            DefaultTourSeeder::class
+        ]);
     }
 }

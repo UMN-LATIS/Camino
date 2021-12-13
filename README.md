@@ -35,6 +35,23 @@ npm run watch
 
 The application will be running on <http://localhost>.
 
+Login to create a user. To promote to administrator:
+
+```sh
+sail tinker
+```
+
+Then:
+
+```php
+\App\User::find(1)->assignRole("administrator");
+```
+
+Note:
+
+- The seeded default tour is a tour template.
+- The tour map will be gray until a new tour is created.
+
 ## Using the Application
 
 ```sh

@@ -18,7 +18,7 @@ class UploadController extends Controller
             $file = $request->file('upload');
             if(str_contains($file->getMimeType(), "image")){
                 $validator = Validator::make($request->all(), [
-                 'image'  => 'required|max:8192',
+                 'upload'  => 'required|max:8192',
                 ]);
                 if ($validator->fails()) {
                     return response()->json(['error' => $validator->errors()->getMessages()], 500);

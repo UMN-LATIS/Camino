@@ -84,7 +84,7 @@ Vue.component('error', require('./components/error.vue').default);
 Vue.component('transport-icon', require('./components/TransportIcon.vue').default);
 
 Vue.component('custom-markdown', require('./components/edit/CustomMarkdown.vue').default);
-Vue.component('image-upload', require('./components/edit/ImageUpload.vue').default);
+Vue.component('file-upload', require('./components/edit/FileUpload.vue').default);
 Vue.component('save-alert', require('./components/edit/SaveAlert.vue').default);
 
 Vue.component('separator', require('./components/edit/Separator.vue').default);
@@ -95,6 +95,7 @@ Vue.component('deepdives', require('./components/edit/DeepDives.vue').default);
 Vue.component('ar', require('./components/edit/AR.vue').default);
 Vue.component('embed-frame', require('./components/edit/Embed.vue').default);
 Vue.component('gallery', require('./components/edit/Gallery.vue').default);
+Vue.component('audiofile', require('./components/edit/Audio.vue').default);
 Vue.component('deep-dive-summary', require('./components/edit/DeepDiveSummary.vue').default);
 Vue.component('feedback', require('./components/edit/Feedback.vue').default);
 Vue.component('quiz', require('./components/edit/Quiz.vue').default);

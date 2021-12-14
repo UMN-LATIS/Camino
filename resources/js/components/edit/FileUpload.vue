@@ -4,16 +4,16 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3 fa-3x" v-if="image">
+                        <div class="col-md-3 fa-3x" v-if="file">
                             <i class="fas fa-spinner fa-spin"></i>
                         </div>
                         <div class="col">
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" ref="file" v-on:change="onImageChange" class="custom-file-input"
-                                        id="inputGroupFile02" @change="uploadImage">
+                                    <input type="file" ref="file" v-on:change="onFileChange" class="custom-file-input"
+                                        id="inputGroupFile02" @change="uploadFile">
                                     <label class="custom-file-label" for="inputGroupFile02"
-                                        aria-describedby="inputGroupFileAddon02">Choose an image</label>
+                                        aria-describedby="inputGroupFileAddon02">Select {{ type }}</label>
                                 </div>
                                 <!-- <div class="input-group-append">
                                     <button class="btn btn-outline-success" id="inputGroupFileAddon02" @click="uploadImage">Upload</button>
@@ -34,40 +34,42 @@
 
 <script>
     export default {
+        props: ["type"],
         data() {
             return {
-                image: '',
+                file: '',
                 errorText: null
             }
         },
         methods: {
-            onImageChange(e) {
+            onFileChange(e) {
                 let files = e.target.files || e.dataTransfer.files;
                 if (!files.length)
                     return;
-                this.createImage(files[0]);
+                this.createFile(files[0]);
             },
-            createImage(file) {
+            createFile(file) {
                 let reader = new FileReader();
                 let vm = this;
                 reader.onload = (e) => {
-                    vm.image = e.target.result;
+                    vm.file = e.target.result;
                 };
                 reader.readAsDataURL(file);
             },
-            uploadImage() {
+            uploadFile() {
                 let data = new FormData()
                 this.errorText = null;
-                data.append('image', this.$refs.file.files[0])
-                axios.post('/creator/image/store', data).then(response => {
+                data.append('upload', this.$refs.file.files[0])
+                axios.post('/creator/file/store', data).then(response => {
                     if (response.data.success) {
-                        this.$emit("imageuploaded", response.data.image);    
+                        this.$emit("fileuploaded", response.data.file);    
                         
                     }
+    console.log(response);
                 })
                 .catch((error) => {
 
-                    this.errorText = error.response.data.error.image;
+                    this.errorText = error.response.data.error.file;
                 });
             }
         }

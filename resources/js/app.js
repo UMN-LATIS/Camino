@@ -55,6 +55,7 @@ Vue.component('navbar', require('./components/Nav.vue').default);
 Vue.component('site-nav', require('./components/SiteNav.vue').default);
 Vue.component('stop-content', require('./components/StopContent.vue').default);
 Vue.component('gallery', require('./components/Gallery.vue').default);
+Vue.component('audiofile', require('./components/Audio.vue').default);
 Vue.component('quiz', require('./components/Quiz.vue').default);
 Vue.component('ar', require('./components/AR.vue').default);
 Vue.component('embed-frame', require('./components/EmbedFrame.vue').default);

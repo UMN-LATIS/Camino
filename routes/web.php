@@ -31,8 +31,8 @@ Route::group(['prefix'=>'creator', 'middleware' => ['auth']], function () {
     Route::resource("edit", "TourEditController")->parameters([
     'edit' => 'tour']);
 
-    Route::post('/image/store', 'ImageController@store');
-    Route::delete('/image/{filename}', 'ImageController@delete');
+    Route::post('/file/store', 'UploadController@store');
+    Route::delete('/file/{filename}', 'UploadController@delete');
     Route::post("/edit/{tour}/stop", "TourEditController@createStop");
     Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
     Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");

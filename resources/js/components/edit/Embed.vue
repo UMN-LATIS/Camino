@@ -38,7 +38,7 @@ export default {
     props: ["stage", "languages", "tour"],
     created() {
         if(!this.stage.buttonTitle) {
-            this.$set(this.stage, "buttonTitle", {"English":"Show Embed"});
+            this.$set(this.stage, "buttonTitle", {"en":"Show Embed"});
             this.$set(this.stage, "url", null);
         }
     }

@@ -12,11 +12,11 @@
         <div class="form-group row">
             <label class="col-sm-1 "><b>Languages</b></label>
             <div class="col-sm-10 flex-wrap flex-column language-container">
-                <div v-for="(language, key) in languages" :key="key" class="form-check">
+                <div v-for="(language, key) in globalLanguages" :key="key" class="form-check">
                     <label class="form-check-label">
                         <input :value="key" v-model="tour.tour_content.languages" type="checkbox"
                             class="form-check-input">
-                        {{ key }}
+                        {{ language }}
                     </label>
                 </div>
             </div>
@@ -277,7 +277,7 @@
                     style: "entire_tour",
                     tour_content: {
                         use_template: true,
-                        languages: ["English"],
+                        languages: ["en"],
                         custom_base_map: {
                             use_basemap: false,
                             image: null,

@@ -78,9 +78,9 @@
                 this.$set(this.stage, "quizType","multiple_choice");
                 this.$set(this.stage, "responses", []);
                 this.$set(this.stage, "requireCorrect", 0);
-                this.$set(this.stage, "buttonText", {"placeholder": null, "English": "Check my Answer"});
-                this.$set(this.stage, "answerPrompt", {"placeholder": null, "English": "Answer"});
-                this.$set(this.stage, "hintPrompt", {"placeholder": null, "English": "Show Hint"});
+                this.$set(this.stage, "buttonText", {"placeholder": null, "en": "Check my Answer"});
+                this.$set(this.stage, "answerPrompt", {"placeholder": null, "en": "Answer"});
+                this.$set(this.stage, "hintPrompt", {"placeholder": null, "en": "Show Hint"});
             }
             
         },

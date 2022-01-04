@@ -65,7 +65,7 @@
                     "placeholder": null
                 });
                 this.$set(this.stage, "buttonTitle", {
-                    "English": "Show AR"
+                    "en": "Show AR"
                 });
                 this.$set(this.stage, "waypoints", []);
             }

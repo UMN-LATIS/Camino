@@ -100,7 +100,7 @@
                         },
                         "stages": [{
                                 "text": {
-                                    "English": "Navigation"
+                                    "en": "Navigation"
                                 },
                                 "type": "separator"
                             },
@@ -110,13 +110,13 @@
                                 },
                                 "type": "navigation",
                                 "buttonTitle": {
-                                    "English": "Show Map"
+                                    "en": "Show Map"
                                 },
                                 "targetPoint": null
                             },
                             {
                                 "text": {
-                                    "English": "Guide"
+                                    "en": "Guide"
                                 },
                                 "type": "separator"
                             },

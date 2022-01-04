@@ -1,14 +1,8 @@
 
 export  const languages = {
-    "English": {
-
-    },
-    "Español": {
-        
-    },
-    "Français" :{
-
-    }
+    "en": "English",
+    "es": "Español",
+    "fr": "Français"
 }
 
 

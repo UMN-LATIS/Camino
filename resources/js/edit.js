@@ -146,7 +146,7 @@ const routes = [{
 ];
 
 import { languages } from './languages';
-Vue.prototype.languages= languages;
+Vue.prototype.globalLanguages= languages;
 
 const router = new VueRouter({
     mode: 'history',

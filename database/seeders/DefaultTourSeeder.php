@@ -19,7 +19,7 @@ class DefaultTourSeeder extends Seeder
             'public'=>0,
             'tour_content' => json_decode('{
                 "languages": [
-                    "English"
+                    "en"
                 ],
                 "use_template": true,
                 "custom_base_map": {
@@ -42,7 +42,7 @@ class DefaultTourSeeder extends Seeder
          $stop = new \App\Stop;
         $stop->stop_content = json_decode('{
             "title": {
-                "English": "Start",
+                "en": "Start",
                 "placeholder": null
             },
             "stages": [
@@ -51,19 +51,19 @@ class DefaultTourSeeder extends Seeder
                 },
                 {
                     "text": {
-                        "English": "Use the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material. \n\nSome stops may provide \"deep dives\". Select topics you\'re especially interested in. At the end of your tour, we\'ll give you a list of the topics you marked, with additional information so you can dive deeper.",
+                        "en": "Use the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material. \n\nSome stops may provide \"deep dives\". Select topics you\'re especially interested in. At the end of your tour, we\'ll give you a list of the topics you marked, with additional information so you can dive deeper.",
                         "placeholder": null
                     },
                     "type": "guide"
                 },
                 {
                     "text": {
-                        "English": "You\'ll start the tour at XXX. You\'ll be walking approximately XX as you complete this tour.",
+                        "en": "You\'ll start the tour at XXX. You\'ll be walking approximately XX as you complete this tour.",
                         "placeholder": null
                     },
                     "type": "navigation",
                     "buttonTitle": {
-                        "English": "Tour Preview"
+                        "en": "Tour Preview"
                     },
                     "targetPoint": null
                 }
@@ -74,13 +74,13 @@ class DefaultTourSeeder extends Seeder
         $stop = new \App\Stop;
         $stop->stop_content = json_decode('{
             "title": {
-                "English": "Finish",
+                "en": "Finish",
                 "placeholder": null
             },
             "stages": [
                 {
                     "text": {
-                        "English": "You\'ve made it to the end of the tour. We hope you enjoyed this experience. Please leave us feedback on your experience.",
+                        "en": "You\'ve made it to the end of the tour. We hope you enjoyed this experience. Please leave us feedback on your experience.",
                         "placeholder": null
                     },
                     "type": "guide"
@@ -93,13 +93,13 @@ class DefaultTourSeeder extends Seeder
                 },
                 {
                     "text": {
-                        "English": "Deep Dives"
+                        "en": "Deep Dives"
                     },
                     "type": "separator"
                 },
                 {
                     "text": {
-                        "English": "Enter your email below to have a copy of this content emailed to you.",
+                        "en": "Enter your email below to have a copy of this content emailed to you.",
                         "placeholder": null
                     },
                     "type": "deepdives-summary",

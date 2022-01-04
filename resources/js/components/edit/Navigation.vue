@@ -44,7 +44,7 @@ export default {
     created() {
         if(!this.stage.text) {
             this.$set(this.stage, "text", {"placeholder": null});
-            this.$set(this.stage, "buttonTitle", {"English":"Show Map"});
+            this.$set(this.stage, "buttonTitle", {"en":"Show Map"});
             this.$set(this.stage, "targetPoint", null);
         }
     },

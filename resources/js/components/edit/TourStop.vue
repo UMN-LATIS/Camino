@@ -19,37 +19,36 @@
             Stop Title
           </language-text>
 
-          <div class="form-group row">
-            <label class="col-sm-2 col-form-label" for="header-image-url">
-              Image URL</label
-            >
-            <div class="col-sm-10">
-                <input
-                type="url"
-                class="form-control"
-                id="header-image-url"
-                placeholder="https://example.com/image.jpg"
-                v-model="stop.stop_content.header_image.src"
-                />
-            </div>
-          </div>
+          <image-upload
+            v-if="!stop.stop_content.header_image.src"
+            @imageuploaded="handleImageUpload"
+          ></image-upload>
+          <button
+            @click="removeHeaderImage"
+            class="btn btn-outline-danger float-right"
+            v-if="stop.stop_content.header_image.src"
+          >
+            <i class="fas fa-trash"></i> Remove Image
+          </button>
+          <img
+            v-if="stop.stop_content.header_image.src"
+            :src="'/storage/' + stop.stop_content.header_image.src"
+            class="img-thumbnail mb-2"
+            width="200"
+          />
           <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="header-image-alt">
-                Image Alt
-            </label
-            >
+              Image Alt
+            </label>
             <div class="col-sm-10">
-                <input
+              <input
                 type="text"
                 class="form-control col"
                 id="header-image-alt"
                 placeholder="Description of the image"
                 v-model="stop.stop_content.header_image.alt"
-                />
+              />
             </div>
-          </div>
-          <div class="header-image__preview">
-              <img v-if="stop.stop_content.header_image.src" :src="stop.stop_content.header_image.src" />
           </div>
         </section>
 
@@ -221,6 +220,27 @@ export default {
         type: this.newStageType,
       });
       this.newStageType = null;
+    },
+    handleImageUpload(imgSrc) {
+      const image = this.stop.stop_content.header_image;
+      this.stop.stop_content.header_image = {
+        src: imgSrc,
+        alt: image.alt || "",
+      };
+    },
+    removeHeaderImage: function () {
+      const image = this.stop.stop_content.header_image;
+      if (!image.src) {
+        return;
+      }
+      if (confirm("Are you sure you wish to delete this image?")) {
+        axios.delete("/creator/image/" + image.src).then((res) => {
+          this.stop.stop_content.header_image = {
+            src: null,
+            alt: null,
+          };
+        });
+      }
     },
     save: function () {
       if (!this.stop.id) {

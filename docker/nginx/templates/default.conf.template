@@ -1,14 +1,14 @@
 server {
   listen 80 default_server;
-	return 301 https://$host$request_uri;
+  return 301 https://$host$request_uri;
 }
 
 server {
-	listen 443 ssl default_server;
+  listen 443 ssl default_server;
     ssl_certificate     /etc/nginx/certs/cert.pem;
     ssl_certificate_key /etc/nginx/certs/key.pem;
 
-	location / {
-		proxy_pass	http://camino-laravel.test-1;
-	}
+  location / {
+    proxy_pass	http://camino-laravel.test-1;
+  }
 }

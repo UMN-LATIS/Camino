@@ -16,6 +16,10 @@ composer install
 # Build docker image
 sail build --no-cache
 
+# Create SSL Certs
+# You may need to tweak the script in package.json to get your localip address
+npm run cert
+
 # Start Sail
 sail up
 

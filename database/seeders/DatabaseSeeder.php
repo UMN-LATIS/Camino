@@ -1,9 +1,10 @@
 <?php
 
-use Database\Seeders\DefaultTourSeeder;
-use Database\Seeders\RolesAndPermissionsSeeder;
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Contracts\Role;
+use App\User;
+use App\Tour;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,9 +16,26 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            // UsersTableSeeder::class,
             RolesAndPermissionsSeeder::class,
-            DefaultTourSeeder::class
+            UsersSeeder::class,
         ]);
+
+
+        // create some default tours owned by admin
+        $admin = User::where('unique_id', 'admin')->first();
+
+        $tourSeeders = [
+            DefaultTourSeeder::class,
+            StoneArchTourSeeder::class,
+            ChromaZoneTourSeeder::class,
+        ];
+
+        $this->call($tourSeeders);
+
+        Tour::latest()
+            ->take(count($tourSeeders))
+            ->each(function ($tour) use ($admin) {
+                $admin->tours()->attach($tour);
+            });
     }
 }

@@ -18,11 +18,11 @@
           >
             Stop Title
           </language-text>
-
           <image-upload
-            v-if="!stop.stop_content.header_image.src"
+           :imageSrc="headerImageSrc"
             @imageuploaded="handleImageUpload"
-          ></image-upload>
+            class="mb-4"
+          />
           <button
             @click="removeHeaderImage"
             class="btn btn-outline-danger float-right"
@@ -30,12 +30,6 @@
           >
             <i class="fas fa-trash"></i> Remove Image
           </button>
-          <img
-            v-if="stop.stop_content.header_image.src"
-            :src="'/storage/' + stop.stop_content.header_image.src"
-            class="img-thumbnail mb-2"
-            width="200"
-          />
           <div class="form-group row">
             <label class="col-sm-2 col-form-label" for="header-image-alt">
               Image Alt
@@ -205,6 +199,9 @@ export default {
     previewLink: function () {
       return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
     },
+    headerImageSrc() {
+      return get(this.stop, "stop_content.header_image.src");
+    },
   },
   watch: {
     stop: {
@@ -222,11 +219,7 @@ export default {
       this.newStageType = null;
     },
     handleImageUpload(imgSrc) {
-      const image = this.stop.stop_content.header_image;
-      this.stop.stop_content.header_image = {
-        src: imgSrc,
-        alt: image.alt || "",
-      };
+      this.stop.stop_content.header_image.src = `/storage/${imgSrc}`;
     },
     removeHeaderImage: function () {
       const image = this.stop.stop_content.header_image;
@@ -289,6 +282,7 @@ export default {
       }
     },
     loadTour: function () {
+      console.log('loadTour');
       // cache bust because otherwise we won't reload the tour when using the back button
       axios
         .get("/creator/edit/" + this.tourId + "?" + Math.random())

@@ -119,7 +119,9 @@
             <div v-if="tour.tour_content.custom_base_map.use_basemap">
 
                 <image-upload v-if="!tour.tour_content.custom_base_map.image"
-                    v-on:imageuploaded="imageUploaded($event)"></image-upload>
+                    :imageSrc="tour.tour_content.custom_base_map.image"
+                    @imageuploaded="imageUploaded($event)" 
+                />
                 <div class="row">
                     <div class="form-group col-sm-2">
                         <label for="upper-left-latitude">Upper Left Latitude</label>

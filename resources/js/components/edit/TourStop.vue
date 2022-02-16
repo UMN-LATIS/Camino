@@ -19,7 +19,7 @@
             Stop Title
           </language-text>
           <image-upload
-           :imageSrc="headerImageSrc"
+            :imageSrc="headerImageSrc"
             @imageuploaded="handleImageUpload"
             class="mb-4"
           />
@@ -282,7 +282,6 @@ export default {
       }
     },
     loadTour: function () {
-      console.log('loadTour');
       // cache bust because otherwise we won't reload the tour when using the back button
       axios
         .get("/creator/edit/" + this.tourId + "?" + Math.random())

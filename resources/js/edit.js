@@ -10,19 +10,13 @@ import Vue from "vue";
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
 
-import {
-  BButton,
-  ModalPlugin,
-  BVToastPlugin,
-  CollapsePlugin,
-} from "bootstrap-vue";
+import { BButton, ModalPlugin, BVToastPlugin } from "bootstrap-vue";
 
 Vue.component("b-button", BButton);
 Vue.use(ModalPlugin);
 // Vue.use(CollapsePlugin)
 Vue.use(BVToastPlugin);
 
-import { map } from "leaflet";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
 import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
 import "leaflet-draw/dist/leaflet.draw.js";
@@ -162,7 +156,7 @@ const router = new VueRouter({
   routes, // short for `routes: routes`
 });
 
-const app = new Vue({
+new Vue({
   router,
   el: "#app",
 });

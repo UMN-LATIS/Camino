@@ -7,24 +7,23 @@
 require("./bootstrap");
 
 import Vue from "vue";
-
 import VueProgressBar from "vue-progressbar";
-
-Vue.use(VueProgressBar, {
-  color: "#8C2F1B",
-  failedColor: "red",
-  thickness: "3px",
-  position: "relative",
-});
-
 import i18n from "./i18n";
-
 import CoolLightBox from "vue-cool-lightbox";
+import DOMPurify from "dompurify";
+import marked from "marked";
+import Permissions from "./mixins/Permissions";
+import { languages } from "./languages";
+import { store } from "./store";
+import { router } from "./route";
+
 import "vue-cool-lightbox/dist/vue-cool-lightbox.min.css";
-Vue.use(CoolLightBox);
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
+import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
+import "leaflet/dist/leaflet.css";
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
-
 import {
   BButton,
   ModalPlugin,
@@ -32,22 +31,18 @@ import {
   NavbarPlugin,
 } from "bootstrap-vue";
 
-Vue.component("b-button", BButton);
 Vue.use(ModalPlugin);
 Vue.use(CollapsePlugin);
 Vue.use(NavbarPlugin);
+Vue.use(CoolLightBox);
+Vue.use(VueProgressBar, {
+  color: "#8C2F1B",
+  failedColor: "red",
+  thickness: "3px",
+  position: "relative",
+});
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
-
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
+Vue.component("b-button", BButton);
 Vue.component("navbar", require("./components/Nav.vue").default);
 Vue.component("site-nav", require("./components/SiteNav.vue").default);
 Vue.component("stop-content", require("./components/StopContent.vue").default);
@@ -63,14 +58,12 @@ Vue.component("language", require("./components/Language.vue").default);
 Vue.component("feedback", require("./components/Feedback.vue").default);
 Vue.component("find-tour", require("./components/FindTour.vue").default);
 Vue.component("save-alert", require("./components/edit/SaveAlert.vue").default);
-
 Vue.component("button-modal", require("./components/ButtonModal.vue").default);
 Vue.component("error", require("./components/error.vue").default);
 Vue.component(
   "transport-icon",
   require("./components/TransportIcon.vue").default
 );
-
 Vue.component("debug-bar", require("./components/DebugBar.vue").default);
 Vue.component("separator", require("./components/Separator.vue").default);
 Vue.component(
@@ -78,14 +71,6 @@ Vue.component(
   require("./components/DeepDivesSummary.vue").default
 );
 
-import { map } from "leaflet";
-import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
-import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
-
-import "leaflet/dist/leaflet.css";
-import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
-
-var marked = require("marked");
 Vue.mixin({
   methods: {
     marked: function (input) {
@@ -94,7 +79,6 @@ Vue.mixin({
   },
 });
 
-import DOMPurify from "dompurify";
 Vue.mixin({
   methods: {
     purify: function (input) {
@@ -103,18 +87,11 @@ Vue.mixin({
   },
 });
 
-import Permissions from "./mixins/Permissions";
 Vue.mixin(Permissions);
-
 Vue.config.ignoredElements = ["a-text", "a-scene", "a-camera"];
-
-import { languages } from "./languages";
 Vue.prototype.languages = languages;
 
-import { store } from "./store";
-import { router } from "./route";
-
-const app = new Vue({
+new Vue({
   store,
   router,
   i18n,

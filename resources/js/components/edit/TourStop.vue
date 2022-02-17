@@ -33,11 +33,11 @@
           <button
             @click="removeHeaderImage"
             class="btn btn-outline-danger float-right"
-            v-if="stop.stop_content.header_image.src"
+            v-if="headerImageSrc"
           >
             <i class="fas fa-trash"></i> Remove Image
           </button>
-          <div class="form-group row">
+          <div class="form-group row" v-if="headerImageSrc">
             <label class="col-sm-2 col-form-label" for="header-image-alt">
               Image Alt
             </label>
@@ -213,7 +213,10 @@ export default {
       return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
     },
     headerImageSrc() {
-      return get(this.stop, "stop_content.header_image.src");
+      return get(this.stop, "stop_content.header_image.src", null);
+    },
+    headerImageAlt() {
+      return get(this.stop, "stop_content.header_image.alt", null);
     },
   },
   watch: {
@@ -289,14 +292,11 @@ export default {
       event.returnValue = "";
     },
     addMissingStopContentAttrs() {
-      const attrsToAddIfMissing = [
-        "stop_content.subtitle",
-        "stop_content.header_image",
-      ];
+      const attrsToAddIfMissing = ["subtitle", "header_image"];
 
       attrsToAddIfMissing.forEach((attr) => {
-        if (typeof get(this.stop, attr) === "undefined") {
-          this.stop[attr] = this.stop_template[attr];
+        if (typeof get(this.stop.stop_content, attr) === "undefined") {
+          this.stop.stop_content[attr] = this.stop_template.stop_content[attr];
         }
       });
     },

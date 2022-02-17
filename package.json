@@ -9,6 +9,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",
+    "lint": "eslint './**/*.{js,mjs,cjs,vue}'",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "pretty-quick": "pretty-quick",
@@ -19,6 +20,9 @@
     "axios": "^0.21",
     "bootstrap": "^4.6.0",
     "cross-env": "^7.0.3",
+    "eslint": "^8.9.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-vue": "^8.4.1",
     "husky": "^7.0.4",
     "jquery": "^3.6.0",
     "laravel-mix": "^6.0",
@@ -64,6 +68,9 @@
   ],
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,vue}": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

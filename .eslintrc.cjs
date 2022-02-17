@@ -18,6 +18,7 @@ module.exports = {
   globals: {
     axios: true,
     Echo: true,
+    L: true, // leaflet
   },
   overrides: [
     // cypress should only be linted in cypress/

@@ -153,7 +153,6 @@ export default {
       };
       L.control.layers(baseMaps).addTo(map);
 
-      var walkingPath = [];
       this.updateMarkers();
       map.fitBounds(markerGroup.getBounds());
       lc = L.control

@@ -240,7 +240,7 @@ export default {
         return;
       }
       if (confirm("Are you sure you wish to delete this image?")) {
-        axios.delete("/creator/image/" + image.src).then((res) => {
+        axios.delete("/creator/image/" + image.src).then(() => {
           this.stop.stop_content.header_image = {
             src: null,
             alt: null,
@@ -274,7 +274,7 @@ export default {
             "/creator/edit/" + this.tour.id + "/stop/" + this.stop.id,
             this.stop
           )
-          .then((res) => {
+          .then(() => {
             this.showAlert = true;
             this.isDirty = false;
           })

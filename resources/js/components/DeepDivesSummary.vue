@@ -79,7 +79,7 @@ export default {
           email: this.email,
           deepDives: this.$store.getters.deepdives,
         })
-        .then((res) => {
+        .then(() => {
           this.success = true;
         });
     },

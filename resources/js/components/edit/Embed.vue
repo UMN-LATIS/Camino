@@ -6,6 +6,8 @@
     <div class="form-group row">
       <label for="url" class="col-sm-2 col-form-label">URL</label>
       <div class="col-sm-6">
+        <!-- FIXME: stage.source as a model will mutate the stage prop! -->
+        <!-- eslint-disable -->
         <input
           type="text"
           id="url"
@@ -13,7 +15,9 @@
           v-model="stage.source"
           aria-describedby="helpId"
           placeholder=""
-        /><small id="helpId" class="form-text text-muted"
+        />
+        <!-- eslint-enable -->
+        <small id="helpId" class="form-text text-muted"
           >Just the web address, with http or https://</small
         >
       </div>

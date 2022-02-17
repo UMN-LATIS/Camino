@@ -442,7 +442,7 @@ export default {
       if (confirm("Are you sure you wish to delete this stop?")) {
         axios
           .delete("/creator/edit/" + this.tour.id + "/stop/" + stopId)
-          .then((res) => {
+          .then(() => {
             this.loadTour();
           })
           .catch((res) => {
@@ -474,7 +474,7 @@ export default {
         .post("/creator/" + this.tour.id + "/share", {
           email: this.shareAddress,
         })
-        .then((res) => {
+        .then(() => {
           this.shareAddress = "";
           this.invitationSent = true;
           setTimeout(() => {
@@ -501,7 +501,7 @@ export default {
       } else {
         axios
           .put("/creator/edit/" + this.tour.id, this.tour)
-          .then((res) => {
+          .then(() => {
             this.showAlert = true;
           })
           .catch((res) => {

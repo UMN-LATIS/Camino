@@ -13,10 +13,7 @@
       ok-title="Close"
     >
       <div style="height: 70vh; width: 100%" id="map"></div>
-      <template
-        v-slot:modal-footer="{ ok }"
-        :locationAvailable="locationAvailable"
-      >
+      <template v-slot:modal-footer="{ ok }">
         <div class="w-100">
           <b-button
             @click="useCurrentLocation"
@@ -56,11 +53,8 @@
 </style>
 
 <script>
-var cssIcon;
 var map;
 var lc;
-var myLocation = null;
-var myLocationCssIcon = null;
 var targetLocationCssIcon = null;
 var otherLocationsCssIcon = null;
 var marker;
@@ -94,7 +88,7 @@ export default {
     },
   },
   watch: {
-    location: function (newLocation) {
+    location() {
       if (!map) {
         return;
       }
@@ -105,7 +99,6 @@ export default {
       }
       // a route with less than two points is obviously invalid, just rebuild it
       if (!this.route || this.route.length < 2) {
-        var allLocations = this.allLocations();
         var previousStop = null;
         if (!this.stop.id) {
           // this is a new stop, we know it's at the end
@@ -143,7 +136,7 @@ export default {
         this.$emit("update:route", oldRoute);
       }
     },
-    route: function (route) {
+    route() {
       if (!map) {
         return;
       }
@@ -185,7 +178,6 @@ export default {
         map.remove();
       }
       map = null;
-      myLocation = null;
     },
     drawMarker: function () {
       if (!this.location) {

@@ -7,14 +7,17 @@
           :key="key"
           class="form-group col"
         >
-          <label :for="'field' + key + randomIdentifier" class=""
-            ><slot /> ({{ language }})</label
-          >
+          <label :for="'field' + key + randomIdentifier" class="">
+            <slot /> ({{ language }})
+          </label>
+          <!-- FIXME: This mutates the text prop! -->
+          <!-- eslint-disable -->
           <custom-markdown
             v-if="largetext"
             :text.sync="text[language]"
             :idkey="'field' + key + randomIdentifier"
           ></custom-markdown>
+          <!-- eslint-enable -->
         </div>
       </div>
     </template>
@@ -27,6 +30,8 @@
             ><slot /> ({{ language }})</label
           >
           <div class="col-sm-10">
+            <!-- FIXME: This mutates the text prop! -->
+            <!-- eslint-disable -->
             <input
               type="text"
               class="form-control"
@@ -34,6 +39,7 @@
               placeholder=""
               :id="'field' + key + randomIdentifier"
             />
+            <!-- eslint-disable  -->
           </div>
           <div class="col-sm-4">
             <slot name="languageaddon"></slot>

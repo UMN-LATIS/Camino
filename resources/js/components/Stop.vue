@@ -35,7 +35,7 @@ export default {
   },
   computed: {},
   watch: {
-    $route(to, from) {
+    $route() {
       document.title =
         this.tour.title +
         " : " +

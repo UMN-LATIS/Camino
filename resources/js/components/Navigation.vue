@@ -17,7 +17,7 @@
 
 <style>
 .css-icon {
-  -webkit-border-radius: 30px;
+  border-radius: 30px;
   height: 10px;
   width: 10px;
   z-index: 10;
@@ -37,11 +37,8 @@
 </style>
 
 <script>
-var cssIcon;
 var map;
 var lc;
-var myLocation = null;
-var myLocationCssIcon = null;
 var targetLocationCssIcon = null;
 var otherLocationsCssIcon = null;
 var marker;
@@ -58,6 +55,7 @@ export default {
       if (this.stage) {
         return this.marked(this.purify(this.stage.text[this.$i18n.locale]));
       }
+      return "";
     },
   },
   methods: {
@@ -68,7 +66,6 @@ export default {
         map.remove();
       }
       map = null;
-      myLocation = null;
     },
     allLocations: function () {
       var targetPoints = this.tour.stops
@@ -192,7 +189,7 @@ export default {
       otherMarkerGroup = L.layerGroup(otherLocations);
       otherMarkerGroup.addTo(map);
     },
-    renderMap: function (e) {
+    renderMap: function () {
       map = L.map("map", {
         tap: false,
       });

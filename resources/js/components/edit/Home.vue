@@ -83,7 +83,8 @@ export default {
   },
   computed: {
     sortedTitles: function () {
-      return this.tours.sort((a, b) => (a.title > b.title ? 1 : -1));
+      // sort mutates the array, so we need to clone it
+      return [...this.tours].sort((a, b) => (a.title > b.title ? 1 : -1));
     },
   },
   methods: {
@@ -91,7 +92,7 @@ export default {
       if (confirm("Are you sure you wish to delete this tour?")) {
         axios
           .delete("/creator/edit/" + tour)
-          .then((res) => {
+          .then(() => {
             this.loadTours();
           })
           .catch((res) => {

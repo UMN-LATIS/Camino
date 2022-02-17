@@ -23,6 +23,8 @@
         <i class="fas fa-trash"></i> Remove Deep Dive
       </button>
     </div>
+    <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
+    <!-- eslint-disable -->
     <button
       @click="
         stage.deepdives.push({
@@ -33,6 +35,7 @@
       "
       class="btn btn-outline-primary"
     >
+      <!-- eslint-enable -->
       <i class="fas fa-image"></i> Add Deep Dive
     </button>
   </div>
@@ -58,6 +61,8 @@ export default {
 
     removeDeepDive: function (deepdive, key) {
       if (confirm("Are you sure you wish to delete this deep dive?")) {
+        // FIXME: This is mutating the stage prop!
+        // eslint-disable-next-line
         this.stage.deepdives.splice(key, 1);
       }
     },

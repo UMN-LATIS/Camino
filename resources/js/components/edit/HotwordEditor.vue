@@ -72,7 +72,12 @@ export default {
       // if there are hotwords that aren't already in the tour, create them.
       Object.values(groupedHotwords).forEach((language) => {
         language.forEach((hw) => {
-          if (!this.tour.tour_content.hotWords.hasOwnProperty(hw)) {
+          if (
+            !Object.prototype.hasOwnProperty.call(
+              this.tour.tour_content.hotWords,
+              hw
+            )
+          ) {
             this.tour.tour_content.hotWords[hw] = "";
           }
         });
@@ -82,7 +87,7 @@ export default {
   },
   methods: {
     save: function () {
-      axios.put("/creator/edit/" + this.tour.id, this.tour).then((res) => {
+      axios.put("/creator/edit/" + this.tour.id, this.tour).then(() => {
         this.showAlert = true;
       });
     },

@@ -13,6 +13,8 @@
       <div class="col-sm-6">
         <div class="form-check">
           <label class="form-check-label">
+            <!-- FIXME: Unexpected mutation of `stage` prop! -->
+            <!-- eslint-disable -->
             <input
               type="radio"
               name="quizType"
@@ -20,11 +22,14 @@
               v-model="stage.quizType"
               value="multiple_choice"
             />
+            <!-- eslint-enable -->
             Multiple Choice
           </label>
         </div>
         <div class="form-check">
           <label class="form-check-label">
+            <!-- FIXME: Mutation of `stage` prop! -->
+            <!-- eslint-disable -->
             <input
               type="radio"
               name="quizType"
@@ -32,6 +37,7 @@
               v-model="stage.quizType"
               value="free_text"
             />
+            <!-- eslint-enable -->
             Free Text
           </label>
         </div>
@@ -97,8 +103,11 @@
       </language-text>
     </div>
     <div>
-      <input type="checkbox" v-model="stage.requireCorrect" value="1" /> Require
-      Correct Answer to Advance
+      <!-- FIXME: mutation of stage prop -->
+      <!-- eslint-disable -->
+      <input type="checkbox" v-model="stage.requireCorrect" value="1" />
+      <!-- eslint-enable -->
+      Require Correct Answer to Advance
     </div>
   </div>
 </template>
@@ -140,6 +149,8 @@ export default {
   },
   methods: {
     addResponse: function () {
+      // FIXME: Mutation of stage prop
+      // eslint-disable-next-line
       this.stage.responses.push({ text: { placeholder: null }, correct: 0 });
     },
   },

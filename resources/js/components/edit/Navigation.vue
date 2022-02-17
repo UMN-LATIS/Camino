@@ -14,7 +14,8 @@
           <b>Latitude:</b> {{ stage.targetPoint.lat }}, <b>Longitude:</b>
           {{ stage.targetPoint.lng }}
         </div>
-
+        <!-- FIXME: This mutates the stage prop! -->
+        <!-- eslint-disable -->
         <location-selector
           :location.sync="stage.targetPoint"
           :route.sync="stage.route"
@@ -23,6 +24,7 @@
           :basemap="tour.tour_content.custom_base_map"
           :stop="stop"
         ></location-selector>
+        <!-- eslint-enable -->
       </div>
     </div>
   </div>
@@ -53,13 +55,14 @@ export default {
   },
   computed: {
     previousStop: function () {
+      var targetIndex;
       if (this.stop.id) {
         var currentStop = this.tour.stops.findIndex(
           (e) => e.id == this.stop.id
         );
-        var targetIndex = currentStop > 0 ? currentStop - 1 : false;
+        targetIndex = currentStop > 0 ? currentStop - 1 : false;
       } else {
-        var targetIndex =
+        targetIndex =
           this.tour.stops.length > 2 ? this.tour.stops.length - 2 : false;
       }
       if (targetIndex === false) {

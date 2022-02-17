@@ -7,16 +7,7 @@
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Waypoints</label>
       <div class="col-sm-10">
-        <button
-          @click="
-            stage.waypoints.push({
-              location: null,
-              text: { placeholder: null },
-              altitude: null,
-            })
-          "
-          class="btn btn-primary"
-        >
+        <button @click="handleAddWaypoint" class="btn btn-primary">
           <i class="fas fa-plus"></i> Add waypoint
         </button>
         <div
@@ -28,7 +19,7 @@
             Text
             <template v-slot:languageaddon>
               <button
-                @click="stage.waypoints.splice(key, 1)"
+                @click="handleRemoveWaypoint(key)"
                 class="btn btn-outline-danger float-right"
               >
                 <i class="fas fa-trash"></i> Remove Waypoint
@@ -92,8 +83,30 @@ export default {
       this.$set(this.stage, "waypoints", []);
     }
   },
+  methods: {
+    handleAddWaypoint() {
+      // FIXME: This is a mutation of `stage` prop!
+      // Ignoring the ESLint error for now until we can test.
+      // Perhaps emit change?
+      // eslint-disable-next-line vue/no-mutating-props
+      this.stage.waypoints.push({
+        text: {
+          placeholder: null,
+        },
+        location: null,
+        altitude: null,
+      });
+    },
+    handleRemoveWaypoint(key) {
+      // FIXME: This is a mutation of `stage` prop!
+      // Ignoring the ESLint error for now until we can test.
+      // Perhaps emit change?
+      // eslint-disable-next-line vue/no-mutating-props
+      this.stage.waypoints.splice(key, 1);
+    },
+  },
   computed: {
-    currentLocation: function () {
+    currentLocation() {
       if (this.stop.id) {
         var nav = this.stop.stop_content.stages.filter(
           (s) => s.type == "navigation"
@@ -104,6 +117,10 @@ export default {
       } else {
         return this.tour.start_location;
       }
+      return {
+        lat: 0,
+        lng: 0,
+      };
     },
   },
 };

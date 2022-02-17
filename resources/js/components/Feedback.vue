@@ -83,7 +83,7 @@ export default {
           email: this.email,
           feedback: this.feedback,
         })
-        .then((res) => {
+        .then(() => {
           this.success = true;
         });
     },

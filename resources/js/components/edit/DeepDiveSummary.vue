@@ -2,11 +2,14 @@
   <div>
     <div class="form-check">
       <label class="form-check-label">
+        <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
+        <!-- eslint-disable -->
         <input
           type="checkbox"
           class="form-check-input"
           v-model="stage.request_email"
         />
+        <!-- eslint-enable -->
         Request Email Addresses
       </label>
     </div>

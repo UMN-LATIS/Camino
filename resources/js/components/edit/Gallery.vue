@@ -31,10 +31,13 @@
         Image Description
       </language-text>
     </div>
+    <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
+    <!-- eslint-disable -->
     <button
       @click="stage.images.push({ src: null, text: { placeholder: null } })"
       class="btn btn-outline-primary"
     >
+      <!-- eslint-enable -->
       <i class="fas fa-image"></i> Add image
     </button>
   </div>
@@ -50,11 +53,15 @@ export default {
   },
   methods: {
     imageUploaded: function (key, value) {
+      // FIXME: This is mutating the stage prop! Ignoring for now.
+      // eslint-disable-next-line
       this.stage.images[key].src = value;
     },
     removeImage: function (image, key) {
       if (confirm("Are you sure you wish to delete this image?")) {
-        axios.delete("/creator/image/" + image.src).then((res) => {
+        axios.delete("/creator/image/" + image.src).then(() => {
+          // FIXME: This is mutating the stage prop! Ignoring for now.
+          // eslint-disable-next-line
           this.stage.images.splice(key, 1);
         });
       }

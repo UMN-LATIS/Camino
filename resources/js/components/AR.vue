@@ -66,7 +66,7 @@ export default {
     },
   },
   methods: {
-    startAR: function (e) {
+    startAR: function () {
       this.closing = false;
     },
     endAR: function () {

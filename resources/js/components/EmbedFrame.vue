@@ -39,7 +39,7 @@ export default {
     },
   },
   methods: {
-    startFrame: function (e) {
+    startFrame: function () {
       this.closing = false;
     },
     endFrame: function () {

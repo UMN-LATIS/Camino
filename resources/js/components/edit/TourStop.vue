@@ -18,6 +18,13 @@
           >
             Stop Title
           </language-text>
+          <language-text
+            class="mb-4"
+            :languages="tour.tour_content.languages"
+            :text.sync="stop.stop_content.subtitle"
+          >
+            Subtitle
+          </language-text>
           <image-upload
             :imageSrc="headerImageSrc"
             @imageuploaded="handleImageUpload"
@@ -149,6 +156,9 @@ export default {
           title: {
             placeholder: null,
           },
+          subtitle: {
+            placeholder: null,
+          },
           stages: [],
         },
       },
@@ -156,6 +166,9 @@ export default {
         stop_content: {
           title: {
             placeholder: null,
+          },
+          subtitle: {
+            English: "",
           },
           header_image: {
             src: null,
@@ -275,11 +288,17 @@ export default {
       event.preventDefault();
       event.returnValue = "";
     },
-    migrateOldStopContent() {
-      if (!get(this.stop, "stop_content.header_image")) {
-        this.stop.stop_content.header_image =
-          this.stop_template.stop_content.header_image;
-      }
+    addMissingStopContentAttrs() {
+      const attrsToAddIfMissing = [
+        "stop_content.subtitle",
+        "stop_content.header_image",
+      ];
+
+      attrsToAddIfMissing.forEach((attr) => {
+        if (typeof get(this.stop, attr) === "undefined") {
+          this.stop[attr] = this.stop_template[attr];
+        }
+      });
     },
     loadTour: function () {
       // cache bust because otherwise we won't reload the tour when using the back button
@@ -294,7 +313,7 @@ export default {
           }
 
           // make sure that any new props are added to the stop_content json
-          this.migrateOldStopContent();
+          this.addMissingStopContentAttrs();
 
           this.$nextTick(() => {
             this.isDirty = false;

@@ -1,5 +1,5 @@
-const fs = require('fs');
-const mix = require('laravel-mix');
+const fs = require("fs");
+const mix = require("laravel-mix");
 
 /*
 |--------------------------------------------------------------------------
@@ -12,35 +12,40 @@ const mix = require('laravel-mix');
 |
 */
 
-mix.options({
-   hmrOptions: {
-       https: true,
-       host: 'localhost',
-       port: '8001'
-   }
-})
-.webpackConfig({
-   resolve: {
-      symlinks: false
-   },
-   devServer: {
-      https: {
-         key: fs.readFileSync('./.cert/key.pem'),
-         cert: fs.readFileSync('./.cert/cert.pem'),
-       },
+mix
+  .options({
+    hmrOptions: {
+      https: true,
+      host: "localhost",
+      port: "8001",
     },
-});
+  })
+  .webpackConfig({
+    resolve: {
+      symlinks: false,
+    },
+    devServer: {
+      https: {
+        key: fs.readFileSync("./.cert/key.pem"),
+        cert: fs.readFileSync("./.cert/cert.pem"),
+      },
+    },
+  });
 
-mix.js('resources/js/app.js', 'public/js').vue().sass('resources/sass/app.scss', 'public/css');
-
+mix
+  .js("resources/js/app.js", "public/js")
+  .vue()
+  .sass("resources/sass/app.scss", "public/css");
 
 if (mix.inProduction()) {
-   mix.version();
+  mix.version();
 }
 
-mix.js('resources/js/edit.js', 'public/js').vue().sass('resources/sass/edit.scss', 'public/css');
-
+mix
+  .js("resources/js/edit.js", "public/js")
+  .vue()
+  .sass("resources/sass/edit.scss", "public/css");
 
 if (mix.inProduction()) {
-   mix.version();
+  mix.version();
 }

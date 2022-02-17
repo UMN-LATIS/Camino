@@ -22,6 +22,7 @@
     "husky": "^7.0.4",
     "jquery": "^3.6.0",
     "laravel-mix": "^6.0",
+    "lint-staged": "^12.3.4",
     "lodash": "^4.17.21",
     "popper.js": "^1.12",
     "prettier": "2.5.1",
@@ -60,5 +61,9 @@
   "browserslist": [
     "defaults",
     "not IE 11"
-  ]
+  ],
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown",
+    "*.{js,css,md}": "prettier --write"
+  }
 }

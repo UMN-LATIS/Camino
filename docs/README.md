@@ -6,10 +6,11 @@ Whether you're passionate about history, geography, art, food or nature, conside
 
 ## Taking a Tour
 
-You can browse the available tours at the "[Find Tours](http://camino.cla.umn.edu/findTours)" page. This shows publicly available tours from trusted guides. You may also receive a direct link to a tour. Anyone can create an share tours with Camino. When you receive a direct link to a tour, that tour hasn't been reviewed or verified by anyone.
+You can browse the available tours at the "[Find Tours](http://camino.cla.umn.edu/findTours)" page. This shows publicly available tours from trusted guides.  You may also receive a direct link to a tour. Anyone can create an share tours with Camino. When you receive a direct link to a tour, that tour hasn't been reviewed or verified by anyone.
 
-Camino tours take you through a series of stops. At each stop, you'll have a mix of navigational information, guide information, and potentially images, augmented reality views, or interactive elements.
+Camino tours take you through a series of stops. At each stop, you'll have a mix of navigational information, guide information, and potentially images, augmented reality views, or interactive elements. 
 
 ### Using the Navigation Features
 
 We encourage our tour creators to write useful, descriptive instructions to move you from stop to stop. We encourage you to try to follow them - look at your surroundings, observe what you see and how it compares to the description, and find your way. If you get stuck though, there'll always be a map button that you can use, which will show you your current location and the destination. Follow the compass to find your way (following any appropriate rules or laws - no tresspassing!).
+

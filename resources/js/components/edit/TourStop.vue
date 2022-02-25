@@ -18,6 +18,13 @@
           >
             Stop Title
           </language-text>
+          <language-text
+            class="mb-4"
+            :languages="tour.tour_content.languages"
+            :text.sync="stop.stop_content.subtitle"
+          >
+            Subtitle
+          </language-text>
           <image-upload
             :imageSrc="headerImageSrc"
             @imageuploaded="handleImageUpload"
@@ -26,11 +33,11 @@
           <button
             @click="removeHeaderImage"
             class="btn btn-outline-danger float-right"
-            v-if="stop.stop_content.header_image.src"
+            v-if="headerImageSrc"
           >
             <i class="fas fa-trash"></i> Remove Image
           </button>
-          <div class="form-group row">
+          <div class="form-group row" v-if="headerImageSrc">
             <label class="col-sm-2 col-form-label" for="header-image-alt">
               Image Alt
             </label>
@@ -149,6 +156,9 @@ export default {
           title: {
             placeholder: null,
           },
+          subtitle: {
+            placeholder: null,
+          },
           stages: [],
         },
       },
@@ -156,6 +166,9 @@ export default {
         stop_content: {
           title: {
             placeholder: null,
+          },
+          subtitle: {
+            English: "",
           },
           header_image: {
             src: null,
@@ -200,7 +213,10 @@ export default {
       return "/tour/" + this.tour.id + "/" + this.stop.sort_order;
     },
     headerImageSrc() {
-      return get(this.stop, "stop_content.header_image.src");
+      return get(this.stop, "stop_content.header_image.src", null);
+    },
+    headerImageAlt() {
+      return get(this.stop, "stop_content.header_image.alt", null);
     },
   },
   watch: {
@@ -227,7 +243,7 @@ export default {
         return;
       }
       if (confirm("Are you sure you wish to delete this image?")) {
-        axios.delete("/creator/image/" + image.src).then((res) => {
+        axios.delete("/creator/image/" + image.src).then(() => {
           this.stop.stop_content.header_image = {
             src: null,
             alt: null,
@@ -261,7 +277,7 @@ export default {
             "/creator/edit/" + this.tour.id + "/stop/" + this.stop.id,
             this.stop
           )
-          .then((res) => {
+          .then(() => {
             this.showAlert = true;
             this.isDirty = false;
           })
@@ -275,11 +291,14 @@ export default {
       event.preventDefault();
       event.returnValue = "";
     },
-    migrateOldStopContent() {
-      if (!get(this.stop, "stop_content.header_image")) {
-        this.stop.stop_content.header_image =
-          this.stop_template.stop_content.header_image;
-      }
+    addMissingStopContentAttrs() {
+      const attrsToAddIfMissing = ["subtitle", "header_image"];
+
+      attrsToAddIfMissing.forEach((attr) => {
+        if (typeof get(this.stop.stop_content, attr) === "undefined") {
+          this.stop.stop_content[attr] = this.stop_template.stop_content[attr];
+        }
+      });
     },
     loadTour: function () {
       // cache bust because otherwise we won't reload the tour when using the back button
@@ -294,7 +313,7 @@ export default {
           }
 
           // make sure that any new props are added to the stop_content json
-          this.migrateOldStopContent();
+          this.addMissingStopContentAttrs();
 
           this.$nextTick(() => {
             this.isDirty = false;

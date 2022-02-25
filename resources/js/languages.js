@@ -1,14 +1,5 @@
-
-export  const languages = {
-    "English": {
-
-    },
-    "Español": {
-        
-    },
-    "Français" :{
-
-    }
-}
-
-
+export const languages = {
+  English: {},
+  Español: {},
+  Français: {},
+};

@@ -17,13 +17,16 @@ add('shared_dirs', []);
 
 add('writable_dirs', []);
 
+// ignore specific platform requirements like php 7.4 or php 8.1
+set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs');
+
 // Servers
 
 host('dev')
   ->hostname("cla-camino-dev.oit.umn.edu")
   ->user('swadm')
   ->stage('development')
-  ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+  ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
   ->set('deploy_path', '/swadm/var/www/html/');
 
 host('stage')

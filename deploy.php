@@ -17,6 +17,9 @@ add('shared_dirs', []);
 
 add('writable_dirs', []);
 
+// ignore specific platform requirements like php 7.4 or php 8.1
+set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs');
+
 // Servers
 
 host('dev')

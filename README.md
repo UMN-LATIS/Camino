@@ -11,7 +11,12 @@ Camino uses Laravel's docker environment, [Laravel Sail](https://laravel.com/doc
 cp .env.example .env
 
 # Instal php deps
-composer install
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    composer install --ignore-platform-reqs
 
 # Build docker image
 sail build --no-cache
@@ -61,6 +66,12 @@ Additional users can be configured in `config/shibboleth.php`.
 Stop the application: `sail down`.
 
 ## Deploy
+
+| Enviroment Name | URL                                  |
+| --------------- | ------------------------------------ |
+| `dev`           | <https://cla-camino-dev.oit.umn.edu> |
+| `stage`         | <https://cla-camino-tst.oit.umn.edu> |
+| `prod`          | <https://camino.cla.umn.edu>         |
 
 ```sh
 ./vendor/bin/dep deploy <environment name>

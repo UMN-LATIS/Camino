@@ -62,6 +62,12 @@ Stop the application: `sail down`.
 
 ## Deploy
 
+| Enviroment Name | URL                                  |
+| --------------- | ------------------------------------ |
+| `dev`           | <https://cla-camino-dev.oit.umn.edu> |
+| `stage`         | <https://cla-camino-tst.oit.umn.edu> |
+| `prod`          | <https://camino.cla.umn.edu>         |
+
 ```sh
 ./vendor/bin/dep deploy <environment name>
 ```

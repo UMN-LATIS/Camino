@@ -23,7 +23,7 @@ host('dev')
   ->hostname("cla-camino-dev.oit.umn.edu")
   ->user('swadm')
   ->stage('development')
-  ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+  ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
   ->set('deploy_path', '/swadm/var/www/html/');
 
 host('stage')

@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "da6067b6ca2575d4b4b53511c60736ff",
+  "content-hash": "0595ae099669fdea15efa52766beb2a0",
   "packages": [
     {
       "name": "asm89/stack-cors",
@@ -7775,20 +7775,20 @@
   "packages-dev": [
     {
       "name": "appzcoder/crud-generator",
-      "version": "v3.2.2",
+      "version": "v3.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/appzcoder/crud-generator.git",
-        "reference": "662840d2e69d1523bd19fafb8402d3dc52293e9d"
+        "reference": "1bc50e0260c1f713b657233be81620b0cb1a81fc"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/appzcoder/crud-generator/zipball/662840d2e69d1523bd19fafb8402d3dc52293e9d",
-        "reference": "662840d2e69d1523bd19fafb8402d3dc52293e9d",
+        "url": "https://api.github.com/repos/appzcoder/crud-generator/zipball/1bc50e0260c1f713b657233be81620b0cb1a81fc",
+        "reference": "1bc50e0260c1f713b657233be81620b0cb1a81fc",
         "shasum": ""
       },
       "require": {
-        "illuminate/support": "^5.3|^6.0|^7.0|^8.0",
+        "illuminate/support": "^5.3|^6.0|^7.0|>=8.0",
         "laravelcollective/html": "^5.3|^6.0",
         "php": ">=5.6.4|>=7.0|>=8.0"
       },
@@ -7830,9 +7830,9 @@
       ],
       "support": {
         "issues": "https://github.com/appzcoder/crud-generator/issues",
-        "source": "https://github.com/appzcoder/crud-generator/tree/v3.2.2"
+        "source": "https://github.com/appzcoder/crud-generator/tree/v3.3.0"
       },
-      "time": "2021-05-25T16:27:56+00:00"
+      "time": "2022-03-25T08:54:28+00:00"
     },
     {
       "name": "deployer/deployer",
@@ -10310,7 +10310,9 @@
   },
   "prefer-stable": true,
   "prefer-lowest": false,
-  "platform": [],
+  "platform": {
+    "php": "^8.1"
+  },
   "platform-dev": [],
   "plugin-api-version": "2.2.0"
 }

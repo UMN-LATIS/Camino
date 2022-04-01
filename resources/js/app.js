@@ -11,7 +11,7 @@ import VueProgressBar from "vue-progressbar";
 import i18n from "./i18n";
 import CoolLightBox from "vue-cool-lightbox";
 import DOMPurify from "dompurify";
-import marked from "marked";
+import { marked } from "marked";
 import Permissions from "./mixins/Permissions";
 import { languages } from "./languages";
 import { store } from "./store";

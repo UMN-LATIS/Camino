@@ -14,7 +14,7 @@
       </label>
     </div>
     <language-text :text="stage.text" :languages="languages" :largetext="true">
-      lDeep Dive Text
+      Deep Dive Text
     </language-text>
   </div>
 </template>

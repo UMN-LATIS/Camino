@@ -144,6 +144,7 @@ export default {
         separator: "Separator",
         ar: "AR",
         deepdives: "Deep Dives",
+        "deepdives-summary": "Deep Dives Summary",
         "embed-frame": "Embed",
         guide: "Guide",
         gallery: "Gallery",

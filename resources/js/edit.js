@@ -91,7 +91,7 @@ Vue.component("ar", require("./components/edit/AR.vue").default);
 Vue.component("embed-frame", require("./components/edit/Embed.vue").default);
 Vue.component("gallery", require("./components/edit/Gallery.vue").default);
 Vue.component(
-  "deep-dive-summary",
+  "deepdives-summary",
   require("./components/edit/DeepDiveSummary.vue").default
 );
 Vue.component("feedback", require("./components/edit/Feedback.vue").default);

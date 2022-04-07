@@ -3,18 +3,18 @@
     <div v-html="formattedText"></div>
 
     <b-button v-b-toggle.collapse-feedback variant="primary">{{
-      $t("stage.feedback.button")
+      t("stage.feedback.button")
     }}</b-button>
     <b-collapse id="collapse-feedback" class="mt-2">
       <div>
         <div class="form-group col-md-4 col-sm-12">
           <label for="">Your Name</label>
           <input
+            id=""
+            v-model="name"
             type="text"
             class="form-control"
             name=""
-            v-model="name"
-            id=""
             aria-describedby="helpId"
             placeholder=""
           />
@@ -22,11 +22,11 @@
         <div class="form-group col-md-4 col-sm-12">
           <label for="">Your E-mail</label>
           <input
+            id=""
+            v-model="email"
             type="email"
             class="form-control"
             name=""
-            v-model="email"
-            id=""
             aria-describedby="emailHelpId"
             placeholder=""
           />
@@ -34,10 +34,10 @@
         <div class="form-group col-md-6 col-sm-12">
           <label for="">Feedback</label>
           <textarea
-            class="form-control"
-            name=""
             id=""
             v-model="feedback"
+            class="form-control"
+            name=""
             rows="3"
           ></textarea>
         </div>
@@ -45,23 +45,22 @@
           <button type="submit" class="btn btn-primary" @click="submitFeedback">
             Submit Feedback
           </button>
-          <i class="fas fa-check-circle ml-2" v-if="success"></i>
+          <i v-if="success" class="fas fa-check-circle ml-2"></i>
         </div>
       </div>
     </b-collapse>
   </div>
 </template>
 
-<style scoped>
-.fa-check-circle {
-  color: green;
-  font-size: 1.4em;
-}
-</style>
-
 <script>
+import { useI18n } from "vue-i18n";
+
 export default {
   props: ["stage", "tour"],
+  setup() {
+    const { t } = useI18n(); // use as global scope
+    return { t };
+  },
   data() {
     return {
       email: null,
@@ -90,3 +89,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.fa-check-circle {
+  color: green;
+  font-size: 1.4em;
+}
+</style>

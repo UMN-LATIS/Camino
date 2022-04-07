@@ -1,15 +1,15 @@
 <template>
   <div>
     <button-modal
-      buttonIcon="fas fa-binoculars"
-      modalName="ar"
-      :buttonText="$t('stage.ar.showar')"
-      :modalTitle="$t('stage.ar.showar')"
-      v-on:modalShown="startAR"
-      v-on:modalClosed="endAR"
+      button-icon="fas fa-binoculars"
+      modal-name="ar"
+      :button-text="t('stage.ar.showar')"
+      :modal-title="t('stage.ar.showar')"
       :disabled="!isMobile"
+      @modalShown="startAR"
+      @modalClosed="endAR"
     >
-      <div style="height: 70vh; width: 100%; overflow: hidden" v-if="stage">
+      <div v-if="stage" style="height: 70vh; width: 100%; overflow: hidden">
         <iframe
           height="100%"
           width="100%"
@@ -18,22 +18,25 @@
         ></iframe>
       </div>
     </button-modal>
-    <div class="alert alert-primary mt-2" role="alert" v-if="!isMobile">
-      {{ $t("stage.ar.warning") }}
+    <div v-if="!isMobile" class="alert alert-primary mt-2" role="alert">
+      {{ t("stage.ar.warning") }}
     </div>
   </div>
 </template>
 
 <script>
+import { useI18n } from "vue-i18n";
+
 export default {
   props: ["stage", "currentStop", "tour"],
+  setup() {
+    const { t } = useI18n(); // use as global scope
+    return { t };
+  },
   data() {
     return {
       closing: false,
     };
-  },
-  mounted() {
-    // THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   },
   computed: {
     source: function () {
@@ -64,6 +67,9 @@ export default {
       }
       return false;
     },
+  },
+  mounted() {
+    // THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   },
   methods: {
     startAR: function () {

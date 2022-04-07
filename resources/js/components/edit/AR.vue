@@ -7,7 +7,7 @@
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Waypoints</label>
       <div class="col-sm-10">
-        <button @click="handleAddWaypoint" class="btn btn-primary">
+        <button class="btn btn-primary" @click="handleAddWaypoint">
           <i class="fas fa-plus"></i> Add waypoint
         </button>
         <div
@@ -17,10 +17,10 @@
         >
           <language-text :text="waypoint.text" :languages="languages">
             Text
-            <template v-slot:languageaddon>
+            <template #languageaddon>
               <button
-                @click="handleRemoveWaypoint(key)"
                 class="btn btn-outline-danger float-right"
+                @click="handleRemoveWaypoint(key)"
               >
                 <i class="fas fa-trash"></i> Remove Waypoint
               </button>
@@ -36,7 +36,7 @@
                 {{ waypoint.location.lng }}
               </div>
               <location-selector
-                :location.sync="waypoint.location"
+                v-model:location="waypoint.location"
                 :generalarea="currentLocation"
                 :basemap="tour.tour_content.custom_base_map"
               >
@@ -50,11 +50,11 @@
             >
             <div class="col-sm-6">
               <input
+                id="altitude"
+                v-model="waypoint.altitude"
                 type="text"
                 class="form-control"
                 aria-describedby="altitudeHelp"
-                v-model="waypoint.altitude"
-                id="altitude"
               />
               <small id="altitudeHelp" class="form-text text-muted"
                 >In meters, relative to this stop's elevation.</small
@@ -67,11 +67,28 @@
   </div>
 </template>
 
-<style scoped></style>
-
 <script>
 export default {
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
+  computed: {
+    currentLocation() {
+      if (this.stop.id) {
+        var nav = this.stop.stop_content.stages.filter(
+          (s) => s.type == "navigation"
+        );
+        if (nav.length > 0 && nav[0].targetPoint) {
+          return nav[0].targetPoint;
+        }
+      } else {
+        return this.tour.start_location;
+      }
+      return {
+        lat: 0,
+        lng: 0,
+      };
+    },
+  },
   created() {
     if (!this.stage.text && !this.stage.waypoints) {
       this.$set(this.stage, "text", {
@@ -103,24 +120,6 @@ export default {
       // Perhaps emit change?
       // eslint-disable-next-line vue/no-mutating-props
       this.stage.waypoints.splice(key, 1);
-    },
-  },
-  computed: {
-    currentLocation() {
-      if (this.stop.id) {
-        var nav = this.stop.stop_content.stages.filter(
-          (s) => s.type == "navigation"
-        );
-        if (nav.length > 0 && nav[0].targetPoint) {
-          return nav[0].targetPoint;
-        }
-      } else {
-        return this.tour.start_location;
-      }
-      return {
-        lat: 0,
-        lng: 0,
-      };
     },
   },
 };

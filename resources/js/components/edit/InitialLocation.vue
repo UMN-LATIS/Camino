@@ -4,7 +4,7 @@
     <!-- FIXME: This mutates the location prop! -->
     <!-- eslint-disable -->
     <location-selector
-      :location.sync="location"
+      v-model:location="location"
       :basemap="basemap"
     ></location-selector>
     <!-- eslint-enable -->

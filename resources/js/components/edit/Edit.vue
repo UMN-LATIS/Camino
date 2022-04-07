@@ -6,11 +6,11 @@
       <label for="tourTitle" class="col-sm-1 col-form-label">Tour Title</label>
       <div class="col-sm-6">
         <input
+          id="tourTitle"
+          v-model="tour.title"
           type="text"
           class="form-control"
-          v-model="tour.title"
           placeholder=""
-          id="tourTitle"
         />
       </div>
     </div>
@@ -21,8 +21,8 @@
         <div v-for="(language, key) in languages" :key="key" class="form-check">
           <label class="form-check-label">
             <input
-              :value="key"
               v-model="tour.tour_content.languages"
+              :value="key"
               type="checkbox"
               class="form-check-input"
             />
@@ -39,7 +39,7 @@
           {{ tour.start_location.lng }}
         </div>
         <initial-location
-          :location.sync="tour.start_location"
+          v-model:location="tour.start_location"
           :basemap="tour.tour_content.custom_base_map"
         >
         </initial-location>
@@ -52,9 +52,9 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              v-model="tour.walking"
               type="checkbox"
               class="form-check-input"
-              v-model="tour.walking"
               value="1"
             />
             Walk
@@ -63,9 +63,9 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              v-model="tour.biking"
               type="checkbox"
               class="form-check-input"
-              v-model="tour.biking"
               value="1"
             />
             Bike
@@ -74,9 +74,9 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              v-model="tour.driving"
               type="checkbox"
               class="form-check-input"
-              v-model="tour.driving"
               value="1"
             />
             Drive
@@ -91,10 +91,10 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              v-model="tour.style"
               type="radio"
               name="tourStyle"
               class="form-check-input"
-              v-model="tour.style"
               value="entire_tour"
             />
             Reveal entire tour
@@ -103,10 +103,10 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              v-model="tour.style"
               type="radio"
               name="tourStyle"
               class="form-check-input"
-              v-model="tour.style"
               value="next_stop"
             />
             Only reveal next stop
@@ -119,19 +119,19 @@
       <div class="col-sm-6">
         <div class="input-group">
           <input
+            id=""
+            v-model="shareAddress"
             type="text"
             class="form-control"
             name=""
-            id=""
-            v-model="shareAddress"
             aria-describedby="helpId"
             placeholder=""
           />
           <div class="input-group-append">
             <button
               class="btn btn-outline-secondary"
-              @click="share"
               type="button"
+              @click="share"
             >
               Share
             </button>
@@ -154,9 +154,9 @@
     <div class="form-check">
       <label class="form-check-label">
         <input
+          v-model="tour.public"
           type="checkbox"
           class="form-check-input"
-          v-model="tour.public"
           :disabled="!$can('publish publicly')"
         />
         Public
@@ -171,9 +171,9 @@
       <div class="form-check">
         <label class="form-check-label">
           <input
+            v-model="tour.tour_content.custom_base_map.use_basemap"
             type="checkbox"
             class="form-check-input"
-            v-model="tour.tour_content.custom_base_map.use_basemap"
             value="checkedValue"
             checked
           />
@@ -183,60 +183,60 @@
       <div v-if="tour.tour_content.custom_base_map.use_basemap">
         <image-upload
           v-if="!tour.tour_content.custom_base_map.image"
-          :imageSrc="tour.tour_content.custom_base_map.image"
+          :image-src="tour.tour_content.custom_base_map.image"
           @imageuploaded="imageUploaded($event)"
         />
         <div class="row">
           <div class="form-group col-sm-2">
             <label for="upper-left-latitude">Upper Left Latitude</label>
             <input
+              id="upper-left-latitude"
+              v-model="tour.tour_content.custom_base_map.coords.upperleft.lat"
               type="text"
               class="form-control"
-              v-model="tour.tour_content.custom_base_map.coords.upperleft.lat"
-              id="upper-left-latitude"
               placeholder=""
             />
           </div>
           <div class="form-group col-sm-2">
             <label for="upper-left-longitude">Upper Left Longitude</label>
             <input
+              id="upper-left-latitude"
+              v-model="tour.tour_content.custom_base_map.coords.upperleft.lng"
               type="text"
               class="form-control"
-              v-model="tour.tour_content.custom_base_map.coords.upperleft.lng"
-              id="upper-left-latitude"
               placeholder=""
             />
           </div>
           <div class="form-group col-sm-2">
             <label for="lower-right-latitude">Lower Right Latitude</label>
             <input
+              id="upper-left-latitude"
+              v-model="tour.tour_content.custom_base_map.coords.lowerright.lat"
               type="text"
               class="form-control"
-              v-model="tour.tour_content.custom_base_map.coords.lowerright.lat"
-              id="upper-left-latitude"
               placeholder=""
             />
           </div>
           <div class="form-group col-sm-2">
             <label for="lower-right-latitude">Lower Right Longitude</label>
             <input
+              id="upper-left-latitude"
+              v-model="tour.tour_content.custom_base_map.coords.lowerright.lng"
               type="text"
               class="form-control"
-              v-model="tour.tour_content.custom_base_map.coords.lowerright.lng"
-              id="upper-left-latitude"
               placeholder=""
             />
           </div>
           <div class="col-sm-2">
             <img
-              :src="'/storage/' + tour.tour_content.custom_base_map.image"
               v-if="tour.tour_content.custom_base_map.image"
+              :src="'/storage/' + tour.tour_content.custom_base_map.image"
               class="img-thumbnail rounded"
             />
             <button
-              @click="tour.tour_content.custom_base_map.image = null"
-              class="btn btn-outline-danger float-right"
               v-if="tour.tour_content.custom_base_map.image"
+              class="btn btn-outline-danger float-right"
+              @click="tour.tour_content.custom_base_map.image = null"
             >
               <i class="fas fa-trash"></i> Remove basemap
             </button>
@@ -248,9 +248,9 @@
     <div class="form-check">
       <label class="form-check-label">
         <input
+          v-model="tour.tour_content.use_template"
           type="checkbox"
           class="form-check-input"
-          v-model="tour.tour_content.use_template"
           disabled
         />
         Use standard template
@@ -259,9 +259,9 @@
 
     <div class="form-check">
       <label class="form-check-label">
-        <input type="checkbox" class="form-check-input" v-model="tour.active" />
+        <input v-model="tour.active" type="checkbox" class="form-check-input" />
         Active
-        <p id="activeHelpId" class="form-text" v-if="tour.active">
+        <p v-if="tour.active" id="activeHelpId" class="form-text">
           Tour URL:
           <strong
             ><a :href="tourURL">{{ tourURL }}</a></strong
@@ -275,31 +275,31 @@
         <h3>Tour Stops</h3>
         <div>
           <router-link
+            v-if="tour.id"
             :to="{ name: 'createStop', params: { tourId: tourId } }"
             class="btn btn-primary"
-            v-if="tour.id"
             ><i class="fas fa-plus"></i> Add a Stop</router-link
           >
         </div>
       </div>
     </div>
     <draggable v-model="tour.stops" :move="checkMove" handle=".handle">
-      <div class="card mt-2" v-for="stop in tour.stops" :key="stop.id">
+      <div v-for="stop in tour.stops" :key="stop.id" class="card mt-2">
         <div
           class="card-body d-flex justify-content-between align-items-center"
         >
           <h5 class="card-title">
             <i
-              class="fas fa-grip-vertical handle"
               v-if="!isLockedItem(stop)"
+              class="fas fa-grip-vertical handle"
             ></i>
             {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
           </h5>
           <div class="controls">
             <a
               href="#"
-              @click="deleteStop(stop.id)"
               class="btn btn-outline-danger"
+              @click="deleteStop(stop.id)"
               ><i class="fas fa-trash"></i>
               <span class="d-none d-sm-inline">Delete</span></a
             >
@@ -333,57 +333,40 @@
             </div>
         </div> -->
 
-    <div class="alert alert-danger" role="alert" v-if="errors.length > 0">
+    <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
       <strong>Errors</strong>
       <ul>
-        <li v-for="(error, key) in errors" :key="key">
-          {{ error }}
+        <li v-for="(err, key) in errors" :key="key">
+          {{ err }}
         </li>
       </ul>
     </div>
     <div class="mt-2">
       <a
-        :href="'/tour/' + tour.id"
         v-if="tour.id"
+        :href="'/tour/' + tour.id"
         class="btn btn-outline-success"
         target="_blank"
         ><i class="fas fa-eye"></i> Preview</a
       >
-      <button @click="save" class="btn btn-primary">
+      <button class="btn btn-primary" @click="save">
         <i class="fas fa-save"></i> Save
       </button>
-      <save-alert :showAlert.sync="showAlert" />
+      <save-alert v-model:show-alert="showAlert" />
     </div>
   </div>
 </template>
-
-<style scoped>
-.handle {
-  cursor: move;
-}
-
-.col-form-label {
-  font-weight: bold;
-}
-
-.language-container {
-  /* column-count: 3 */
-}
-
-.card-title {
-  margin-bottom: 0px;
-}
-</style>
 
 <script>
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
 import draggable from "vuedraggable";
 
 export default {
-  props: ["tourId"],
   components: {
     draggable,
   },
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["tourId"],
   data() {
     return {
       error: null,
@@ -436,6 +419,9 @@ export default {
         this.tourId
       );
     },
+  },
+  mounted: function () {
+    this.loadTour();
   },
   methods: {
     deleteStop: function (stopId) {
@@ -542,8 +528,19 @@ export default {
       );
     },
   },
-  mounted: function () {
-    this.loadTour();
-  },
 };
 </script>
+
+<style scoped>
+.handle {
+  cursor: move;
+}
+
+.col-form-label {
+  font-weight: bold;
+}
+
+.card-title {
+  margin-bottom: 0px;
+}
+</style>

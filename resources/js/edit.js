@@ -10,12 +10,12 @@ import Vue from "vue";
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
 
-import { BButton, ModalPlugin, BVToastPlugin } from "bootstrap-vue";
+// import { BButton, ModalPlugin, BVToastPlugin } from "bootstrap-vue";
 
-Vue.component("b-button", BButton);
-Vue.use(ModalPlugin);
+// Vue.component("b-button", BButton);
+// Vue.use(ModalPlugin);
 // Vue.use(CollapsePlugin)
-Vue.use(BVToastPlugin);
+// Vue.use(BVToastPlugin);
 
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
 import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
@@ -28,22 +28,22 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 Vue.config.ignoredElements = ["a-text", "a-scene", "a-camera"];
 
 import VueQRCodeComponent from "vue-qrcode-component";
-Vue.component("qr-code", VueQRCodeComponent);
+Vue.component("QrCode", VueQRCodeComponent);
 
 import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import home from "./components/edit/Home.vue";
-Vue.component("home", home);
+Vue.component("Home", home);
 
 import edit from "./components/edit/Edit.vue";
-Vue.component("edit", edit);
+Vue.component("Edit", edit);
 
 import feedbackView from "./components/edit/FeedbackView.vue";
-Vue.component("feedback-view", feedbackView);
+Vue.component("FeedbackView", feedbackView);
 
 import tourStop from "./components/edit/TourStop.vue";
-Vue.component("tour-stop", tourStop);
+Vue.component("TourStop", tourStop);
 
 import "v-markdown-editor/dist/v-markdown-editor.css";
 import Editor from "v-markdown-editor";
@@ -52,57 +52,57 @@ Vue.use(Editor);
 import Permissions from "./mixins/Permissions";
 Vue.mixin(Permissions);
 
-Vue.component("tour-stop", require("./components/edit/TourStop.vue").default);
+Vue.component("TourStop", require("./components/edit/TourStop.vue").default);
 Vue.component(
-  "language-text",
+  "LanguageText",
   require("./components/edit/LanguageText.vue").default
 );
-Vue.component("stage", require("./components/edit/Stage.vue").default);
+Vue.component("Stage", require("./components/edit/Stage.vue").default);
 
-Vue.component("button-modal", require("./components/ButtonModal.vue").default);
-Vue.component("error", require("./components/error.vue").default);
+Vue.component("ButtonModal", require("./components/ButtonModal.vue").default);
+Vue.component("Error", require("./components/error.vue").default);
 Vue.component(
-  "transport-icon",
+  "TransportIcon",
   require("./components/TransportIcon.vue").default
 );
 
 Vue.component(
-  "custom-markdown",
+  "CustomMarkdown",
   require("./components/edit/CustomMarkdown.vue").default
 );
 Vue.component(
-  "image-upload",
+  "ImageUpload",
   require("./components/edit/ImageUpload.vue").default
 );
-Vue.component("save-alert", require("./components/edit/SaveAlert.vue").default);
+Vue.component("SaveAlert", require("./components/edit/SaveAlert.vue").default);
 
-Vue.component("separator", require("./components/edit/Separator.vue").default);
+Vue.component("Separator", require("./components/edit/Separator.vue").default);
 Vue.component(
-  "language",
+  "Language",
   require("./components/edit/LanguageSelector.vue").default
 );
 Vue.component(
-  "navigation",
+  "Navigation",
   require("./components/edit/Navigation.vue").default
 );
-Vue.component("guide", require("./components/edit/Guide.vue").default);
-Vue.component("deepdives", require("./components/edit/DeepDives.vue").default);
-Vue.component("ar", require("./components/edit/AR.vue").default);
-Vue.component("embed-frame", require("./components/edit/Embed.vue").default);
-Vue.component("gallery", require("./components/edit/Gallery.vue").default);
+Vue.component("Guide", require("./components/edit/Guide.vue").default);
+Vue.component("Deepdives", require("./components/edit/DeepDives.vue").default);
+Vue.component("Ar", require("./components/edit/AR.vue").default);
+Vue.component("EmbedFrame", require("./components/edit/Embed.vue").default);
+Vue.component("Gallery", require("./components/edit/Gallery.vue").default);
 Vue.component(
-  "deepdives-summary",
+  "DeepdivesSummary",
   require("./components/edit/DeepDiveSummary.vue").default
 );
-Vue.component("feedback", require("./components/edit/Feedback.vue").default);
-Vue.component("quiz", require("./components/edit/Quiz.vue").default);
+Vue.component("Feedback", require("./components/edit/Feedback.vue").default);
+Vue.component("Quiz", require("./components/edit/Quiz.vue").default);
 
 Vue.component(
-  "location-selector",
+  "LocationSelector",
   require("./components/edit/LocationSelector.vue").default
 );
 Vue.component(
-  "initial-location",
+  "InitialLocation",
   require("./components/edit/LocationSelector.vue").default
 );
 

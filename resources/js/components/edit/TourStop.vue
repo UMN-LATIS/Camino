@@ -12,42 +12,42 @@
       <div>
         <section class="mb-4">
           <language-text
+            v-model:text="stop.stop_content.title"
             class="mb-4"
             :languages="tour.tour_content.languages"
-            :text.sync="stop.stop_content.title"
           >
             Stop Title
           </language-text>
           <language-text
+            v-model:text="stop.stop_content.subtitle"
             class="mb-4"
             :languages="tour.tour_content.languages"
-            :text.sync="stop.stop_content.subtitle"
           >
             Subtitle
           </language-text>
           <image-upload
-            :imageSrc="headerImageSrc"
-            @imageuploaded="handleImageUpload"
+            :image-src="headerImageSrc"
             class="mb-4"
+            @imageuploaded="handleImageUpload"
           />
           <button
-            @click="removeHeaderImage"
-            class="btn btn-outline-danger float-right"
             v-if="headerImageSrc"
+            class="btn btn-outline-danger float-right"
+            @click="removeHeaderImage"
           >
             <i class="fas fa-trash"></i> Remove Image
           </button>
-          <div class="form-group row" v-if="headerImageSrc">
+          <div v-if="headerImageSrc" class="form-group row">
             <label class="col-sm-2 col-form-label" for="header-image-alt">
               Image Alt
             </label>
             <div class="col-sm-10">
               <input
+                id="header-image-alt"
+                v-model="stop.stop_content.header_image.alt"
                 type="text"
                 class="form-control col"
-                id="header-image-alt"
                 placeholder="Description of the image"
-                v-model="stop.stop_content.header_image.alt"
               />
             </div>
           </div>
@@ -58,7 +58,7 @@
             v-for="(stage, key) in stop.stop_content.stages"
             :key="key"
             :stage="stage"
-            v-on:remove="stop.stop_content.stages.splice(key, 1)"
+            @remove="stop.stop_content.stages.splice(key, 1)"
           >
             <component
               :is="stage.type"
@@ -83,23 +83,23 @@
             <span class="d-none d-sm-inline">Back to Tour</span></router-link
           >
           <a
-            :href="previewLink"
             v-if="stop.id"
+            :href="previewLink"
             class="btn btn-outline-success"
             target="_blank"
             ><i class="fas fa-eye"></i>
             <span class="d-none d-sm-inline">Preview</span></a
           >
-          <button @click="save" class="btn btn-primary">
+          <button class="btn btn-primary" @click="save">
             <i class="fas fa-save"></i>
             <span class="d-none d-sm-inline">Save</span>
           </button>
-          <save-alert :showAlert.sync="showAlert" />
+          <save-alert v-model:show-alert="showAlert" />
         </span>
 
         <div class="col-6">
           <div class="row d-flex justify-content-end">
-            <select class="form-control col-3" v-model="newStageType">
+            <select v-model="newStageType" class="form-control col-3">
               <option disabled></option>
               <option
                 v-for="(stageType, key) in stageTypes"
@@ -112,8 +112,8 @@
 
             <button
               class="btn btn-primary"
-              @click="addStage"
               :disabled="!newStageType"
+              @click="addStage"
             >
               <i class="fas fa-plus"></i> Add a Stage
             </button>
@@ -129,10 +129,18 @@ import draggable from "vuedraggable";
 import { get } from "lodash";
 
 export default {
-  props: ["stopId", "tourId"],
   components: {
     draggable,
   },
+  beforeRouteLeave(to, from, next) {
+    if (this.isDirty) {
+      if (!window.confirm("Leave without saving?")) {
+        return;
+      }
+    }
+    next();
+  },
+  props: ["stopId", "tourId"],
   data() {
     return {
       error: null,
@@ -227,6 +235,15 @@ export default {
       },
       deep: true,
     },
+  },
+  mounted: function () {
+    this.loadTour();
+  },
+  beforeMount() {
+    window.addEventListener("beforeunload", this.preventNav);
+  },
+  beforeUnmount() {
+    window.removeEventListener("beforeunload", this.preventNav);
   },
   methods: {
     addStage: function () {
@@ -327,23 +344,6 @@ export default {
         this.stageTypes.language = "Language";
       }
     },
-  },
-  mounted: function () {
-    this.loadTour();
-  },
-  beforeMount() {
-    window.addEventListener("beforeunload", this.preventNav);
-    this.$once("hook:beforeDestroy", () => {
-      window.removeEventListener("beforeunload", this.preventNav);
-    });
-  },
-  beforeRouteLeave(to, from, next) {
-    if (this.isDirty) {
-      if (!window.confirm("Leave without saving?")) {
-        return;
-      }
-    }
-    next();
   },
 };
 </script>

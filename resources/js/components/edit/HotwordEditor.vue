@@ -9,15 +9,15 @@
       <div v-for="(hotword, hwkey) in language" :key="hwkey">
         <label :for="'field' + hwkey" class="">{{ hotword }}</label>
         <hotwords-text-editor
-          :editorData.sync="tour.tour_content.hotWords[hotword]"
+          v-model:editorData="tour.tour_content.hotWords[hotword]"
           :idkey="'field' + hwkey"
         ></hotwords-text-editor>
         <!-- <textarea :value="tour.tour_content.hotWords[hotword]" @input="tour.tour_content.hotWords[hotword] = $event.target.value"></textarea> -->
       </div>
       <hr />
     </div>
-    <button @click="save" class="btn btn-primary">Save</button
-    ><save-alert :showAlert.sync="showAlert" />
+    <button class="btn btn-primary" @click="save">Save</button
+    ><save-alert v-model:show-alert="showAlert" />
   </div>
 </template>
 
@@ -85,13 +85,6 @@ export default {
       return groupedHotwords;
     },
   },
-  methods: {
-    save: function () {
-      axios.put("/creator/edit/" + this.tour.id, this.tour).then(() => {
-        this.showAlert = true;
-      });
-    },
-  },
   mounted: function () {
     axios.get("/creator/edit/" + this.tourId).then((res) => {
       if (res.data.tour_content.hotWords.length == 0) {
@@ -99,6 +92,13 @@ export default {
       }
       this.tour = res.data;
     });
+  },
+  methods: {
+    save: function () {
+      axios.put("/creator/edit/" + this.tour.id, this.tour).then(() => {
+        this.showAlert = true;
+      });
+    },
   },
 };
 </script>

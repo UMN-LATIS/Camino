@@ -17,8 +17,8 @@
         <!-- FIXME: This mutates the stage prop! -->
         <!-- eslint-disable -->
         <location-selector
-          :location.sync="stage.targetPoint"
-          :route.sync="stage.route"
+          v-model:location="stage.targetPoint"
+          v-model:route="stage.route"
           :generalarea="previousStop"
           :tour="tour"
           :basemap="tour.tour_content.custom_base_map"
@@ -29,30 +29,10 @@
     </div>
   </div>
 </template>
-
-<style>
-.css-icon {
-  -webkit-border-radius: 30px;
-  height: 10px;
-  width: 10px;
-  z-index: 10;
-}
-
-.target-css-icon {
-  border: 3px solid red;
-  background-color: red;
-}
-</style>
 <script>
 export default {
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
-  created() {
-    if (!this.stage.text) {
-      this.$set(this.stage, "text", { placeholder: null });
-      this.$set(this.stage, "buttonTitle", { English: "Show Map" });
-      this.$set(this.stage, "targetPoint", null);
-    }
-  },
   computed: {
     previousStop: function () {
       var targetIndex;
@@ -79,5 +59,25 @@ export default {
       return this.tour.start_location;
     },
   },
+  created() {
+    if (!this.stage.text) {
+      this.$set(this.stage, "text", { placeholder: null });
+      this.$set(this.stage, "buttonTitle", { English: "Show Map" });
+      this.$set(this.stage, "targetPoint", null);
+    }
+  },
 };
 </script>
+<style>
+.css-icon {
+  border-radius: 30px;
+  height: 10px;
+  width: 10px;
+  z-index: 10;
+}
+
+.target-css-icon {
+  border: 3px solid red;
+  background-color: red;
+}
+</style>

@@ -14,7 +14,7 @@
           <!-- eslint-disable -->
           <custom-markdown
             v-if="largetext"
-            :text.sync="text[language]"
+            v-model:text="text[language]"
             :idkey="'field' + key + randomIdentifier"
           ></custom-markdown>
           <!-- eslint-enable -->

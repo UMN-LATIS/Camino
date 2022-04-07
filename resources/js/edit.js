@@ -7,15 +7,7 @@
 require("./bootstrap");
 
 import Vue from "vue";
-
-// TODO: if we're going to import bootstrap vue, can we ditch our other import?
-
-// import { BButton, ModalPlugin, BVToastPlugin } from "bootstrap-vue";
-
-// Vue.component("b-button", BButton);
-// Vue.use(ModalPlugin);
-// Vue.use(CollapsePlugin)
-// Vue.use(BVToastPlugin);
+import { createRouter, createWebHistory } from "vue-router";
 
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
 import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
@@ -29,9 +21,6 @@ Vue.config.ignoredElements = ["a-text", "a-scene", "a-camera"];
 
 import VueQRCodeComponent from "vue-qrcode-component";
 Vue.component("QrCode", VueQRCodeComponent);
-
-import VueRouter from "vue-router";
-Vue.use(VueRouter);
 
 import home from "./components/edit/Home.vue";
 Vue.component("Home", home);
@@ -134,12 +123,6 @@ const routes = [
     component: tourStop,
     props: true,
   },
-  // {
-  //     path: '/creator/:tourId?/hotwords',
-  //     name: "editHotwords",
-  //     component: hotwordEditor,
-  //     props: true,
-  // },
   {
     path: "/creator/:tourId?/viewFeedback",
     name: "tourFeedback",
@@ -151,9 +134,9 @@ const routes = [
 import { languages } from "./languages";
 Vue.prototype.languages = languages;
 
-const router = new VueRouter({
-  mode: "history",
-  routes, // short for `routes: routes`
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
 });
 
 new Vue({

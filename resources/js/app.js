@@ -24,16 +24,16 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
 
 // TODO: if we're going to import bootstrap vue, can we ditch our other import?
-import {
-  BButton,
-  ModalPlugin,
-  CollapsePlugin,
-  NavbarPlugin,
-} from "bootstrap-vue";
+// import {
+//   BButton,
+//   ModalPlugin,
+//   CollapsePlugin,
+//   NavbarPlugin,
+// } from "bootstrap-vue";
 
-Vue.use(ModalPlugin);
-Vue.use(CollapsePlugin);
-Vue.use(NavbarPlugin);
+// Vue.use(ModalPlugin);
+// Vue.use(CollapsePlugin);
+// Vue.use(NavbarPlugin);
 Vue.use(CoolLightBox);
 Vue.use(VueProgressBar, {
   color: "#8C2F1B",
@@ -42,32 +42,32 @@ Vue.use(VueProgressBar, {
   position: "relative",
 });
 
-Vue.component("b-button", BButton);
-Vue.component("navbar", require("./components/Nav.vue").default);
-Vue.component("site-nav", require("./components/SiteNav.vue").default);
-Vue.component("stop-content", require("./components/StopContent.vue").default);
-Vue.component("gallery", require("./components/Gallery.vue").default);
-Vue.component("quiz", require("./components/Quiz.vue").default);
-Vue.component("ar", require("./components/AR.vue").default);
-Vue.component("embed-frame", require("./components/EmbedFrame.vue").default);
-Vue.component("ar-embed", require("./components/ARembed.vue").default);
-Vue.component("guide", require("./components/Guide.vue").default);
-Vue.component("deepdives", require("./components/DeepDives.vue").default);
-Vue.component("navigation", require("./components/Navigation.vue").default);
-Vue.component("language", require("./components/Language.vue").default);
-Vue.component("feedback", require("./components/Feedback.vue").default);
-Vue.component("find-tour", require("./components/FindTour.vue").default);
-Vue.component("save-alert", require("./components/edit/SaveAlert.vue").default);
-Vue.component("button-modal", require("./components/ButtonModal.vue").default);
-Vue.component("error", require("./components/error.vue").default);
+// Vue.component("b-button", BButton);
+Vue.component("Navbar", require("./components/Nav.vue").default);
+Vue.component("SiteNav", require("./components/SiteNav.vue").default);
+Vue.component("StopContent", require("./components/StopContent.vue").default);
+Vue.component("Gallery", require("./components/Gallery.vue").default);
+Vue.component("Quiz", require("./components/Quiz.vue").default);
+Vue.component("Ar", require("./components/AR.vue").default);
+Vue.component("EmbedFrame", require("./components/EmbedFrame.vue").default);
+Vue.component("ArEmbed", require("./components/ARembed.vue").default);
+Vue.component("Guide", require("./components/Guide.vue").default);
+Vue.component("Deepdives", require("./components/DeepDives.vue").default);
+Vue.component("Navigation", require("./components/Navigation.vue").default);
+Vue.component("Language", require("./components/Language.vue").default);
+Vue.component("Feedback", require("./components/Feedback.vue").default);
+Vue.component("FindTour", require("./components/FindTour.vue").default);
+Vue.component("SaveAlert", require("./components/edit/SaveAlert.vue").default);
+Vue.component("ButtonModal", require("./components/ButtonModal.vue").default);
+Vue.component("Error", require("./components/error.vue").default);
 Vue.component(
-  "transport-icon",
+  "TransportIcon",
   require("./components/TransportIcon.vue").default
 );
-Vue.component("debug-bar", require("./components/DebugBar.vue").default);
-Vue.component("separator", require("./components/Separator.vue").default);
+Vue.component("DebugBar", require("./components/DebugBar.vue").default);
+Vue.component("Separator", require("./components/Separator.vue").default);
 Vue.component(
-  "deepdives-summary",
+  "DeepdivesSummary",
   require("./components/DeepDivesSummary.vue").default
 );
 

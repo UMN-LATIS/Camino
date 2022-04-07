@@ -12,6 +12,29 @@ const mix = require("laravel-mix");
 |
 */
 
+mix.webpackConfig({
+  resolve: {
+    alias: {
+      vue: "@vue/compat",
+    },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.vue$/,
+        loader: "vue-loader",
+        options: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2,
+            },
+          },
+        },
+      },
+    ],
+  },
+});
+
 if (!mix.inProduction()) {
   mix
     .options({
@@ -22,9 +45,6 @@ if (!mix.inProduction()) {
       },
     })
     .webpackConfig({
-      resolve: {
-        symlinks: false,
-      },
       devServer: {
         https: {
           key: fs.readFileSync("./.cert/key.pem"),

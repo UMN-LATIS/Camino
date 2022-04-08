@@ -41,7 +41,6 @@ Vue.use(Editor);
 import Permissions from "./mixins/Permissions";
 Vue.mixin(Permissions);
 
-Vue.component("TourStop", require("./components/edit/TourStop.vue").default);
 Vue.component(
   "LanguageText",
   require("./components/edit/LanguageText.vue").default

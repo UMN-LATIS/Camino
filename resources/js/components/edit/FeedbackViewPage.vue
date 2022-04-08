@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card" v-for="feedback in feedback" :key="feedback.id">
+    <div v-for="feedback in feedback" :key="feedback.id" class="card">
       <div class="card-body">
         <h4 class="card-title">{{ feedback.name }} {{ feedback.email }}</h4>
         <p class="card-text">{{ feedback.created_at }}</p>
@@ -18,11 +18,11 @@ export default {
       feedback: null,
     };
   },
-  methods: {},
   mounted() {
     axios.get("/creator/" + this.tourId + "/feedback").then((res) => {
       this.feedback = res.data;
     });
   },
+  methods: {},
 };
 </script>

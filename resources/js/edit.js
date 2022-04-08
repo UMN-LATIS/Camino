@@ -9,10 +9,10 @@ require("./bootstrap");
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
-import HomePage from "./components/edit/Home.vue";
-import EditPage from "./components/edit/Edit.vue";
-import TourStopPage from "./components/edit/TourStop.vue";
-import FeedbackViewPage from "./components/edit/FeedbackView.vue";
+import HomePage from "./components/edit/HomePage.vue";
+import EditPage from "./components/edit/EditPage.vue";
+import TourStopPage from "./components/edit/TourStopPage.vue";
+import FeedbackViewPage from "./components/edit/FeedbackViewPage.vue";
 
 // import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
 // import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";

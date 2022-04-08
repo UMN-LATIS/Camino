@@ -18,7 +18,11 @@
     <div class="form-group row">
       <label class="col-sm-1"><b>Languages</b></label>
       <div class="col-sm-10 flex-wrap flex-column language-container">
-        <div v-for="(language, key) in languages" :key="key" class="form-check">
+        <div
+          v-for="(language, key) in possibleLanguages"
+          :key="key"
+          class="form-check"
+        >
           <label class="form-check-label">
             <input
               v-model="tour.tour_content.languages"
@@ -31,6 +35,7 @@
         </div>
       </div>
     </div>
+
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-1 col-form-label">Location</label>
       <div class="col-sm-6">
@@ -114,6 +119,7 @@
         </div>
       </div>
     </div>
+
     <div class="form-group row">
       <label for="sharing" class="col-sm-1"><b>Sharing</b></label>
       <div class="col-sm-6">
@@ -151,7 +157,7 @@
       </div>
     </div>
 
-    <div class="form-check">
+    <!-- <div class="form-check">
       <label class="form-check-label">
         <input
           v-model="tour.public"
@@ -165,9 +171,9 @@
           publish tour publicly)</span
         >
       </label>
-    </div>
+    </div> -->
 
-    <div>
+    <!-- <div>
       <div class="form-check">
         <label class="form-check-label">
           <input
@@ -322,7 +328,7 @@
           </div>
         </div>
       </div>
-    </draggable>
+    </draggable> -->
 
     <!-- <div class="form-group row mt-2">
             <label for="" class="col-sm-1 col-form-label">Hotwords</label>
@@ -333,7 +339,7 @@
             </div>
         </div> -->
 
-    <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
+    <!-- <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
       <strong>Errors</strong>
       <ul>
         <li v-for="(err, key) in errors" :key="key">
@@ -353,22 +359,24 @@
         <i class="fas fa-save"></i> Save
       </button>
       <save-alert v-model:show-alert="showAlert" />
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
-import draggable from "vuedraggable";
+// import draggable from "vuedraggable";
+import { languages as possibleLanguages } from "../../languages.js";
 
 export default {
   components: {
-    draggable,
+    // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["tourId"],
   data() {
     return {
+      possibleLanguages,
       error: null,
       showAlert: false,
       errors: [],

@@ -6,7 +6,7 @@
 
 require("./bootstrap");
 
-import Vue from "vue";
+import Vue, { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
@@ -139,7 +139,4 @@ const router = createRouter({
   routes,
 });
 
-new Vue({
-  router,
-  el: "#app",
-});
+createApp({}).use(router).mount("#app");

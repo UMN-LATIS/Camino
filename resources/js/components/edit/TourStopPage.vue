@@ -1,34 +1,32 @@
 <template>
   <div v-if="tour && stop">
-    <error :error="error" />
+    <Error :error="error" />
     <div class="mb-2">
-      {{ stopId }}
-      {{ tourId }}
-      <!-- <div class="mb-4">
+      <div class="mb-4">
         <router-link :to="{ name: 'editTour', params: { tourId } }">{{
           tour.title
         }}</router-link>
         >
         {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
-      </div> -->
+      </div>
 
-      <!-- <div>
+      <div>
         <section class="mb-4">
-          <language-text
+          <LanguageText
             v-model:text="stop.stop_content.title"
             class="mb-4"
             :languages="tour.tour_content.languages"
           >
             Stop Title
-          </language-text>
-          <language-text
+          </LanguageText>
+          <LanguageText
             v-model:text="stop.stop_content.subtitle"
             class="mb-4"
             :languages="tour.tour_content.languages"
           >
             Subtitle
-          </language-text>
-          <image-upload
+          </LanguageText>
+          <ImageUpload
             :image-src="headerImageSrc"
             class="mb-4"
             @imageuploaded="handleImageUpload"
@@ -56,24 +54,24 @@
           </div>
         </section>
 
-        <draggable v-model="stop.stop_content.stages" handle=".handle">
-          <stage
-            v-for="(stage, key) in stop.stop_content.stages"
-            :key="key"
+        <!-- <draggable v-model="stop.stop_content.stages" handle=".handle"> -->
+        <Stage
+          v-for="(stage, key) in stop.stop_content.stages"
+          :key="key"
+          :stage="stage"
+          @remove="stop.stop_content.stages.splice(key, 1)"
+        >
+          <component
+            :is="stage.type"
             :stage="stage"
-            @remove="stop.stop_content.stages.splice(key, 1)"
+            :languages="tour.tour_content.languages"
+            :tour="tour"
+            :stop="stop"
           >
-            <component
-              :is="stage.type"
-              :stage="stage"
-              :languages="tour.tour_content.languages"
-              :tour="tour"
-              :stop="stop"
-            >
-            </component>
-          </stage>
-        </draggable>
-      </div> -->
+          </component>
+        </Stage>
+        <!-- </draggable> -->
+      </div>
     </div>
     <!-- <div class="row mt-2">
       <div class="col-12 d-flex justify-content-between align-items-center">
@@ -131,11 +129,19 @@
 // import draggable from "vuedraggable";
 import { get } from "lodash";
 import usePermissions from "../../hooks/usePermissions";
+import Error from "../error.vue";
+import LanguageText from "./LanguageText.vue";
+import ImageUpload from "./ImageUpload.vue";
+import Stage from "./Stage.vue";
 
 const { userCan } = usePermissions();
 
 export default {
   components: {
+    Error,
+    LanguageText,
+    ImageUpload,
+    Stage,
     // draggable,
   },
   beforeRouteLeave(to, from, next) {
@@ -146,6 +152,7 @@ export default {
     }
     next();
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stopId", "tourId"],
   data() {
     return {

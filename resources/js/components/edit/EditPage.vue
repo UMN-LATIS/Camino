@@ -173,7 +173,7 @@
       </label>
     </div>
 
-    <!-- <div>
+    <div>
       <div class="form-check">
         <label class="form-check-label">
           <input
@@ -289,46 +289,42 @@
         </div>
       </div>
     </div>
-    <draggable v-model="tour.stops" :move="checkMove" handle=".handle">
-      <div v-for="stop in tour.stops" :key="stop.id" class="card mt-2">
-        <div
-          class="card-body d-flex justify-content-between align-items-center"
-        >
-          <h5 class="card-title">
-            <i
-              v-if="!isLockedItem(stop)"
-              class="fas fa-grip-vertical handle"
-            ></i>
-            {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
-          </h5>
-          <div class="controls">
-            <a
-              href="#"
-              class="btn btn-outline-danger"
-              @click="deleteStop(stop.id)"
-              ><i class="fas fa-trash"></i>
-              <span class="d-none d-sm-inline">Delete</span></a
-            >
-            <a
-              :href="'/tour/' + tour.id + '/' + stop.sort_order"
-              class="btn btn-outline-success"
-              target="_blank"
-              ><i class="fas fa-eye"></i>
-              <span class="d-none d-sm-inline">Preview</span>
-            </a>
-            <router-link
-              :to="{
-                name: 'editStop',
-                params: { tourId: tourId, stopId: stop.id },
-              }"
-              class="btn btn-outline-primary"
-              ><i class="fas fa-edit"></i>
-              <span class="d-none d-sm-inline">Edit</span></router-link
-            >
-          </div>
+
+    <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
+    <div v-for="stop in tour.stops" :key="stop.id" class="card mt-2">
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <h5 class="card-title">
+          <i v-if="!isLockedItem(stop)" class="fas fa-grip-vertical handle"></i>
+          {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
+        </h5>
+        <div class="controls">
+          <a
+            href="#"
+            class="btn btn-outline-danger"
+            @click="deleteStop(stop.id)"
+            ><i class="fas fa-trash"></i>
+            <span class="d-none d-sm-inline">Delete</span></a
+          >
+          <a
+            :href="'/tour/' + tour.id + '/' + stop.sort_order"
+            class="btn btn-outline-success"
+            target="_blank"
+            ><i class="fas fa-eye"></i>
+            <span class="d-none d-sm-inline">Preview</span>
+          </a>
+          <router-link
+            :to="{
+              name: 'editStop',
+              params: { tourId: tourId, stopId: stop.id },
+            }"
+            class="btn btn-outline-primary"
+            ><i class="fas fa-edit"></i>
+            <span class="d-none d-sm-inline">Edit</span></router-link
+          >
         </div>
       </div>
-    </draggable> -->
+    </div>
+    <!-- </draggable> -->
 
     <!-- <div class="form-group row mt-2">
             <label for="" class="col-sm-1 col-form-label">Hotwords</label>

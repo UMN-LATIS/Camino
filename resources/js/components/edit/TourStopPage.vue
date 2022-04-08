@@ -73,7 +73,7 @@
         <!-- </draggable> -->
       </div>
     </div>
-    <!-- <div class="row mt-2">
+    <div class="row mt-2">
       <div class="col-12 d-flex justify-content-between align-items-center">
         <span>
           <router-link
@@ -95,7 +95,7 @@
             <i class="fas fa-save"></i>
             <span class="d-none d-sm-inline">Save</span>
           </button>
-          <save-alert v-model:show-alert="showAlert" />
+          <SaveAlert v-model:show-alert="showAlert" />
         </span>
 
         <div class="col-6">
@@ -121,7 +121,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 

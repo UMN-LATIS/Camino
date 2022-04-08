@@ -10,13 +10,13 @@
       </div>
     </div>
 
-    <div class="card mt-2" v-for="tour in sortedTitles" :key="tour.id">
+    <div v-for="tour in toursSortedByTitle" :key="tour.id" class="card mt-2">
       <div
         class="card-body d-flex justify-content-between align-items-center flex-wrap"
       >
         <h5 class="card-title">
-          <i class="fas fa-check-circle mr-2" v-if="tour.active"></i
-          ><i class="fas fa-globe mr-2" v-if="tour.public"></i
+          <i v-if="tour.active" class="fas fa-check-circle mr-2"></i
+          ><i v-if="tour.public" class="fas fa-globe mr-2"></i
           ><transport-icon :tour="tour" class="mr-2" />{{ tour.title }}
         </h5>
         <div class="controls pt-2 pt-sm-0">
@@ -28,8 +28,8 @@
           >
           <a
             href="#"
-            @click="deleteTour(tour.id)"
             class="btn btn-outline-danger"
+            @click="deleteTour(tour.id)"
             ><i class="fas fa-trash"></i>
             <span class="d-none d-sm-inline">Delete</span></a
           >
@@ -52,28 +52,9 @@
   </div>
 </template>
 
-<style scoped>
-.card-title {
-  margin-bottom: 0px;
-}
-.fa-check-circle {
-  color: green;
-}
-.fa-globe {
-  color: darkblue;
-}
-.controls {
-  white-space: nowrap;
-}
-</style>
-
-<style>
-.ck-editor__editable:not(.ck-editor__nested-editable) {
-  min-height: 150px;
-}
-</style>
-
 <script>
+console.log("loading home");
+
 export default {
   data() {
     return {
@@ -82,10 +63,13 @@ export default {
     };
   },
   computed: {
-    sortedTitles: function () {
+    toursSortedByTitle: function () {
       // sort mutates the array, so we need to clone it
       return [...this.tours].sort((a, b) => (a.title > b.title ? 1 : -1));
     },
+  },
+  mounted: function () {
+    this.loadTours();
   },
   methods: {
     deleteTour: function (tour) {
@@ -112,8 +96,26 @@ export default {
         });
     },
   },
-  mounted: function () {
-    this.loadTours();
-  },
 };
 </script>
+
+<style scoped>
+.card-title {
+  margin-bottom: 0px;
+}
+.fa-check-circle {
+  color: green;
+}
+.fa-globe {
+  color: darkblue;
+}
+.controls {
+  white-space: nowrap;
+}
+</style>
+
+<style>
+.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 150px;
+}
+</style>

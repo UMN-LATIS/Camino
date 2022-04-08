@@ -122,7 +122,7 @@ const routes = [
     props: true,
   },
   {
-    path: "/creator/:tourId?/viewFeedback",
+    path: "/creator/:tourId/viewFeedback",
     name: "tourFeedback",
     component: FeedbackViewPage,
     props: true,

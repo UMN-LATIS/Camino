@@ -26,6 +26,9 @@
 
 <script>
 import { useI18n } from "vue-i18n";
+import usePermissions from "../hooks/usePermissions";
+
+const { userCan } = usePermissions();
 
 export default {
   props: ["stage", "currentStop", "tour"],
@@ -43,7 +46,7 @@ export default {
       if (this.closing) {
         return "";
       }
-      var simulateLocation = this.$can("edit own tours")
+      var simulateLocation = userCan("edit own tours")
         ? this.$store.state.config.simulateLocation
         : false;
 

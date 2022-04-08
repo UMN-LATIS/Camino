@@ -2,14 +2,17 @@
   <div v-if="tour && stop">
     <error :error="error" />
     <div class="mb-2">
-      <div class="mb-4">
-        <router-link :to="{ name: 'editTour', params: { tourId: tourId } }">{{
+      {{ stopId }}
+      {{ tourId }}
+      <!-- <div class="mb-4">
+        <router-link :to="{ name: 'editTour', params: { tourId } }">{{
           tour.title
         }}</router-link>
         >
         {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
-      </div>
-      <div>
+      </div> -->
+
+      <!-- <div>
         <section class="mb-4">
           <language-text
             v-model:text="stop.stop_content.title"
@@ -70,9 +73,9 @@
             </component>
           </stage>
         </draggable>
-      </div>
+      </div> -->
     </div>
-    <div class="row mt-2">
+    <!-- <div class="row mt-2">
       <div class="col-12 d-flex justify-content-between align-items-center">
         <span>
           <router-link
@@ -120,17 +123,20 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
+// import draggable from "vuedraggable";
 import { get } from "lodash";
+import usePermissions from "../../hooks/usePermissions";
+
+const { userCan } = usePermissions();
 
 export default {
   components: {
-    draggable,
+    // draggable,
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {
@@ -340,7 +346,7 @@ export default {
         .catch((res) => {
           this.error = res;
         });
-      if (this.$can("administer site")) {
+      if (userCan("administer site")) {
         this.stageTypes.language = "Language";
       }
     },

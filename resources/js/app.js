@@ -12,7 +12,6 @@ import i18n from "./i18n";
 import CoolLightBox from "vue-cool-lightbox";
 import DOMPurify from "dompurify";
 import { marked } from "marked";
-import Permissions from "./mixins/Permissions";
 import { languages } from "./languages";
 import { store } from "./store";
 import { router } from "./route";
@@ -87,7 +86,6 @@ Vue.mixin({
   },
 });
 
-Vue.mixin(Permissions);
 Vue.config.ignoredElements = ["a-text", "a-scene", "a-camera"];
 Vue.prototype.languages = languages;
 

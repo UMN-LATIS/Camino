@@ -326,15 +326,6 @@
     </div>
     <!-- </draggable> -->
 
-    <!-- <div class="form-group row mt-2">
-            <label for="" class="col-sm-1 col-form-label">Hotwords</label>
-            <div class="col-sm-6">
-                <div class="col-form-label">You have {{ hotwords.length }} hotwords.</div>
-                <router-link v-if="hotwords.length" :to="{ name: 'editHotwords', params: { tourId: tourId }}"
-                    class="btn btn-outline-primary">Manage Hotwords <i class="fas fa-edit"></i></router-link>
-            </div>
-        </div> -->
-
     <!-- <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
       <strong>Errors</strong>
       <ul>

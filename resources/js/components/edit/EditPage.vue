@@ -326,7 +326,7 @@
     </div>
     <!-- </draggable> -->
 
-    <!-- <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
+    <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
       <strong>Errors</strong>
       <ul>
         <li v-for="(err, key) in errors" :key="key">
@@ -346,7 +346,7 @@
         <i class="fas fa-save"></i> Save
       </button>
       <save-alert v-model:show-alert="showAlert" />
-    </div> -->
+    </div>
   </div>
 </template>
 

@@ -12,7 +12,21 @@ module.exports = {
   },
   plugins: ["vue"],
   rules: {
-    "vue/multi-word-component-names": "off",
+    // "vue/multi-word-component-names": "off",
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase",
+      {
+        registeredComponentsOnly: false,
+        ignores: [
+          "component",
+          "client-only",
+          "keep-alive",
+          "router-link",
+          "router-view",
+        ],
+      },
+    ],
   },
   ignorePatterns: ["**/vendor/**/*.js", "**/public/**/*.js"],
   globals: {

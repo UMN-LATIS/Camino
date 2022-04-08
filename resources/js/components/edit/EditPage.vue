@@ -157,21 +157,21 @@
       </div>
     </div>
 
-    <!-- <div class="form-check">
+    <div class="form-check">
       <label class="form-check-label">
         <input
           v-model="tour.public"
           type="checkbox"
           class="form-check-input"
-          :disabled="!$can('publish publicly')"
+          :disabled="!userCan('publish publicly')"
         />
         Public
-        <span v-if="!$can('publish publicly')" class="help-text"
+        <span v-if="!userCan('publish publicly')" class="help-text"
           >(<a href="mailto:mcfa0086@umn.edu">Contact us</a> for permission to
           publish tour publicly)</span
         >
       </label>
-    </div> -->
+    </div>
 
     <!-- <div>
       <div class="form-check">
@@ -367,6 +367,9 @@
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
 // import draggable from "vuedraggable";
 import { languages as possibleLanguages } from "../../languages.js";
+import usePermissions from "../../hooks/usePermissions.js";
+
+const { userCan } = usePermissions();
 
 export default {
   components: {
@@ -432,6 +435,7 @@ export default {
     this.loadTour();
   },
   methods: {
+    userCan,
     deleteStop: function (stopId) {
       if (confirm("Are you sure you wish to delete this stop?")) {
         axios

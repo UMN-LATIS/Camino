@@ -37,9 +37,6 @@ import FeedbackViewPage from "./components/edit/FeedbackViewPage.vue";
 // import Editor from "v-markdown-editor";
 // Vue.use(Editor);
 
-// import Permissions from "./mixins/Permissions";
-// Vue.mixin(Permissions);
-
 // Vue.component(
 //   "LanguageText",
 //   require("./components/edit/LanguageText.vue").default
@@ -137,4 +134,8 @@ const router = createRouter({
   routes,
 });
 
-createApp({}).use(router).mount("#app");
+createApp({
+  mixins: [Permissions],
+})
+  .use(router)
+  .mount("#app");

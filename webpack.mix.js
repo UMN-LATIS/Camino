@@ -66,7 +66,8 @@ if (mix.inProduction()) {
 mix
   .js("resources/js/edit.js", "public/js")
   .vue()
-  .sass("resources/sass/edit.scss", "public/css");
+  .sass("resources/sass/edit.scss", "public/css")
+  .sourceMaps();
 
 if (mix.inProduction()) {
   mix.version();

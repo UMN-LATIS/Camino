@@ -127,16 +127,13 @@
 
 <script>
 // import draggable from "vuedraggable";
+import { defineAsyncComponent } from "vue";
 import { get } from "lodash";
 import usePermissions from "../../hooks/usePermissions";
 import Error from "../error.vue";
 import LanguageText from "./LanguageText.vue";
 import ImageUpload from "./ImageUpload.vue";
 import Stage from "./Stage.vue";
-
-// Stages
-import Separator from "./Separator.vue";
-import Navigation from "./Navigation.vue";
 
 const { userCan } = usePermissions();
 
@@ -149,8 +146,9 @@ export default {
     // draggable,
 
     // Stages
-    Separator,
-    Navigation,
+    Separator: defineAsyncComponent(() => import("./Separator.vue")),
+    Navigation: defineAsyncComponent(() => import("./Navigation.vue")),
+    Guide: defineAsyncComponent(() => import("./Guide.vue")),
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {

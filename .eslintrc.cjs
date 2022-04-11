@@ -12,7 +12,7 @@ module.exports = {
   },
   plugins: ["vue"],
   rules: {
-    // "vue/multi-word-component-names": "off",
+    "vue/multi-word-component-names": "off",
     "vue/component-name-in-template-casing": [
       "error",
       "PascalCase",
@@ -24,6 +24,7 @@ module.exports = {
           "keep-alive",
           "router-link",
           "router-view",
+          "teleport",
         ],
       },
     ],

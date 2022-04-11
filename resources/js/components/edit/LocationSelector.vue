@@ -1,58 +1,39 @@
 <template>
   <div>
-    <b-button v-b-modal="randomizedModalName" variant="outline-primary"
-      ><i class="fas fa-map-marker-alt"></i> Set Location</b-button
+    <BButton variant="outline-primary"
+      ><i class="fas fa-map-marker-alt"></i> Set Location</BButton
     >
 
-    <b-modal
-      size="lg"
+    <BModal
       :id="randomizedModalName"
+      size="lg"
       title="Set Location"
       ok-only
       modal-class="modal-fullscreen"
       ok-title="Close"
     >
-      <div style="height: 70vh; width: 100%" id="map"></div>
-      <template v-slot:modal-footer="{ ok }">
+      <div id="map" style="height: 70vh; width: 100%"></div>
+      <template #modal-footer="{ ok }">
         <div class="w-100">
-          <b-button
-            @click="useCurrentLocation"
+          <BButton
             v-if="locationAvailable"
             class="float-left"
-            >Use Current Location</b-button
+            @click="useCurrentLocation"
+            >Use Current Location</BButton
           >
 
-          <b-button variant="success" @click="ok()" class="float-right">
+          <BButton variant="success" class="float-right" @click="ok()">
             Close
-          </b-button>
+          </BButton>
         </div>
       </template>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
-<style>
-.css-icon {
-  -webkit-border-radius: 30px;
-  height: 10px;
-  width: 10px;
-  z-index: 10;
-}
-
-.target-css-icon {
-  border: 3px solid red;
-  background-color: red;
-}
-
-.other-css-icon {
-  border: 3px solid gray;
-  background-color: rgba(194, 143, 143, 1);
-  width: 10px;
-  height: 10px;
-}
-</style>
-
 <script>
+import BButton from "../../tempComponents/BButton.vue";
+import BModal from "../../tempComponents/BModal.vue";
 var map;
 var lc;
 var targetLocationCssIcon = null;
@@ -62,6 +43,10 @@ var polyline;
 var otherMarkerGroup;
 
 export default {
+  components: {
+    BButton,
+    BModal,
+  },
   props: ["location", "generalarea", "basemap", "tour", "route", "stop"],
   data() {
     return {
@@ -69,18 +54,6 @@ export default {
       locationAvailable: false,
       randomIdentifier: Math.round(Math.random() * 100000),
     };
-  },
-  mounted() {
-    this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
-      if (modalId == this.randomizedModalName) {
-        this.renderMap();
-      }
-    });
-    this.$root.$on("bv::modal::hidden", (bvEvent, modalId) => {
-      if (modalId == this.randomizedModalName) {
-        this.destroyMap();
-      }
-    });
   },
   computed: {
     randomizedModalName: function () {
@@ -144,6 +117,18 @@ export default {
       this.drawMarker();
       this.drawOtherPoints();
     },
+  },
+  mounted() {
+    this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
+      if (modalId == this.randomizedModalName) {
+        this.renderMap();
+      }
+    });
+    this.$root.$on("bv::modal::hidden", (bvEvent, modalId) => {
+      if (modalId == this.randomizedModalName) {
+        this.destroyMap();
+      }
+    });
   },
   methods: {
     allLocations: function () {
@@ -389,3 +374,24 @@ export default {
   },
 };
 </script>
+
+<style>
+.css-icon {
+  -webkit-border-radius: 30px;
+  height: 10px;
+  width: 10px;
+  z-index: 10;
+}
+
+.target-css-icon {
+  border: 3px solid red;
+  background-color: red;
+}
+
+.other-css-icon {
+  border: 3px solid gray;
+  background-color: rgba(194, 143, 143, 1);
+  width: 10px;
+  height: 10px;
+}
+</style>

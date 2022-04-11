@@ -1,12 +1,16 @@
 <template>
   <div>
-    <language-text :text="stage.text" :languages="languages">
+    <LanguageText :text="stage.text" :languages="languages">
       Separator Title
-    </language-text>
+    </LanguageText>
   </div>
 </template>
 <script>
+import LanguageText from "./LanguageText.vue";
 export default {
+  components: {
+    LanguageText,
+  },
   props: ["stage", "languages"],
   created() {
     if (!this.stage.text) {

@@ -1,11 +1,8 @@
 <template>
   <div>
-    <language-text :text="stage.text" :languages="languages" :largetext="true">
+    <LanguageText :text="stage.text" :languages="languages" :largetext="true">
       Navigation Text
-    </language-text>
-    <language-text :text="stage.buttonTitle" :languages="languages">
-      Map Button Title
-    </language-text>
+    </LanguageText>
 
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
@@ -16,21 +13,28 @@
         </div>
         <!-- FIXME: This mutates the stage prop! -->
         <!-- eslint-disable -->
-        <location-selector
+        <LocationSelector
           v-model:location="stage.targetPoint"
           v-model:route="stage.route"
           :generalarea="previousStop"
           :tour="tour"
           :basemap="tour.tour_content.custom_base_map"
           :stop="stop"
-        ></location-selector>
+        />
         <!-- eslint-enable -->
       </div>
     </div>
   </div>
 </template>
 <script>
+import LanguageText from "./LanguageText.vue";
+import LocationSelector from "./LocationSelector.vue";
+
 export default {
+  components: {
+    LanguageText,
+    LocationSelector,
+  },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
   computed: {

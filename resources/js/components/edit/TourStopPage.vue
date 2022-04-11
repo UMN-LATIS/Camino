@@ -134,6 +134,10 @@ import LanguageText from "./LanguageText.vue";
 import ImageUpload from "./ImageUpload.vue";
 import Stage from "./Stage.vue";
 
+// Stages
+import Separator from "./Separator.vue";
+import Navigation from "./Navigation.vue";
+
 const { userCan } = usePermissions();
 
 export default {
@@ -143,6 +147,10 @@ export default {
     ImageUpload,
     Stage,
     // draggable,
+
+    // Stages
+    Separator,
+    Navigation,
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {

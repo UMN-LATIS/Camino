@@ -30,9 +30,8 @@ export default {
   width: 100%;
   min-height: 10rem;
   padding: 1rem;
-  border: none;
-  background: #f0f0f0;
+  border: 1px solid #ddd;
+  background: #f8fafc;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

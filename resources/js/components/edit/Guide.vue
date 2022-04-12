@@ -1,13 +1,15 @@
 <template>
   <div>
-    <language-text :text="stage.text" :languages="languages" :largetext="true">
+    <LanguageText :text="stage.text" :languages="languages" :largetext="true">
       Guide Text
-    </language-text>
+    </LanguageText>
   </div>
 </template>
 
 <script>
+import LanguageText from "./LanguageText.vue";
 export default {
+  components: { LanguageText },
   props: ["stage", "languages", "tour"],
   created() {
     if (!this.stage.text) {

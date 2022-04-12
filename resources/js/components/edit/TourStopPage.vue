@@ -134,6 +134,7 @@ import Error from "../error.vue";
 import LanguageText from "./LanguageText.vue";
 import ImageUpload from "./ImageUpload.vue";
 import Stage from "./Stage.vue";
+import SaveAlert from "./SaveAlert.vue";
 
 const { userCan } = usePermissions();
 
@@ -143,6 +144,7 @@ export default {
     LanguageText,
     ImageUpload,
     Stage,
+    SaveAlert,
     // draggable,
 
     // Stages

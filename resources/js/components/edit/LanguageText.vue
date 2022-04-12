@@ -12,11 +12,7 @@
           </label>
           <!-- FIXME: This mutates the text prop! -->
           <!-- eslint-disable -->
-          <custom-markdown
-            v-if="largetext"
-            v-model:text="text[language]"
-            :idkey="'field' + key + randomIdentifier"
-          ></custom-markdown>
+          <MarkdownEditor v-if="largetext" v-model="text[language]" />
           <!-- eslint-enable -->
         </div>
       </div>
@@ -50,7 +46,11 @@
   </div>
 </template>
 <script>
+import MarkdownEditor from "./MarkdownEditor.vue";
 export default {
+  components: {
+    MarkdownEditor,
+  },
   props: ["languages", "text", "largetext"],
   data() {
     return {

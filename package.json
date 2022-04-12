@@ -56,7 +56,6 @@
     "marked": "^4.0.12",
     "qrcode.vue": "^3.3.3",
     "three": "^0.139.2",
-    "v-markdown-editor": "^1.2.6",
     "vue": "^3.2.31",
     "vue-cool-lightbox": "^2.7.4",
     "vue-i18n": "^9.1.9",

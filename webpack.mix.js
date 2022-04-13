@@ -1,8 +1,12 @@
 const fs = require("fs");
 const mix = require("laravel-mix");
+const path = require("path");
 
 // Main Laravel App Styles and Scripts (homepage)
 mix
+  .alias({
+    "@": path.join(__dirname, "resources"),
+  })
   .js("resources/js/app.js", "public/js/app.js")
   .sass("resources/sass/app.scss", "public/css/app.css");
 

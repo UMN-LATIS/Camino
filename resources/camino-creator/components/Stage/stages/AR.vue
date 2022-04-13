@@ -77,6 +77,7 @@ export default {
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
+  emits: ["update:stage"],
   computed: {
     currentLocation() {
       if (this.stop.id) {
@@ -97,13 +98,15 @@ export default {
   },
   created() {
     if (!this.stage.text && !this.stage.waypoints) {
-      this.$set(this.stage, "text", {
-        placeholder: null,
-      });
-      this.$set(this.stage, "buttonTitle", {
-        English: "Show AR",
-      });
-      this.$set(this.stage, "waypoints", []);
+      const updatedStage = {
+        ...this.stage,
+        text: {
+          placeholder: null,
+        },
+        waypoints: [],
+      };
+
+      this.$emit("update:stage", updatedStage);
     }
   },
   methods: {

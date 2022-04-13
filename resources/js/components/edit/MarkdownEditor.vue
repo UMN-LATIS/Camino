@@ -1,7 +1,8 @@
 <template>
   <div class="markdown-editor">
     <textarea
-      class="mde__textarea"
+      class="mde__textarea form-control"
+      rows="4"
       :value="modelValue"
       @input="$emit('update:modelValue', $event.target.value)"
     />
@@ -24,14 +25,3 @@ export default {
   compatConfig: { COMPONENT_V_MODEL: false },
 };
 </script>
-
-<style scoped>
-.mde__textarea {
-  width: 100%;
-  min-height: 10rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  background: #f8fafc;
-  border-radius: 0.5rem;
-}
-</style>

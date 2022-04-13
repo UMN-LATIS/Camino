@@ -1,7 +1,7 @@
 <template>
   <div
-    class="modal"
     v-if="error"
+    class="modal"
     tabindex="-1"
     role="dialog"
     style="display:block; !important"
@@ -15,14 +15,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["error"],
+};
+</script>
+
 <style scoped>
 .modal {
   background-color: rgba(100, 100, 100, 0.3);
 }
 </style>
-
-<script>
-export default {
-  props: ["error"],
-};
-</script>

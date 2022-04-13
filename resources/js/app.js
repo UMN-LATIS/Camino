@@ -58,7 +58,7 @@ Vue.component("Feedback", require("./components/Feedback.vue").default);
 Vue.component("FindTour", require("./components/FindTour.vue").default);
 Vue.component("SaveAlert", require("./components/edit/SaveAlert.vue").default);
 Vue.component("ButtonModal", require("./components/ButtonModal.vue").default);
-Vue.component("Error", require("./components/error.vue").default);
+Vue.component("Error", require("./components/Error.vue").default);
 Vue.component(
   "TransportIcon",
   require("./components/TransportIcon.vue").default

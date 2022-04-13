@@ -4,8 +4,9 @@
     <!-- FIXME: This mutates the location prop! -->
     <!-- eslint-disable vue/no-mutating-props -->
     <LocationSelector
-      v-model:location="location"
       :basemap="basemap"
+      :location="location"
+      @update:location="(payload) => $emit('update:location', payload)"
     ></LocationSelector>
     <!-- eslint-enable -->
   </div>
@@ -19,5 +20,6 @@ export default {
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["location", "basemap"],
+  emits: ["update:location"],
 };
 </script>

@@ -1,32 +1,29 @@
 <template>
   <div>
-    <BButton variant="outline-primary"
+    <BButton
+      data-bs-toggle="modal"
+      data-bs-target="#setLocation"
+      @click="isModalOpen = !isModalOpen"
       ><i class="fas fa-map-marker-alt"></i> Set Location</BButton
     >
 
     <BModal
-      :id="randomizedModalName"
-      size="lg"
+      v-show="isModalOpen"
+      id="setLocation"
       title="Set Location"
-      ok-only
-      modal-class="modal-fullscreen"
-      ok-title="Close"
+      @close="isModalOpen = false"
     >
-      <div id="map" style="height: 70vh; width: 100%"></div>
-      <template #modal-footer="{ ok }">
-        <div class="w-100">
+      <div>
+        <div id="map" style="height: 70vh; width: 100%"></div>
+        <footer class="w-100">
           <BButton
             v-if="locationAvailable"
             class="float-left"
             @click="useCurrentLocation"
             >Use Current Location</BButton
           >
-
-          <BButton variant="success" class="float-right" @click="ok()">
-            Close
-          </BButton>
-        </div>
-      </template>
+        </footer>
+      </div>
     </BModal>
   </div>
 </template>
@@ -47,12 +44,15 @@ export default {
     BButton,
     BModal,
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ["location", "generalarea", "basemap", "tour", "route", "stop"],
+  emits: ["update:location", "update:route"],
   data() {
     return {
       currentLocation: null,
       locationAvailable: false,
       randomIdentifier: Math.round(Math.random() * 100000),
+      isModalOpen: false,
     };
   },
   computed: {
@@ -61,6 +61,9 @@ export default {
     },
   },
   watch: {
+    isModalOpen(isOpen) {
+      this.$nextTick(() => (isOpen ? this.renderMap() : this.destroyMap()));
+    },
     location() {
       if (!map) {
         return;
@@ -117,18 +120,6 @@ export default {
       this.drawMarker();
       this.drawOtherPoints();
     },
-  },
-  mounted() {
-    this.$root.$on("bv::modal::shown", (bvEvent, modalId) => {
-      if (modalId == this.randomizedModalName) {
-        this.renderMap();
-      }
-    });
-    this.$root.$on("bv::modal::hidden", (bvEvent, modalId) => {
-      if (modalId == this.randomizedModalName) {
-        this.destroyMap();
-      }
-    });
   },
   methods: {
     allLocations: function () {

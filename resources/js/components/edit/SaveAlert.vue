@@ -1,10 +1,26 @@
 <template>
-  <transition name="slide-fade">
-    <p class="saveAlert" v-if="showAlert">
+  <Transition name="slide-fade">
+    <p v-if="showAlert" class="saveAlert">
       <slot><b>Saved</b></slot>
     </p>
-  </transition>
+  </Transition>
 </template>
+<script>
+export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["showAlert"],
+  emits: ["update:showAlert"],
+  watch: {
+    showAlert: function (value) {
+      if (value == true) {
+        setTimeout(() => {
+          this.$emit("update:showAlert", false);
+        }, 1500);
+      }
+    },
+  },
+};
+</script>
 <style scoped>
 .saveAlert {
   display: inline-block;
@@ -23,17 +39,3 @@
   opacity: 0;
 }
 </style>
-<script>
-export default {
-  props: ["showAlert"],
-  watch: {
-    showAlert: function (value) {
-      if (value == true) {
-        setTimeout(() => {
-          this.$emit("update:showAlert", false);
-        }, 1500);
-      }
-    },
-  },
-};
-</script>

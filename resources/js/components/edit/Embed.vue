@@ -1,8 +1,8 @@
 <template>
   <div>
-    <language-text :text="stage.buttonTitle" :languages="languages">
+    <LanguageText :text="stage.buttonTitle" :languages="languages">
       Embed Button Title
-    </language-text>
+    </LanguageText>
     <div class="form-group row">
       <label for="url" class="col-sm-2 col-form-label">URL</label>
       <div class="col-sm-6">
@@ -25,6 +25,22 @@
   </div>
 </template>
 
+<script>
+import LanguageText from "./LanguageText.vue";
+export default {
+  components: {
+    LanguageText,
+  },
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["stage", "languages", "tour"],
+  created() {
+    if (!this.stage.buttonTitle) {
+      this.$set(this.stage, "buttonTitle", { English: "Show Embed" });
+      this.$set(this.stage, "url", null);
+    }
+  },
+};
+</script>
 <style>
 .css-icon {
   -webkit-border-radius: 30px;
@@ -38,14 +54,3 @@
   background-color: red;
 }
 </style>
-<script>
-export default {
-  props: ["stage", "languages", "tour"],
-  created() {
-    if (!this.stage.buttonTitle) {
-      this.$set(this.stage, "buttonTitle", { English: "Show Embed" });
-      this.$set(this.stage, "url", null);
-    }
-  },
-};
-</script>

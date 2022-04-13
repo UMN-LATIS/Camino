@@ -47,10 +47,12 @@
 </template>
 <script>
 import MarkdownEditor from "./MarkdownEditor.vue";
+
 export default {
   components: {
     MarkdownEditor,
   },
+  // eslint-disable-next-line vue/require-prop-types
   props: ["languages", "text", "largetext"],
   data() {
     return {

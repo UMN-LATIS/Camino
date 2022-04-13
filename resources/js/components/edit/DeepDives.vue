@@ -1,24 +1,24 @@
 <template>
   <div>
     <div v-for="(deepdive, key) in stage.deepdives" :key="key" class="m-2">
-      <language-text
+      <LanguageText
         :text="deepdive.title"
         :languages="languages"
         :largetext="false"
       >
         Deep Dive Title
-      </language-text>
-      <language-text
+      </LanguageText>
+      <LanguageText
         :text="deepdive.text"
         :languages="languages"
         :largetext="true"
       >
         Deep Dive Text
-      </language-text>
+      </LanguageText>
       <button
-        @click="removeDeepDive(deepdive, key)"
-        class="btn btn-outline-danger float-right"
         v-if="deepdive.title"
+        class="btn btn-outline-danger float-right"
+        @click="removeDeepDive(deepdive, key)"
       >
         <i class="fas fa-trash"></i> Remove Deep Dive
       </button>
@@ -42,7 +42,11 @@
 </template>
 
 <script>
+import LanguageText from "./LanguageText.vue";
 export default {
+  components: {
+    LanguageText,
+  },
   props: ["stage", "languages", "tour"],
   created() {
     if (!this.stage.deepdives) {

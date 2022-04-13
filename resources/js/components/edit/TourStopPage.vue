@@ -130,7 +130,7 @@
 import { defineAsyncComponent } from "vue";
 import { get } from "lodash";
 import usePermissions from "../../hooks/usePermissions";
-import Error from "../error.vue";
+import Error from "../Error.vue";
 import LanguageText from "./LanguageText.vue";
 import ImageUpload from "./ImageUpload.vue";
 import Stage from "./Stage.vue";
@@ -148,10 +148,18 @@ export default {
     // draggable,
 
     // Stages
-    Separator: defineAsyncComponent(() => import("./Separator.vue")),
-    Navigation: defineAsyncComponent(() => import("./Navigation.vue")),
-    Guide: defineAsyncComponent(() => import("./Guide.vue")),
     Ar: defineAsyncComponent(() => import("./AR.vue")),
+    Deepdives: defineAsyncComponent(() => import("./DeepDives.vue")),
+    DeepDiveSummary: defineAsyncComponent(() =>
+      import("./DeepDiveSummary.vue")
+    ),
+    Embed: defineAsyncComponent(() => import("./Embed.vue")),
+    Feedback: defineAsyncComponent(() => import("./Feedback.vue")),
+    Gallery: defineAsyncComponent(() => import("./Gallery.vue")),
+    Guide: defineAsyncComponent(() => import("./Guide.vue")),
+    Navigation: defineAsyncComponent(() => import("./Navigation.vue")),
+    Separator: defineAsyncComponent(() => import("./Separator.vue")),
+    Quiz: defineAsyncComponent(() => import("./Quiz.vue")),
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {

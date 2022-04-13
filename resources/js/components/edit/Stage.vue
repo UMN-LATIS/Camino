@@ -7,8 +7,8 @@
         </h5>
         <div class="controls">
           <button
-            @click="$emit('remove', stage)"
             class="btn btn-outline-danger"
+            @click="$emit('remove', stage)"
           >
             <i class="fas fa-trash"></i> Remove Stage
           </button>
@@ -19,6 +19,13 @@
   </div>
 </template>
 
+<script>
+export default {
+  // eslint-disable-next-line vue/require-prop-types
+  props: ["stage"],
+  emits: ["remove"],
+};
+</script>
 <style scoped>
 /*Make this global */
 .card-title {
@@ -26,8 +33,3 @@
   text-transform: capitalize;
 }
 </style>
-<script>
-export default {
-  props: ["stage"],
-};
-</script>

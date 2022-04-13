@@ -1,6 +1,6 @@
 <template>
   <div>
-    <error :error="error" />
+    <Error :error="error" />
     <div class="row d-flex justify-content-between align-items-center">
       <h1>My Tours</h1>
       <div>
@@ -17,7 +17,7 @@
         <h5 class="card-title">
           <i v-if="tour.active" class="fas fa-check-circle mr-2"></i
           ><i v-if="tour.public" class="fas fa-globe mr-2"></i
-          ><transport-icon :tour="tour" class="mr-2" />{{ tour.title }}
+          ><TransportIcon :tour="tour" class="mr-2" />{{ tour.title }}
         </h5>
         <div class="controls pt-2 pt-sm-0">
           <router-link
@@ -53,9 +53,14 @@
 </template>
 
 <script>
-console.log("loading home");
+import Error from "../Error.vue";
+import TransportIcon from "../TransportIcon.vue";
 
 export default {
+  components: {
+    Error,
+    TransportIcon,
+  },
   data() {
     return {
       tours: [],

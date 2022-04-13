@@ -25,11 +25,11 @@
         alt="Image uploaded to server"
       />
       <input
+        id="image-upload-file"
         type="file"
         class="image-upload__input"
-        @change="onFileChange"
-        id="image-upload-file"
         accept="image/gif, image/png, image/jpeg, image/webp"
+        @change="onFileChange"
       />
 
       <div class="image-upload__status">
@@ -37,7 +37,7 @@
           Drag your image here to {{ imageSrc ? "replace" : "upload" }} <br />
           or click to browse
         </p>
-        <div class="image-upload__spinner" v-if="isUploading">
+        <div v-if="isUploading" class="image-upload__spinner">
           <i class="fas fa-spinner fa-spin fa-3x"></i>
         </div>
       </div>
@@ -53,6 +53,7 @@ export default {
       default: null,
     },
   },
+  emits: ["imageuploaded"],
   data() {
     return {
       isUploading: false,

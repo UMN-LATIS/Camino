@@ -1,12 +1,12 @@
 <template>
   <div>
-    <language-text
+    <LanguageText
       :text="stage.questionText"
       :languages="languages"
       :largetext="true"
     >
       Quiz Question Text
-    </language-text>
+    </LanguageText>
 
     <div class="form-group row">
       <label for="quizType" class="col-sm-1"><b>Quiz Type</b></label>
@@ -45,82 +45,87 @@
     </div>
 
     <div
-      class="form-group row responseOutline"
       v-for="(response, index) in stage.responses"
       :key="index"
+      class="form-group row responseOutline"
     >
       <div class="col-sm-12 mt-2">
-        <language-text
+        <LanguageText
           :text="response.text"
           :languages="languages"
           :largetext="isMultipleChoice"
         >
           Response
-        </language-text>
+        </LanguageText>
         <span v-if="isMultipleChoice">
-          <input type="checkbox" v-model="response.correct" value="1" /> Correct
+          <input v-model="response.correct" type="checkbox" value="1" /> Correct
         </span>
       </div>
     </div>
 
-    <button @click="addResponse" class="btn btn-outline-primary">
+    <button class="btn btn-outline-primary" @click="addResponse">
       <i class="fas fa-plus"></i> Add response
     </button>
 
-    <language-text
+    <LanguageText
       :text="stage.hintText"
       :languages="languages"
       :largetext="true"
     >
       Hint
-    </language-text>
+    </LanguageText>
 
     <div>
-      <language-text
+      <LanguageText
         :text="stage.buttonText"
         :languages="languages"
         :largetext="false"
       >
         Button Text
-      </language-text>
+      </LanguageText>
     </div>
     <div v-if="!isMultipleChoice">
-      <language-text
+      <LanguageText
         :text="stage.answerPrompt"
         :languages="languages"
         :largetext="false"
       >
         Answer Prompt
-      </language-text>
+      </LanguageText>
     </div>
     <div>
-      <language-text
+      <LanguageText
         :text="stage.hintPrompt"
         :languages="languages"
         :largetext="false"
       >
         Hint Prompt
-      </language-text>
+      </LanguageText>
     </div>
     <div>
       <!-- FIXME: mutation of stage prop -->
-      <!-- eslint-disable -->
-      <input type="checkbox" v-model="stage.requireCorrect" value="1" />
+      <!-- eslint-disable vue/no-mutating-props -->
+      <input v-model="stage.requireCorrect" type="checkbox" value="1" />
       <!-- eslint-enable -->
       Require Correct Answer to Advance
     </div>
   </div>
 </template>
 
-<style scoped>
-.responseOutline {
-  border: 1px solid lightgray;
-  border-radius: 3px;
-}
-</style>
 <script>
+import LanguageText from "./LanguageText.vue";
+
 export default {
+  components: {
+    LanguageText,
+  },
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour"],
+  computed: {
+    isMultipleChoice: function () {
+      return this.stage.quizType == "multiple_choice";
+    },
+  },
   created() {
     if (!this.stage.questionText) {
       this.$set(this.stage, "questionText", { placeholder: null });
@@ -142,11 +147,6 @@ export default {
       });
     }
   },
-  computed: {
-    isMultipleChoice: function () {
-      return this.stage.quizType == "multiple_choice";
-    },
-  },
   methods: {
     addResponse: function () {
       // FIXME: Mutation of stage prop
@@ -156,3 +156,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+.responseOutline {
+  border: 1px solid lightgray;
+  border-radius: 3px;
+}
+</style>

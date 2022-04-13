@@ -5,31 +5,31 @@
       :key="key"
       class="border rounded p-2 m-2"
     >
-      <image-upload
+      <ImageUpload
         v-if="!image.src"
+        :image-src="image.src"
         @imageuploaded="imageUploaded(key, $event)"
-        :imageSrc="image.src"
       />
       <button
-        @click="removeImage(image, key)"
-        class="btn btn-outline-danger float-right"
         v-if="image.src"
+        class="btn btn-outline-danger float-right"
+        @click="removeImage(image, key)"
       >
         <i class="fas fa-trash"></i> Remove Image
       </button>
       <img
+        v-if="image.src"
         :src="'/storage/' + image.src"
         class="img-thumbnail mb-2"
-        v-if="image.src"
         width="200"
       />
-      <language-text
+      <LanguageText
         :text="image.text"
         :languages="languages"
         :largetext="false"
       >
         Image Description
-      </language-text>
+      </LanguageText>
     </div>
     <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
     <!-- eslint-disable -->
@@ -44,7 +44,14 @@
 </template>
 
 <script>
+import LanguageText from "./LanguageText.vue";
+import ImageUpload from "./ImageUpload.vue";
 export default {
+  components: {
+    LanguageText,
+    ImageUpload,
+  },
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour"],
   created() {
     if (!this.stage.images) {

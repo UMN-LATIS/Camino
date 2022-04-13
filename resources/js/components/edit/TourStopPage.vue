@@ -151,6 +151,7 @@ export default {
     Separator: defineAsyncComponent(() => import("./Separator.vue")),
     Navigation: defineAsyncComponent(() => import("./Navigation.vue")),
     Guide: defineAsyncComponent(() => import("./Guide.vue")),
+    Ar: defineAsyncComponent(() => import("./AR.vue")),
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {

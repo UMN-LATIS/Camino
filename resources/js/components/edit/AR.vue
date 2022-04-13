@@ -1,8 +1,8 @@
 <template>
   <div>
-    <language-text :text="stage.buttonTitle" :languages="languages">
+    <LanguageText :text="stage.buttonTitle" :languages="languages">
       AR Button Title
-    </language-text>
+    </LanguageText>
 
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Waypoints</label>
@@ -15,7 +15,7 @@
           :key="key"
           class="border rounded mt-2 p-2"
         >
-          <language-text :text="waypoint.text" :languages="languages">
+          <LanguageText :text="waypoint.text" :languages="languages">
             Text
             <template #languageaddon>
               <button
@@ -25,7 +25,7 @@
                 <i class="fas fa-trash"></i> Remove Waypoint
               </button>
             </template>
-          </language-text>
+          </LanguageText>
           <div class="form-group row">
             <label for="tourTitle" class="col-sm-2 col-form-label"
               >Location</label
@@ -35,12 +35,12 @@
                 <b>Latitude:</b> {{ waypoint.location.lat }}, <b>Longitude:</b>
                 {{ waypoint.location.lng }}
               </div>
-              <location-selector
+              <LocationSelector
                 v-model:location="waypoint.location"
                 :generalarea="currentLocation"
                 :basemap="tour.tour_content.custom_base_map"
               >
-              </location-selector>
+              </LocationSelector>
             </div>
           </div>
 
@@ -68,7 +68,13 @@
 </template>
 
 <script>
+import LanguageText from "./LanguageText.vue";
+import LocationSelector from "./LocationSelector.vue";
 export default {
+  components: {
+    LanguageText,
+    LocationSelector,
+  },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
   computed: {

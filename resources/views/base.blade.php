@@ -12,12 +12,9 @@
   <script src="/umn/js/umnhf-2015.js" type="text/javascript"></script>
   <script src="/umn/js/html5shiv-printshiv.js" type="text/javascript"></script>
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Amatic+SC" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-  {{-- <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css"> --}}
+  <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
   @yield('header')
 </head>
 
@@ -174,7 +171,7 @@
 <script>
   window.mapbox = "{{ config('services.mapbox') }}";
 </script>
-{{-- <script src="{{ mix('js/app.js') }}"></script> --}}
+<script src="{{ mix('js/app.js') }}"></script>
 
 @yield('footer')
 

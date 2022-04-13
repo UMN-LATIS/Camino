@@ -1,6 +1,12 @@
 const fs = require("fs");
 const mix = require("laravel-mix");
 
+// Main Laravel App Styles and Scripts (homepage)
+mix
+  .js("resources/js/app.js", "public/js/app.js")
+  .sass("resources/sass/app.scss", "public/css/app.css");
+
+// Camino Creator App
 mix
   .js("resources/camino-creator/main.js", "public/camino-creator/main.js")
   .sass("resources/camino-creator/main.scss", "public/camino-creator/main.css")
@@ -9,9 +15,7 @@ mix
 
 if (mix.inProduction()) {
   mix.version();
-}
-
-if (!mix.inProduction()) {
+} else {
   mix
     .options({
       hmrOptions: {

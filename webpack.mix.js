@@ -13,23 +13,11 @@ const mix = require("laravel-mix");
 */
 
 mix.webpackConfig({
-  resolve: {
-    alias: {
-      vue: "@vue/compat",
-    },
-  },
   module: {
     rules: [
       {
         test: /\.vue$/,
         loader: "vue-loader",
-        options: {
-          compilerOptions: {
-            compatConfig: {
-              MODE: 2,
-            },
-          },
-        },
       },
     ],
   },
@@ -54,10 +42,10 @@ if (!mix.inProduction()) {
     });
 }
 
-mix
-  .js("resources/js/app.js", "public/js")
-  .vue()
-  .sass("resources/sass/app.scss", "public/css");
+// mix
+//   .js("resources/js/app.js", "public/js")
+//   .vue()
+//   .sass("resources/sass/app.scss", "public/css");
 
 if (mix.inProduction()) {
   mix.version();

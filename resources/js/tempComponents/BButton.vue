@@ -1,6 +1,12 @@
 <template>
-  <button class="btn">
+  <button class="btn btn-outline-dark">
     <slot />
   </button>
 </template>
-<script setup></script>
+<script>
+export default {
+  compatConfig: {
+    MODE: 3, // opt-in to Vue 3 behavior for this component only
+  },
+};
+</script>

@@ -4,7 +4,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require("./bootstrap");
+require("./camino-creator/common/initAxios");
 
 import Vue from "vue";
 import VueProgressBar from "vue-progressbar";

@@ -1,27 +1,15 @@
 const fs = require("fs");
 const mix = require("laravel-mix");
 
-/*
-|--------------------------------------------------------------------------
-| Mix Asset Management
-|--------------------------------------------------------------------------
-|
-| Mix provides a clean, fluent API for defining some Webpack build steps
-| for your Laravel application. By default, we are compiling the Sass
-| file for the application as well as bundling up all the JS files.
-|
-*/
+mix
+  .js("resources/camino-creator/main.js", "public/camino-creator/main.js")
+  .sass("resources/camino-creator/main.scss", "public/camino-creator/main.css")
+  .vue()
+  .sourceMaps();
 
-mix.webpackConfig({
-  module: {
-    rules: [
-      {
-        test: /\.vue$/,
-        loader: "vue-loader",
-      },
-    ],
-  },
-});
+if (mix.inProduction()) {
+  mix.version();
+}
 
 if (!mix.inProduction()) {
   mix
@@ -40,23 +28,4 @@ if (!mix.inProduction()) {
         },
       },
     });
-}
-
-// mix
-//   .js("resources/js/app.js", "public/js")
-//   .vue()
-//   .sass("resources/sass/app.scss", "public/css");
-
-if (mix.inProduction()) {
-  mix.version();
-}
-
-mix
-  .js("resources/js/edit.js", "public/js")
-  .vue()
-  .sass("resources/sass/edit.scss", "public/css")
-  .sourceMaps();
-
-if (mix.inProduction()) {
-  mix.version();
 }

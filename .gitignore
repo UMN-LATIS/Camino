@@ -1,6 +1,9 @@
 /node_modules
 /public/hot
 /public/storage
+/public/camino-creator
+/public/images/vendor
+/public/mix-manifest.json
 /storage/*.key
 /vendor
 .env

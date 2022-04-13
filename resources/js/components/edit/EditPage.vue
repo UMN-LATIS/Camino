@@ -1,6 +1,6 @@
 <template>
   <div>
-    <error :error="error" />
+    <Error :error="error" />
     <h1>{{ tour.title }}</h1>
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-1 col-form-label">Tour Title</label>
@@ -43,11 +43,11 @@
           <b>Latitude:</b> {{ tour.start_location.lat }}, <b>Longitude:</b>
           {{ tour.start_location.lng }}
         </div>
-        <initial-location
+        <InitialLocation
           v-model:location="tour.start_location"
           :basemap="tour.tour_content.custom_base_map"
         >
-        </initial-location>
+        </InitialLocation>
       </div>
     </div>
 
@@ -187,7 +187,7 @@
         </label>
       </div>
       <div v-if="tour.tour_content.custom_base_map.use_basemap">
-        <image-upload
+        <ImageUpload
           v-if="!tour.tour_content.custom_base_map.image"
           :image-src="tour.tour_content.custom_base_map.image"
           @imageuploaded="imageUploaded($event)"
@@ -271,7 +271,7 @@
           Tour URL:
           <strong
             ><a :href="tourURL">{{ tourURL }}</a></strong
-          ><qr-code :size="120" :text="tourURL"></qr-code>
+          ><QrCode :size="120" :text="tourURL"></QrCode>
         </p>
       </label>
     </div>
@@ -345,7 +345,7 @@
       <button class="btn btn-primary" @click="save">
         <i class="fas fa-save"></i> Save
       </button>
-      <save-alert v-model:show-alert="showAlert" />
+      <SaveAlert v-model:show-alert="showAlert" />
     </div>
   </div>
 </template>
@@ -353,6 +353,11 @@
 <script>
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
 // import draggable from "vuedraggable";
+import Error from "../Error.vue";
+import SaveAlert from "./SaveAlert.vue";
+import QrCode from "qrcode.vue";
+import InitialLocation from "./InitialLocation.vue";
+import ImageUpload from "./ImageUpload.vue";
 import { languages as possibleLanguages } from "../../languages.js";
 import usePermissions from "../../hooks/usePermissions.js";
 
@@ -360,6 +365,11 @@ const { userCan } = usePermissions();
 
 export default {
   components: {
+    Error,
+    SaveAlert,
+    QrCode,
+    InitialLocation,
+    ImageUpload,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types

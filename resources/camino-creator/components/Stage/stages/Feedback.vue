@@ -1,16 +1,17 @@
 <template>
   <div>
     <LanguageText :text="stage.text" :languages="languages" :largetext="true">
-      Guide Text
+      Feedback Text
     </LanguageText>
   </div>
 </template>
 
 <script>
-import LanguageText from "./LanguageText.vue";
+import LanguageText from "../../LanguageText.vue";
 export default {
-  components: { LanguageText },
-  // eslint-disable-next-line vue/require-prop-types
+  components: {
+    LanguageText,
+  },
   props: ["stage", "languages", "tour"],
   created() {
     if (!this.stage.text) {

@@ -27,8 +27,8 @@
   </div>
 </template>
 <script>
-import LanguageText from "./LanguageText.vue";
-import LocationSelector from "./LocationSelector.vue";
+import LanguageText from "../../LanguageText.vue";
+import LocationSelector from "../../LocationSelector.vue";
 
 export default {
   components: {

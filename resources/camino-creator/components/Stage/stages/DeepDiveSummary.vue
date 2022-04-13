@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import LanguageText from "./LanguageText.vue";
+import LanguageText from "../../LanguageText.vue";
 export default {
   components: {
     LanguageText,

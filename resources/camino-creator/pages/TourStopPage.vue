@@ -59,17 +59,10 @@
           v-for="(stage, key) in stop.stop_content.stages"
           :key="key"
           :stage="stage"
+          :tour="tour"
+          :stop="stop"
           @remove="stop.stop_content.stages.splice(key, 1)"
-        >
-          <component
-            :is="stage.type"
-            :stage="stage"
-            :languages="tour.tour_content.languages"
-            :tour="tour"
-            :stop="stop"
-          >
-          </component>
-        </Stage>
+        />
         <!-- </draggable> -->
       </div>
     </div>
@@ -127,13 +120,12 @@
 
 <script>
 // import draggable from "vuedraggable";
-import { defineAsyncComponent } from "vue";
 import { get } from "lodash";
 import usePermissions from "../hooks/usePermissions";
 import Error from "../components/Error.vue";
 import LanguageText from "../components/LanguageText.vue";
 import ImageUpload from "../components/ImageUpload.vue";
-import Stage from "../components/Stage.vue";
+import Stage from "../components/Stage/Stage.vue";
 import SaveAlert from "../components/SaveAlert.vue";
 
 const { userCan } = usePermissions();
@@ -146,26 +138,6 @@ export default {
     Stage,
     SaveAlert,
     // draggable,
-
-    // Stages
-    Ar: defineAsyncComponent(() => import("../components/AR.vue")),
-    Deepdives: defineAsyncComponent(() =>
-      import("../components/DeepDives.vue")
-    ),
-    DeepDiveSummary: defineAsyncComponent(() =>
-      import("../components/DeepDiveSummary.vue")
-    ),
-    Embed: defineAsyncComponent(() => import("../components/Embed.vue")),
-    Feedback: defineAsyncComponent(() => import("../components/Feedback.vue")),
-    Gallery: defineAsyncComponent(() => import("../components/Gallery.vue")),
-    Guide: defineAsyncComponent(() => import("../components/Guide.vue")),
-    Navigation: defineAsyncComponent(() =>
-      import("../components/Navigation.vue")
-    ),
-    Separator: defineAsyncComponent(() =>
-      import("../components/Separator.vue")
-    ),
-    Quiz: defineAsyncComponent(() => import("../components/Quiz.vue")),
   },
   beforeRouteLeave(to, from, next) {
     if (this.isDirty) {

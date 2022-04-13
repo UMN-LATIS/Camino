@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import LanguageText from "./LanguageText.vue";
-import ImageUpload from "./ImageUpload.vue";
+import LanguageText from "../../LanguageText.vue";
+import ImageUpload from "../../ImageUpload.vue";
 export default {
   components: {
     LanguageText,

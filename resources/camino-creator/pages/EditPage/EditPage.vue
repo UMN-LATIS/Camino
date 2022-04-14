@@ -1,19 +1,8 @@
 <template>
   <div>
     <Error :error="error" />
-    <h1>{{ tour.title }}</h1>
-    <div class="form-group row">
-      <label for="tourTitle" class="col-sm-1 col-form-label">Tour Title</label>
-      <div class="col-sm-6">
-        <input
-          id="tourTitle"
-          v-model="tour.title"
-          type="text"
-          class="form-control"
-          placeholder=""
-        />
-      </div>
-    </div>
+
+    <TourTitleInput v-model="tour.title" />
 
     <div class="form-group row">
       <label class="col-sm-1"><b>Languages</b></label>
@@ -354,12 +343,13 @@
 // Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
-import Error from "../components/Error.vue";
-import SaveAlert from "../components/SaveAlert.vue";
-import InitialLocation from "../components/InitialLocation.vue";
-import ImageUpload from "../components/ImageUpload.vue";
-import { languages as possibleLanguages } from "../languages.js";
-import usePermissions from "../hooks/usePermissions.js";
+import Error from "../../components/Error.vue";
+import SaveAlert from "../../components/SaveAlert.vue";
+import InitialLocation from "../../components/InitialLocation.vue";
+import ImageUpload from "../../components/ImageUpload.vue";
+import { languages as possibleLanguages } from "../../languages.js";
+import usePermissions from "../../hooks/usePermissions.js";
+import TourTitleInput from "./TourTitleInput.vue";
 
 const { userCan } = usePermissions();
 
@@ -370,6 +360,7 @@ export default {
     QrCode,
     InitialLocation,
     ImageUpload,
+    TourTitleInput,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types

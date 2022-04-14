@@ -19,21 +19,16 @@
      -->
     <ShareTour v-if="tour.id" v-model:users="tour.users" :tour-id="tour.id" />
 
-    <div class="form-check">
-      <label class="form-check-label">
-        <input
-          v-model="tour.public"
-          type="checkbox"
-          class="form-check-input"
-          :disabled="!userCan('publish publicly')"
-        />
-        Public
-        <span v-if="!userCan('publish publicly')" class="help-text"
-          >(<a href="mailto:mcfa0086@umn.edu">Contact us</a> for permission to
-          publish tour publicly)</span
-        >
-      </label>
-    </div>
+    <CheckboxInput
+      v-model="tour.public"
+      label="Public"
+      :disabled="!userCan('publish publicly')"
+    >
+      <small v-if="!userCan('publish publicly')" class="help-text"
+        >(<a href="mailto:latistecharch@umn.edu">Contact us</a> for permission
+        to publish tour publicly)</small
+      >
+    </CheckboxInput>
 
     <div>
       <div class="form-check">
@@ -227,6 +222,7 @@ import SelectTransport from "./SelectTransport.vue";
 import SelectTourStyle from "./SelectTourStyle.vue";
 import ShareTour from "./ShareTour.vue";
 import { TOUR_STYLES } from "../../common/constants.js";
+import CheckboxInput from "../../components/CheckboxInput.vue";
 
 const { userCan } = usePermissions();
 
@@ -242,7 +238,7 @@ export default {
     SelectTransport,
     SelectTourStyle,
     ShareTour,
-    // draggable,
+    CheckboxInput,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["tourId"],

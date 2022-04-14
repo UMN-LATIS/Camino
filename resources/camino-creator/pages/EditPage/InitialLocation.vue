@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group row my-2">
+  <div class="form-group row my-4">
     <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
     <div class="col-sm-6">
       <div v-if="modelValue.lat || modelValue.lng">
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import LocationSelector from "./LocationSelector.vue";
+import LocationSelector from "../../components/LocationSelector.vue";
 
 defineProps({
   modelValue: {

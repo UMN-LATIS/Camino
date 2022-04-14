@@ -3,58 +3,21 @@
     <Error :error="error" />
 
     <TourTitleInput v-model="tour.title" />
-
     <SelectLanguages v-model="tour.tour_content.languages" />
-
     <InitialLocation
       v-model="tour.start_location"
       :basemap="tour.tour_content.custom_base_map"
     />
-
     <SelectTransport
       v-model:walking="tour.walking"
       v-model:biking="tour.biking"
       v-model:driving="tour.driving"
     />
-
     <SelectTourStyle v-model="tour.style" />
 
-    <div class="form-group row">
-      <label for="sharing" class="col-sm-1"><b>Sharing</b></label>
-      <div class="col-sm-6">
-        <div class="input-group">
-          <input
-            id=""
-            v-model="shareAddress"
-            type="text"
-            class="form-control"
-            name=""
-            aria-describedby="helpId"
-            placeholder=""
-          />
-          <div class="input-group-append">
-            <button
-              class="btn btn-outline-secondary"
-              type="button"
-              @click="share"
-            >
-              Share
-            </button>
-          </div>
-        </div>
-
-        <small id="helpId" class="form-text text-muted"
-          >Enter a full email address</small
-        >
-        <strong v-if="invitationSent">Invitation Sent</strong>
-        <div v-if="tour.users.length > 1">
-          <p class="mb-0">Shared With:</p>
-          <ul class="mt-0">
-            <li v-for="user in tour.users" :key="user.id">{{ user.email }}</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <!-- tour needs to be created and have an id before it can be shared
+     -->
+    <ShareTour v-if="tour.id" v-model:users="tour.users" :tour-id="tour.id" />
 
     <div class="form-check">
       <label class="form-check-label">
@@ -262,6 +225,7 @@ import TourTitleInput from "./TourTitleInput.vue";
 import SelectLanguages from "./SelectLanguages.vue";
 import SelectTransport from "./SelectTransport.vue";
 import SelectTourStyle from "./SelectTourStyle.vue";
+import ShareTour from "./ShareTour.vue";
 import { TOUR_STYLES } from "../../common/constants.js";
 
 const { userCan } = usePermissions();
@@ -277,6 +241,7 @@ export default {
     SelectLanguages,
     SelectTransport,
     SelectTourStyle,
+    ShareTour,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types

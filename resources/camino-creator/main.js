@@ -8,7 +8,10 @@ import "bootstrap";
 import initAxios from "./common/initAxios";
 import initLeaflet from "./common/initLeaflet";
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import router from "./router.js";
+
+const pinia = createPinia();
 
 initAxios();
 initLeaflet();
@@ -18,5 +21,6 @@ createApp({
   // and is set server-side in the blade template `index.blade.php`
   mixins: [Permissions],
 })
+  .use(pinia)
   .use(router)
   .mount("#app");

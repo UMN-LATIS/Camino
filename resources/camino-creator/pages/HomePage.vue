@@ -34,7 +34,7 @@
           <a
             href="#"
             class="btn btn-outline-danger"
-            @click="deleteTour(tour.id)"
+            @click="handleDelete(tour.id)"
             ><i class="fas fa-trash"></i>
             <span class="d-none d-sm-inline">Delete</span></a
           >
@@ -57,54 +57,28 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
+import { useTourStore } from "../stores/tours.js";
 
-export default {
-  components: {
-    Error,
-  },
-  data() {
-    return {
-      tours: [],
-      error: null,
-    };
-  },
-  computed: {
-    toursSortedByTitle: function () {
-      // sort mutates the array, so we need to clone it
-      return [...this.tours].sort((a, b) => (a.title > b.title ? 1 : -1));
-    },
-  },
-  mounted: function () {
-    this.loadTours();
-  },
-  methods: {
-    deleteTour: function (tour) {
-      if (confirm("Are you sure you wish to delete this tour?")) {
-        axios
-          .delete("/creator/edit/" + tour)
-          .then(() => {
-            this.loadTours();
-          })
-          .catch((res) => {
-            this.error = res;
-          });
-      }
-    },
-    loadTours: function () {
-      axios
-        .get("/creator?" + Math.random()) // someday do .json routes in laravel
-        .then((res) => {
-          this.tours = res.data;
-          document.title = "Camino: My Tours";
-        })
-        .catch((res) => {
-          this.error = res;
-        });
-    },
-  },
-};
+const tourStore = useTourStore();
+
+const { tours, error } = storeToRefs(tourStore);
+
+const toursSortedByTitle = computed(() =>
+  [...tours.value].sort((a, b) => (a.title > b.title ? 1 : -1))
+);
+function handleDelete(tourId) {
+  if (confirm("Are you sure you wish to delete this tour?")) {
+    tourStore.deleteTour(tourId);
+  }
+}
+
+onMounted(() => {
+  tourStore.fetchTours();
+});
 </script>
 
 <style scoped>

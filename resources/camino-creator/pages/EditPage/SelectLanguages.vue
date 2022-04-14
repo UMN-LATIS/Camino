@@ -2,7 +2,6 @@
   <div class="form-group row my-4">
     <label class="col-sm-2">Languages</label>
     <div class="col-sm-10 flex-wrap flex-column language-container">
-      {{ modelValue }}
       <div v-for="(_, key) in possibleLanguages" :key="key" class="form-check">
         <label class="form-check-label">
           <input

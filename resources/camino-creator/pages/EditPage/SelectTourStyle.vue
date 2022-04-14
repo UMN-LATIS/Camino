@@ -1,8 +1,7 @@
 <template>
-  <div class="form-group row">
-    <label for="tourStyle" class="col-sm-1"><b>Tour Style</b></label>
+  <div class="form-group row my-4">
+    <label for="tourStyle" class="col-sm-2">Tour Style</label>
     <div class="col-sm-6">
-      {{ modelValue }}
       <div
         v-for="(tourStyleDescription, tourStyleValue) in descriptions"
         :key="tourStyleValue"

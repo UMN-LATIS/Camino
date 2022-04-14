@@ -11,44 +11,11 @@
       :basemap="tour.tour_content.custom_base_map"
     />
 
-    <div class="form-group row">
-      <label for="tourTitle" class="col-sm-1"><b>Transport</b></label>
-      <div class="col-sm-6">
-        <div class="form-check">
-          <label class="form-check-label">
-            <input
-              v-model="tour.walking"
-              type="checkbox"
-              class="form-check-input"
-              value="1"
-            />
-            Walk
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input
-              v-model="tour.biking"
-              type="checkbox"
-              class="form-check-input"
-              value="1"
-            />
-            Bike
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input
-              v-model="tour.driving"
-              type="checkbox"
-              class="form-check-input"
-              value="1"
-            />
-            Drive
-          </label>
-        </div>
-      </div>
-    </div>
+    <SelectTransport
+      v-model:walking="tour.walking"
+      v-model:biking="tour.biking"
+      v-model:driving="tour.driving"
+    />
 
     <div class="form-group row">
       <label for="tourStyle" class="col-sm-1"><b>Tour Style</b></label>
@@ -316,11 +283,12 @@
 import QrCode from "qrcode.vue";
 import Error from "../../components/Error.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
-import InitialLocation from "../../components/InitialLocation.vue";
+import InitialLocation from "./InitialLocation.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import usePermissions from "../../hooks/usePermissions.js";
 import TourTitleInput from "./TourTitleInput.vue";
 import SelectLanguages from "./SelectLanguages.vue";
+import SelectTransport from "./SelectTransport.vue";
 
 const { userCan } = usePermissions();
 
@@ -333,6 +301,7 @@ export default {
     ImageUpload,
     TourTitleInput,
     SelectLanguages,
+    SelectTransport,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types
@@ -350,12 +319,12 @@ export default {
         active: false,
         title: "",
         start_location: {
-          lng: null,
-          lat: null,
+          lng: 0,
+          lat: 0,
         },
-        walking: 0,
-        biking: 0,
-        driving: 0,
+        walking: false,
+        biking: false,
+        driving: false,
         style: "entire_tour",
         tour_content: {
           use_template: true,

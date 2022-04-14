@@ -23,7 +23,8 @@
           {{ error }}
         </ErrorAlert>
         <strong v-if="invitationSent">Invitation Sent</strong>
-        <div v-if="users.length">
+        <!-- show users list if there's more than just the tour owner -->
+        <div v-if="users.length > 1">
           <p class="mb-0">Shared With:</p>
           <ul class="mt-0">
             <li v-for="user in users" :key="user.email">{{ user.email }}</li>

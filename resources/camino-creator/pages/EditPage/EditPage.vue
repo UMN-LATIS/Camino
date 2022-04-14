@@ -17,35 +17,7 @@
       v-model:driving="tour.driving"
     />
 
-    <div class="form-group row">
-      <label for="tourStyle" class="col-sm-1"><b>Tour Style</b></label>
-      <div class="col-sm-6">
-        <div class="form-check">
-          <label class="form-check-label">
-            <input
-              v-model="tour.style"
-              type="radio"
-              name="tourStyle"
-              class="form-check-input"
-              value="entire_tour"
-            />
-            Reveal entire tour
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <input
-              v-model="tour.style"
-              type="radio"
-              name="tourStyle"
-              class="form-check-input"
-              value="next_stop"
-            />
-            Only reveal next stop
-          </label>
-        </div>
-      </div>
-    </div>
+    <SelectTourStyle v-model="tour.style" />
 
     <div class="form-group row">
       <label for="sharing" class="col-sm-1"><b>Sharing</b></label>
@@ -289,6 +261,8 @@ import usePermissions from "../../hooks/usePermissions.js";
 import TourTitleInput from "./TourTitleInput.vue";
 import SelectLanguages from "./SelectLanguages.vue";
 import SelectTransport from "./SelectTransport.vue";
+import SelectTourStyle from "./SelectTourStyle.vue";
+import { TOUR_STYLES } from "../../common/constants.js";
 
 const { userCan } = usePermissions();
 
@@ -302,6 +276,7 @@ export default {
     TourTitleInput,
     SelectLanguages,
     SelectTransport,
+    SelectTourStyle,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types
@@ -325,7 +300,7 @@ export default {
         walking: false,
         biking: false,
         driving: false,
-        style: "entire_tour",
+        style: TOUR_STYLES.ENTIRE_TOUR,
         tour_content: {
           use_template: true,
           languages: ["English"],

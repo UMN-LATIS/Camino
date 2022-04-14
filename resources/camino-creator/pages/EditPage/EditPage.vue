@@ -4,26 +4,7 @@
 
     <TourTitleInput v-model="tour.title" />
 
-    <div class="form-group row">
-      <label class="col-sm-1"><b>Languages</b></label>
-      <div class="col-sm-10 flex-wrap flex-column language-container">
-        <div
-          v-for="(language, key) in possibleLanguages"
-          :key="key"
-          class="form-check"
-        >
-          <label class="form-check-label">
-            <input
-              v-model="tour.tour_content.languages"
-              :value="key"
-              type="checkbox"
-              class="form-check-input"
-            />
-            {{ key }}
-          </label>
-        </div>
-      </div>
-    </div>
+    <SelectLanguages v-model="tour.tour_content.languages" />
 
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-1 col-form-label">Location</label>
@@ -347,9 +328,9 @@ import Error from "../../components/Error.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "../../components/InitialLocation.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
-import { languages as possibleLanguages } from "../../languages.js";
 import usePermissions from "../../hooks/usePermissions.js";
 import TourTitleInput from "./TourTitleInput.vue";
+import SelectLanguages from "./SelectLanguages.vue";
 
 const { userCan } = usePermissions();
 
@@ -361,13 +342,13 @@ export default {
     InitialLocation,
     ImageUpload,
     TourTitleInput,
+    SelectLanguages,
     // draggable,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["tourId"],
   data() {
     return {
-      possibleLanguages,
       error: null,
       showAlert: false,
       errors: [],

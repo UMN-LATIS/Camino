@@ -13,6 +13,7 @@ module.exports = {
   plugins: ["vue"],
   rules: {
     "vue/multi-word-component-names": "off",
+    "vue/attribute-hyphenation": ["error", "never"],
     "vue/component-name-in-template-casing": [
       "error",
       "PascalCase",

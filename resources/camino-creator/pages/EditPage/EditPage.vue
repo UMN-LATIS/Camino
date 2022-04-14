@@ -17,7 +17,7 @@
 
     <!-- tour needs to be created and have an id before it can be shared
      -->
-    <ShareTour v-if="tour.id" v-model:users="tour.users" :tour-id="tour.id" />
+    <ShareTour v-if="tour.id" v-model:users="tour.users" :tourId="tour.id" />
 
     <CheckboxInput
       v-model="tour.public"
@@ -30,83 +30,16 @@
       >
     </CheckboxInput>
 
-    <div>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input
-            v-model="tour.tour_content.custom_base_map.use_basemap"
-            type="checkbox"
-            class="form-check-input"
-            value="checkedValue"
-            checked
-          />
-          Custom base Map
-        </label>
-      </div>
-      <div v-if="tour.tour_content.custom_base_map.use_basemap">
-        <ImageUpload
-          v-if="!tour.tour_content.custom_base_map.image"
-          :image-src="tour.tour_content.custom_base_map.image"
-          @imageuploaded="imageUploaded($event)"
-        />
-        <div class="row">
-          <div class="form-group col-sm-2">
-            <label for="upper-left-latitude">Upper Left Latitude</label>
-            <input
-              id="upper-left-latitude"
-              v-model="tour.tour_content.custom_base_map.coords.upperleft.lat"
-              type="text"
-              class="form-control"
-              placeholder=""
-            />
-          </div>
-          <div class="form-group col-sm-2">
-            <label for="upper-left-longitude">Upper Left Longitude</label>
-            <input
-              id="upper-left-latitude"
-              v-model="tour.tour_content.custom_base_map.coords.upperleft.lng"
-              type="text"
-              class="form-control"
-              placeholder=""
-            />
-          </div>
-          <div class="form-group col-sm-2">
-            <label for="lower-right-latitude">Lower Right Latitude</label>
-            <input
-              id="upper-left-latitude"
-              v-model="tour.tour_content.custom_base_map.coords.lowerright.lat"
-              type="text"
-              class="form-control"
-              placeholder=""
-            />
-          </div>
-          <div class="form-group col-sm-2">
-            <label for="lower-right-latitude">Lower Right Longitude</label>
-            <input
-              id="upper-left-latitude"
-              v-model="tour.tour_content.custom_base_map.coords.lowerright.lng"
-              type="text"
-              class="form-control"
-              placeholder=""
-            />
-          </div>
-          <div class="col-sm-2">
-            <img
-              v-if="tour.tour_content.custom_base_map.image"
-              :src="'/storage/' + tour.tour_content.custom_base_map.image"
-              class="img-thumbnail rounded"
-            />
-            <button
-              v-if="tour.tour_content.custom_base_map.image"
-              class="btn btn-outline-danger float-right"
-              @click="tour.tour_content.custom_base_map.image = null"
-            >
-              <i class="fas fa-trash"></i> Remove basemap
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <SelectCustomBaseMap
+      v-model:useBaseMap="tour.tour_content.custom_base_map.use_basemap"
+      v-model:image="tour.tour_content.custom_base_map.image"
+      v-model:upperLeftCoord="
+        tour.tour_content.custom_base_map.coords.upperleft
+      "
+      v-model:lowerRightCoord="
+        tour.tour_content.custom_base_map.coords.lowerright
+      "
+    />
 
     <div class="form-check">
       <label class="form-check-label">
@@ -214,15 +147,15 @@ import QrCode from "qrcode.vue";
 import Error from "../../components/Error.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "./InitialLocation.vue";
-import ImageUpload from "../../components/ImageUpload.vue";
 import usePermissions from "../../hooks/usePermissions.js";
 import TourTitleInput from "./TourTitleInput.vue";
 import SelectLanguages from "./SelectLanguages.vue";
 import SelectTransport from "./SelectTransport.vue";
 import SelectTourStyle from "./SelectTourStyle.vue";
 import ShareTour from "./ShareTour.vue";
-import { TOUR_STYLES } from "../../common/constants.js";
 import CheckboxInput from "../../components/CheckboxInput.vue";
+import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
+import { TOUR_STYLES } from "../../common/constants.js";
 
 const { userCan } = usePermissions();
 
@@ -232,13 +165,13 @@ export default {
     SaveAlert,
     QrCode,
     InitialLocation,
-    ImageUpload,
     TourTitleInput,
     SelectLanguages,
     SelectTransport,
     SelectTourStyle,
     ShareTour,
     CheckboxInput,
+    SelectCustomBaseMap,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["tourId"],
@@ -267,7 +200,7 @@ export default {
           languages: ["English"],
           custom_base_map: {
             use_basemap: false,
-            image: null,
+            image: "",
             coords: {
               upperleft: {
                 lat: null,
@@ -314,9 +247,6 @@ export default {
             this.error = res;
           });
       }
-    },
-    imageUploaded: function (value) {
-      this.tour.tour_content.custom_base_map.image = value;
     },
     validate: function () {
       this.errors = [];

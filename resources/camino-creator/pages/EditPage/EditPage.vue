@@ -6,20 +6,10 @@
 
     <SelectLanguages v-model="tour.tour_content.languages" />
 
-    <div class="form-group row">
-      <label for="tourTitle" class="col-sm-1 col-form-label">Location</label>
-      <div class="col-sm-6">
-        <div v-if="tour.start_location">
-          <b>Latitude:</b> {{ tour.start_location.lat }}, <b>Longitude:</b>
-          {{ tour.start_location.lng }}
-        </div>
-        <InitialLocation
-          v-model:location="tour.start_location"
-          :basemap="tour.tour_content.custom_base_map"
-        >
-        </InitialLocation>
-      </div>
-    </div>
+    <InitialLocation
+      v-model="tour.start_location"
+      :basemap="tour.tour_content.custom_base_map"
+    />
 
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-1"><b>Transport</b></label>
@@ -359,7 +349,10 @@ export default {
         public: false,
         active: false,
         title: "",
-        start_location: null,
+        start_location: {
+          lng: null,
+          lat: null,
+        },
         walking: 0,
         biking: 0,
         driving: 0,

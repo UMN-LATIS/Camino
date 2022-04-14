@@ -1,25 +1,33 @@
 <template>
-  <div>
-    <p>General location for tour: {{ location }}</p>
-    <!-- FIXME: This mutates the location prop! -->
-    <!-- eslint-disable vue/no-mutating-props -->
-    <LocationSelector
-      :basemap="basemap"
-      :location="location"
-      @update:location="(payload) => $emit('update:location', payload)"
-    ></LocationSelector>
-    <!-- eslint-enable -->
+  <div class="form-group row my-2">
+    <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
+    <div class="col-sm-6">
+      <div v-if="modelValue.lat || modelValue.lng">
+        <b>Latitude:</b> {{ modelValue.lat }}, <b>Longitude:</b>
+        {{ modelValue.lng }}
+      </div>
+      <LocationSelector
+        :basemap="basemap"
+        :location="modelValue"
+        @update:location="(payload) => $emit('update:modelValue', payload)"
+      ></LocationSelector>
+    </div>
   </div>
 </template>
 
-<script>
+<script setup>
 import LocationSelector from "./LocationSelector.vue";
-export default {
-  components: {
-    LocationSelector,
+
+defineProps({
+  modelValue: {
+    type: Object,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["location", "basemap"],
-  emits: ["update:location"],
-};
+  basemap: {
+    type: Object,
+    default: null,
+  },
+});
+
+defineEmits(["update:modelValue"]);
 </script>

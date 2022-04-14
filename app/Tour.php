@@ -21,7 +21,12 @@ class Tour extends Model
 
     protected $casts = [
         'tour_content' => 'json',
-        'geocoded' => 'json'
+        'geocoded' => 'json',
+        'walking' => 'boolean',
+        'biking' => 'boolean',
+        'driving' => 'boolean',
+        'public' => 'boolean',
+        'active' => 'boolean'
     ];
 
     public function users() {

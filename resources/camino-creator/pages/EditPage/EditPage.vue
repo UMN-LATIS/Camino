@@ -41,30 +41,19 @@
       "
     />
 
-    <div class="form-check">
-      <label class="form-check-label">
-        <input
-          v-model="tour.tour_content.use_template"
-          type="checkbox"
-          class="form-check-input"
-          disabled
-        />
-        Use standard template
-      </label>
-    </div>
+    <CheckboxInput
+      v-model="tour.tour_content.use_template"
+      label="Use standard template"
+    />
 
-    <div class="form-check">
-      <label class="form-check-label">
-        <input v-model="tour.active" type="checkbox" class="form-check-input" />
-        Active
-        <p v-if="tour.active" id="activeHelpId" class="form-text">
-          Tour URL:
-          <strong
-            ><a :href="tourURL">{{ tourURL }}</a></strong
-          ><QrCode :size="120" :text="tourURL"></QrCode>
+    <CheckboxInput v-model="tour.active" label="Active">
+      <div v-if="tour.active" id="activeHelpId" class="form-text">
+        <p>
+          Tour URL: <a :href="tourURL">{{ tourURL }}</a>
         </p>
-      </label>
-    </div>
+        <p><QrCode :size="120" :text="tourURL" /></p>
+      </div>
+    </CheckboxInput>
 
     <div class="row mt-2">
       <div class="col d-flex justify-content-between align-items-center">

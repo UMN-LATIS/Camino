@@ -1,6 +1,6 @@
 <template>
-  <header class="tour-title">
-    <h1>{{ modelValue }}</h1>
+  <header class="tour-title my-4">
+    <h1 class="my-4">{{ modelValue }}</h1>
     <div class="form-group row">
       <label for="tourTitle" class="col-sm-2 col-form-label">Tour Title</label>
       <div class="col-sm-6">

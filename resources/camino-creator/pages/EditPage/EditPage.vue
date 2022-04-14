@@ -200,7 +200,7 @@ export default {
           languages: ["English"],
           custom_base_map: {
             use_basemap: false,
-            image: "",
+            image: null,
             coords: {
               upperleft: {
                 lat: null,
@@ -285,9 +285,11 @@ export default {
         axios
           .post("/creator/edit", this.tour)
           .then((res) => {
+            console.log({ res });
             this.$router.replace("/creator/" + res.data.id);
             this.tour.id = res.data.id;
-            this.$set(this.tour, "stops", res.data.stops);
+            // this.$set(this.tour, "stops", res.data.stops);
+            this.tour.stops = res.data.stops;
             this.showAlert = true;
           })
           .catch((res) => {

@@ -78,7 +78,7 @@ const props = defineProps({
   },
   image: {
     type: String,
-    required: true,
+    default: null,
   },
   upperLeftCoord: {
     type: Object,

@@ -12,7 +12,7 @@
 
     <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
     <div
-      v-for="stop in tourStore.getTourStops(tourId)"
+      v-for="stop in tourStore.getTour(tourId).stops"
       :key="stop.id"
       class="card mt-2"
     >

@@ -58,22 +58,28 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
 import { useTourStore } from "../stores/tours.js";
 
 const tourStore = useTourStore();
 
-const { tours, error } = storeToRefs(tourStore);
+const { tours } = storeToRefs(tourStore);
+const error = ref(null);
 
 const toursSortedByTitle = computed(() =>
   [...tours.value].sort((a, b) => (a.title > b.title ? 1 : -1))
 );
 function handleDelete(tourId) {
-  if (confirm("Are you sure you wish to delete this tour?")) {
-    tourStore.deleteTour(tourId);
+  if (!confirm("Are you sure you wish to delete this tour?")) {
+    return;
   }
+
+  tourStore.deleteTour(tourId).catch((err) => {
+    console.error(err);
+    error.value = err;
+  });
 }
 
 onMounted(() => {

@@ -55,55 +55,12 @@
       </div>
     </CheckboxInput>
 
-    <div class="row mt-2">
-      <div class="col d-flex justify-content-between align-items-center">
-        <h3>Tour Stops</h3>
-        <div>
-          <router-link
-            v-if="tour.id"
-            :to="{ name: 'createStop', params: { tourId: tourId } }"
-            class="btn btn-primary"
-            ><i class="fas fa-plus"></i> Add a Stop</router-link
-          >
-        </div>
-      </div>
-    </div>
-
-    <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
-    <div v-for="stop in tour.stops" :key="stop.id" class="card mt-2">
-      <div class="card-body d-flex justify-content-between align-items-center">
-        <h5 class="card-title">
-          <i v-if="!isLockedItem(stop)" class="fas fa-grip-vertical handle"></i>
-          {{ stop.stop_content.title[tour.tour_content.languages[0]] }}
-        </h5>
-        <div class="controls">
-          <a
-            href="#"
-            class="btn btn-outline-danger"
-            @click="deleteStop(stop.id)"
-            ><i class="fas fa-trash"></i>
-            <span class="d-none d-sm-inline">Delete</span></a
-          >
-          <a
-            :href="'/tour/' + tour.id + '/' + stop.sort_order"
-            class="btn btn-outline-success"
-            target="_blank"
-            ><i class="fas fa-eye"></i>
-            <span class="d-none d-sm-inline">Preview</span>
-          </a>
-          <router-link
-            :to="{
-              name: 'editStop',
-              params: { tourId: tourId, stopId: stop.id },
-            }"
-            class="btn btn-outline-primary"
-            ><i class="fas fa-edit"></i>
-            <span class="d-none d-sm-inline">Edit</span></router-link
-          >
-        </div>
-      </div>
-    </div>
-    <!-- </draggable> -->
+    <TourStopList
+      v-if="tour.id && tour.stops"
+      :tourId="tour.id"
+      :stops="tour.stops"
+      :locale="defaultLanguage"
+    />
 
     <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
       <strong>Errors</strong>
@@ -113,7 +70,7 @@
         </li>
       </ul>
     </div>
-    <div class="mt-2">
+    <div class="mt-2 d-flex gap-1">
       <a
         v-if="tour.id"
         :href="'/tour/' + tour.id"
@@ -144,6 +101,7 @@ import SelectTourStyle from "./SelectTourStyle.vue";
 import ShareTour from "./ShareTour.vue";
 import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
+import TourStopList from "./TourStopList.vue";
 import { TOUR_STYLES } from "../../common/constants.js";
 
 const { userCan } = usePermissions();
@@ -161,6 +119,7 @@ export default {
     ShareTour,
     CheckboxInput,
     SelectCustomBaseMap,
+    TourStopList,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["tourId"],
@@ -218,6 +177,9 @@ export default {
         "/tour/" +
         this.tourId
       );
+    },
+    defaultLanguage() {
+      return this.tour.tour_content.languages[0];
     },
   },
   mounted: function () {
@@ -307,25 +269,6 @@ export default {
             this.error = res;
           });
       }
-    },
-    checkMove(e) {
-      return this.isDraggable(e.draggedContext);
-    },
-    isDraggable(context) {
-      const { index, futureIndex } = context;
-      return !(
-        this.isLockedItem(this.tour.stops[index]) ||
-        this.isLockedItem(this.tour.stops[futureIndex])
-      );
-    },
-    isLockedItem(stop) {
-      return (
-        stop.sort_order == 0 ||
-        stop.sort_order ==
-          this.tour.stops
-            .map((s) => s.sort_order)
-            .reduce((a, b) => Math.max(a, b))
-      );
     },
   },
 };

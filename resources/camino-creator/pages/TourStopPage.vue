@@ -27,7 +27,7 @@
             Subtitle
           </LanguageText>
           <ImageUpload
-            :image-src="headerImageSrc"
+            :imageSrc="headerImageSrc"
             class="mb-4"
             @imageuploaded="handleImageUpload"
           />
@@ -140,12 +140,16 @@ export default {
     // draggable,
   },
   beforeRouteLeave(to, from, next) {
-    if (this.isDirty) {
-      if (!window.confirm("Leave without saving?")) {
-        return;
-      }
+    // if we're just replacing the route during save step
+    // or we haven't made any changes, carry-on...
+    if (this.isSaving || !this.isDirty) {
+      return next();
     }
-    next();
+
+    // otherwise confirm we actually want to actually leave
+    if (confirm("Leave without saving?")) {
+      return next();
+    }
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stopId", "tourId"],
@@ -153,6 +157,7 @@ export default {
     return {
       error: null,
       isDirty: false,
+      isSaving: false,
       localStop: this.stopId,
       showAlert: false,
       newStageType: null,
@@ -278,11 +283,11 @@ export default {
       }
     },
     save: function () {
+      this.isSaving = true;
       if (!this.stop.id) {
         axios
           .post("/creator/edit/" + this.tour.id + "/stop/", this.stop)
           .then((res) => {
-            this.isDirty = false;
             this.stop.id = res.data.id;
             this.loadTour();
             this.$router.replace({
@@ -293,9 +298,13 @@ export default {
               },
             });
             this.showAlert = true;
+            this.isDirty = false;
           })
           .catch((res) => {
             this.error = res;
+          })
+          .finally(() => {
+            this.isSaving = false;
           });
       } else {
         axios
@@ -309,6 +318,9 @@ export default {
           })
           .catch((res) => {
             this.error = res;
+          })
+          .finally(() => {
+            this.isSaving = false;
           });
       }
     },

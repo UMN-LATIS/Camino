@@ -8,6 +8,12 @@ export const useTourStore = defineStore("tours", {
       loading: false,
     };
   },
+  getters: {
+    getTourStops: (state) => (tourId) => {
+      console.log({ tours: state.tours });
+      return state.tours.find((tour) => tour.id === tourId)?.stops ?? [];
+    },
+  },
   actions: {
     async fetchTours() {
       axios
@@ -22,6 +28,16 @@ export const useTourStore = defineStore("tours", {
     async deleteTour(tourId) {
       axios
         .delete(`/creator/edit/${tourId}`)
+        .then(() => {
+          this.fetchTours();
+        })
+        .catch((err) => {
+          this.error = err;
+        });
+    },
+    async deleteTourStop({ tourId, stopId }) {
+      axios
+        .delete(`/creator/edit/${tourId}/stop/${stopId}`)
         .then(() => {
           this.fetchTours();
         })

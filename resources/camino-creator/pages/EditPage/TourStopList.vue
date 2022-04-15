@@ -11,7 +11,11 @@
     </header>
 
     <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
-    <div v-for="stop in stops" :key="stop.id" class="card mt-2">
+    <div
+      v-for="stop in tourStore.getTourStops(tourId)"
+      :key="stop.id"
+      class="card mt-2"
+    >
       <div class="card-body d-flex justify-content-between align-items-center">
         <h4 class="card-title">
           <i v-if="!isLockedItem(stop)" class="fas fa-grip-vertical handle"></i>
@@ -52,6 +56,9 @@
   </section>
 </template>
 <script setup>
+// import { computed } from 'vue';
+import { useTourStore } from "../../stores/tours";
+
 const props = defineProps({
   tourId: {
     type: Number,
@@ -67,11 +74,20 @@ const props = defineProps({
   },
 });
 
+const tourStore = useTourStore();
+console.log(tourStore.getTourStops(props.tourId));
+
 function isLockedItem(stop) {
   return (
     stop.sort_order === 0 ||
     stop.sort_order ===
       props.stops.map((s) => s.sort_order).reduce((a, b) => Math.max(a, b))
   );
+}
+
+function deleteStop(stopId) {
+  if (confirm("Are you sure you wish to delete this stop?")) {
+    tourStore.deleteTourStop({ tourId: props.tourId, stopId });
+  }
 }
 </script>

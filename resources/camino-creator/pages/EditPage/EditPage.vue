@@ -86,8 +86,9 @@
   </div>
 </template>
 
-<script>
-// Someday, all of this should be moved to a pattern like https://zaengle.com/blog/using-v-model-on-nested-vue-components
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useRouter } from "vue-router";
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
 import Error from "../../components/Error.vue";
@@ -103,175 +104,112 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { TOUR_STYLES } from "../../common/constants.js";
+import { useTourStore } from "../../stores/tours";
 
 const { userCan } = usePermissions();
 
-export default {
-  components: {
-    Error,
-    SaveAlert,
-    QrCode,
-    InitialLocation,
-    TourTitleInput,
-    SelectLanguages,
-    SelectTransport,
-    SelectTourStyle,
-    ShareTour,
-    CheckboxInput,
-    SelectCustomBaseMap,
-    TourStopList,
+const props = defineProps({
+  tourId: {
+    type: Number,
+    // when creating a new tour this will be null
+    default: null,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["tourId"],
-  data() {
-    return {
-      error: null,
-      showAlert: false,
-      errors: [],
-      shareAddress: "",
-      invitationSent: false,
-      tour: {
-        id: null,
-        public: false,
-        active: false,
-        title: "",
-        start_location: {
-          lng: 0,
-          lat: 0,
+});
+
+const error = ref(null);
+const showAlert = ref(false);
+const defaultTour = {
+  id: null,
+  public: false,
+  active: false,
+  title: "",
+  start_location: {
+    lng: 0,
+    lat: 0,
+  },
+  walking: false,
+  biking: false,
+  driving: false,
+  style: TOUR_STYLES.ENTIRE_TOUR,
+  tour_content: {
+    use_template: true,
+    languages: ["English"],
+    custom_base_map: {
+      use_basemap: false,
+      image: null,
+      coords: {
+        upperleft: {
+          lat: null,
+          lng: null,
         },
-        walking: false,
-        biking: false,
-        driving: false,
-        style: TOUR_STYLES.ENTIRE_TOUR,
-        tour_content: {
-          use_template: true,
-          languages: ["English"],
-          custom_base_map: {
-            use_basemap: false,
-            image: null,
-            coords: {
-              upperleft: {
-                lat: null,
-                lng: null,
-              },
-              lowerright: {
-                lat: null,
-                lng: null,
-              },
-            },
-          },
+        lowerright: {
+          lat: null,
+          lng: null,
         },
-        stops: [],
-        users: [],
       },
-    };
-  },
-  computed: {
-    tourURL: function () {
-      return (
-        location.protocol +
-        "//" +
-        location.hostname +
-        (location.port ? ":" : "") +
-        location.port +
-        "/tour/" +
-        this.tourId
-      );
-    },
-    defaultLanguage() {
-      return this.tour.tour_content.languages[0];
     },
   },
-  mounted: function () {
-    this.loadTour();
-  },
-  methods: {
-    userCan,
-    deleteStop: function (stopId) {
-      if (confirm("Are you sure you wish to delete this stop?")) {
-        axios
-          .delete("/creator/edit/" + this.tour.id + "/stop/" + stopId)
-          .then(() => {
-            this.loadTour();
-          })
-          .catch((res) => {
-            this.error = res;
-          });
-      }
-    },
-    validate: function () {
-      this.errors = [];
-      if (!this.tour.title) {
-        this.errors.push("A title is required");
-      }
-      if (!this.tour.start_location) {
-        this.errors.push("A start location is required");
-      }
-      if (this.tour.tour_content.languages.length == 0) {
-        this.errors.push("At least one language is required");
-      }
-      if (this.errors.length > 0) {
-        return false;
-      }
-      return true;
-    },
-    share: function () {
-      axios
-        .post("/creator/" + this.tour.id + "/share", {
-          email: this.shareAddress,
-        })
-        .then(() => {
-          this.shareAddress = "";
-          this.invitationSent = true;
-          setTimeout(() => {
-            this.invitationSent = false;
-          }, 2000);
-        });
-    },
-    save: function () {
-      if (!this.validate()) {
-        return;
-      }
-      if (!this.tour.id) {
-        axios
-          .post("/creator/edit", this.tour)
-          .then((res) => {
-            console.log({ res });
-            this.$router.replace("/creator/" + res.data.id);
-            this.tour.id = res.data.id;
-            // this.$set(this.tour, "stops", res.data.stops);
-            this.tour.stops = res.data.stops;
-            this.showAlert = true;
-          })
-          .catch((res) => {
-            this.error = res;
-          });
-      } else {
-        axios
-          .put("/creator/edit/" + this.tour.id, this.tour)
-          .then(() => {
-            this.showAlert = true;
-          })
-          .catch((res) => {
-            this.error = res;
-          });
-      }
-    },
-    loadTour: function () {
-      if (this.tourId) {
-        axios
-          .get("/creator/edit/" + this.tourId)
-          .then((res) => {
-            this.tour = res.data;
-            document.title = "Editing : " + this.tour.title;
-          })
-          .catch((res) => {
-            this.error = res;
-          });
-      }
-    },
-  },
+  stops: [],
+  users: [],
 };
+
+const tourStore = useTourStore();
+const tour = ref(defaultTour);
+const errors = ref([]);
+const router = useRouter();
+
+const tourURL = computed(() => {
+  const { protocol, host } = window.location;
+  return `${protocol}//${host}/tour/${props.tourId}`;
+});
+
+const defaultLanguage = computed(
+  () => tour.value.tour_content.languages[0] || "English"
+);
+
+onMounted(() => {
+  if (!props.tourId) return;
+
+  // load existing tour info
+  tour.value = tourStore.getTour(props.tourId);
+});
+
+function validate(tour) {
+  errors.value = [];
+
+  if (!tour.title) {
+    errors.value.push("A title is required");
+  }
+  if (!tour.start_location) {
+    errors.value.push("A start location is required");
+  }
+  if (tour.tour_content.languages.length === 0) {
+    errors.value.push("At least one language is required");
+  }
+
+  return !errors.value.length;
+}
+
+const handleError = (err) => {
+  console.error(err);
+  errors.value.push(err.message);
+};
+
+async function save() {
+  if (!validate(tour.value)) return;
+
+  if (!tour.value.id) {
+    // create tour
+    const { payload } = await tourStore
+      .createTour(tour.value)
+      .catch(handleError);
+    router.replace(`/creator/${payload.id}`);
+  } else {
+    // update tour
+    tourStore.updateTour(tour.value).catch(handleError);
+  }
+  showAlert.value = true;
+}
 </script>
 
 <style scoped>

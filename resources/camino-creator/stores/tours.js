@@ -5,45 +5,49 @@ export const useTourStore = defineStore("tours", {
     return {
       tours: [],
       error: null,
-      loading: false,
+      isReady: false,
     };
   },
   getters: {
     getTourStops: (state) => (tourId) => {
-      console.log({ tours: state.tours });
       return state.tours.find((tour) => tour.id === tourId)?.stops ?? [];
+    },
+    getTour: (state) => (tourId) => {
+      return state.tours.find((tour) => tour.id === tourId);
     },
   },
   actions: {
+    async init() {
+      await this.fetchTours();
+      this.isReady = true;
+    },
     async fetchTours() {
-      axios
+      return axios
         .get("/creator") // someday do .json routes in laravel
         .then((res) => {
           this.tours = res.data;
-        })
-        .catch((err) => {
-          this.error = err;
         });
     },
     async deleteTour(tourId) {
-      axios
-        .delete(`/creator/edit/${tourId}`)
-        .then(() => {
-          this.fetchTours();
-        })
-        .catch((err) => {
-          this.error = err;
-        });
+      return axios.delete(`/creator/edit/${tourId}`).then(() => {
+        this.fetchTours();
+      });
     },
     async deleteTourStop({ tourId, stopId }) {
-      axios
-        .delete(`/creator/edit/${tourId}/stop/${stopId}`)
-        .then(() => {
-          this.fetchTours();
-        })
-        .catch((err) => {
-          this.error = err;
-        });
+      return axios.delete(`/creator/edit/${tourId}/stop/${stopId}`).then(() => {
+        this.fetchTours();
+      });
+    },
+    async createTour(tour) {
+      return axios.post("/creator/edit", tour).then((res) => {
+        this.fetchTours();
+        return { payload: res.data };
+      });
+    },
+    async updateTour(tour) {
+      return axios.put(`/creator/edit/${tour.id}`, tour).then(() => {
+        this.fetchTours();
+      });
     },
   },
 });

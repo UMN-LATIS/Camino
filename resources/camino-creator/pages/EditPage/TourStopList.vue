@@ -56,7 +56,6 @@
   </section>
 </template>
 <script setup>
-// import { computed } from 'vue';
 import { useTourStore } from "../../stores/tours";
 
 const props = defineProps({
@@ -75,7 +74,6 @@ const props = defineProps({
 });
 
 const tourStore = useTourStore();
-console.log(tourStore.getTourStops(props.tourId));
 
 function isLockedItem(stop) {
   return (

@@ -18,25 +18,34 @@ const routes = [
     path: "/creator/:tourId",
     name: "editTour",
     component: EditPage,
-    props: true,
+    props: (route) => ({
+      tourId: Number.parseInt(route.params.tourId, 10),
+    }),
   },
   {
     path: "/creator/:tourId/addStop",
     name: "createStop",
     component: TourStopPage,
-    props: true,
+    props: (route) => ({
+      tourId: Number.parseInt(route.params.tourId, 10),
+    }),
   },
   {
     path: "/creator/:tourId/edit/:stopId",
     name: "editStop",
     component: TourStopPage,
-    props: true,
+    props: (route) => ({
+      tourId: Number.parseInt(route.params.tourId, 10),
+      stopId: Number.parseInt(route.params.stopId, 10),
+    }),
   },
   {
     path: "/creator/:tourId/viewFeedback",
     name: "tourFeedback",
     component: FeedbackViewPage,
-    props: true,
+    props: (route) => ({
+      tourId: Number.parseInt(route.params.tourId, 10),
+    }),
   },
 ];
 

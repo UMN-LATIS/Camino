@@ -10,17 +10,11 @@ import initLeaflet from "./common/initLeaflet";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import router from "./router.js";
+import App from "./App.vue";
 
 const pinia = createPinia();
 
 initAxios();
 initLeaflet();
 
-createApp({
-  // window.Permissions encodes the permissions of the current user
-  // and is set server-side in the blade template `index.blade.php`
-  mixins: [Permissions],
-})
-  .use(pinia)
-  .use(router)
-  .mount("#app");
+createApp(App).use(pinia).use(router).mount("#app");

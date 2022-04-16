@@ -51,7 +51,7 @@
         <p>
           Tour URL: <a :href="tourURL">{{ tourURL }}</a>
         </p>
-        <p><QrCode :size="120" :text="tourURL" /></p>
+        <p><QrCode :size="120" :value="tourURL" /></p>
       </div>
     </CheckboxInput>
 
@@ -103,8 +103,8 @@ import ShareTour from "./ShareTour.vue";
 import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
-import { TOUR_STYLES } from "../../common/constants.js";
 import { useTourStore } from "../../stores/tours";
+import defaultTour from "./defaultTour.js";
 
 const { userCan } = usePermissions();
 
@@ -118,41 +118,6 @@ const props = defineProps({
 
 const error = ref(null);
 const showAlert = ref(false);
-const defaultTour = {
-  id: null,
-  public: false,
-  active: false,
-  title: "",
-  start_location: {
-    lng: 0,
-    lat: 0,
-  },
-  walking: false,
-  biking: false,
-  driving: false,
-  style: TOUR_STYLES.ENTIRE_TOUR,
-  tour_content: {
-    use_template: true,
-    languages: ["English"],
-    custom_base_map: {
-      use_basemap: false,
-      image: null,
-      coords: {
-        upperleft: {
-          lat: null,
-          lng: null,
-        },
-        lowerright: {
-          lat: null,
-          lng: null,
-        },
-      },
-    },
-  },
-  stops: [],
-  users: [],
-};
-
 const tourStore = useTourStore();
 const tour = ref(defaultTour);
 const errors = ref([]);

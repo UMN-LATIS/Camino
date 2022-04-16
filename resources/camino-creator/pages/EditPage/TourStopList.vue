@@ -85,7 +85,7 @@ function isLockedItem(stop) {
 
 function deleteStop(stopId) {
   if (confirm("Are you sure you wish to delete this stop?")) {
-    tourStore.deleteTourStop({ tourId: props.tourId, stopId });
+    tourStore.deleteTourStop(props.tourId, stopId);
   }
 }
 </script>

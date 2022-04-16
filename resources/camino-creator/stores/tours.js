@@ -9,12 +9,32 @@ export const useTourStore = defineStore("tours", {
     };
   },
   getters: {
-    getTourStops: (state) => (tourId) => {
-      return state.tours.find((tour) => tour.id === tourId)?.stops ?? [];
-    },
     getTour: (state) => (tourId) => {
       return state.tours.find((tour) => tour.id === tourId);
     },
+    getTourStop:
+      ({ getTour }) =>
+      (tourId, stopId) => {
+        const tour = getTour(tourId);
+        console.log({ tour });
+        return tour.stops.find((stop) => stop.id === stopId);
+      },
+    // getTourStopStage: (state) => (tourId, stopId, stageId) => {},
+    getTourTitle:
+      ({ getTour }) =>
+      (tourId) => {
+        return getTour(tourId).title;
+      },
+    getTourLanguages:
+      ({ getTour }) =>
+      (tourId) => {
+        return getTour(tourId).tour_content.languages;
+      },
+    getDefaultTourLanguage:
+      ({ getTour }) =>
+      (tourId) => {
+        return getTour(tourId).tour_content.languages[0] || "English";
+      },
   },
   actions: {
     async init() {
@@ -28,16 +48,6 @@ export const useTourStore = defineStore("tours", {
           this.tours = res.data;
         });
     },
-    async deleteTour(tourId) {
-      return axios.delete(`/creator/edit/${tourId}`).then(() => {
-        this.fetchTours();
-      });
-    },
-    async deleteTourStop({ tourId, stopId }) {
-      return axios.delete(`/creator/edit/${tourId}/stop/${stopId}`).then(() => {
-        this.fetchTours();
-      });
-    },
     async createTour(tour) {
       return axios.post("/creator/edit", tour).then((res) => {
         this.fetchTours();
@@ -49,6 +59,33 @@ export const useTourStore = defineStore("tours", {
         this.fetchTours();
       });
     },
+    async deleteTour(tourId) {
+      return axios.delete(`/creator/edit/${tourId}`).then(() => {
+        this.fetchTours();
+      });
+    },
+    async createTourStop(tourId, stop) {
+      return axios.post(`/creator/edit/${tourId}/stop/`, stop).then((res) => {
+        this.fetchTours();
+        return { payload: res.data };
+      });
+    },
+    async updateTourStop(tourId, stop) {
+      return axios
+        .put(`/creator/edit/${tourId}/stop/${stop.id}`, stop)
+        .then((res) => {
+          this.fetchTours();
+          return { payload: res.data };
+        });
+    },
+    async deleteTourStop(tourId, stopId) {
+      return axios.delete(`/creator/edit/${tourId}/stop/${stopId}`).then(() => {
+        this.fetchTours();
+      });
+    },
+    // async createTourStopStage(tourId, stopId, stage) {},
+    // async updateTourStopStage(tourId, stopId, stage) {},
+    // async deleteTourStopStage(tourId, stopId, stageId) {},
   },
 });
 

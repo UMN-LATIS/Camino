@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "./pages/HomePage.vue";
 import EditPage from "./pages/EditPage/EditPage.vue";
-import TourStopPage from "./pages/TourStopPage.vue";
+import TourStopPage from "./pages/TourStopPage/TourStopPage.vue";
 import FeedbackViewPage from "./pages/FeedbackViewPage.vue";
 
 const routes = [

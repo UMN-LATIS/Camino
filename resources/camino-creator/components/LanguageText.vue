@@ -10,10 +10,13 @@
           <label :for="'field' + key + randomIdentifier" class="">
             <slot /> ({{ language }})
           </label>
-          <!-- FIXME: This mutates the text prop! -->
-          <!-- eslint-disable -->
-          <MarkdownEditor v-if="largetext" v-model="text[language]" />
-          <!-- eslint-enable -->
+          <MarkdownEditor
+            v-if="largetext"
+            :modelValue="text[language]"
+            @update:modelValue="
+              (payload) => handleTextUpdate(language, payload)
+            "
+          />
         </div>
       </div>
     </template>
@@ -26,16 +29,13 @@
             ><slot /> ({{ language }})</label
           >
           <div class="col-sm-10">
-            <!-- FIXME: This mutates the text prop! -->
-            <!-- eslint-disable -->
             <input
+              :id="'field' + key + randomIdentifier"
               type="text"
               class="form-control"
-              v-model="text[language]"
-              placeholder=""
-              :id="'field' + key + randomIdentifier"
+              :value="text[language]"
+              @input="handleTextUpdate(language, $event.target.value)"
             />
-            <!-- eslint-disable  -->
           </div>
           <div class="col-sm-4">
             <slot name="languageaddon"></slot>
@@ -45,19 +45,38 @@
     </template>
   </div>
 </template>
-<script>
+<script setup>
 import MarkdownEditor from "./MarkdownEditor.vue";
 
-export default {
-  components: {
-    MarkdownEditor,
+const props = defineProps({
+  languages: {
+    type: Array,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["languages", "text", "largetext"],
-  data() {
-    return {
-      randomIdentifier: Math.round(Math.random() * 10000).toString(),
-    };
+  // FIXME: text is actually a localized text object of the form
+  // { 'en': 'Hello', 'es': 'Hola' }
+  // currently it's not using two-letter locale codes.
+  text: {
+    type: Object,
+    required: true,
   },
-};
+  // FIXME: unclear that this is a boolean to turn this into a textarea in
+  // perhaps just make a separate textare component?
+  largetext: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+const emit = defineEmits(["update:text"]);
+
+const randomIdentifier = Math.round(Math.random() * 10000).toString();
+
+function handleTextUpdate(language, updatedText) {
+  const updatedTextObj = {
+    ...props.text,
+    [language]: updatedText,
+  };
+  emit("update:text", updatedTextObj);
+}
 </script>

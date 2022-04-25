@@ -232,20 +232,20 @@ function handleImageUpload(imgSrc) {
 //   this.newStageType = null;
 // }
 
-// function removeHeaderImage() {
-//   const image = this.stop.stop_content.header_image;
-//   if (!image.src) {
-//     return;
-//   }
-//   if (confirm("Are you sure you wish to delete this image?")) {
-//     axios.delete("/creator/image/" + image.src).then(() => {
-//       this.stop.stop_content.header_image = {
-//         src: null,
-//         alt: null,
-//       };
-//     });
-//   }
-// }
+function removeHeaderImage() {
+  const image = stop.value.stop_content.header_image;
+  if (!image.src) {
+    return;
+  }
+  if (confirm("Are you sure you wish to delete this image?")) {
+    axios.delete("/creator/image/" + image.src).then(() => {
+      stop.value.stop_content.header_image = {
+        src: null,
+        alt: null,
+      };
+    });
+  }
+}
 
 function validate(stop) {
   errors.value = [];

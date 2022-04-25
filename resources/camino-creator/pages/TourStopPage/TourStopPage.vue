@@ -221,15 +221,15 @@ const previewLink = computed(
   () => `/tour/${props.tourId}/${stop.value.sort_order}`
 );
 
+function handleImageUpload(imgSrc) {
+  stop.value.stop_content.header_image.src = `/storage/${imgSrc}`;
+}
+
 // function addStage() {
 //   this.stop.stop_content.stages.push({
 //     type: this.newStageType,
 //   });
 //   this.newStageType = null;
-// }
-
-// function handleImageUpload(imgSrc) {
-//   this.stop.stop_content.header_image.src = `/storage/${imgSrc}`;
 // }
 
 // function removeHeaderImage() {

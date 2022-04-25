@@ -1,4 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
+import defaultStop from "../common/defaultStop.js";
 
 export const useTourStore = defineStore("tours", {
   state() {
@@ -6,6 +7,7 @@ export const useTourStore = defineStore("tours", {
       tours: [],
       error: null,
       isReady: false,
+      newStop: null,
     };
   },
   getters: {
@@ -16,7 +18,6 @@ export const useTourStore = defineStore("tours", {
       ({ getTour }) =>
       (tourId, stopId) => {
         const tour = getTour(tourId);
-        console.log({ tour });
         return tour.stops.find((stop) => stop.id === stopId);
       },
     // getTourStopStage: (state) => (tourId, stopId, stageId) => {},
@@ -64,11 +65,20 @@ export const useTourStore = defineStore("tours", {
         this.fetchTours();
       });
     },
-    async createTourStop(tourId, stop) {
-      return axios.post(`/creator/edit/${tourId}/stop/`, stop).then((res) => {
-        this.fetchTours();
-        return { payload: res.data };
-      });
+    // create a draft new tour stop
+    async initTourStop(tourId) {
+      this.newStop = {
+        ...defaultStop,
+        tour_id: tourId,
+      };
+    },
+    async createTourStop(tourId) {
+      return axios
+        .post(`/creator/edit/${tourId}/stop/`, this.newStop)
+        .then((res) => {
+          this.fetchTours();
+          return { payload: res.data };
+        });
     },
     async updateTourStop(tourId, stop) {
       return axios
@@ -84,7 +94,13 @@ export const useTourStore = defineStore("tours", {
       });
     },
     // async createTourStopStage(tourId, stopId, stage) {},
-    // async updateTourStopStage(tourId, stopId, stage) {},
+    async updateTourStopStage(tourId, stopId, stage) {
+      const tourStop = this.getTourStop(tourId, stopId);
+      const stageIndex = tourStop.stop_content.stages.findIndex(
+        (s) => s.id === stage.id
+      );
+      tourStop.stop_content.stages[stageIndex] = stage;
+    },
     // async deleteTourStopStage(tourId, stopId, stageId) {},
   },
 });

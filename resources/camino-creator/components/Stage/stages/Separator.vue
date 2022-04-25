@@ -1,23 +1,40 @@
 <template>
   <div>
-    <LanguageText :text="stage.text" :languages="languages">
+    <LanguageText
+      :text="stage.text"
+      :languages="tourLanguages"
+      @update:text="handleStageUpdate"
+    >
       Separator Title
     </LanguageText>
   </div>
 </template>
-<script>
+<script setup>
 import LanguageText from "../../LanguageText.vue";
+import { useTourStore } from "../../../stores/tours.js";
 
-export default {
-  components: {
-    LanguageText,
+const props = defineProps({
+  tourId: {
+    type: Number,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages"],
-  created() {
-    if (!this.stage.text) {
-      this.$set(this.stage, "text", { placeholder: null });
-    }
+  stopId: {
+    type: [Number, null],
+    default: null,
   },
-};
+  stage: {
+    type: Object,
+    required: true,
+  },
+});
+
+const tourStore = useTourStore();
+const tourLanguages = tourStore.getTourLanguages(props.tourId);
+
+function handleStageUpdate(updatedText) {
+  tourStore.updateTourStopStage(props.tourId, props.stopId, {
+    ...props.stage,
+    text: updatedText,
+  });
+}
 </script>

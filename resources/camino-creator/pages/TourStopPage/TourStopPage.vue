@@ -138,7 +138,7 @@ import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
-import defaultStop from "./defaultStop.js";
+import defaultStop from "../../common/defaultStop.js";
 
 const props = defineProps({
   tourId: {

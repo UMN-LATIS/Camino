@@ -34,9 +34,7 @@
     </div>
   </header>
   <main>
-    <div id="app" class="container">
-      <router-view />
-    </div>
+    <div id="app" class="container"></div>
   </main>
   <footer class="footer mt-2">
     <div class="container d-flex align-items-center justify-content-between">

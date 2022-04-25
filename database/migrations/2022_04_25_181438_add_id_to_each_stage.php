@@ -16,22 +16,7 @@ class AddIdToEachStage extends Migration
   public function up()
   {
     Stop::all()->each(function ($stop) {
-      $stages = $stop->stop_content['stages'];
-
-      // add uuid to each stage if it doesn't exist
-      $stages_with_uuid = collect($stages)->map(function ($stage) {
-        return [
-          ...$stage,
-          'id' => $stage['id'] ?? Str::uuid(),
-        ];
-      })->toArray();
-
-      // update this stops's stop_content
-      $stop->stop_content = [
-        ...$stop->stop_content,
-        'stages' => $stages_with_uuid,
-      ];
-
+      $stop->addMissingStageIds();
       $stop->save();
     });
   }
@@ -58,6 +43,10 @@ class AddIdToEachStage extends Migration
         'stages' => $stages_without_uuid,
       ];
 
+
+      // Note: the Stop model adds uuid() when saving
+      // remove the saving hook in the boot() method
+      // before rolling back this migration
       $stop->save();
     });
 

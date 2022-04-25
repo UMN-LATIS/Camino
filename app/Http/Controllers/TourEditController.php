@@ -56,20 +56,16 @@ class TourEditController extends Controller
 
         if($tour->tour_content["use_template"]) {
             $template = Tour::where("template", true)->first();
-            $startContent = $template->stops->first();
-            $endContent = $template->stops->last();
 
-            $stop = new Stop;
-            $stop->stop_content = $startContent->stop_content;
-            $stop->sort_order = 0;
-            $tour->stops()->save($stop);
+            $clonedFirstStop = $template->stops->first()->clone();
+            $clonedFirstStop->sort_order = 0;
+            $tour->stops()->save($clonedFirstStop);
 
-
-            $stop = new Stop;
-            $stop->stop_content = $endContent->stop_content;
-            $stop->sort_order = 1;
-            $tour->stops()->save($stop);
+            $clonedLastStop = $template->stops->last()->clone();
+            $clonedLastStop->sort_order = 1;
+            $tour->stops()->save($clonedLastStop);
         }
+
         $tour->load("stops");
         
         return response()->json($tour);

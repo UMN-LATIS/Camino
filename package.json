@@ -60,6 +60,7 @@
     "vue-progressbar": "^0.7.5",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^4.0.14",
+    "vue-types": "^4.1.1",
     "vuedraggable": "^4.1.0",
     "webpack": "^5.72.0"
   },

@@ -148,6 +148,7 @@ import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import createDefaultStop from "../../common/createDefaultStop.js";
 import stageFactory from "../../components/Stage/stages/stageFactory";
+import { STAGE_TYPES } from "../../common/constants";
 
 const props = defineProps({
   tourId: {
@@ -174,15 +175,15 @@ const tourLanguages = tourStore.getTourLanguages(props.tourId);
 const defaultTourLanguage = tourStore.getDefaultTourLanguage(props.tourId);
 
 const stageTypes = ref({
-  separator: "Separator",
-  ar: "AR",
-  deepdives: "Deep Dives",
-  "deepdives-summary": "Deep Dives Summary",
-  "embed-frame": "Embed",
-  guide: "Guide",
-  gallery: "Gallery",
-  navigation: "Navigation",
-  quiz: "Quiz",
+  [STAGE_TYPES.SEPARATOR]: "Separator",
+  [STAGE_TYPES.AR]: "AR",
+  [STAGE_TYPES.DEEPDIVES]: "Deep Dives",
+  [STAGE_TYPES.DEEPDIVES_SUMMARY]: "Deep Dives Summary",
+  [STAGE_TYPES.EMBED_FRAME]: "Embed",
+  [STAGE_TYPES.GUIDE]: "Guide",
+  [STAGE_TYPES.GALLERY]: "Gallery",
+  [STAGE_TYPES.NAVIGATION]: "Navigation",
+  [STAGE_TYPES.QUIZ]: "Quiz",
 });
 
 if (userCan("administer site")) {

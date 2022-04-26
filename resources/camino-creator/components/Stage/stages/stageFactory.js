@@ -54,6 +54,12 @@ const factories = {
     text: createMultilingualText(languages),
   }),
 
+  [STAGE_TYPES.GALLERY]: () => ({
+    type: STAGE_TYPES.GALLERY,
+    id: global.crypto.randomUUID(),
+    images: [],
+  }),
+
   // fallback for undefined types
   default: (type = "unknown") => ({
     type,

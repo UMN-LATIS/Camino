@@ -17,7 +17,7 @@
       >
         <LanguageText
           class="mb-3"
-          :languages="tourStore.getTourLanguages(tourId)"
+          :languages="languages"
           :text="newTitle"
           @update:text="(text) => (newTitle = text)"
         >
@@ -76,6 +76,7 @@
 import { ref } from "vue";
 import { useTourStore } from "../../stores/tours";
 import LanguageText from "../../components/LanguageText.vue";
+import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
 
 const props = defineProps({
   tourId: {
@@ -94,9 +95,10 @@ const props = defineProps({
 
 const tourStore = useTourStore();
 const showCreateForm = ref(false);
+const languages = tourStore.getTourLanguages(props.tourId);
 
 // localized titles
-const newTitle = ref({});
+const newTitle = ref(createMultilingualText(languages));
 
 function createNew() {
   tourStore.createTourStop(props.tourId, {
@@ -104,6 +106,8 @@ function createNew() {
       title: newTitle.value,
     },
   });
+  showCreateForm.value = false;
+  newTitle.value = createMultilingualText(languages);
 }
 
 function isLockedItem(stop) {

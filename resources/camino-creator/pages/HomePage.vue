@@ -105,9 +105,14 @@ function handleDelete(tourId) {
 }
 
 function createNew() {
+  error.value = null;
+
+  showCreateForm.value = false;
   tourStore.createTour({
     title: newTitle.value,
   });
+
+  newTitle.value = "";
 }
 
 onMounted(() => {

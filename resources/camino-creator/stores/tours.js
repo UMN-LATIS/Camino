@@ -70,7 +70,6 @@ export const useTourStore = defineStore("tours", {
     },
     async createTourStop(tourId, stop) {
       const newStop = mergeDeepRight(defaultStop, stop);
-      console.log({ newStop, defaultStop, stop });
       return axios
         .post(`/creator/edit/${tourId}/stop/`, newStop)
         .then((res) => {

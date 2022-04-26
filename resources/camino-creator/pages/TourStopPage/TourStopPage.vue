@@ -61,6 +61,8 @@
           :stage="stage"
           :tour="tourStore.getTour(tourId)"
           :stop="stop"
+          :tourId="tourId"
+          :stopId="stopId"
           @remove="handleDeleteStage(stage, key)"
         />
         <!-- </draggable> -->

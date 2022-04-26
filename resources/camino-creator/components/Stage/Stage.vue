@@ -20,6 +20,8 @@
         :languages="tour.tour_content.languages"
         :tour="tour"
         :stop="stop"
+        :tourId="tourId"
+        :stopId="stopId"
       >
       </component>
     </div>
@@ -50,6 +52,14 @@ const props = defineProps({
   },
   stop: {
     type: Object,
+    required: true,
+  },
+  tourId: {
+    type: Number,
+    required: true,
+  },
+  stopId: {
+    type: Number,
     required: true,
   },
 });

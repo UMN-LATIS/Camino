@@ -132,6 +132,7 @@
 
 <script setup>
 // import draggable from "vuedraggable";
+import { mergeDeepRight } from "ramda";
 import { ref, computed, onMounted, watch } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
@@ -187,7 +188,11 @@ const newStageType = ref(null);
 const stop = ref(defaultStop);
 
 onMounted(() => {
-  stop.value = tourStore.getTourStop(props.tourId, props.stopId);
+  const currentStop = tourStore.getTourStop(props.tourId, props.stopId);
+
+  // merge with default stop in case new props have been added to the
+  // stop since created. For example: `header_image`
+  stop.value = mergeDeepRight(stop.value, currentStop);
 });
 
 // if there are any object changes

@@ -1,20 +1,15 @@
 <template>
   <div>
-    <LanguageText :text="stage.buttonTitle" :languages="languages">
-      Embed Button Title
-    </LanguageText>
     <div class="form-group row">
       <label for="url" class="col-sm-2 col-form-label">URL</label>
       <div class="col-sm-6">
-        <!-- FIXME: stage.source as a model will mutate the stage prop! -->
-        <!-- eslint-disable -->
         <input
-          type="text"
           id="url"
+          type="text"
           class="form-control"
-          v-model="stage.source"
+          :value="stage.source"
           aria-describedby="helpId"
-          placeholder=""
+          @input="updateStage({ source: $event.target.value })"
         />
         <!-- eslint-enable -->
         <small id="helpId" class="form-text text-muted"
@@ -25,21 +20,22 @@
   </div>
 </template>
 
-<script>
-import LanguageText from "../../LanguageText.vue";
-export default {
-  components: {
-    LanguageText,
+<script setup>
+const props = defineProps({
+  stage: {
+    type: Object,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour"],
-  created() {
-    if (!this.stage.buttonTitle) {
-      this.$set(this.stage, "buttonTitle", { English: "Show Embed" });
-      this.$set(this.stage, "url", null);
-    }
-  },
-};
+});
+
+const emit = defineEmits(["update"]);
+
+function updateStage(change) {
+  emit("update", {
+    ...props.stage,
+    ...change,
+  });
+}
 </script>
 <style>
 .css-icon {

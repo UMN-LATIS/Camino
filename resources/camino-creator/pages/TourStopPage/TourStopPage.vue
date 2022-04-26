@@ -56,14 +56,15 @@
 
         <!-- <draggable v-model="stop.stop_content.stages" handle=".handle"> -->
         <Stage
-          v-for="(stage, key) in stop.stop_content.stages"
-          :key="key"
+          v-for="stage in stop.stop_content.stages"
+          :key="stage.id"
           :stage="stage"
           :tour="tourStore.getTour(tourId)"
           :stop="stop"
           :tourId="tourId"
           :stopId="stopId"
-          @remove="handleDeleteStage(stage, key)"
+          @update="(updatedStage) => handleStageUpdate(stage.id, updatedStage)"
+          @remove="handleDeleteStage(stage.id)"
         />
         <!-- </draggable> -->
       </div>
@@ -186,17 +187,7 @@ const newStageType = ref(null);
 const stop = ref(defaultStop);
 
 onMounted(() => {
-  if (!props.stopId) return;
-
-  const tourStop = tourStore.getTourStop(props.tourId, props.stopId);
-
-  // load existing stop info
-  // but merge it with defaultStop in case the JSON is missing
-  // some new default attributes
-  stop.value = {
-    ...defaultStop,
-    ...tourStop,
-  };
+  stop.value = tourStore.getTourStop(props.tourId, props.stopId);
 });
 
 // if there are any object changes
@@ -227,12 +218,14 @@ function handleImageUpload(imgSrc) {
   stop.value.stop_content.header_image.src = `/storage/${imgSrc}`;
 }
 
-// function addStage() {
-//   this.stop.stop_content.stages.push({
-//     type: this.newStageType,
-//   });
-//   this.newStageType = null;
-// }
+function handleStageUpdate(stageId, updatedStage) {
+  console.log("stageUpdated", { stageId, updatedStage });
+  const stageIndex = stop.value.stop_content.stages.findIndex(
+    (s) => s.id === stageId
+  );
+
+  stop.value.stop_content.stages[stageIndex] = updatedStage;
+}
 
 function removeHeaderImage() {
   const image = stop.value.stop_content.header_image;

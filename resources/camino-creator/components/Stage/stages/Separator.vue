@@ -31,10 +31,12 @@ const props = defineProps({
 const tourStore = useTourStore();
 const tourLanguages = tourStore.getTourLanguages(props.tourId);
 
-function handleStageUpdate(updatedText) {
-  tourStore.updateTourStopStage(props.tourId, props.stopId, {
+const emit = defineEmits(["update"]);
+
+function handleStageUpdate(updatedLocalizedText) {
+  emit("update", {
     ...props.stage,
-    text: updatedText,
+    text: updatedLocalizedText,
   });
 }
 </script>

@@ -22,6 +22,7 @@
         :stop="stop"
         :tourId="tourId"
         :stopId="stopId"
+        @update="(updatedStage) => $emit('update', updatedStage)"
       >
       </component>
     </div>
@@ -64,7 +65,7 @@ const props = defineProps({
   },
 });
 
-defineEmits(["remove"]);
+defineEmits(["remove", "update"]);
 
 const componentLookup = {
   ar: AR,

@@ -90,15 +90,6 @@ export const useTourStore = defineStore("tours", {
         this.fetchTours();
       });
     },
-    // async createTourStopStage(tourId, stopId, stage) {},
-    async updateTourStopStage(tourId, stopId, stage) {
-      const tourStop = this.getTourStop(tourId, stopId);
-      const stageIndex = tourStop.stop_content.stages.findIndex(
-        (s) => s.id === stage.id
-      );
-      tourStop.stop_content.stages[stageIndex] = stage;
-    },
-    // async deleteTourStopStage(tourId, stopId, stageId) {},
   },
 });
 

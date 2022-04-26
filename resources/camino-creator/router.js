@@ -10,12 +10,12 @@ const routes = [
     component: HomePage,
   },
   {
-    path: "/creator/create",
+    path: "/creator/tours/create",
     name: "createTour",
     component: EditPage,
   },
   {
-    path: "/creator/:tourId",
+    path: "/creator/tours/:tourId",
     name: "editTour",
     component: EditPage,
     props: (route) => ({
@@ -23,7 +23,7 @@ const routes = [
     }),
   },
   {
-    path: "/creator/:tourId/addStop",
+    path: "/creator/tours/:tourId/stops/create",
     name: "createStop",
     component: TourStopPage,
     props: (route) => ({
@@ -31,7 +31,7 @@ const routes = [
     }),
   },
   {
-    path: "/creator/:tourId/edit/:stopId",
+    path: "/creator/tours/:tourId/stops/:stopId",
     name: "editStop",
     component: TourStopPage,
     props: (route) => ({
@@ -40,7 +40,7 @@ const routes = [
     }),
   },
   {
-    path: "/creator/:tourId/viewFeedback",
+    path: "/creator/tours/:tourId/feedback",
     name: "tourFeedback",
     component: FeedbackViewPage,
     props: (route) => ({

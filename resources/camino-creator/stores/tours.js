@@ -1,3 +1,4 @@
+import { mergeDeepRight } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import defaultStop from "../common/defaultStop.js";
 import defaultTour from "../common/defaultTour.js";
@@ -8,7 +9,6 @@ export const useTourStore = defineStore("tours", {
       tours: [],
       error: null,
       isReady: false,
-      newStop: null,
     };
   },
   getters: {
@@ -52,10 +52,7 @@ export const useTourStore = defineStore("tours", {
     },
     async createTour(tour) {
       return axios
-        .post("/creator/edit", {
-          ...defaultTour,
-          ...tour,
-        })
+        .post("/creator/edit", mergeDeepRight(defaultTour, tour))
         .then((res) => {
           this.fetchTours();
           return { payload: res.data };
@@ -71,16 +68,11 @@ export const useTourStore = defineStore("tours", {
         this.fetchTours();
       });
     },
-    // create a draft new tour stop
-    async initTourStop(tourId) {
-      this.newStop = {
-        ...defaultStop,
-        tour_id: tourId,
-      };
-    },
-    async createTourStop(tourId) {
+    async createTourStop(tourId, stop) {
+      const newStop = mergeDeepRight(defaultStop, stop);
+      console.log({ newStop, defaultStop, stop });
       return axios
-        .post(`/creator/edit/${tourId}/stop/`, this.newStop)
+        .post(`/creator/edit/${tourId}/stop/`, newStop)
         .then((res) => {
           this.fetchTours();
           return { payload: res.data };

@@ -1,13 +1,30 @@
 <template>
   <section class="tour-stop-list my-4">
-    <header class="d-flex justify-content-between">
-      <h3>Tour Stops</h3>
-      <router-link
-        :to="{ name: 'createStop', params: { tourId } }"
-        class="btn btn-primary"
+    <header>
+      <h3 class="mb-3">Tour Stops</h3>
+
+      <button
+        class="btn btn-outline-primary mb-3"
+        @click="showCreateForm = !showCreateForm"
       >
-        <i class="fas fa-plus" /> Add a Stop
-      </router-link>
+        <i class="fas fa-plus"></i> New Stop
+      </button>
+
+      <form
+        v-if="showCreateForm"
+        class="p-2 bg-body bg-gradient shadow-sm p-3 mb-3 rounded"
+        @submit.prevent="createNew"
+      >
+        <LanguageText
+          class="mb-3"
+          :languages="tourStore.getTourLanguages(tourId)"
+          :text="newTitle"
+          @update:text="(text) => (newTitle = text)"
+        >
+          Stop Name
+        </LanguageText>
+        <button class="btn btn-primary">Create</button>
+      </form>
     </header>
 
     <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
@@ -56,7 +73,9 @@
   </section>
 </template>
 <script setup>
+import { ref } from "vue";
 import { useTourStore } from "../../stores/tours";
+import LanguageText from "../../components/LanguageText.vue";
 
 const props = defineProps({
   tourId: {
@@ -74,6 +93,18 @@ const props = defineProps({
 });
 
 const tourStore = useTourStore();
+const showCreateForm = ref(false);
+
+// localized titles
+const newTitle = ref({});
+
+function createNew() {
+  tourStore.createTourStop(props.tourId, {
+    stop_content: {
+      title: newTitle.value,
+    },
+  });
+}
 
 function isLockedItem(stop) {
   return (

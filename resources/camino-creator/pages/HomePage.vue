@@ -1,13 +1,32 @@
 <template>
   <div>
     <Error :error="error" />
-    <div class="row d-flex justify-content-between align-items-center">
-      <h1>My Tours</h1>
-      <div>
-        <router-link :to="{ name: 'createTour' }" class="btn btn-primary"
-          ><i class="fas fa-plus"></i> Create a New Tour</router-link
-        >
-      </div>
+    <div>
+      <h1 class="mb-3">My Tours</h1>
+      <button
+        class="btn btn-outline-primary mb-3"
+        @click="showCreateForm = !showCreateForm"
+      >
+        <i class="fas fa-plus"></i> New Tour
+      </button>
+
+      <form
+        v-if="showCreateForm"
+        class="w-50 p-2 bg-body bg-gradient shadow-sm p-3 mb-5 rounded"
+        @submit.prevent="createNew"
+      >
+        <div class="mb-3">
+          <label for="new-title" class="form-label">Tour Name</label>
+          <input
+            id="new-title"
+            v-model="newTitle"
+            type="text"
+            class="form-control"
+            placeholder="Stone Arch Bridge"
+          />
+        </div>
+        <button class="btn btn-primary">Create</button>
+      </form>
     </div>
 
     <div v-for="tour in toursSortedByTitle" :key="tour.id" class="card mt-2">
@@ -67,6 +86,8 @@ const tourStore = useTourStore();
 
 const { tours } = storeToRefs(tourStore);
 const error = ref(null);
+const showCreateForm = ref(false);
+const newTitle = ref("");
 
 const toursSortedByTitle = computed(() =>
   [...tours.value].sort((a, b) => (a.title > b.title ? 1 : -1))
@@ -80,6 +101,12 @@ function handleDelete(tourId) {
   tourStore.deleteTour(tourId).catch((err) => {
     console.error(err);
     error.value = err;
+  });
+}
+
+function createNew() {
+  tourStore.createTour({
+    title: newTitle.value,
   });
 }
 

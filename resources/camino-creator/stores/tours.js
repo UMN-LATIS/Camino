@@ -1,5 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import defaultStop from "../common/defaultStop.js";
+import defaultTour from "../common/defaultTour.js";
 
 export const useTourStore = defineStore("tours", {
   state() {
@@ -50,10 +51,15 @@ export const useTourStore = defineStore("tours", {
         });
     },
     async createTour(tour) {
-      return axios.post("/creator/edit", tour).then((res) => {
-        this.fetchTours();
-        return { payload: res.data };
-      });
+      return axios
+        .post("/creator/edit", {
+          ...defaultTour,
+          ...tour,
+        })
+        .then((res) => {
+          this.fetchTours();
+          return { payload: res.data };
+        });
     },
     async updateTour(tour) {
       return axios.put(`/creator/edit/${tour.id}`, tour).then(() => {

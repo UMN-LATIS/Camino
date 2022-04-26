@@ -19,7 +19,7 @@
 <body>
   <header>
     <div
-      class="d-flex justify-content-between flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+      class="d-flex justify-content-between flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
       <h5 class="my-0 mr-md-auto font-weight-normal"><a class="text-reset" href="/">Camino</a></h5>
       <nav class="my-2 my-md-0 mr-md-3">
         <a class="p-2 text-dark" href="/creator">My Tours</a>
@@ -33,9 +33,7 @@
       @endif
     </div>
   </header>
-  <main>
-    <div id="app" class="container"></div>
-  </main>
+  <div id="app"></div>
   <footer class="footer mt-2">
     <div class="container d-flex align-items-center justify-content-between">
       <p class="mb-0">

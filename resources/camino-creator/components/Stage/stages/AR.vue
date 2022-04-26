@@ -7,16 +7,20 @@
           <i class="fas fa-plus"></i> Add waypoint
         </button>
         <div
-          v-for="(waypoint, key) in stage.waypoints"
-          :key="key"
+          v-for="(waypoint, index) in stage.waypoints"
+          :key="index"
           class="border rounded mt-2 p-2"
         >
-          <LanguageText :text="waypoint.text" :languages="languages">
+          <LanguageText
+            :text="waypoint.text"
+            :languages="languages"
+            @update:text="(text) => handleUpdateWaypoint(index, { text })"
+          >
             Text
             <template #languageaddon>
               <button
                 class="btn btn-outline-danger float-right"
-                @click="handleRemoveWaypoint(key)"
+                @click="handleRemoveWaypoint(index)"
               >
                 <i class="fas fa-trash"></i> Remove Waypoint
               </button>
@@ -32,9 +36,12 @@
                 {{ waypoint.location.lng }}
               </div>
               <LocationSelector
-                v-model:location="waypoint.location"
+                :location="waypoint.location"
                 :generalarea="currentLocation"
                 :basemap="tour.tour_content.custom_base_map"
+                @update:location="
+                  (location) => handleUpdateWaypoint(index, { location })
+                "
               >
               </LocationSelector>
             </div>
@@ -47,10 +54,15 @@
             <div class="col-sm-6">
               <input
                 id="altitude"
-                v-model="waypoint.altitude"
+                :value="waypoint.altitude"
                 type="text"
                 class="form-control"
                 aria-describedby="altitudeHelp"
+                @input="
+                  handleUpdateWaypoint(index, {
+                    altitude: Number.parseInt($event.target.value),
+                  })
+                "
               />
               <small id="altitudeHelp" class="form-text text-muted"
                 >In meters, relative to this stop's elevation.</small
@@ -66,6 +78,7 @@
 <script>
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
+import { createMultilingualText } from "./stageFactory";
 export default {
   components: {
     LanguageText,
@@ -73,7 +86,7 @@ export default {
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour", "stop"],
-  emits: ["update:stage"],
+  emits: ["update"],
   computed: {
     currentLocation() {
       if (this.stop.id) {
@@ -92,39 +105,45 @@ export default {
       };
     },
   },
-  // created() {
-  //   if (!this.stage.text && !this.stage.waypoints) {
-  //     const updatedStage = {
-  //       ...this.stage,
-  //       text: {
-  //         placeholder: null,
-  //       },
-  //       waypoints: [],
-  //     };
-
-  //     this.$emit("update:stage", updatedStage);
-  //   }
-  // },
   methods: {
     handleAddWaypoint() {
-      // FIXME: This is a mutation of `stage` prop!
-      // Ignoring the ESLint error for now until we can test.
-      // Perhaps emit change?
-      // eslint-disable-next-line vue/no-mutating-props
-      this.stage.waypoints.push({
-        text: {
-          placeholder: null,
-        },
-        location: null,
-        altitude: null,
-      });
+      const updatedStage = {
+        ...this.stage,
+        waypoints: this.stage.waypoints.concat({
+          text: createMultilingualText(this.languages),
+          location: null,
+          altitude: null,
+        }),
+      };
+      this.$emit("update", updatedStage);
     },
-    handleRemoveWaypoint(key) {
-      // FIXME: This is a mutation of `stage` prop!
-      // Ignoring the ESLint error for now until we can test.
-      // Perhaps emit change?
-      // eslint-disable-next-line vue/no-mutating-props
-      this.stage.waypoints.splice(key, 1);
+    handleUpdateWaypoint(index, propChange) {
+      console.log("updateWaypoint", index, { propChange });
+      const currentWaypoint = this.stage.waypoints[index];
+      const updatedWaypoint = {
+        ...currentWaypoint,
+        ...propChange,
+      };
+      const updatedStage = {
+        ...this.stage,
+        waypoints: [
+          ...this.stage.waypoints.slice(0, index),
+          updatedWaypoint,
+          ...this.stage.waypoints.slice(index + 1),
+        ],
+      };
+
+      this.$emit("update", updatedStage);
+    },
+    handleRemoveWaypoint(index) {
+      const updatesStage = {
+        ...this.stage,
+        waypoints: [
+          ...this.stage.waypoints.slice(0, index),
+          ...this.stage.waypoints.slice(index + 1),
+        ],
+      };
+      this.$emit("update", updatesStage);
     },
   },
 };

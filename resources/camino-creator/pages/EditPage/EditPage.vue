@@ -168,7 +168,7 @@ async function save() {
     const { payload } = await tourStore
       .createTour(tour.value)
       .catch(handleError);
-    router.replace(`/creator/${payload.id}`);
+    router.replace({ name: "editTour", params: { tourId: payload.id } });
   } else {
     // update tour
     tourStore.updateTour(tour.value).catch(handleError);

@@ -1,9 +1,5 @@
 <template>
   <div>
-    <LanguageText :text="stage.buttonTitle" :languages="languages">
-      AR Button Title
-    </LanguageText>
-
     <div class="form-group row">
       <label class="col-sm-2 col-form-label">Waypoints</label>
       <div class="col-sm-10">
@@ -96,19 +92,19 @@ export default {
       };
     },
   },
-  created() {
-    if (!this.stage.text && !this.stage.waypoints) {
-      const updatedStage = {
-        ...this.stage,
-        text: {
-          placeholder: null,
-        },
-        waypoints: [],
-      };
+  // created() {
+  //   if (!this.stage.text && !this.stage.waypoints) {
+  //     const updatedStage = {
+  //       ...this.stage,
+  //       text: {
+  //         placeholder: null,
+  //       },
+  //       waypoints: [],
+  //     };
 
-      this.$emit("update:stage", updatedStage);
-    }
-  },
+  //     this.$emit("update:stage", updatedStage);
+  //   }
+  // },
   methods: {
     handleAddWaypoint() {
       // FIXME: This is a mutation of `stage` prop!

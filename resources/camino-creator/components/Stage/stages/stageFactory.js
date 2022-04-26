@@ -7,23 +7,36 @@ export function createMultilingualText(languages = ["English"]) {
 
 const factories = {
   separator: ({ languages } = {}) => ({
+    type: "separator",
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
-    type: "separator",
   }),
 
   navigation: ({ languages } = {}) => ({
+    type: "navigation",
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
-    type: "navigation",
     targetPoint: null,
     route: [],
   }),
 
+  guide: ({ languages } = {}) => ({
+    type: "guide",
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+  }),
+
+  ar: ({ languages } = {}) => ({
+    type: "ar",
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+    waypoints: [],
+  }),
+
   // fallback for undefined types
   default: (type = "unknown") => ({
-    id: global.crypto.randomUUID(),
     type,
+    id: global.crypto.randomUUID(),
   }),
 };
 

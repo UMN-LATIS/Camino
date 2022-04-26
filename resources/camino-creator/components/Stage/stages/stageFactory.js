@@ -1,3 +1,5 @@
+import { STAGE_TYPES } from "../../../common/constants.js";
+
 export function createMultilingualText(languages = ["English"]) {
   return languages.reduce((acc, lang) => {
     acc[lang] = "";
@@ -6,31 +8,37 @@ export function createMultilingualText(languages = ["English"]) {
 }
 
 const factories = {
-  separator: ({ languages } = {}) => ({
-    type: "separator",
+  [STAGE_TYPES.SEPARATOR]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.SEPARATOR,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
   }),
 
-  navigation: ({ languages } = {}) => ({
-    type: "navigation",
+  [STAGE_TYPES.NAVIGATION]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.NAVIGATION,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
     targetPoint: null,
     route: [],
   }),
 
-  guide: ({ languages } = {}) => ({
-    type: "guide",
+  [STAGE_TYPES.GUIDE]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.GUIDE,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
   }),
 
-  ar: ({ languages } = {}) => ({
-    type: "ar",
+  [STAGE_TYPES.AR]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.AR,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
     waypoints: [],
+  }),
+
+  [STAGE_TYPES.DEEPDIVES]: () => ({
+    type: STAGE_TYPES.DEEPDIVES,
+    id: global.crypto.randomUUID(),
+    deepdives: [],
   }),
 
   // fallback for undefined types

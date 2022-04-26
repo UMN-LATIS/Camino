@@ -41,6 +41,7 @@ import Gallery from "./stages/Gallery.vue";
 import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
+import { STAGE_TYPES } from "../../common/constants";
 
 const props = defineProps({
   stage: {
@@ -68,16 +69,16 @@ const props = defineProps({
 defineEmits(["remove", "update"]);
 
 const componentLookup = {
-  ar: AR,
-  "embed-frame": EmbedFrame,
-  deepdives: DeepDives,
-  "deepdives-summary": DeepDivesSummary,
-  feedback: Feedback,
-  gallery: Gallery,
-  guide: Guide,
-  language: LanguageSelector,
-  navigation: Navigation,
-  separator: Separator,
+  [STAGE_TYPES.AR]: AR,
+  [STAGE_TYPES.EMBED_FRAME]: EmbedFrame,
+  [STAGE_TYPES.DEEPDIVES]: DeepDives,
+  [STAGE_TYPES.DEEPDIVES_SUMMARY]: DeepDivesSummary,
+  [STAGE_TYPES.FEEDBACK]: Feedback,
+  [STAGE_TYPES.GALLERY]: Gallery,
+  [STAGE_TYPES.GUIDE]: Guide,
+  [STAGE_TYPES.LANGUAGE_SELECTOR]: LanguageSelector,
+  [STAGE_TYPES.NAVIGATION]: Navigation,
+  [STAGE_TYPES.SEPARATOR]: Separator,
 };
 
 const componentName = computed(() => componentLookup[props.stage.type]);

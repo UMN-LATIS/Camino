@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div v-for="(deepdive, key) in stage.deepdives" :key="key" class="m-2">
+    <div v-for="(deepdive, index) in stage.deepdives" :key="index" class="m-2">
       <LanguageText
         :text="deepdive.title"
         :languages="languages"
         :largetext="false"
+        @update:text="(title) => updateDeepDive(index, { title })"
       >
         Deep Dive Title
       </LanguageText>
@@ -12,29 +13,21 @@
         :text="deepdive.text"
         :languages="languages"
         :largetext="true"
+        @update:text="(text) => updateDeepDive(index, { text })"
       >
         Deep Dive Text
       </LanguageText>
       <button
         v-if="deepdive.title"
         class="btn btn-outline-danger float-right"
-        @click="removeDeepDive(deepdive, key)"
+        @click="removeDeepDive(index)"
       >
         <i class="fas fa-trash"></i> Remove Deep Dive
       </button>
     </div>
     <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
     <!-- eslint-disable -->
-    <button
-      @click="
-        stage.deepdives.push({
-          title: { placeholder: null },
-          text: { placeholder: null },
-          id: uuidv4(),
-        })
-      "
-      class="btn btn-outline-primary"
-    >
+    <button @click="addDeepDive" class="btn btn-outline-primary">
       <!-- eslint-enable -->
       <i class="fas fa-image"></i> Add Deep Dive
     </button>
@@ -43,33 +36,57 @@
 
 <script>
 import LanguageText from "../../LanguageText.vue";
+import { createMultilingualText } from "./stageFactory";
 
 export default {
   components: {
     LanguageText,
   },
   props: ["stage", "languages", "tour"],
-  created() {
-    if (!this.stage.deepdives) {
-      this.$set(this.stage, "deepdives", []);
-    }
-  },
+  emits: ["update"],
   methods: {
-    uuidv4: function () {
-      return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-        (
-          c ^
-          (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-        ).toString(16)
-      );
-    },
+    addDeepDive() {
+      const updatedStage = {
+        ...this.stage,
+        deepdives: this.stage.deepdives.concat({
+          id: global.crypto.randomUUID(),
+          title: createMultilingualText(this.languages),
+          text: createMultilingualText(this.languages),
+        }),
+      };
 
-    removeDeepDive: function (deepdive, key) {
-      if (confirm("Are you sure you wish to delete this deep dive?")) {
-        // FIXME: This is mutating the stage prop!
-        // eslint-disable-next-line
-        this.stage.deepdives.splice(key, 1);
+      this.$emit("update", updatedStage);
+    },
+    updateDeepDive(index, update) {
+      const currentDeepDive = this.stage.deepdives[index];
+      const updatedStage = {
+        ...this.stage,
+        deepdives: [
+          ...this.stage.deepdives.slice(0, index),
+          {
+            ...currentDeepDive,
+            ...update,
+          },
+          ...this.stage.deepdives.slice(index + 1),
+        ],
+      };
+
+      this.$emit("update", updatedStage);
+    },
+    removeDeepDive(index) {
+      if (!confirm("Are you sure you wish to delete this deep dive?")) {
+        return;
       }
+
+      const updatedStage = {
+        ...this.stage,
+        deepdives: [
+          ...this.stage.deepdives.slice(0, index),
+          ...this.stage.deepdives.slice(index + 1),
+        ],
+      };
+
+      this.$emit("update", updatedStage);
     },
   },
 };

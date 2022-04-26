@@ -105,21 +105,25 @@
 
         <div class="col-6">
           <div class="row d-flex justify-content-end">
-            <select v-model="newStageType" class="form-control col-3">
-              <option disabled></option>
+            <select
+              v-model="newStageType"
+              class="form-select"
+              aria-label="Select a Stage"
+            >
+              <option disabled>Select a Stage Type</option>
               <option
-                v-for="(stageType, key) in stageTypes"
-                :key="key"
-                :value="key"
+                v-for="(stageTypeName, stageTypeKey) in stageTypes"
+                :key="stageTypeKey"
+                :value="stageTypeKey"
               >
-                {{ stageType }}
+                {{ stageTypeName }}
               </option>
             </select>
 
             <button
               class="btn btn-primary"
               :disabled="!newStageType"
-              @click="addStage"
+              @click="handleAddStage"
             >
               <i class="fas fa-plus"></i> Add a Stage
             </button>
@@ -142,7 +146,8 @@ import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
-import defaultStop from "../../common/defaultStop.js";
+import createDefaultStop from "../../common/createDefaultStop.js";
+import stageFactory from "../../components/Stage/stages/stageFactory";
 
 const props = defineProps({
   tourId: {
@@ -185,7 +190,7 @@ if (userCan("administer site")) {
 }
 
 const newStageType = ref(null);
-const stop = ref(defaultStop);
+const stop = ref(createDefaultStop());
 
 onMounted(() => {
   const currentStop = tourStore.getTourStop(props.tourId, props.stopId);
@@ -236,6 +241,19 @@ function handleDeleteStage(stageId) {
   stop.value.stop_content.stages = stop.value.stop_content.stages.filter(
     (s) => s.id !== stageId
   );
+}
+
+function handleAddStage() {
+  if (!newStageType.value) {
+    console.error("No stage type selected", newStageType.value);
+    return;
+  }
+
+  const newStage = stageFactory.create(newStageType.value, {
+    languages: tourLanguages,
+  });
+  console.log("addStage", newStage);
+  stop.value.stop_content.stages.push(newStage);
 }
 
 function removeHeaderImage() {

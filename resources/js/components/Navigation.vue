@@ -1,17 +1,17 @@
 <template>
   <div>
     <div v-html="formattedText"></div>
-    <button-modal
+    <ButtonModal
       v-if="stage.targetPoint"
-      modal-name="nav"
-      :button-text="stage.buttonTitle[$i18n.locale]"
-      button-icon="far fa-map"
-      :modal-title="stage.buttonTitle[$i18n.locale]"
+      modalName="nav"
+      :buttonText="stage.buttonTitle[$i18n.locale]"
+      buttonIcon="far fa-map"
+      :modalTitle="stage.buttonTitle[$i18n.locale]"
       @modalShown="renderMap"
       @modalClosed="destroyMap"
     >
       <div id="map" style="height: 70vh; width: 100%"></div>
-    </button-modal>
+    </ButtonModal>
   </div>
 </template>
 

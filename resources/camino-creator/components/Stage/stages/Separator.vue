@@ -12,6 +12,7 @@
 <script setup>
 import LanguageText from "../../LanguageText.vue";
 import { useTourStore } from "../../../stores/tours.js";
+import { shape, string, object } from "vue-types";
 
 const props = defineProps({
   tourId: {
@@ -22,10 +23,11 @@ const props = defineProps({
     type: [Number, null],
     default: null,
   },
-  stage: {
-    type: Object,
-    required: true,
-  },
+  stage: shape({
+    id: string().isRequired,
+    type: "separator".isRequired,
+    text: object(),
+  }),
 });
 
 const tourStore = useTourStore();

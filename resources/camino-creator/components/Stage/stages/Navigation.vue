@@ -55,9 +55,6 @@ const props = defineProps({
 const tourStore = useTourStore();
 const tourLanguages = tourStore.getTourLanguages(props.tourId);
 const tour = tourStore.getTour(props.tourId);
-
-const emit = defineEmits(["update"]);
-
 const currentStopIndex = computed(() =>
   tour.stops.findIndex((s) => s.id === props.stopId)
 );
@@ -72,6 +69,7 @@ const previousStopTargetPoint = computed(() => {
   return allStopPoints[currentStopIndex.value - 1];
 });
 
+const emit = defineEmits(["update"]);
 function handleUpdateLocation(targetPoint) {
   emit("update", {
     ...props.stage,

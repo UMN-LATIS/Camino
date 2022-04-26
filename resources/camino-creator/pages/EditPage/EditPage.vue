@@ -104,7 +104,7 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { useTourStore } from "../../stores/tours";
-import defaultTour from "../../common/defaultTour.js";
+import createDefaultTour from "../../common/createDefaultTour.js";
 
 const { userCan } = usePermissions();
 
@@ -119,7 +119,7 @@ const props = defineProps({
 const error = ref(null);
 const showAlert = ref(false);
 const tourStore = useTourStore();
-const tour = ref(defaultTour);
+const tour = ref(createDefaultTour());
 const errors = ref([]);
 const router = useRouter();
 

@@ -232,6 +232,12 @@ function handleStageUpdate(stageId, updatedStage) {
   stop.value.stop_content.stages[stageIndex] = updatedStage;
 }
 
+function handleDeleteStage(stageId) {
+  stop.value.stop_content.stages = stop.value.stop_content.stages.filter(
+    (s) => s.id !== stageId
+  );
+}
+
 function removeHeaderImage() {
   const image = stop.value.stop_content.header_image;
   if (!image.src) {

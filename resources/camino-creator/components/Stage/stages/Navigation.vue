@@ -1,6 +1,11 @@
 <template>
   <div>
-    <LanguageText :text="stage.text" :languages="languages" :largetext="true">
+    <LanguageText
+      :text="stage.text"
+      :languages="tourLanguages"
+      :largetext="true"
+      @update:text="handleUpdateText"
+    >
       Navigation Text
     </LanguageText>
 
@@ -11,66 +16,82 @@
           <b>Latitude:</b> {{ stage.targetPoint.lat }}, <b>Longitude:</b>
           {{ stage.targetPoint.lng }}
         </div>
-        <!-- FIXME: This mutates the stage prop! -->
-        <!-- eslint-disable -->
         <LocationSelector
-          v-model:location="stage.targetPoint"
-          v-model:route="stage.route"
-          :generalarea="previousStop"
+          :location="stage.targetPoint"
+          :route="stage.route"
+          :generalarea="previousStopTargetPoint"
           :tour="tour"
           :basemap="tour.tour_content.custom_base_map"
-          :stop="stop"
+          :stop="currentStop"
+          @update:location="handleUpdateLocation"
+          @update:route="handleUpdateRoute"
         />
-        <!-- eslint-enable -->
       </div>
     </div>
   </div>
 </template>
-<script>
+<script setup>
+import { computed } from "vue";
+import getAllStopPoints from "../../../util/getAllStopPoints.js";
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
+import { useTourStore } from "../../../stores/tours.js";
 
-export default {
-  components: {
-    LanguageText,
-    LocationSelector,
+const props = defineProps({
+  tourId: {
+    type: Number,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour", "stop"],
-  computed: {
-    previousStop: function () {
-      var targetIndex;
-      if (this.stop.id) {
-        var currentStop = this.tour.stops.findIndex(
-          (e) => e.id == this.stop.id
-        );
-        targetIndex = currentStop > 0 ? currentStop - 1 : false;
-      } else {
-        targetIndex =
-          this.tour.stops.length > 2 ? this.tour.stops.length - 2 : false;
-      }
-      if (targetIndex === false) {
-        return this.tour.start_location;
-      } else {
-        var targetStop = this.tour.stops[targetIndex];
-        var nav = targetStop.stop_content.stages.filter(
-          (s) => s.type == "navigation"
-        );
-        if (nav.length > 0 && nav[0].targetPoint) {
-          return nav[0].targetPoint;
-        }
-      }
-      return this.tour.start_location;
-    },
+  stopId: {
+    type: [Number, null],
+    default: null,
   },
-  created() {
-    if (!this.stage.text) {
-      this.$set(this.stage, "text", { placeholder: null });
-      this.$set(this.stage, "buttonTitle", { English: "Show Map" });
-      this.$set(this.stage, "targetPoint", null);
-    }
+  stage: {
+    type: Object,
+    required: true,
   },
-};
+});
+
+const tourStore = useTourStore();
+const tourLanguages = tourStore.getTourLanguages(props.tourId);
+const tour = tourStore.getTour(props.tourId);
+
+const emit = defineEmits(["update"]);
+
+const currentStopIndex = computed(() =>
+  tour.stops.findIndex((s) => s.id === props.stopId)
+);
+const currentStop = computed(() => tour.stops[currentStopIndex.value]);
+const previousStopTargetPoint = computed(() => {
+  // if stop id not found or first stop, return tour start location
+  if (currentStopIndex.value <= 0) {
+    return tour.start_location;
+  }
+
+  const allStopPoints = getAllStopPoints(tour);
+  return allStopPoints[currentStopIndex.value - 1];
+});
+
+function handleUpdateLocation(targetPoint) {
+  emit("update", {
+    ...props.stage,
+    targetPoint,
+  });
+}
+
+function handleUpdateRoute(route) {
+  emit("update", {
+    ...props.stage,
+    route,
+  });
+}
+
+function handleUpdateText(text) {
+  emit("update", {
+    ...props.stage,
+    text,
+  });
+}
 </script>
 <style>
 .css-icon {

@@ -97,7 +97,6 @@ export default {
   max-width: 400px;
   max-height: 400px;
   position: relative;
-  z-index: -1;
 }
 
 .image-upload__dropbox {

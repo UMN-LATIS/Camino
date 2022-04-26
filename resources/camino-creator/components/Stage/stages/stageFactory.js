@@ -8,6 +8,26 @@ export function createMultilingualText(languages = ["English"]) {
 }
 
 const factories = {
+  [STAGE_TYPES.AR]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.AR,
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+    waypoints: [],
+  }),
+
+  [STAGE_TYPES.DEEPDIVES]: () => ({
+    type: STAGE_TYPES.DEEPDIVES,
+    id: global.crypto.randomUUID(),
+    deepdives: [],
+  }),
+
+  [STAGE_TYPES.DEEPDIVES_SUMMARY]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.DEEPDIVES_SUMMARY,
+    id: global.crypto.randomUUID(),
+    request_email: true,
+    text: createMultilingualText(languages),
+  }),
+
   [STAGE_TYPES.SEPARATOR]: ({ languages } = {}) => ({
     type: STAGE_TYPES.SEPARATOR,
     id: global.crypto.randomUUID(),
@@ -26,19 +46,6 @@ const factories = {
     type: STAGE_TYPES.GUIDE,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
-  }),
-
-  [STAGE_TYPES.AR]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.AR,
-    id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
-    waypoints: [],
-  }),
-
-  [STAGE_TYPES.DEEPDIVES]: () => ({
-    type: STAGE_TYPES.DEEPDIVES,
-    id: global.crypto.randomUUID(),
-    deepdives: [],
   }),
 
   // fallback for undefined types

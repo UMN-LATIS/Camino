@@ -2,18 +2,21 @@
   <div>
     <div class="form-check">
       <label class="form-check-label">
-        <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
-        <!-- eslint-disable -->
         <input
           type="checkbox"
           class="form-check-input"
-          v-model="stage.request_email"
+          :checked="stage.request_email"
+          @change="handleUpdate({ request_email: $event.target.checked })"
         />
-        <!-- eslint-enable -->
         Request Email Addresses
       </label>
     </div>
-    <LanguageText :text="stage.text" :languages="languages" :largetext="true">
+    <LanguageText
+      :text="stage.text"
+      :languages="languages"
+      :largetext="true"
+      @update:text="(text) => handleUpdate({ text })"
+    >
       Deep Dive Text
     </LanguageText>
   </div>
@@ -27,11 +30,14 @@ export default {
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "languages", "tour"],
-  created() {
-    if (!this.stage.text) {
-      this.$set(this.stage, "text", { placeholder: null });
-      this.$set(this.stage, "request_email", true);
-    }
+  emits: ["update"],
+  methods: {
+    handleUpdate(change) {
+      this.$emit("update", {
+        ...this.stage,
+        ...change,
+      });
+    },
   },
 };
 </script>

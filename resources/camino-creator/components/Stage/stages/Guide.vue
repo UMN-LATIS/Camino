@@ -1,21 +1,44 @@
 <template>
   <div>
-    <LanguageText :text="stage.text" :languages="languages" :largetext="true">
+    <LanguageText
+      :text="stage.text"
+      :languages="tourLanguages"
+      :largetext="true"
+      @update:text="handleStageUpdate"
+    >
       Guide Text
     </LanguageText>
   </div>
 </template>
 
-<script>
+<script setup>
 import LanguageText from "../../LanguageText.vue";
-export default {
-  components: { LanguageText },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour"],
-  created() {
-    if (!this.stage.text) {
-      this.$set(this.stage, "text", { placeholder: null });
-    }
+import { useTourStore } from "../../../stores/tours.js";
+
+const props = defineProps({
+  tourId: {
+    type: Number,
+    required: true,
   },
-};
+  stopId: {
+    type: [Number, null],
+    default: null,
+  },
+  stage: {
+    type: Object,
+    required: true,
+  },
+});
+
+const tourStore = useTourStore();
+const tourLanguages = tourStore.getTourLanguages(props.tourId);
+
+const emit = defineEmits(["update"]);
+
+function handleStageUpdate(updatedLocalizedText) {
+  emit("update", {
+    ...props.stage,
+    text: updatedLocalizedText,
+  });
+}
 </script>

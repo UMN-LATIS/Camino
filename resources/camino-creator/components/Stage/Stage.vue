@@ -41,6 +41,7 @@ import Gallery from "./stages/Gallery.vue";
 import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
+import Quiz from "./stages/Quiz.vue";
 import { STAGE_TYPES } from "../../common/constants";
 
 const props = defineProps({
@@ -79,6 +80,7 @@ const componentLookup = {
   [STAGE_TYPES.LANGUAGE_SELECTOR]: LanguageSelector,
   [STAGE_TYPES.NAVIGATION]: Navigation,
   [STAGE_TYPES.SEPARATOR]: Separator,
+  [STAGE_TYPES.QUIZ]: Quiz,
 };
 
 const componentName = computed(() => componentLookup[props.stage.type]);

@@ -4,66 +4,43 @@
       :text="stage.questionText"
       :languages="languages"
       :largetext="true"
+      @update:text="(questionText) => handleUpdateStage({ questionText })"
     >
       Quiz Question Text
     </LanguageText>
 
-    <div class="form-group row">
-      <label for="quizType" class="col-sm-1"><b>Quiz Type</b></label>
-      <div class="col-sm-6">
-        <div class="form-check">
-          <label class="form-check-label">
-            <!-- FIXME: Unexpected mutation of `stage` prop! -->
-            <!-- eslint-disable -->
-            <input
-              type="radio"
-              name="quizType"
-              class="form-check-input"
-              v-model="stage.quizType"
-              value="multiple_choice"
-            />
-            <!-- eslint-enable -->
-            Multiple Choice
-          </label>
-        </div>
-        <div class="form-check">
-          <label class="form-check-label">
-            <!-- FIXME: Mutation of `stage` prop! -->
-            <!-- eslint-disable -->
-            <input
-              type="radio"
-              name="quizType"
-              class="form-check-input"
-              v-model="stage.quizType"
-              value="free_text"
-            />
-            <!-- eslint-enable -->
-            Free Text
-          </label>
-        </div>
-      </div>
-    </div>
-
     <div
       v-for="(response, index) in stage.responses"
       :key="index"
-      class="form-group row responseOutline"
+      class="bg-light p-3 my-3 position-relative"
     >
-      <div class="col-sm-12 mt-2">
-        <LanguageText
-          :text="response.text"
-          :languages="languages"
-          :largetext="isMultipleChoice"
+      <label>
+        <button
+          class="btn btn-link-dark d-inline-block position-absolute top-0 end-0"
+          @click="handleRemoveResponse(index)"
         >
-          Response
-        </LanguageText>
-        <span v-if="isMultipleChoice">
-          <input v-model="response.correct" type="checkbox" value="1" /> Correct
-        </span>
-      </div>
+          <i class="fas fa-times"></i>
+        </button>
+        <input
+          :checked="response.correct"
+          type="checkbox"
+          @change="
+            handleUpdateResponse(index, { correct: $event.target.checked })
+          "
+        />
+        Correct
+      </label>
+      <LanguageText
+        :text="response.text"
+        :languages="languages"
+        class="flex-1"
+        @update:text="(text) => handleUpdateResponse(index, { text })"
+      >
+        Response
+      </LanguageText>
     </div>
 
-    <button class="btn btn-outline-primary" @click="addResponse">
+    <button class="btn btn-outline-primary mb-3" @click="handleAddResponse">
       <i class="fas fa-plus"></i> Add response
     </button>
 
@@ -71,90 +48,74 @@
       :text="stage.hintText"
       :languages="languages"
       :largetext="true"
+      @update:text="(hintText) => handleUpdateStage({ hintText })"
     >
       Hint
     </LanguageText>
-
-    <div>
-      <LanguageText
-        :text="stage.buttonText"
-        :languages="languages"
-        :largetext="false"
-      >
-        Button Text
-      </LanguageText>
-    </div>
-    <div v-if="!isMultipleChoice">
-      <LanguageText
-        :text="stage.answerPrompt"
-        :languages="languages"
-        :largetext="false"
-      >
-        Answer Prompt
-      </LanguageText>
-    </div>
-    <div>
-      <LanguageText
-        :text="stage.hintPrompt"
-        :languages="languages"
-        :largetext="false"
-      >
-        Hint Prompt
-      </LanguageText>
-    </div>
-    <div>
-      <!-- FIXME: mutation of stage prop -->
-      <!-- eslint-disable vue/no-mutating-props -->
-      <input v-model="stage.requireCorrect" type="checkbox" value="1" />
-      <!-- eslint-enable -->
-      Require Correct Answer to Advance
-    </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { useTourStore } from "../../../stores/tours";
 import LanguageText from "../../LanguageText.vue";
+import { createMultilingualText } from "./stageFactory";
 
-export default {
-  components: {
-    LanguageText,
+const props = defineProps({
+  stage: {
+    type: Object,
+    required: true,
   },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour"],
-  computed: {
-    isMultipleChoice: function () {
-      return this.stage.quizType == "multiple_choice";
-    },
+  tourId: {
+    type: Number,
+    required: true,
   },
-  created() {
-    if (!this.stage.questionText) {
-      this.$set(this.stage, "questionText", { placeholder: null });
-      this.$set(this.stage, "hintText", { placeholder: null });
-      this.$set(this.stage, "quizType", "multiple_choice");
-      this.$set(this.stage, "responses", []);
-      this.$set(this.stage, "requireCorrect", 0);
-      this.$set(this.stage, "buttonText", {
-        placeholder: null,
-        English: "Check my Answer",
-      });
-      this.$set(this.stage, "answerPrompt", {
-        placeholder: null,
-        English: "Answer",
-      });
-      this.$set(this.stage, "hintPrompt", {
-        placeholder: null,
-        English: "Show Hint",
-      });
-    }
-  },
-  methods: {
-    addResponse: function () {
-      // FIXME: Mutation of stage prop
-      // eslint-disable-next-line
-      this.stage.responses.push({ text: { placeholder: null }, correct: 0 });
-    },
-  },
-};
+});
+
+const tourStore = useTourStore();
+const languages = tourStore.getTourLanguages(props.tourId);
+
+const emit = defineEmits(["update"]);
+
+function handleUpdateStage(update) {
+  emit("update", {
+    ...props.stage,
+    ...update,
+  });
+}
+
+function handleAddResponse() {
+  emit("update", {
+    ...props.stage,
+    responses: props.stage.responses.concat({
+      text: createMultilingualText(languages),
+      correct: false,
+    }),
+  });
+}
+function handleUpdateResponse(index, update) {
+  const updatedResponse = {
+    ...props.stage.responses[index],
+    ...update,
+  };
+
+  emit("update", {
+    ...props.stage,
+    responses: [
+      ...props.stage.responses.slice(0, index),
+      updatedResponse,
+      ...props.stage.responses.slice(index + 1),
+    ],
+  });
+}
+function handleRemoveResponse(index) {
+  emit("update", {
+    ...props.stage,
+    responses: [
+      ...props.stage.responses.slice(0, index),
+      ...props.stage.responses.slice(index + 1),
+    ],
+  });
+}
 </script>
 <style scoped>
 .responseOutline {

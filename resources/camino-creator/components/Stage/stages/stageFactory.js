@@ -28,20 +28,6 @@ const factories = {
     text: createMultilingualText(languages),
   }),
 
-  [STAGE_TYPES.SEPARATOR]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.SEPARATOR,
-    id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
-  }),
-
-  [STAGE_TYPES.NAVIGATION]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.NAVIGATION,
-    id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
-    targetPoint: null,
-    route: [],
-  }),
-
   [STAGE_TYPES.GUIDE]: ({ languages } = {}) => ({
     type: STAGE_TYPES.GUIDE,
     id: global.crypto.randomUUID(),
@@ -58,6 +44,29 @@ const factories = {
     type: STAGE_TYPES.GALLERY,
     id: global.crypto.randomUUID(),
     images: [],
+  }),
+
+  [STAGE_TYPES.NAVIGATION]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.NAVIGATION,
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+    targetPoint: null,
+    route: [],
+  }),
+
+  [STAGE_TYPES.SEPARATOR]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.SEPARATOR,
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+  }),
+
+  [STAGE_TYPES.QUIZ]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.QUIZ,
+    id: global.crypto.randomUUID(),
+    questionText: createMultilingualText(languages),
+    quizType: "multiple_choice",
+    responses: [],
+    hintText: createMultilingualText(languages),
   }),
 
   // fallback for undefined types

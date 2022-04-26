@@ -15,4 +15,5 @@ export const STAGE_TYPES = {
   LANGUAGE_SELECTOR: "language",
   NAVIGATION: "navigation",
   SEPARATOR: "separator",
+  QUIZ: "quiz",
 };

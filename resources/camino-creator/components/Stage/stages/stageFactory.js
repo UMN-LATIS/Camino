@@ -48,6 +48,12 @@ const factories = {
     text: createMultilingualText(languages),
   }),
 
+  [STAGE_TYPES.FEEDBACK]: ({ languages } = {}) => ({
+    type: STAGE_TYPES.FEEDBACK,
+    id: global.crypto.randomUUID(),
+    text: createMultilingualText(languages),
+  }),
+
   // fallback for undefined types
   default: (type = "unknown") => ({
     type,

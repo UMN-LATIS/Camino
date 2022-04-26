@@ -180,6 +180,7 @@ const stageTypes = ref({
   [STAGE_TYPES.DEEPDIVES]: "Deep Dives",
   [STAGE_TYPES.DEEPDIVES_SUMMARY]: "Deep Dives Summary",
   [STAGE_TYPES.EMBED_FRAME]: "Embed",
+  [STAGE_TYPES.FEEDBACK]: "Feedback",
   [STAGE_TYPES.GUIDE]: "Guide",
   [STAGE_TYPES.GALLERY]: "Gallery",
   [STAGE_TYPES.NAVIGATION]: "Navigation",
@@ -187,7 +188,7 @@ const stageTypes = ref({
 });
 
 if (userCan("administer site")) {
-  stageTypes.value.language = "Language";
+  stageTypes.value[STAGE_TYPES.LANGUAGE_SELECTOR] = "Language";
 }
 
 const newStageType = ref(null);

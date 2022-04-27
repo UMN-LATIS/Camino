@@ -4,16 +4,16 @@
 
     <div v-if="stage.quizType == 'multiple_choice'">
       <div
-        class="form-check"
         v-for="(response, index) in stage.responses"
         :key="index"
+        class="form-check"
       >
         <label class="form-check-label">
           <input
+            v-model="selectedAnswer"
             type="radio"
             class="form-check-input"
             :value="response"
-            v-model="selectedAnswer"
           />
           {{ response.text[$i18n.locale] }}
         </label>
@@ -23,10 +23,10 @@
       <div class="form-group">
         <label for="">{{ stage.answerPrompt[$i18n.locale] }}</label>
         <input
+          v-model="selectedAnswer"
           type="text"
           class="form-control"
           name="quiz_answer"
-          v-model="selectedAnswer"
         />
       </div>
     </div>
@@ -40,26 +40,16 @@
     <button class="btn btn-outline-primary" @click="checkMyAnswer">
       {{ stage.buttonText[$i18n.locale] }}
     </button>
-    <save-alert :showAlert.sync="showAlert"
-      ><i class="far fa-check-circle answer align-middle" v-if="correct"></i>
-      <i class="far fa-times-circle answer align-middle" v-if="!correct"></i>
+    <save-alert v-model:showAlert="showAlert"
+      ><i v-if="correct" class="far fa-check-circle answer align-middle"></i>
+      <i v-if="!correct" class="far fa-times-circle answer align-middle"></i>
     </save-alert>
   </div>
 </template>
 
-<style scoped>
-.answer {
-  font-size: 1.6em;
-}
-.answer.fa-check-circle {
-  color: green;
-}
-.answer.fa-times-circle {
-  color: red;
-}
-</style>
 <script>
 export default {
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "tour", "currentStopId"],
   data() {
     return {
@@ -70,6 +60,21 @@ export default {
     };
   },
   computed: {},
+  mounted() {
+    if (this.stage.requireCorrect) {
+      if (
+        !this.$store.state.locks[this.currentStopId] ||
+        !this.$store.state.locks[this.currentStopId].find(
+          (e) => e.text == this.stage.questionText[this.$i18n.locale]
+        )
+      ) {
+        this.$store.commit("lockStop", {
+          stop: this.currentStopId,
+          text: this.stage.questionText[this.$i18n.locale],
+        });
+      }
+    }
+  },
   methods: {
     checkMyAnswer: function () {
       if (this.stage.quizType == "multiple_choice") {
@@ -103,20 +108,17 @@ export default {
       }
     },
   },
-  mounted() {
-    if (this.stage.requireCorrect) {
-      if (
-        !this.$store.state.locks[this.currentStopId] ||
-        !this.$store.state.locks[this.currentStopId].find(
-          (e) => e.text == this.stage.questionText[this.$i18n.locale]
-        )
-      ) {
-        this.$store.commit("lockStop", {
-          stop: this.currentStopId,
-          text: this.stage.questionText[this.$i18n.locale],
-        });
-      }
-    }
-  },
 };
 </script>
+
+<style scoped>
+.answer {
+  font-size: 1.6em;
+}
+.answer.fa-check-circle {
+  color: green;
+}
+.answer.fa-times-circle {
+  color: red;
+}
+</style>

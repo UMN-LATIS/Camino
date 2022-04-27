@@ -11,8 +11,8 @@
             class="form-check-input"
             type="checkbox"
             :value="deepdive"
-            @change="change($event.target.checked, deepdive)"
             :checked="checked(deepdive)"
+            @change="change($event.target.checked, deepdive)"
           />{{ deepdive.title[$i18n.locale] }}
         </label>
       </li>

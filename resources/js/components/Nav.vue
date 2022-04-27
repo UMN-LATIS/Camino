@@ -6,16 +6,16 @@
           v-if="previousStop !== false"
           :to="{ name: 'tour', params: { currentStopId: previousStop } }"
           class="controlButton p-2"
-          >&laquo; {{ $t("nav.prev") }}
+          >&laquo; {{ t("nav.prev") }}
         </router-link>
       </div>
       <div class="col-6 text-center navToggle">
         <a
           class="p-2"
-          @click.prevent="collapseVisible = !collapseVisible"
           role="button"
           href="#"
           aria-expanded="false"
+          @click.prevent="collapseVisible = !collapseVisible"
           >{{ currentStop.title[$i18n.locale] }}</a
         >
       </div>
@@ -24,7 +24,7 @@
           v-if="nextStop !== false && showNextButton"
           :to="{ name: 'tour', params: { currentStopId: nextStop } }"
           class="controlButton p-2"
-          >{{ $t("nav.next") }} &raquo;</router-link
+          >{{ t("nav.next") }} &raquo;</router-link
         >
       </div>
     </div>
@@ -35,8 +35,8 @@
     <!-- https://gist.github.com/mblarsen/f628fc3c196b5f58d326242061922446 -->
     <b-collapse
       id="collapse-1"
-      class="row mx-0 border-bottom"
       v-model="collapseVisible"
+      class="row mx-0 border-bottom"
     >
       <div class="col px-0">
         <div class="list-group list-group-flush">
@@ -52,53 +52,15 @@
     </b-collapse>
   </div>
 </template>
-
-<style scoped>
-a {
-  text-decoration: none;
-  display: inline-block;
-  width: 100%;
-  color: white;
-  /* padding: 8px 16px; */
-}
-
-a:hover {
-  background-color: #024873;
-  color: white;
-}
-
-.navHeader {
-  background-color: #608ba6;
-  /* background-color: #A89B9D; */
-  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.navToggle {
-  border-left: 1px solid rgba(0, 0, 0, 0.5);
-  border-right: 1px solid rgba(0, 0, 0, 0.5);
-}
-
-.list-group-item-action {
-  background-color: #608ba6;
-}
-
-.router-link-exact-active {
-  background-color: #024873;
-}
-.navButton {
-}
-
-.navToggle a {
-  /* color: white; */
-}
-
-.dropdown-menu a {
-  color: black;
-}
-</style>
 <script>
+import { useI18n } from "vue-i18n";
+
 export default {
   props: ["tour", "currentStopId"],
+  setup() {
+    const { t } = useI18n(); // use as global scope
+    return { t };
+  },
   data() {
     return {
       collapseVisible: false,
@@ -143,13 +105,6 @@ export default {
       return true;
     },
   },
-  methods: {
-    setProgress: function () {
-      this.$Progress.set(
-        ((this.currentStopId + 1) / this.tour.stops.length) * 100
-      );
-    },
-  },
   watch: {
     $route() {
       this.collapseVisible = false;
@@ -166,5 +121,56 @@ export default {
     this.setProgress();
     this.maxStop = Math.max(this.currentStopId, this.maxStop);
   },
+  methods: {
+    setProgress: function () {
+      this.$Progress.set(
+        ((this.currentStopId + 1) / this.tour.stops.length) * 100
+      );
+    },
+  },
 };
 </script>
+
+<style scoped>
+a {
+  text-decoration: none;
+  display: inline-block;
+  width: 100%;
+  color: white;
+  /* padding: 8px 16px; */
+}
+
+a:hover {
+  background-color: #024873;
+  color: white;
+}
+
+.navHeader {
+  background-color: #608ba6;
+  /* background-color: #A89B9D; */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.navToggle {
+  border-left: 1px solid rgba(0, 0, 0, 0.5);
+  border-right: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.list-group-item-action {
+  background-color: #608ba6;
+}
+
+.router-link-exact-active {
+  background-color: #024873;
+}
+.navButton {
+}
+
+.navToggle a {
+  /* color: white; */
+}
+
+.dropdown-menu a {
+  color: black;
+}
+</style>

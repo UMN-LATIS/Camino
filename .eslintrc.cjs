@@ -1,11 +1,11 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
     node: true,
+    "vue/setup-compiler-macros": true,
     jest: true,
   },
-  extends: ["eslint:recommended", "plugin:vue/essential", "prettier"],
+  extends: ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
   parserOptions: {
     ecmaVersion: 13,
     sourceType: "module",
@@ -13,6 +13,23 @@ module.exports = {
   plugins: ["vue"],
   rules: {
     "vue/multi-word-component-names": "off",
+    "vue/attribute-hyphenation": ["error", "never"],
+    "vue/v-on-event-hyphenation": ["error", "never"],
+    "vue/component-name-in-template-casing": [
+      "error",
+      "PascalCase",
+      {
+        registeredComponentsOnly: false,
+        ignores: [
+          "component",
+          "client-only",
+          "keep-alive",
+          "router-link",
+          "router-view",
+          "teleport",
+        ],
+      },
+    ],
   },
   ignorePatterns: ["**/vendor/**/*.js", "**/public/**/*.js"],
   globals: {

@@ -1,0 +1,19 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: #f3f4f6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

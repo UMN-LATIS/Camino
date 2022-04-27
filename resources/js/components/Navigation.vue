@@ -1,42 +1,25 @@
 <template>
   <div>
     <div v-html="formattedText"></div>
-    <button-modal
+    <ButtonModal
       v-if="stage.targetPoint"
       modalName="nav"
       :buttonText="stage.buttonTitle[$i18n.locale]"
       buttonIcon="far fa-map"
       :modalTitle="stage.buttonTitle[$i18n.locale]"
-      v-on:modalShown="renderMap"
-      v-on:modalClosed="destroyMap"
+      @modalShown="renderMap"
+      @modalClosed="destroyMap"
     >
-      <div style="height: 70vh; width: 100%" id="map"></div>
-    </button-modal>
+      <div id="map" style="height: 70vh; width: 100%"></div>
+    </ButtonModal>
   </div>
 </template>
 
-<style>
-.css-icon {
-  border-radius: 30px;
-  height: 10px;
-  width: 10px;
-  z-index: 10;
-}
-
-.target-css-icon {
-  border: 3px solid red;
-  background-color: red;
-}
-
-.other-css-icon {
-  border: 3px solid gray;
-  background-color: rgba(194, 143, 143, 0.514);
-  width: 10px;
-  height: 10px;
-}
-</style>
-
 <script>
+import usePermissions from "../hooks/usePermissions.js";
+
+const { userCan } = usePermissions();
+
 var map;
 var lc;
 var targetLocationCssIcon = null;
@@ -276,7 +259,7 @@ export default {
         .addTo(map);
 
       if (
-        !this.$can("edit own tours") ||
+        !userCan("edit own tours") ||
         !this.$store.state.config.simulateLocation
       ) {
         lc.start();
@@ -285,3 +268,24 @@ export default {
   },
 };
 </script>
+
+<style>
+.css-icon {
+  border-radius: 30px;
+  height: 10px;
+  width: 10px;
+  z-index: 10;
+}
+
+.target-css-icon {
+  border: 3px solid red;
+  background-color: red;
+}
+
+.other-css-icon {
+  border: 3px solid gray;
+  background-color: rgba(194, 143, 143, 0.514);
+  width: 10px;
+  height: 10px;
+}
+</style>

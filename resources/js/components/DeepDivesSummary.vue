@@ -5,31 +5,31 @@
     <div class="form-inline">
       <label for="email" class="sr-only">E-mail address</label>
       <input
+        id="email"
+        v-model="email"
         type="email"
         class="form-control mr-2 col-7 col-md-3"
         name=""
-        v-model="email"
-        id="email"
         placeholder="E-mail address"
         aria-describedby="emailHelpId"
       />
       <button
         type="submit"
         class="btn btn-primary"
-        @click="sendDeepDives"
         :disabled="success"
+        @click="sendDeepDives"
       >
-        {{ $t("stage.deepdives.email") }}
+        {{ t("stage.deepdives.email") }}
       </button>
-      <i class="fas fa-check-circle ml-2" v-if="success"></i>
+      <i v-if="success" class="fas fa-check-circle ml-2"></i>
     </div>
     <small id="emailHelpId" class="form-text text-muted">{{
-      $t("stage.deepdives.disclaimer")
+      t("stage.deepdives.disclaimer")
     }}</small>
     <div
-      class="card mt-2 mb-2"
       v-for="(deepdive, key) in $store.getters.deepdives"
       :key="key"
+      class="card mt-2 mb-2"
     >
       <div class="card-body">
         <h5 class="card-title">{{ deepdive.title[$i18n.locale] }}</h5>
@@ -38,29 +38,20 @@
     </div>
   </div>
   <div v-else>
-    <p>{{ $t("stage.deepdives.none") }}</p>
+    <p>{{ t("stage.deepdives.none") }}</p>
   </div>
 </template>
 
-<style scoped>
-.card-title {
-  text-transform: capitalize;
-}
-
-.form-inline .form-control {
-  display: inline-block !important;
-  width: auto !important;
-}
-
-.fa-check-circle {
-  color: green;
-  font-size: 1.4em;
-}
-</style>
-
 <script>
+import { useI18n } from "vue-i18n";
+
 export default {
+  // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "tour"],
+  setup() {
+    const { t } = useI18n(); // use as global scope
+    return { t };
+  },
   data() {
     return {
       email: null,
@@ -86,3 +77,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card-title {
+  text-transform: capitalize;
+}
+
+.form-inline .form-control {
+  display: inline-block !important;
+  width: auto !important;
+}
+
+.fa-check-circle {
+  color: green;
+  font-size: 1.4em;
+}
+</style>

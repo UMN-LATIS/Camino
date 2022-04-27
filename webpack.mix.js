@@ -1,18 +1,25 @@
 const fs = require("fs");
 const mix = require("laravel-mix");
+const path = require("path");
 
-/*
-|--------------------------------------------------------------------------
-| Mix Asset Management
-|--------------------------------------------------------------------------
-|
-| Mix provides a clean, fluent API for defining some Webpack build steps
-| for your Laravel application. By default, we are compiling the Sass
-| file for the application as well as bundling up all the JS files.
-|
-*/
+// Main Laravel App Styles and Scripts (homepage)
+mix
+  .alias({
+    "@": path.join(__dirname, "resources"),
+  })
+  .js("resources/js/app.js", "public/js/app.js")
+  .sass("resources/sass/app.scss", "public/css/app.css");
 
-if (!mix.inProduction()) {
+// Camino Creator App
+mix
+  .js("resources/camino-creator/main.js", "public/camino-creator/main.js")
+  .sass("resources/camino-creator/main.scss", "public/camino-creator/main.css")
+  .vue()
+  .sourceMaps();
+
+if (mix.inProduction()) {
+  mix.version();
+} else {
   mix
     .options({
       hmrOptions: {
@@ -22,9 +29,6 @@ if (!mix.inProduction()) {
       },
     })
     .webpackConfig({
-      resolve: {
-        symlinks: false,
-      },
       devServer: {
         https: {
           key: fs.readFileSync("./.cert/key.pem"),
@@ -32,22 +36,4 @@ if (!mix.inProduction()) {
         },
       },
     });
-}
-
-mix
-  .js("resources/js/app.js", "public/js")
-  .vue()
-  .sass("resources/sass/app.scss", "public/css");
-
-if (mix.inProduction()) {
-  mix.version();
-}
-
-mix
-  .js("resources/js/edit.js", "public/js")
-  .vue()
-  .sass("resources/sass/edit.scss", "public/css");
-
-if (mix.inProduction()) {
-  mix.version();
 }

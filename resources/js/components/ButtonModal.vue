@@ -1,22 +1,22 @@
 <template>
   <div>
-    <b-button
-      variant="outline-primary"
+    <BButton
       v-b-modal="randomizedModalName"
-      v-bind:disabled="disabled"
-      ><i :class="buttonIcon" v-if="buttonIcon"></i> {{ buttonText }}</b-button
+      variant="outline-primary"
+      :disabled="disabled"
+      ><i v-if="buttonIcon" :class="buttonIcon"></i> {{ buttonText }}</BButton
     >
 
-    <b-modal
-      size="lg"
+    <BModal
       :id="randomizedModalName"
+      size="lg"
       :title="modalTitle"
-      ok-only
-      modal-class="modal-fullscreen"
-      ok-title="Close"
+      okOnly
+      modalClass="modal-fullscreen"
+      okTitle="Close"
     >
       <slot></slot>
-    </b-modal>
+    </BModal>
   </div>
 </template>
 
@@ -31,6 +31,19 @@ export default {
   computed: {
     randomizedModalName: function () {
       return this.modalName + this.randomIdentifier;
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if (
+        (from &&
+          from.params.status &&
+          from.params.status == this.randomizedModalName &&
+          !to.params.status) ||
+        to.params.status !== this.randomizedModalName
+      ) {
+        this.$bvModal.hide(this.randomizedModalName);
+      }
     },
   },
   mounted() {
@@ -71,23 +84,10 @@ export default {
       }
     });
   },
-  beforeDestroy() {
+  beforeUnmount() {
     this.$emit("modalClosed");
     this.$root.$off("bv::modal::shown");
     this.$root.$off("bv::modal::hide");
-  },
-  watch: {
-    $route(to, from) {
-      if (
-        (from &&
-          from.params.status &&
-          from.params.status == this.randomizedModalName &&
-          !to.params.status) ||
-        to.params.status !== this.randomizedModalName
-      ) {
-        this.$bvModal.hide(this.randomizedModalName);
-      }
-    },
   },
 };
 </script>

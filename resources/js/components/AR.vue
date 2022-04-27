@@ -1,10 +1,10 @@
 <template>
   <div>
-    <button-modal
-      button-icon="fas fa-binoculars"
-      modal-name="ar"
-      :button-text="t('stage.ar.showar')"
-      :modal-title="t('stage.ar.showar')"
+    <ButtonModal
+      buttonIcon="fas fa-binoculars"
+      modalName="ar"
+      :buttonText="t('stage.ar.showar')"
+      :modalTitle="t('stage.ar.showar')"
       :disabled="!isMobile"
       @modalShown="startAR"
       @modalClosed="endAR"
@@ -17,7 +17,7 @@
           :src="source"
         ></iframe>
       </div>
-    </button-modal>
+    </ButtonModal>
     <div v-if="!isMobile" class="alert alert-primary mt-2" role="alert">
       {{ t("stage.ar.warning") }}
     </div>

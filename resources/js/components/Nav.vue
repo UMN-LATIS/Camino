@@ -28,12 +28,12 @@
         >
       </div>
     </div>
-    <vue-progress-bar></vue-progress-bar>
+    <VueProgressBar></VueProgressBar>
     <!-- https://stackoverflow.com/questions/40573011/dynamically-inject-vue-2-component-from-shortcode -->
     <!-- https://medium.com/@maeganwilson_/how-to-create-a-navigation-bar-in-vue-js-8a70e7f29f80?source=-----8a70e7f29f80---------------------post_regwall-&skipOnboarding=1 -->
     <!-- https://www.codementor.io/@mblarsen/wordpress-shortcodes-vuejs-vue-js-5gv4op8sm -->
     <!-- https://gist.github.com/mblarsen/f628fc3c196b5f58d326242061922446 -->
-    <b-collapse
+    <BCollapse
       id="collapse-1"
       v-model="collapseVisible"
       class="row mx-0 border-bottom"
@@ -49,7 +49,7 @@
           >
         </div>
       </div>
-    </b-collapse>
+    </BCollapse>
   </div>
 </template>
 <script>

@@ -40,10 +40,10 @@
     <button class="btn btn-outline-primary" @click="checkMyAnswer">
       {{ stage.buttonText[$i18n.locale] }}
     </button>
-    <save-alert v-model:showAlert="showAlert"
+    <SaveAlert v-model:showAlert="showAlert"
       ><i v-if="correct" class="far fa-check-circle answer align-middle"></i>
       <i v-if="!correct" class="far fa-times-circle answer align-middle"></i>
-    </save-alert>
+    </SaveAlert>
   </div>
 </template>
 

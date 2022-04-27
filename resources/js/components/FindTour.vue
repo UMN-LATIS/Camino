@@ -1,26 +1,26 @@
 <template>
   <div>
-    <div style="height: 60vh; width: 100%" id="map"></div>
+    <div id="map" style="height: 60vh; width: 100%"></div>
 
     <div class="row mt-2">
       <div class="col d-flex justify-content-center" style="font-size: 1.4em">
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="walk" />
+            <input v-model="walk" type="checkbox" class="form-check-input" />
             <i class="fas fa-walking mr-2"></i>Walk
           </label>
         </div>
 
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="bike" />
+            <input v-model="bike" type="checkbox" class="form-check-input" />
             <i class="fas fa-biking mr-2"></i>Bike
           </label>
         </div>
 
         <div class="form-check form-check-inline">
           <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" v-model="drive" />
+            <input v-model="drive" type="checkbox" class="form-check-input" />
             <i class="fas fa-car mr-2"></i>Drive
           </label>
         </div>
@@ -42,12 +42,6 @@ export default {
       drive: true,
     };
   },
-  mounted: function () {
-    axios.get("/api/tours").then((res) => {
-      this.tours = res.data;
-      this.renderMap();
-    });
-  },
   watch: {
     walk: function () {
       this.updateMarkers();
@@ -58,6 +52,12 @@ export default {
     drive: function () {
       this.updateMarkers();
     },
+  },
+  mounted: function () {
+    axios.get("/api/tours").then((res) => {
+      this.tours = res.data;
+      this.renderMap();
+    });
   },
   methods: {
     updateMarkers: function () {

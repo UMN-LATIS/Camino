@@ -6,12 +6,12 @@
     @close="$emit('close')"
   >
     <ol class="menu-sheet__list">
-      <router-link v-for="(item, i) in menuItems" :key="i" :to="item.href">
+      <a v-for="(item, i) in menuItems" :key="i" :href="item.href">
         <li class="menu-sheet__list-item">
           <span v-if="!!item.icon" class="material-icons">{{ item.icon }}</span>
           <span>{{ item.text }}</span>
         </li>
-      </router-link>
+      </a>
     </ol>
   </Sheet>
 </template>
@@ -28,19 +28,29 @@ defineEmits(["close"]);
 
 const menuItems = [
   {
-    icon: "home",
     text: "Home",
     href: "/",
+    icon: "home",
   },
   {
-    icon: "settings",
-    text: "Settings",
-    href: "/settings",
+    text: "Find Tours",
+    href: "/findTours",
+    icon: "travel_explore",
   },
   {
-    icon: "help_outline",
+    text: "Create a Tour",
+    href: "/creator",
+    icon: "add_location_alt",
+  },
+  {
+    text: "About Camino",
+    href: "/about",
+    icon: "arrow_forward",
+  },
+  {
     text: "Help",
-    href: "/help",
+    href: "https://umn-latis.github.io/Camino/",
+    icon: "help_outline",
   },
 ];
 </script>

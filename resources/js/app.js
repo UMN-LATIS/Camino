@@ -7,6 +7,8 @@ import FindTourPage from "./FindTourPage.vue";
 initAxios();
 initLeaflet();
 
-const app = createApp(FindTourPage);
+const app = createApp({});
+app.component("find-tour-page", FindTourPage);
+app.component("ar-embed", () => import("./components/ARembed.vue"));
 
 app.mount("#app");

@@ -1,0 +1,172 @@
+/* Border Box default */
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* Variables */
+:root {
+  /* Color styles */
+  --yellow: #f3ff7d;
+  --yellow-light: #f6ffa2;
+  --yellow-lighter: #fbffd9;
+  --white: #fff;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #e5e5e5;
+  --gray-300: #d4d4d4;
+  --gray-400: #a3a3a3;
+  --gray-500: #737373;
+  --gray-600: #525252;
+  --gray-700: #404040;
+  --gray-800: #262626;
+  --gray-900: #171717;
+
+  --black: var(--gray-900);
+  --gray-dark: var(--gray-600);
+  --gray-medium: var(--gray-400);
+  --gray: var(--gray-300);
+  --gray-light: var(--gray-200);
+  --gray-lighter: var(--gray-100);
+
+  --blue-light: #dff8fd;
+  --blue-medium: #abeffa;
+  --blue: var(--blue-medium);
+  --orange-light: #fff3ed;
+  --orange-medium: #ffc798;
+  --orange: var(--orange-medium);
+  --system-blue: #0a84ff;
+  --system-red: #ff453a;
+  --system-green: #00c853;
+  --translucent-color: hsla(0, 0%, 100%, 0.75);
+  --translucent-filter: blur(0.25rem);
+
+  /* umn golds */
+  --gold: #fc3;
+  --gold-light: #ffde7a;
+  --gold-header: #ffd75f;
+  --gold-dark: #ffb71e;
+
+  /* umn maroons */
+  --maroon: #7a0019;
+  --maroon-light: #900021;
+  --maroon-dark: #4d0010;
+  --maroon-darker: #5b0013;
+
+  /* Text-size styles */
+  /* base size: default (16px) */
+  --small: 0.75rem;
+  --h3: 1rem;
+  --h2: 1.5rem;
+  --h1: 2rem;
+  --subtitle: 2.5rem;
+  --title: 3rem;
+  --heading-secondary: 0.88rem;
+  --default: 1rem;
+  --button-text: 1rem;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--white);
+  line-height: 1.5;
+  color: var(--gray-dark);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: var(--black);
+  font-weight: bold;
+}
+
+a {
+  color: var(--black);
+}
+
+a:hover {
+  background: var(--yellow);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.not-sr-only {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+.page-title {
+  font-size: var(--title);
+}
+
+.page-subtitle {
+  font-size: var(--subtitle);
+}
+
+h1,
+.h1 {
+  font-size: var(--h1);
+  line-height: 1.2;
+}
+
+h2,
+.h2 {
+  font-size: var(--h2);
+  line-height: 1.2;
+}
+h3,
+.h3 {
+  font-size: var(--h3);
+}
+
+button,
+.button {
+  font-size: var(--button-text);
+}
+
+small,
+.small {
+  font-size: var(--small);
+}
+
+.container {
+  padding: 1rem 2rem;
+}
+
+button,
+router-link {
+  cursor: pointer;
+}
+
+#app {
+  min-height: 100%;
+}

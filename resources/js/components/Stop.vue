@@ -1,16 +1,16 @@
 <template>
   <div v-if="tour" class="bootstrap-fs-modal">
-    <navbar :tour="tour" :current-stop-id="currentStopId" />
-    <stop-content
+    <Navbar :tour="tour" :currentStopId="currentStopId" />
+    <StopContent
       :key="currentStopId"
       class="stop-container"
       :tour="tour"
-      :current-stop="tour.stops[currentStopId]"
-      :current-stop-id="currentStopId"
+      :currentStop="tour.stops[currentStopId]"
+      :currentStopId="currentStopId"
     />
-    <debug-bar v-if="userCan('edit own tours')" />
+    <DebugBar v-if="userCan('edit own tours')" />
   </div>
-  <error v-else :error="error" />
+  <Error v-else :error="error" />
 </template>
 
 <script>

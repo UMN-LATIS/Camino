@@ -13,8 +13,8 @@
             :is="stage.type"
             :stage="stage"
             :tour="tour"
-            :current-stop="currentStop.stop_content"
-            :current-stop-id="currentStopId"
+            :currentStop="currentStop.stop_content"
+            :currentStopId="currentStopId"
           >
           </component>
         </div>

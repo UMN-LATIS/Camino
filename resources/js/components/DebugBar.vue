@@ -6,10 +6,10 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              id=""
               class="form-check-input"
               type="checkbox"
               name=""
-              id=""
               :checked="$store.state.config.simulateLocation"
               @change="
                 $store.commit(
@@ -24,10 +24,10 @@
         <div class="form-check">
           <label class="form-check-label">
             <input
+              id=""
               class="form-check-input"
               type="checkbox"
               name=""
-              id=""
               :checked="$store.state.config.simulateMobile"
               @change="
                 $store.commit(
@@ -53,11 +53,11 @@
           <div class="form-check">
             <label class="form-check-label">
               <input
+                id=""
+                v-model="$i18n.locale"
                 type="radio"
                 class="form-check-input"
-                v-model="$i18n.locale"
                 name="locale"
-                id=""
                 :value="key"
               />
               {{ key }}
@@ -65,14 +65,14 @@
           </div>
         </div>
 
-        <h6 class="mt-2" v-if="$store.getters.deepdives.length > 0">
+        <h6 v-if="$store.getters.deepdives.length > 0" class="mt-2">
           Deep Dives
         </h6>
         <ul class="list-group">
           <li
-            class="list-group-item"
             v-for="(deepdive, index) in $store.getters.deepdives"
             :key="index"
+            class="list-group-item"
           >
             {{ deepdive }}
           </li>

@@ -4,30 +4,78 @@
       ref="lightbox"
       :items="items"
       :index="index"
+      :slideshow="false"
+      :gallery="false"
       @close="
         index = null;
         close();
       "
-      @on-open="open()"
-      :slideshow="false"
-      :gallery="false"
+      @onOpen="open()"
     >
     </CoolLightBox>
     <div class="images-wrapper">
       <div
-        class="image-wrapper"
         v-for="(image, imageIndex) in items"
         :key="imageIndex"
+        class="image-wrapper"
       >
         <div
           class="image"
-          @click="index = imageIndex"
           :style="{ backgroundImage: 'url(' + image.src + ')' }"
+          @click="index = imageIndex"
         ></div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: ["stage", "currentStop"],
+  data: function () {
+    return {
+      index: null,
+      modalName: "gallery" + Math.round(Math.random() * 10000),
+    };
+  },
+  computed: {
+    items: function () {
+      return this.stage.images.map((i) => {
+        return { title: i.text[this.$i18n.locale], src: "/storage/" + i.src };
+      });
+    },
+  },
+  watch: {
+    $route(to, from) {
+      if (
+        (from &&
+          from.params.status &&
+          from.params.status == this.modalName &&
+          !to.params.status) ||
+        to.params.status !== this.modalName
+      ) {
+        this.$refs.lightbox.close();
+      }
+    },
+  },
+  methods: {
+    close: function () {
+      if (this.$router.currentRoute.params.status == this.modalName) {
+        this.$router.go(-1);
+      }
+    },
+    open: function () {
+      this.$router.push({
+        name: "tour",
+        params: {
+          currentStopId: this.$router.currentRoute.params.currentStopId,
+          status: this.modalName,
+        },
+      });
+    },
+  },
+};
+</script>
 
 <style>
 .cool-lightbox-toolbar .cool-lightbox-toolbar__btn {
@@ -35,7 +83,6 @@
   height: 55px !important;
 }
 </style>
-
 <style scoped>
 .images-wrapper {
   display: -webkit-box;
@@ -78,50 +125,3 @@ select {
   padding-top: 100%;
 }
 </style>
-<script>
-export default {
-  props: ["stage", "currentStop"],
-  data: function () {
-    return {
-      index: null,
-      modalName: "gallery" + Math.round(Math.random() * 10000),
-    };
-  },
-  methods: {
-    close: function () {
-      if (this.$router.currentRoute.params.status == this.modalName) {
-        this.$router.go(-1);
-      }
-    },
-    open: function () {
-      this.$router.push({
-        name: "tour",
-        params: {
-          currentStopId: this.$router.currentRoute.params.currentStopId,
-          status: this.modalName,
-        },
-      });
-    },
-  },
-  computed: {
-    items: function () {
-      return this.stage.images.map((i) => {
-        return { title: i.text[this.$i18n.locale], src: "/storage/" + i.src };
-      });
-    },
-  },
-  watch: {
-    $route(to, from) {
-      if (
-        (from &&
-          from.params.status &&
-          from.params.status == this.modalName &&
-          !to.params.status) ||
-        to.params.status !== this.modalName
-      ) {
-        this.$refs.lightbox.close();
-      }
-    },
-  },
-};
-</script>

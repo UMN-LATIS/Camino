@@ -1,13 +1,13 @@
 <template>
   <div>
-    <button-modal
+    <ButtonModal
       modalName="embedFrame"
       :buttonText="stage.buttonTitle[$i18n.locale]"
       :modalTitle="stage.buttonTitle[$i18n.locale]"
-      v-on:modalShown="startFrame"
-      v-on:modalClosed="endFrame"
+      @modalShown="startFrame"
+      @modalClosed="endFrame"
     >
-      <div style="height: 70vh; width: 100%; overflow: hidden" v-if="stage">
+      <div v-if="stage" style="height: 70vh; width: 100%; overflow: hidden">
         <iframe
           height="100%"
           width="100%"
@@ -15,7 +15,7 @@
           :src="source"
         ></iframe>
       </div>
-    </button-modal>
+    </ButtonModal>
   </div>
 </template>
 
@@ -27,9 +27,6 @@ export default {
       closing: false,
     };
   },
-  mounted() {
-    // THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
-  },
   computed: {
     source: function () {
       if (this.closing) {
@@ -37,6 +34,9 @@ export default {
       }
       return this.stage.source;
     },
+  },
+  mounted() {
+    // THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
   },
   methods: {
     startFrame: function () {

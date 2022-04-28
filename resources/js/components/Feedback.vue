@@ -2,10 +2,10 @@
   <div>
     <div v-html="formattedText"></div>
 
-    <b-button v-b-toggle.collapse-feedback variant="primary">{{
+    <BButton v-b-toggle.collapse-feedback variant="primary">{{
       t("stage.feedback.button")
-    }}</b-button>
-    <b-collapse id="collapse-feedback" class="mt-2">
+    }}</BButton>
+    <BCollapse id="collapse-feedback" class="mt-2">
       <div>
         <div class="form-group col-md-4 col-sm-12">
           <label for="">Your Name</label>
@@ -48,7 +48,7 @@
           <i v-if="success" class="fas fa-check-circle ml-2"></i>
         </div>
       </div>
-    </b-collapse>
+    </BCollapse>
   </div>
 </template>
 

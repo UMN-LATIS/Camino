@@ -1,16 +1,16 @@
 <template>
   <div style="width: 100%; height: 100%">
-    <a-scene
+    <AScene
       v-if="currentStopAR"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: true"
+      vrModeUi="enabled: false"
+      deviceOrientationPermissionUi="enabled: true"
       arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false"
     >
-      <a-text
+      <AText
         v-for="(waypoint, index) in currentStopAR.waypoints"
         :key="index"
         :value="waypoint.text[locale]"
-        :gps-entity-place="
+        :gpsEntityPlace="
           'latitude: ' +
           waypoint.location.lat +
           '; longitude: ' +
@@ -21,10 +21,10 @@
         rotation="0 0 0"
         font="roboto"
         color="#e43e31"
-        look-at="#camera"
+        lookAt="#camera"
         side="double"
         align="center"
-        :z-offset="getDistanceFromWaypoint(waypoint) * 0.1"
+        :zOffset="getDistanceFromWaypoint(waypoint) * 0.1"
         :geometry="
           'primitive: plane; width: ' +
           getTextWidth(waypoint) +
@@ -34,21 +34,19 @@
         material="color: #eee; opacity: 0.6; transparent: true"
         :width="getSizeForPoint(waypoint)"
       >
-      </a-text>
+      </AText>
 
-      <a-camera
+      <ACamera
         id="camera"
-        :gps-camera="cameraSettings"
-        rotation-reader
+        :gpsCamera="cameraSettings"
+        rotationReader
         maxDistance="10000"
         far="90000"
       >
-      </a-camera>
-    </a-scene>
+      </ACamera>
+    </AScene>
   </div>
 </template>
-
-<style scoped></style>
 
 <script>
 export default {
@@ -96,6 +94,14 @@ export default {
       }
     },
   },
+  mounted() {
+    axios
+      .get("/api/tour/" + this.tourId)
+      .then((response) => {
+        this.tour = response.data;
+      })
+      .catch((error) => console.log(error));
+  },
   methods: {
     getTextWidth(waypoint) {
       return this.getSizeForPoint(waypoint) / 1.5;
@@ -126,13 +132,7 @@ export default {
       return scaledDistance * waypoint.text[this.locale].length;
     },
   },
-  mounted() {
-    axios
-      .get("/api/tour/" + this.tourId)
-      .then((response) => {
-        this.tour = response.data;
-      })
-      .catch((error) => console.log(error));
-  },
 };
 </script>
+
+<style scoped></style>

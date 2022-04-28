@@ -23,7 +23,7 @@ class TourEditController extends Controller
         if($req->ajax()){
             return response()->json(TourResource::collection(Auth::user()->tours));
         }
-        return view("edit.index");
+        return view("camino-creator.index");
     }
 
 

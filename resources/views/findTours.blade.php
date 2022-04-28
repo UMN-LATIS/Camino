@@ -1,5 +1,7 @@
 @extends('base')
 
 @section('content')
-  <div id="app"></div>
+  <div id="app">
+    <find-tour-page></find-tour-page>
+  </div>
 @endsection

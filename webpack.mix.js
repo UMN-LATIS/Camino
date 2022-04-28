@@ -19,7 +19,16 @@ mix
   .js("resources/camino-creator/main.js", "public/js/camino-creator.js")
   .sass("resources/camino-creator/main.scss", "public/css/camino-creator.css");
 
-mix.vue().sourceMaps();
+mix
+  .vue({
+    options: {
+      compilerOptions: {
+        isCustomElement: (tag) =>
+          ["a-text", "a-scene", "a-camera"].includes(tag),
+      },
+    },
+  })
+  .sourceMaps();
 
 if (mix.inProduction()) {
   mix.version();

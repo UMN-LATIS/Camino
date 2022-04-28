@@ -15,8 +15,9 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "vue/attribute-hyphenation": ["error", "never"],
     "vue/v-on-event-hyphenation": ["error", "never"],
+    "vue/component-definition-name-casing": "off",
     "vue/component-name-in-template-casing": [
-      "error",
+      "warn",
       "PascalCase",
       {
         registeredComponentsOnly: false,
@@ -27,6 +28,9 @@ module.exports = {
           "router-link",
           "router-view",
           "teleport",
+          "a-scene",
+          "a-text",
+          "a-camera",
         ],
       },
     ],

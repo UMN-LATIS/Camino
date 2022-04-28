@@ -1,16 +1,19 @@
 <template>
+  <!-- eslint-enable vue/multi-word-component-names -->
+  <!-- eslint-disable vue/component-name-in-template-casing -->
+  <!-- eslint-disable vue/attribute-hyphenation -->
   <div style="width: 100%; height: 100%">
-    <AScene
+    <a-scene
       v-if="currentStopAR"
-      vrModeUi="enabled: false"
-      deviceOrientationPermissionUi="enabled: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: true"
       arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false"
     >
-      <AText
+      <a-text
         v-for="(waypoint, index) in currentStopAR.waypoints"
         :key="index"
         :value="waypoint.text[locale]"
-        :gpsEntityPlace="
+        :gps-entity-place="
           'latitude: ' +
           waypoint.location.lat +
           '; longitude: ' +
@@ -21,10 +24,10 @@
         rotation="0 0 0"
         font="roboto"
         color="#e43e31"
-        lookAt="#camera"
+        look-at="#camera"
         side="double"
         align="center"
-        :zOffset="getDistanceFromWaypoint(waypoint) * 0.1"
+        :z-offset="getDistanceFromWaypoint(waypoint) * 0.1"
         :geometry="
           'primitive: plane; width: ' +
           getTextWidth(waypoint) +
@@ -34,17 +37,17 @@
         material="color: #eee; opacity: 0.6; transparent: true"
         :width="getSizeForPoint(waypoint)"
       >
-      </AText>
+      </a-text>
 
-      <ACamera
+      <a-camera
         id="camera"
-        :gpsCamera="cameraSettings"
-        rotationReader
+        :gps-camera="cameraSettings"
+        rotation-reader
         maxDistance="10000"
         far="90000"
       >
-      </ACamera>
-    </AScene>
+      </a-camera>
+    </a-scene>
   </div>
 </template>
 

@@ -61,7 +61,7 @@
     "vue-types": "^4.1.1",
     "vuedraggable": "^4.1.0",
     "webpack": "^5.72.0",
-    "@ar-js-org/ar.js": "^3.4.0-alpha-rc2",
+    "@ar-js-org/ar.js": "^3.4.0",
     "@fontsource/material-icons": "^4.5.4",
     "@fontsource/poppins": "^4.5.5",
     "@types/jest": "^27.4.1",

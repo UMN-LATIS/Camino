@@ -18,41 +18,42 @@ add('shared_dirs', []);
 add('writable_dirs', []);
 
 // ignore specific platform requirements like php 7.4 or php 8.1
-set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs');
+set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs');
 
 // Servers
 
-host('cla-camino-dev.oit.umn.edu')
-  ->alias("dev")
-  ->remote_user('swadm')
-  ->set('labels', ['stage' => 'development'])
-  ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
-  ->set('deploy_path', '/swadm/var/www/html/');
+host('dev')
+    ->set('hostname', 'cla-camino-dev.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'development'])
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
+    ->set('deploy_path', '/swadm/var/www/html/');
 
-host('cla-camino-tst.oit.umn.edu')
-  ->alias("stage")
-  ->remote_user('swadm')
-  ->set('labels', ['stage' => 'stage'])
-  ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-  ->set('deploy_path', '/swadm/var/www/html/');
+host('stage')
+    ->set('hostname', 'cla-camino-tst.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'stage'])
+    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+    ->set('deploy_path', '/swadm/var/www/html/');
 
-host('cla-camino-prd.oit.umn.edu')
-  ->alias("prod")
-  ->remote_user('swadm')
-  ->set('labels', ['stage' => 'production'])
-  ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-  ->set('deploy_path', '/swadm/var/www/html/');
+host('prod')
+    ->set('hostname', 'cla-camino-prd.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'production'])
+    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+    ->set('deploy_path', '/swadm/var/www/html/');
 
 task('assets:generate', function () {
-  cd('{{release_path}}');
-  run('npm run production');
+    cd('{{release_path}}');
+    run('npm run production');
 })->desc('Assets generation');
 
-task('fix_storage_perms', '
-    touch storage/logs/laravel.log
-    sudo chown apache storage/logs/laravel.log
-    sudo chgrp apache storage/logs/laravel.log
-')->desc("Fix Apache Logs");
+task('fix_storage_perms', function () {
+    cd('{{release_path}}');
+    run('touch storage/logs/laravel.log');
+    run('sudo chown apache storage/logs/laravel.log');
+    run('sudo chgrp apache storage/logs/laravel.log');
+})->desc("Fix Apache Logs");
 after('artisan:migrate', 'fix_storage_perms');
 
 

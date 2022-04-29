@@ -12,7 +12,6 @@ use MatanYadaev\EloquentSpatial\Objects\Point;
 class Tour extends Model
 {
     use SoftDeletes;
-    // use SpatialTrait;
 
     protected $spatialFields = [
         'start_location'

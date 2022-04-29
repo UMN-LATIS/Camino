@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use App\Stop;
 use Illuminate\Database\Seeder;
 use App\Tour;
-// use Grimzy\LaravelMysqlSpatial\Types\Point;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+
 class StoneArchTourSeeder extends Seeder
 {
     /**

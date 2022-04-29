@@ -5,7 +5,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-// use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 

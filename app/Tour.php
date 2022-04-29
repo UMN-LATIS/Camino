@@ -5,19 +5,29 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use MatanYadaev\EloquentSpatial\SpatialBuilder;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 class Tour extends Model
 {
-    Use SoftDeletes;
-    use SpatialTrait;
+    use SoftDeletes;
 
     protected $spatialFields = [
         'start_location'
     ];
 
-    protected $fillable = ["public", "active", "title", "tour_content", "start_location", "driving", "biking","walking", "style"];
+    protected $fillable = [
+        "public",
+        "active",
+        "title",
+        "tour_content",
+        "start_location",
+        "driving",
+        "biking",
+        "walking",
+        "style"
+    ];
 
     protected $casts = [
         'tour_content' => 'json',
@@ -26,19 +36,27 @@ class Tour extends Model
         'biking' => 'boolean',
         'driving' => 'boolean',
         'public' => 'boolean',
-        'active' => 'boolean'
+        'active' => 'boolean',
+        'start_location' => Point::class,
     ];
 
-    public function users() {
+    public function users()
+    {
         return $this->belongsToMany(User::class);
     }
-    
-    public function stops() {
+
+    public function stops()
+    {
         return $this->hasMany(Stop::class);
     }
-        
-    public function feedback() {
+
+    public function feedback()
+    {
         return $this->hasMany(Feedback::class);
     }
 
+    public function newEloquentBuilder($query): SpatialBuilder
+    {
+        return new SpatialBuilder($query);
+    }
 }

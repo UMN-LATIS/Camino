@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+
+use MatanYadaev\EloquentSpatial\Objects\Point;
 use App\Tour;
 use App\Stop;
 use Illuminate\Http\Request;
@@ -19,8 +20,8 @@ class TourEditController extends Controller
      */
     public function index(Request $req)
     {
-        
-        if($req->ajax()){
+
+        if ($req->ajax()) {
             return response()->json(TourResource::collection(Auth::user()->tours));
         }
         return view("camino-creator.index");
@@ -36,25 +37,25 @@ class TourEditController extends Controller
     public function store(Request $request)
     {
         $this->authorize('create', Tour::class);
-        
+
         $tour = new Tour;
-        
+
         $request = $request->all();
-        if($request["start_location"]) {
+        if ($request["start_location"]) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
-        } 
-        
-        if(!Auth::user()->can("publish publicly")) {
-            $request["public"] = $tour->public??false;
         }
-        
+
+        if (!Auth::user()->can("publish publicly")) {
+            $request["public"] = $tour->public ?? false;
+        }
+
 
         $tour->fill($request);
         $tour->save();
         $tour->users()->attach(Auth::user());
         $tour->save();
 
-        if($tour->tour_content["use_template"]) {
+        if ($tour->tour_content["use_template"]) {
             $template = Tour::where("template", true)->first();
 
             $clonedFirstStop = $template->stops->first()->clone();
@@ -67,7 +68,7 @@ class TourEditController extends Controller
         }
 
         $tour->load("stops");
-        
+
         return response()->json($tour);
     }
 
@@ -78,17 +79,16 @@ class TourEditController extends Controller
         $stop->fill($request->all());
         $sortOrder = $tour->stops->pluck("sort_order")->toArray();
         // we should always have a finish
-        if(count($sortOrder) == 0) {
+        if (count($sortOrder) == 0) {
             $stop->sort_order = 0;
-        }
-        else {
+        } else {
             $finish = $tour->stops->last();
             // remove the "end" item - we don't let them make that not the end.
             $stop->sort_order = max($tour->stops->pluck("sort_order")->toArray());
             $finish->sort_order = $stop->sort_order + 1;
             $finish->save();
         }
-        
+
 
         $tour->stops()->save($stop);
 
@@ -119,22 +119,22 @@ class TourEditController extends Controller
         $this->authorize('update', $tour);
         $request = $request->all();
         $locationDirty = false;
-        if($request["start_location"]) {
+        if ($request["start_location"]) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
-            if($request["start_location"] != $tour->start_location) {
+            if ($request["start_location"] != $tour->start_location) {
                 $locationDirty = true;
             }
-        } 
-        
-        if(!Auth::user()->can("publish publicly")) {
+        }
+
+        if (!Auth::user()->can("publish publicly")) {
             $request["public"] = $tour->public;
         }
 
         $tour->fill($request);
 
-        if($locationDirty){
-            $geocoded = app('geocoder')->reverse($tour->start_location->getLat(), $tour->start_location->getLng())->get();
-            if($geocoded) {
+        if ($locationDirty) {
+            $geocoded = app('geocoder')->reverse($tour->start_location->latitude, $tour->start_location->longitude)->get();
+            if ($geocoded) {
                 $firstGeocode = $geocoded[0];
                 $neighborhood = $firstGeocode->getNeighborhood();
                 $locality = $firstGeocode->getLocality();
@@ -149,7 +149,7 @@ class TourEditController extends Controller
         $tour->save();
 
 
-        for($i=0; $i<count($request["stops"]); $i++) {
+        for ($i = 0; $i < count($request["stops"]); $i++) {
             $stop = $request["stops"][$i];
             $loadedStop = Stop::find($stop["id"]);
             $loadedStop->sort_order = $i;
@@ -158,7 +158,7 @@ class TourEditController extends Controller
 
         return response()->json($tour);
     }
-    
+
     public function updateStop(Request $request, Tour $tour, Stop $stop)
     {
         $this->authorize('update', $tour);
@@ -167,41 +167,41 @@ class TourEditController extends Controller
         return response()->json($stop);
     }
 
-    public function deleteStop(Request $request, Tour $tour, Stop $stop) {
+    public function deleteStop(Request $request, Tour $tour, Stop $stop)
+    {
         $this->authorize('delete', $tour);
         $stop->delete();
     }
 
-    public function getFeedback(Request $request, Tour $tour) {
+    public function getFeedback(Request $request, Tour $tour)
+    {
         $this->authorize('viewFeedback', $tour);
         return response()->json($tour->feedback);
     }
 
 
-    public function shareTour(Request $request, Tour $tour) {
-         $this->validate($request, [
-			'email' => 'required|email',
-			// 'description' => 'required'
+    public function shareTour(Request $request, Tour $tour)
+    {
+        $this->validate($request, [
+            'email' => 'required|email',
+            // 'description' => 'required'
         ]);
-        
+
         $tourURL = url("/creator/" . $tour->id . "/join/" . sha1($request->input("email") . $tour->id));
 
         Mail::to($request->input("email"))->send(new TourInvite($tour, $tourURL));
-        return response()->json(["success"=>"success"]);
-
-
+        return response()->json(["success" => "success"]);
     }
 
-    public function joinTour(Tour $tour, $tourCode) {
-        if(sha1(Auth::user()->email . $tour->id) == $tourCode) {
+    public function joinTour(Tour $tour, $tourCode)
+    {
+        if (sha1(Auth::user()->email . $tour->id) == $tourCode) {
             $tour->users()->attach(Auth::user());
             $tour->save();
             return redirect("/creator/" . $tour->id);
-        }
-        else {
+        } else {
             abort(403, 'Access denied');
         }
-
     }
 
     /**

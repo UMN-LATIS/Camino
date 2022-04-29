@@ -133,7 +133,7 @@ class TourEditController extends Controller
         $tour->fill($request);
 
         if ($locationDirty) {
-            $geocoded = app('geocoder')->reverse($tour->start_location->getLat(), $tour->start_location->getLng())->get();
+            $geocoded = app('geocoder')->reverse($tour->start_location->latitude, $tour->start_location->longitude)->get();
             if ($geocoded) {
                 $firstGeocode = $geocoded[0];
                 $neighborhood = $firstGeocode->getNeighborhood();

@@ -47,7 +47,7 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-polylinedecorator": "git+https://github.com/UMN-LATIS/Leaflet.PolylineDecorator.git",
     "leaflet.locatecontrol": "^0.76.0",
-    "marked": "^4.0.12",
+    "marked": "^4.0.14",
     "pinia": "^2.0.13",
     "qrcode.vue": "^3.3.3",
     "ramda": "^0.28.0",

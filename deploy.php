@@ -3,7 +3,7 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
-require 'recipe/npm.php';
+require 'contrib/npm.php';
 
 // Configuration
 set('ssh_type', 'native');
@@ -22,24 +22,24 @@ set('composer_options', '{{composer_action}} --verbose --prefer-dist --no-progre
 
 // Servers
 
-host('dev')
-  ->hostname("cla-camino-dev.oit.umn.edu")
-  ->user('swadm')
-  ->stage('development')
+host('cla-camino-dev.oit.umn.edu')
+  ->alias("dev")
+  ->remote_user('swadm')
+  ->set('labels', ['stage' => 'development'])
   ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
   ->set('deploy_path', '/swadm/var/www/html/');
 
-host('stage')
-  ->hostname("cla-camino-tst.oit.umn.edu")
-  ->user('swadm')
-  ->stage('stage')
+host('cla-camino-tst.oit.umn.edu')
+  ->alias("stage")
+  ->remote_user('swadm')
+  ->set('labels', ['stage' => 'stage'])
   ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
   ->set('deploy_path', '/swadm/var/www/html/');
 
-host('prod')
-  ->hostname("cla-camino-prd.oit.umn.edu")
-  ->user('swadm')
-  ->stage('production')
+host('cla-camino-prd.oit.umn.edu')
+  ->alias("prod")
+  ->remote_user('swadm')
+  ->set('labels', ['stage' => 'production'])
   ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
   ->set('deploy_path', '/swadm/var/www/html/');
 

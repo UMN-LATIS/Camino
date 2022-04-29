@@ -52,7 +52,7 @@
     "qrcode.vue": "^3.3.3",
     "ramda": "^0.28.0",
     "three": "^0.139.2",
-    "vue": "^3.2.31",
+    "vue": "^3.2.33",
     "vue-cool-lightbox": "^2.7.4",
     "vue-i18n": "^9.1.9",
     "vue-progressbar": "^0.7.5",

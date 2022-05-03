@@ -54,7 +54,7 @@
     "three": "^0.139.2",
     "vue": "^3.2.33",
     "vue-cool-lightbox": "^2.7.4",
-    "vue-i18n": "^9.1.9",
+    "vue-i18n": "^9.1.10",
     "vue-progressbar": "^0.7.5",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^4.0.14",

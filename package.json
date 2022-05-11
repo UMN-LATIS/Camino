@@ -60,7 +60,7 @@
     "vue-router": "^4.0.15",
     "vue-types": "^4.1.1",
     "vuedraggable": "^4.1.0",
-    "webpack": "^5.72.0",
+    "webpack": "^5.72.1",
     "@ar-js-org/ar.js": "^3.4.0",
     "@fontsource/material-icons": "^4.5.4",
     "@fontsource/poppins": "^4.5.8",

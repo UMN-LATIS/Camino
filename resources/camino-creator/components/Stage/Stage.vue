@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import AR from "./stages/AR.vue";
 import DeepDives from "./stages/DeepDives.vue";
@@ -42,7 +42,7 @@ import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
 import Quiz from "./stages/Quiz.vue";
-import { STAGE_TYPES } from "../../common/constants";
+import { StageType } from "../../../types";
 
 const props = defineProps({
   stage: {
@@ -70,17 +70,17 @@ const props = defineProps({
 defineEmits(["remove", "update"]);
 
 const componentLookup = {
-  [STAGE_TYPES.AR]: AR,
-  [STAGE_TYPES.EMBED_FRAME]: EmbedFrame,
-  [STAGE_TYPES.DEEPDIVES]: DeepDives,
-  [STAGE_TYPES.DEEPDIVES_SUMMARY]: DeepDivesSummary,
-  [STAGE_TYPES.FEEDBACK]: Feedback,
-  [STAGE_TYPES.GALLERY]: Gallery,
-  [STAGE_TYPES.GUIDE]: Guide,
-  [STAGE_TYPES.LANGUAGE_SELECTOR]: LanguageSelector,
-  [STAGE_TYPES.NAVIGATION]: Navigation,
-  [STAGE_TYPES.SEPARATOR]: Separator,
-  [STAGE_TYPES.QUIZ]: Quiz,
+  [StageType.AR]: AR,
+  [StageType.EmbedFrame]: EmbedFrame,
+  [StageType.DeepDives]: DeepDives,
+  [StageType.DeepDivesSummary]: DeepDivesSummary,
+  [StageType.Feedback]: Feedback,
+  [StageType.Gallery]: Gallery,
+  [StageType.Guide]: Guide,
+  [StageType.LanguageSelector]: LanguageSelector,
+  [StageType.Navigation]: Navigation,
+  [StageType.Separator]: Separator,
+  [StageType.Quiz]: Quiz,
 };
 
 const componentName = computed(() => componentLookup[props.stage.type]);

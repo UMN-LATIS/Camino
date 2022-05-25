@@ -148,7 +148,7 @@ import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import createDefaultStop from "../../common/createDefaultStop.js";
 import stageFactory from "../../components/Stage/stages/stageFactory";
-import { STAGE_TYPES } from "../../common/constants";
+import { StageType } from "../../../types";
 
 const props = defineProps({
   tourId: {
@@ -175,20 +175,20 @@ const tourLanguages = tourStore.getTourLanguages(props.tourId);
 const defaultTourLanguage = tourStore.getDefaultTourLanguage(props.tourId);
 
 const stageTypes = ref({
-  [STAGE_TYPES.SEPARATOR]: "Separator",
-  [STAGE_TYPES.AR]: "AR",
-  [STAGE_TYPES.DEEPDIVES]: "Deep Dives",
-  [STAGE_TYPES.DEEPDIVES_SUMMARY]: "Deep Dives Summary",
-  [STAGE_TYPES.EMBED_FRAME]: "Embed",
-  [STAGE_TYPES.FEEDBACK]: "Feedback",
-  [STAGE_TYPES.GUIDE]: "Guide",
-  [STAGE_TYPES.GALLERY]: "Gallery",
-  [STAGE_TYPES.NAVIGATION]: "Navigation",
-  [STAGE_TYPES.QUIZ]: "Quiz",
+  [StageType.Separator]: "Separator",
+  [StageType.AR]: "AR",
+  [StageType.DeepDives]: "Deep Dives",
+  [StageType.DeepDivesSummary]: "Deep Dives Summary",
+  [StageType.EmbedFrame]: "Embed",
+  [StageType.Feedback]: "Feedback",
+  [StageType.Guide]: "Guide",
+  [StageType.Gallery]: "Gallery",
+  [StageType.Navigation]: "Navigation",
+  [StageType.Quiz]: "Quiz",
 });
 
 if (userCan("administer site")) {
-  stageTypes.value[STAGE_TYPES.LANGUAGE_SELECTOR] = "Language";
+  stageTypes.value[StageType.LanguageSelector] = "Language";
 }
 
 const newStageType = ref(null);

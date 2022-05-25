@@ -1,6 +1,5 @@
-/// <reference path="../types.ts" />;
-import { LngLat } from "../types.js";
 import { getStagesFromTourWhere } from "./index.js";
+import type { LngLat } from "../../types";
 
 /**
  * gets all route points from a given tour

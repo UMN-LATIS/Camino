@@ -1,4 +1,4 @@
-import { STAGE_TYPES } from "../../../common/constants.js";
+import { StageType } from "../../../../types";
 
 export function createMultilingualText(languages = ["English"]) {
   return languages.reduce((acc, lang) => {
@@ -8,60 +8,60 @@ export function createMultilingualText(languages = ["English"]) {
 }
 
 const factories = {
-  [STAGE_TYPES.AR]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.AR,
+  [StageType.AR]: ({ languages }) => ({
+    type: StageType.AR,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
     waypoints: [],
   }),
 
-  [STAGE_TYPES.DEEPDIVES]: () => ({
-    type: STAGE_TYPES.DEEPDIVES,
+  [StageType.DeepDives]: () => ({
+    type: StageType.DeepDives,
     id: global.crypto.randomUUID(),
     deepdives: [],
   }),
 
-  [STAGE_TYPES.DEEPDIVES_SUMMARY]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.DEEPDIVES_SUMMARY,
+  [StageType.DeepDivesSummary]: ({ languages }) => ({
+    type: StageType.DeepDivesSummary,
     id: global.crypto.randomUUID(),
     request_email: true,
     text: createMultilingualText(languages),
   }),
 
-  [STAGE_TYPES.GUIDE]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.GUIDE,
+  [StageType.Guide]: ({ languages }) => ({
+    type: StageType.Guide,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
   }),
 
-  [STAGE_TYPES.FEEDBACK]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.FEEDBACK,
+  [StageType.Feedback]: ({ languages }) => ({
+    type: StageType.Feedback,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
   }),
 
-  [STAGE_TYPES.GALLERY]: () => ({
-    type: STAGE_TYPES.GALLERY,
+  [StageType.Gallery]: () => ({
+    type: StageType.Gallery,
     id: global.crypto.randomUUID(),
     images: [],
   }),
 
-  [STAGE_TYPES.NAVIGATION]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.NAVIGATION,
+  [StageType.Navigation]: ({ languages }) => ({
+    type: StageType.Navigation,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
     targetPoint: null,
     route: [],
   }),
 
-  [STAGE_TYPES.SEPARATOR]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.SEPARATOR,
+  [StageType.Separator]: ({ languages }) => ({
+    type: StageType.Separator,
     id: global.crypto.randomUUID(),
     text: createMultilingualText(languages),
   }),
 
-  [STAGE_TYPES.QUIZ]: ({ languages } = {}) => ({
-    type: STAGE_TYPES.QUIZ,
+  [StageType.Quiz]: ({ languages }) => ({
+    type: StageType.Quiz,
     id: global.crypto.randomUUID(),
     questionText: createMultilingualText(languages),
     quizType: "multiple_choice",
@@ -78,5 +78,5 @@ const factories = {
 
 export default {
   create: (type, opts) =>
-    factories[type] ? factories[type](opts) : factories.default(type, opts),
+    factories[type] ? factories[type](opts) : factories.default(type),
 };

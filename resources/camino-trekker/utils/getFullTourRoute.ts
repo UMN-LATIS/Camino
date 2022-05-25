@@ -1,5 +1,6 @@
-/// <reference path="../types.js" />;
+/// <reference path="../types.ts" />;
 
+import { LngLat } from "../types.js";
 import { getStagesFromTourWhere } from "./index.js";
 
 /**
@@ -9,7 +10,7 @@ import { getStagesFromTourWhere } from "./index.js";
  * @returns {LngLat[]} - array of route points from every
  * stage
  */
-export default (tour) => {
+export default (tour): LngLat[] => {
   const navStages = getStagesFromTourWhere("type", "navigation", tour);
   const routePoints = navStages.flatMap((stage) => stage.route);
   return [tour.start_location, ...routePoints];

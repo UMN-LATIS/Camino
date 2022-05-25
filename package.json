@@ -16,7 +16,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",
-    "lint": "eslint './**/*.{js,mjs,cjs,vue}'",
+    "lint": "eslint './**/*.{js,mjs,cjs,vue,ts}'",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write .",
     "pretty-quick": "pretty-quick",

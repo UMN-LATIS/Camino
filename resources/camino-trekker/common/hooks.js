@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { useStore } from "vuex";
-import getFullTourRoute from "../utils/getFullTourRoute.js";
+import getFullTourRoute from "../utils/getFullTourRoute";
 import config from "../config.js";
 
 export const useTour = () => {

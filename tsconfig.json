@@ -7,6 +7,14 @@
     "jsx": "preserve",
     "moduleResolution": "node",
     "noImplicitAny": false,
-    "allowJs": true
+    "allowJs": true,
+    "baseUrl": "resources",
+    // this enables the use of `import` statements in TypeScript files
+    // like `import { Component } from '@/components';
+    // requires `tsconfig-paths-webpack-plugin` in order to work
+    // with webpack's `alias` feature
+    "paths": {
+      "@/*": ["*"]
+    }
   }
 }

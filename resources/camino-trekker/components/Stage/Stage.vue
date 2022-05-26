@@ -5,7 +5,7 @@
     <pre>{{ stage }}</pre>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import LanguageSelect from "./stages/LanguageSelect.vue";
 import Guide from "./stages/Guide.vue";
@@ -17,18 +17,20 @@ import EmbedFrame from "./stages/EmbedFrame.vue";
 import DeepDives from "./stages/DeepDives.vue";
 import Feedback from "./stages/Feedback.vue";
 import DeepDivesSummary from "./stages/DeepDivesSummary.vue";
+import { StageType } from "@/types";
+import type { Component } from "vue";
 
-const componentLookup = {
-  ar: AR,
-  "embed-frame": EmbedFrame,
-  deepdives: DeepDives,
-  "deepdives-summary": DeepDivesSummary,
-  feedback: Feedback,
-  gallery: Gallery,
-  guide: Guide,
-  language: LanguageSelect,
-  navigation: Navigation,
-  separator: Separator,
+const componentLookup: Partial<{ [stageKey in StageType]: Component }> = {
+  [StageType.AR]: AR,
+  [StageType.EmbedFrame]: EmbedFrame,
+  [StageType.DeepDives]: DeepDives,
+  [StageType.DeepDivesSummary]: DeepDivesSummary,
+  [StageType.Feedback]: Feedback,
+  [StageType.Gallery]: Gallery,
+  [StageType.Guide]: Guide,
+  [StageType.LanguageSelector]: LanguageSelect,
+  [StageType.Navigation]: Navigation,
+  [StageType.Separator]: Separator,
 };
 
 const props = defineProps({

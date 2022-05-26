@@ -223,7 +223,7 @@ onBeforeRouteLeave((to, from, next) => {
 });
 
 const previewLink = computed(
-  () => `/tour/${props.tourId}/${stop.value.sort_order}`
+  () => `/trekker/tours/${props.tourId}/stops/${stop.value.sort_order}`
 );
 
 function handleImageUpload(imgSrc) {

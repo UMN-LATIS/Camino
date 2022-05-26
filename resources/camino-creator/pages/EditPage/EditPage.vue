@@ -124,8 +124,8 @@ const errors = ref([]);
 const router = useRouter();
 
 const tourURL = computed(() => {
-  const { protocol, host } = window.location;
-  return `${protocol}//${host}/tour/${props.tourId}`;
+  const { origin } = window.location;
+  return `${origin}/trekker/tours/${props.tourId}`;
 });
 
 const defaultLanguage = computed(

@@ -37,7 +37,7 @@ export interface CustomBaseMap {
     upperleft: LngLat;
     lowerright: LngLat;
   };
-  use_basemap: false;
+  use_basemap: boolean;
 }
 
 export interface GeocodedLocation {

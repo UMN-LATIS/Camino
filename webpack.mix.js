@@ -3,12 +3,12 @@ const mix = require("laravel-mix");
 
 // Main Laravel App Styles and Scripts (homepage)
 mix
-  .js("resources/js/app.js", "public/js/app.js")
+  .ts("resources/js/app.ts", "public/js/app.js")
   .sass("resources/sass/app.scss", "public/css/app.css");
 
 // Camino Trekker
 mix
-  .js("resources/camino-trekker/main.js", "public/js/camino-trekker.js")
+  .ts("resources/camino-trekker/app.ts", "public/js/camino-trekker.js")
   .postCss(
     "resources/camino-trekker/main.css",
     "public/css/camino-trekker.css"
@@ -16,7 +16,7 @@ mix
 
 // Camino Creator App
 mix
-  .js("resources/camino-creator/main.js", "public/js/camino-creator.js")
+  .ts("resources/camino-creator/app.ts", "public/js/camino-creator.js")
   .sass("resources/camino-creator/main.scss", "public/css/camino-creator.css");
 
 mix

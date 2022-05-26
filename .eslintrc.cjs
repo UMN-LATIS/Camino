@@ -1,17 +1,28 @@
+/* eslint-env node */
+require("@rushstack/eslint-patch/modern-module-resolution");
+
 module.exports = {
   env: {
     browser: true,
+    es2021: true,
     node: true,
-    "vue/setup-compiler-macros": true,
     jest: true,
+    "vue/setup-compiler-macros": true,
   },
-  extends: ["eslint:recommended", "plugin:vue/vue3-recommended", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "@vue/eslint-config-typescript",
+    "prettier",
+  ],
   parserOptions: {
     ecmaVersion: 13,
     sourceType: "module",
   },
   plugins: ["vue"],
   rules: {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
     "vue/multi-word-component-names": "off",
     "vue/attribute-hyphenation": ["error", "never"],
     "vue/v-on-event-hyphenation": ["error", "never"],

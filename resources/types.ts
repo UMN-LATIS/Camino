@@ -85,22 +85,70 @@ export enum StageType {
 }
 
 export type UUID = Brand<string, "UUID">;
+export interface Waypoint {
+  text: LocalizedText;
+  altitude: Maybe<number>;
+  location: LngLat;
+}
 
 export interface Stage {
   id: UUID;
   type: StageType;
 }
 
-export interface ARStage extends Stage {}
-export interface DeepDiveStage extends Stage {}
-export interface DeepDiveSummaryStage extends Stage {}
-export interface EmbedStage extends Stage {}
-export interface FeedbackStage extends Stage {}
-export interface GalleryStage extends Stage {}
-export interface GuideStage extends Stage {}
+export interface DeepDiveItem {
+  title: LocalizedText;
+  text: LocalizedText;
+}
+
+export interface ARStage extends Stage {
+  text: LocalizedText;
+  waypoints: Waypoint[];
+}
+export interface DeepDiveStage extends Stage {
+  deepdives: DeepDiveItem[];
+}
+export interface DeepDiveSummaryStage extends Stage {
+  request_email: boolean;
+  text: LocalizedText;
+}
+
+export interface EmbedStage extends Stage {
+  source: URL;
+}
+
+export interface FeedbackStage extends Stage {
+  text: LocalizedText;
+}
+
+export interface GalleryStage extends Stage {
+  images: Image[];
+}
+
+export interface GuideStage extends Stage {
+  text: LocalizedText;
+}
 export interface LanguageSelectorStage extends Stage {}
-export interface NavigationStage extends Stage {}
-export interface QuizStage extends Stage {}
+export interface NavigationStage extends Stage {
+  text: LocalizedText;
+  route: LngLat[];
+  targetPoint: LngLat;
+}
+
+export enum QuizType {
+  MultipleChoice = "multiple_choice",
+}
+
+export interface QuizChoice {
+  text: LocalizedText;
+  correct: boolean;
+}
+export interface QuizStage extends Stage {
+  quizType: QuizType;
+  questionText: LocalizedText;
+  hintText: LocalizedText;
+  responses: QuizChoice[];
+}
 export interface SeparatorStage extends Stage {}
 
 export type URL = Brand<string, "URL">;

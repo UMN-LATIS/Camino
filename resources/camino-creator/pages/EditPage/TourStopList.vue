@@ -51,7 +51,7 @@
           </button>
 
           <a
-            :href="`/tour/${tourId}/stop.sort_order`"
+            :href="`/trekker/tours/${tourId}/stops/${stop.sort_order}`"
             class="btn btn-outline-success"
             target="_blank"
             ><i class="fas fa-eye"></i>

@@ -73,7 +73,7 @@
     <div class="mt-2 d-flex gap-1">
       <a
         v-if="tour.id"
-        :href="'/tour/' + tour.id"
+        :href="'/trekker/tours/' + tour.id"
         class="btn btn-outline-success"
         target="_blank"
         ><i class="fas fa-eye"></i> Preview</a

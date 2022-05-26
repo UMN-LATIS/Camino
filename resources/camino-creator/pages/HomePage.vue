@@ -58,7 +58,7 @@
             <span class="d-none d-sm-inline">Delete</span></a
           >
           <a
-            :href="'/tour/' + tour.id"
+            :href="'/trekker/tours/' + tour.id"
             class="btn btn-outline-success"
             target="_blank"
             ><i class="fas fa-eye"></i>

@@ -140,7 +140,7 @@ import { mergeDeepRight } from "ramda";
 import { ref, computed, onMounted, watch } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
-import { useTourStore } from "@creator/stores/useTourStore";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Error from "../../components/Error.vue";
 import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
@@ -162,7 +162,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 const { userCan } = usePermissions();
 const isSaving = ref(false);
 const isDirty = ref(false);

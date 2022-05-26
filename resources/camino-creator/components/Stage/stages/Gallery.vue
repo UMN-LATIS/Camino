@@ -41,7 +41,7 @@
 <script setup>
 import LanguageText from "../../LanguageText.vue";
 import ImageUpload from "../../ImageUpload.vue";
-import { useTourStore } from "../../../stores/useTourStore";
+import { useCreatorStore } from "../../../stores/useCreatorStore";
 import { createMultilingualText } from "./stageFactory";
 
 const props = defineProps({
@@ -55,7 +55,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 const languages = tourStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits(["update"]);

@@ -80,9 +80,9 @@
 import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
-import { useTourStore } from "@creator/stores/useTourStore";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 
 const { tours } = storeToRefs(tourStore);
 const error = ref(null);

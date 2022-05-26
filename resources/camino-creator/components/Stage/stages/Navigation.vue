@@ -35,7 +35,7 @@ import { computed } from "vue";
 import getAllStopPoints from "../../../util/getAllStopPoints.js";
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
-import { useTourStore } from "@creator/stores/useTourStore";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 
 const props = defineProps({
   tourId: {
@@ -52,7 +52,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 const tourLanguages = tourStore.getTourLanguages(props.tourId);
 const tour = tourStore.getTour(props.tourId);
 const currentStopIndex = computed(() =>

@@ -13,7 +13,7 @@
 
 <script setup>
 import LanguageText from "../../LanguageText.vue";
-import { useTourStore } from "@creator/stores/useTourStore";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 
 const props = defineProps({
   tourId: {
@@ -30,7 +30,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 const tourLanguages = tourStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits(["update"]);

@@ -74,7 +74,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { useTourStore } from "@creator/stores/useTourStore";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
 
@@ -93,7 +93,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 const showCreateForm = ref(false);
 const languages = tourStore.getTourLanguages(props.tourId);
 

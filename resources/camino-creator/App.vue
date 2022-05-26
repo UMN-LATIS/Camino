@@ -10,9 +10,9 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
-import { useTourStore } from "./stores/useTourStore";
+import { useCreatorStore } from "./stores/useCreatorStore";
 
-const tourStore = useTourStore();
+const tourStore = useCreatorStore();
 onMounted(() => tourStore.init());
 </script>
 

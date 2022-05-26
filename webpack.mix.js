@@ -1,5 +1,6 @@
 const fs = require("fs");
 const mix = require("laravel-mix");
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 // Main Laravel App Styles and Scripts (homepage)
 mix
@@ -47,6 +48,13 @@ if (mix.inProduction()) {
           key: fs.readFileSync("./.cert/key.pem"),
           cert: fs.readFileSync("./.cert/cert.pem"),
         },
+      },
+      // uses for resolving aliases like "@/trekker/components"
+      // instead of using long relative paths
+      // See tsconfig.json `paths` to set up aliases
+      resolve: {
+        plugins: [new TsconfigPathsPlugin({})],
+        extensions: [".ts", ".js", ".vue"],
       },
     });
 }

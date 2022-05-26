@@ -2,7 +2,7 @@ import { app } from "@storybook/vue3";
 import { createStore } from "vuex";
 import TourMap from "./TourMap.vue";
 import mockTour from "../../common/__mocks__/mockTour.json";
-import { getters } from "../../store/index.js";
+import { getters } from "../../store";
 
 const store = createStore({
   state: () => ({

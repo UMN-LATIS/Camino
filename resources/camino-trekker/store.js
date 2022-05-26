@@ -1,5 +1,5 @@
 import { createStore, createLogger } from "vuex";
-import { toursService } from "../common/api.service.js";
+import { toursService } from "./common/api.service.js";
 
 const toInt = (str) => Number.parseInt(str, 10);
 

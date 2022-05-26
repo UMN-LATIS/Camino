@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { useTourStore } from "../../../stores/tours";
+import { useTourStore } from "@creator/stores/useTourStore";
 import LanguageText from "../../LanguageText.vue";
 
 const props = defineProps({

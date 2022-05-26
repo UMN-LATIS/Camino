@@ -11,7 +11,7 @@
 </template>
 <script setup>
 import LanguageText from "../../LanguageText.vue";
-import { useTourStore } from "../../../stores/tours.js";
+import { useTourStore } from "@creator/stores/useTourStore";
 import { shape, string, object } from "vue-types";
 
 const props = defineProps({

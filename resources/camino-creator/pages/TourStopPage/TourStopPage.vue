@@ -140,7 +140,7 @@ import { mergeDeepRight } from "ramda";
 import { ref, computed, onMounted, watch } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
-import { useTourStore } from "../../stores/tours.js";
+import { useTourStore } from "@creator/stores/useTourStore";
 import Error from "../../components/Error.vue";
 import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";

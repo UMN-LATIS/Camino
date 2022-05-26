@@ -13,7 +13,7 @@
 
 <script setup>
 import LanguageText from "../../LanguageText.vue";
-import { useTourStore } from "../../../stores/tours.js";
+import { useTourStore } from "@creator/stores/useTourStore";
 
 const props = defineProps({
   tourId: {

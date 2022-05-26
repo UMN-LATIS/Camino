@@ -103,7 +103,7 @@ import ShareTour from "./ShareTour.vue";
 import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
-import { useTourStore } from "../../stores/tours";
+import { useTourStore } from "@creator/stores/useTourStore";
 import createDefaultTour from "../../common/createDefaultTour.js";
 
 const { userCan } = usePermissions();

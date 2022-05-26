@@ -41,7 +41,7 @@
 <script setup>
 import LanguageText from "../../LanguageText.vue";
 import ImageUpload from "../../ImageUpload.vue";
-import { useTourStore } from "../../../stores/tours";
+import { useTourStore } from "../../../stores/useTourStore";
 import { createMultilingualText } from "./stageFactory";
 
 const props = defineProps({

@@ -74,7 +74,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { useTourStore } from "../../stores/tours";
+import { useTourStore } from "@creator/stores/useTourStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
 

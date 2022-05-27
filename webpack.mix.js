@@ -20,13 +20,26 @@ mix
   .ts("resources/camino-creator/app.ts", "public/js/camino-creator.js")
   .sass("resources/camino-creator/main.scss", "public/css/camino-creator.css");
 
-mix.vue({
-  options: {
-    compilerOptions: {
-      isCustomElement: (tag) => ["a-text", "a-scene", "a-camera"].includes(tag),
+// All apps: both production and development
+mix
+  .vue({
+    options: {
+      compilerOptions: {
+        isCustomElement: (tag) =>
+          ["a-text", "a-scene", "a-camera"].includes(tag),
+      },
     },
-  },
-});
+  })
+  .sourceMaps()
+  .webpackConfig({
+    // uses for resolving aliases like "@/trekker/components"
+    // instead of using long relative paths
+    // See tsconfig.json `paths` to set up aliases
+    resolve: {
+      plugins: [new TsconfigPathsPlugin({})],
+      extensions: [".ts", ".js", ".vue"],
+    },
+  });
 
 if (mix.inProduction()) {
   mix.version();
@@ -46,13 +59,6 @@ if (mix.inProduction()) {
           key: fs.readFileSync("./.cert/key.pem"),
           cert: fs.readFileSync("./.cert/cert.pem"),
         },
-      },
-      // uses for resolving aliases like "@/trekker/components"
-      // instead of using long relative paths
-      // See tsconfig.json `paths` to set up aliases
-      resolve: {
-        plugins: [new TsconfigPathsPlugin({})],
-        extensions: [".ts", ".js", ".vue"],
       },
     });
 }

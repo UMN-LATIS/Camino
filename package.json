@@ -68,7 +68,7 @@
     "pinia": "^2.0.14",
     "qrcode.vue": "^3.3.3",
     "ramda": "^0.28.0",
-    "three": "^0.140.2",
+    "three": "^0.141.0",
     "vue": "^3.2.36",
     "vue-cool-lightbox": "^2.7.4",
     "vue-easy-lightbox": "^1.4.1",

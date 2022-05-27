@@ -29,7 +29,7 @@
 
     <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
     <div
-      v-for="stop in tourStore.getTour(tourId).stops"
+      v-for="stop in creatorStore.getTour(tourId).stops"
       :key="stop.id"
       class="card mt-2"
     >
@@ -51,7 +51,7 @@
           </button>
 
           <a
-            :href="`/tour/${tourId}/stop.sort_order`"
+            :href="`/trekker/tours/${tourId}/stops/${stop.sort_order}`"
             class="btn btn-outline-success"
             target="_blank"
             ><i class="fas fa-eye"></i>
@@ -74,7 +74,7 @@
 </template>
 <script setup>
 import { ref } from "vue";
-import { useTourStore } from "../../stores/tours";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
 
@@ -93,15 +93,15 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
+const creatorStore = useCreatorStore();
 const showCreateForm = ref(false);
-const languages = tourStore.getTourLanguages(props.tourId);
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 // localized titles
 const newTitle = ref(createMultilingualText(languages));
 
 function createNew() {
-  tourStore.createTourStop(props.tourId, {
+  creatorStore.createTourStop(props.tourId, {
     stop_content: {
       title: newTitle.value,
     },
@@ -120,7 +120,7 @@ function isLockedItem(stop) {
 
 function deleteStop(stopId) {
   if (confirm("Are you sure you wish to delete this stop?")) {
-    tourStore.deleteTourStop(props.tourId, stopId);
+    creatorStore.deleteTourStop(props.tourId, stopId);
   }
 }
 </script>

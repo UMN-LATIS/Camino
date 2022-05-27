@@ -11,8 +11,8 @@
   </div>
 </template>
 
-<script setup>
-import { useTourStore } from "../../../stores/tours";
+<script setup lang="ts">
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../LanguageText.vue";
 
 const props = defineProps({
@@ -26,8 +26,8 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
-const languages = tourStore.getTourLanguages(props.tourId);
+const creatorStore = useCreatorStore();
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits(["update"]);
 

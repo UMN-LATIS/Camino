@@ -1,4 +1,4 @@
-import { getStagesFromTourWhere } from "./index.js";
+import { getStagesFromTourWhere } from "./index";
 import type { LngLat } from "../../types";
 
 /**

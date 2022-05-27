@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup>
-import { TOUR_STYLES } from "../../common/constants.js";
+import { TOUR_STYLES } from "../../common/constants";
 
 const { NEXT_STOP, ENTIRE_TOUR } = TOUR_STYLES;
 

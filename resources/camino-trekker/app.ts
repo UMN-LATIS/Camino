@@ -1,13 +1,10 @@
 import { createApp } from "vue";
-import App from "./App.vue";
+import { createPinia } from "pinia";
 import router from "./router";
-import store from "./store/index.js";
-import { sync } from "vuex-router-sync";
-import "./globalStyles.js";
-
-// keep vuex and vue-router in sync
-sync(store, router);
+import App from "./App.vue";
+import "./globalStyles";
 
 const app = createApp(App);
+const pinia = createPinia();
 
-app.use(router).use(store).mount("#app");
+app.use(router).use(pinia).mount("#app");

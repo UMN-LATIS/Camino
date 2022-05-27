@@ -1,42 +1,67 @@
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { mergeDeepRight } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
-import createDefaultStop from "../common/createDefaultStop.js";
-import createDefaultTour from "../common/createDefaultTour.js";
+import createDefaultStop from "../common/createDefaultStop";
+import createDefaultTour from "../common/createDefaultTour";
+import { Tour, Maybe, TourStop, Locale } from "@/types";
+import { axiosClient as axios } from "@creator/common/axios";
 
-export const useTourStore = defineStore("tours", {
-  state() {
-    return {
-      tours: [],
-      error: null,
-      isReady: false,
-    };
-  },
+const route = useRoute();
+
+interface State {
+  tours: Tour[];
+  error: Maybe<Error>;
+  isReady: boolean;
+  route: RouteLocationNormalizedLoaded;
+}
+
+export const useCreatorStore = defineStore("creator", {
+  state: (): State => ({
+    tours: [],
+    error: null,
+    isReady: false,
+    route,
+  }),
   getters: {
-    getTour: (state) => (tourId) => {
-      return state.tours.find((tour) => tour.id === tourId);
+    getTour:
+      (state: State) =>
+      (tourId: number): Tour => {
+        const tour = state.tours.find((tour) => tour.id === tourId);
+        if (!tour) {
+          throw new Error(
+            `a tour with id ${tourId} does not exist in the store`
+          );
+        }
+        return tour;
+      },
+    getTourStop() {
+      const store = this;
+      return (tourId, stopId): TourStop => {
+        const tour = store.getTour(tourId);
+        const stop = tour.stops.find((stop) => stop.id === stopId);
+        if (!stop) {
+          throw new Error(
+            `tour stop with tour id ${tourId} and stop id $${stopId} does not exist in the`
+          );
+        }
+        return stop;
+      };
     },
-    getTourStop:
-      ({ getTour }) =>
-      (tourId, stopId) => {
-        const tour = getTour(tourId);
-        return tour.stops.find((stop) => stop.id === stopId);
-      },
     // getTourStopStage: (state) => (tourId, stopId, stageId) => {},
-    getTourTitle:
-      ({ getTour }) =>
-      (tourId) => {
-        return getTour(tourId).title;
-      },
-    getTourLanguages:
-      ({ getTour }) =>
-      (tourId) => {
-        return getTour(tourId).tour_content.languages;
-      },
-    getDefaultTourLanguage:
-      ({ getTour }) =>
-      (tourId) => {
-        return getTour(tourId).tour_content.languages[0] || "English";
-      },
+    getTourTitle() {
+      const store = this;
+      return (tourId: number): string => store.getTour(tourId).title;
+    },
+    getTourLanguages() {
+      const store = this;
+      return (tourId: number): Locale[] =>
+        store.getTour(tourId).tour_content.languages;
+    },
+    getDefaultTourLanguage() {
+      const store = this;
+      return (tourId: number): Locale =>
+        store.getTour(tourId).tour_content.languages[0] || Locale.en;
+    },
   },
   actions: {
     async init() {
@@ -96,6 +121,6 @@ export const useTourStore = defineStore("tours", {
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html
 if (import.meta.webpackHot) {
   import.meta.webpackHot.accept(
-    acceptHMRUpdate(useTourStore, import.meta.webpackHot)
+    acceptHMRUpdate(useCreatorStore, import.meta.webpackHot)
   );
 }

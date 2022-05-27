@@ -102,7 +102,7 @@ export default {
               targetPoint.title +
               "</p>" +
               iconAppend +
-              '<a href="/tour/' +
+              '<a href="/trekker/tours/' +
               targetPoint.id +
               '">Start tour</a>'
           );

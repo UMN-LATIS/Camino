@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { useTourStore } from "../../../stores/tours";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../LanguageText.vue";
 import { createMultilingualText } from "./stageFactory";
 
@@ -71,8 +71,8 @@ const props = defineProps({
   },
 });
 
-const tourStore = useTourStore();
-const languages = tourStore.getTourLanguages(props.tourId);
+const creatorStore = useCreatorStore();
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits(["update"]);
 

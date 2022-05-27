@@ -54,8 +54,8 @@
 import { computed, ref } from "vue";
 import { object, string } from "vue-types";
 import Button from "../../Button/Button.vue";
-import { useStopIndex, useTour } from "../../../common/hooks.js";
-import config from "../../../config.js";
+import { useStopIndex, useTour } from "../../../common/hooks";
+import config from "../../../config";
 import Toggle from "../../Toggle/Toggle.vue";
 import Alert from "../../Alert/Alert.vue";
 

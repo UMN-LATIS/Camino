@@ -14,7 +14,10 @@
     // requires `tsconfig-paths-webpack-plugin` in order to work
     // with webpack's `alias` feature
     "paths": {
-      "@/*": ["*"]
-    }
+      "@/*": ["*"],
+      "@trekker/*": ["camino-trekker/*"],
+      "@creator/*": ["camino-creator/*"]
+    },
+    "sourceMap": true
   }
 }

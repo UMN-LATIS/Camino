@@ -18,7 +18,7 @@
   </div>
 </template>
 <script setup>
-import { languages as possibleLanguages } from "../../languages.js";
+import { languages as possibleLanguages } from "../../languages";
 
 const props = defineProps({
   modelValue: {

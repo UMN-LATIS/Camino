@@ -1,4 +1,4 @@
-import getAllStopPoints from "./getAllStopPoints.js";
+import getAllStopPoints from "./getAllStopPoints";
 
 const tour = {
   start_location: { lng: 1, lat: 2 },

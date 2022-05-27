@@ -58,7 +58,7 @@
             <span class="d-none d-sm-inline">Delete</span></a
           >
           <a
-            :href="'/tour/' + tour.id"
+            :href="'/trekker/tours/' + tour.id"
             class="btn btn-outline-success"
             target="_blank"
             ><i class="fas fa-eye"></i>
@@ -80,11 +80,11 @@
 import { computed, onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
-import { useTourStore } from "../stores/tours.js";
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
 
-const tourStore = useTourStore();
+const creatorStore = useCreatorStore();
 
-const { tours } = storeToRefs(tourStore);
+const { tours } = storeToRefs(creatorStore);
 const error = ref(null);
 const showCreateForm = ref(false);
 const newTitle = ref("");
@@ -98,7 +98,7 @@ function handleDelete(tourId) {
   }
   console.log({ tourId });
 
-  tourStore.deleteTour(tourId).catch((err) => {
+  creatorStore.deleteTour(tourId).catch((err) => {
     console.error(err);
     error.value = err;
   });
@@ -108,7 +108,7 @@ function createNew() {
   error.value = null;
 
   showCreateForm.value = false;
-  tourStore.createTour({
+  creatorStore.createTour({
     title: newTitle.value,
   });
 
@@ -116,7 +116,7 @@ function createNew() {
 }
 
 onMounted(() => {
-  tourStore.fetchTours();
+  creatorStore.fetchTours();
 });
 </script>
 

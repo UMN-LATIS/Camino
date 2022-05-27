@@ -6,25 +6,19 @@
     </span>
   </button>
 </template>
-<script setup>
-defineProps({
-  icon: {
-    type: String,
-    default: null,
-  },
-  variant: {
-    type: String,
-    validator(str) {
-      return ["primary", "secondary", "inverse", "link", "icon-only"].includes(
-        str
-      );
-    },
-    default: "secondary",
-  },
-  iconPosition: {
-    type: String,
-    default: "before",
-  },
+<script setup lang="ts">
+import type { Maybe } from "@/types";
+
+interface Props {
+  icon?: Maybe<string>;
+  variant?: "primary" | "secondary" | "inverse" | "link" | "icon-only";
+  iconPosition?: "before" | "after";
+}
+
+withDefaults(defineProps<Props>(), {
+  icon: null,
+  variant: "secondary",
+  iconPosition: "before",
 });
 </script>
 <style scoped>

@@ -1,20 +1,22 @@
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
 import "bootstrap";
-import initAxios from "./common/initAxios";
-import initLeaflet from "./common/initLeaflet";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
-import router from "./router.js";
+import { axiosClient } from "./common/axios";
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
+import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
+import "leaflet-draw/dist/leaflet.draw.js";
+import "leaflet-draw/dist/leaflet.draw.css";
+import "leaflet/dist/leaflet.css";
+import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
+import router from "./router";
 import App from "./App.vue";
+declare global {
+  interface Window {
+    axios: typeof axiosClient;
+  }
+}
 
+window.axios = axiosClient;
 const pinia = createPinia();
-
-initAxios();
-initLeaflet();
 
 createApp(App).use(pinia).use(router).mount("#app");

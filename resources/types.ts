@@ -235,3 +235,11 @@ export interface Tour {
   stops: TourStop[];
   users: User[];
 }
+
+export interface FeedbackResponse {
+  id: number;
+  name: string;
+  email: string;
+  created_at: DateTime;
+  feedback: string;
+}

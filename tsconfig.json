@@ -20,5 +20,5 @@
     },
     "sourceMap": true
   },
-  "exclude": ["node_modules", "**/*.stories.js"]
+  "exclude": ["node_modules", "*.stories.*"]
 }

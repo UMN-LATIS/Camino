@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, type Ref } from "vue";
+import { computed, ref } from "vue";
 import axios from "axios";
 import { useTour, useLocale } from "@trekker/common/hooks";
 import Markdown from "../../Markdown/Markdown.vue";
@@ -64,7 +64,11 @@ import Input from "../../Input/Input.vue";
 import config from "../../../config";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import getTextForLocale from "@/camino-trekker/utils/getTextForLocale";
-import type { DeepDiveItem, DeepDiveSummaryStage } from "@/types";
+import type {
+  DeepDiveItem,
+  DeepDiveSummaryStage,
+  DeepDiveStage,
+} from "@/types";
 
 interface Props {
   stage: DeepDiveSummaryStage;
@@ -84,8 +88,9 @@ const deepDiveSummaryText = computed(
   () => props.stage.text[locale.value] || ""
 );
 const checkedDeepDives = computed(() => store.deepDives);
-const allDeepDives: Ref<DeepDiveItem[]> = computed(() => {
-  const deepDiveStages = getStagesFromTourWhere(
+const allDeepDives = computed(() => {
+  if (!tour.value) return [];
+  const deepDiveStages = getStagesFromTourWhere<DeepDiveStage>(
     "type",
     "deepdives",
     tour.value

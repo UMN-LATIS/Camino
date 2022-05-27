@@ -92,7 +92,7 @@ export interface Waypoint {
   location: LngLat;
 }
 
-export interface Stage {
+export interface Stage extends Record<string, any> {
   id: UUID;
   type: StageType;
 }

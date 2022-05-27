@@ -23,19 +23,3 @@ export const toursService = {
     middlewares.push(middleware);
   },
 };
-
-// function replaceObjectKeys([oldKeyName, newKeyName], obj) {
-//   const ObjAsString = JSON.stringify(obj);
-//   const newObjAsString = ObjAsString.replace(
-//     new RegExp(`"${oldKeyName}":`, "g"),
-//     `"${newKeyName}":`
-//   );
-//   return JSON.parse(newObjAsString);
-// }
-
-// function convertEnglishToEn(response) {
-//   const newData = replaceObjectKeys(["English", "en"], response.data);
-//   return { ...response, data: newData };
-// }
-
-// toursService.use(convertEnglishToEn);

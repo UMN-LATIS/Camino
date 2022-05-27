@@ -8,7 +8,7 @@ import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
-import router from "./router.js";
+import router from "./router";
 import App from "./App.vue";
 declare global {
   interface Window {
@@ -17,5 +17,6 @@ declare global {
 }
 
 window.axios = axiosClient;
+const pinia = createPinia();
 
-createApp(App).use(createPinia()).use(router).mount("#app");
+createApp(App).use(pinia).use(router).mount("#app");

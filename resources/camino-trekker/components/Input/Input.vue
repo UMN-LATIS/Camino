@@ -23,23 +23,16 @@
     </small>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useAttrs, computed } from "vue";
 
-defineProps({
-  label: {
-    type: String,
-    required: true,
-  },
-  labelHidden: {
-    type: Boolean,
-    default: false,
-  },
-  hint: {
-    type: String,
-    default: "",
-  },
-});
+interface Props {
+  label: string;
+  labelHidden: boolean;
+  hint: string;
+}
+
+withDefaults(defineProps<Props>(), { labelHidden: false, hint: "" });
 
 const attrs = useAttrs();
 

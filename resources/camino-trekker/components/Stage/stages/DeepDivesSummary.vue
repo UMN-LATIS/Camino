@@ -51,27 +51,27 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
 import axios from "axios";
-import { useTour, useLocale } from "../../../common/hooks.js";
+import { useTour, useLocale } from "@trekker/common/hooks";
 import Markdown from "../../Markdown/Markdown.vue";
 import Error from "../../Error/Error.vue";
-import getStagesFromTourWhere from "../../../utils/getStagesFromTourWhere.js";
+import getStagesFromTourWhere from "../../../utils/getStagesFromTourWhere";
 import DeepDivesSummaryItem from "./DeepDivesSummaryItem.vue";
 import Button from "../../Button/Button.vue";
 import Input from "../../Input/Input.vue";
-import config from "../../../config.js";
+import config from "../../../config";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
+import { DeepDiveItem, DeepDiveSummaryStage } from "@/types";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-});
+interface Props {
+  stage: DeepDiveSummaryStage;
+}
 
-const store = useStore();
+const props = defineProps<Props>();
+
+const store = useTrekkerStore();
 const { tour } = useTour();
 const { locale } = useLocale();
 const email = ref("");
@@ -80,7 +80,7 @@ const isSent = ref(false);
 const error = ref("");
 // const success = ref(false);
 const deepDiveSummaryText = computed(() => props.stage.text[locale.value]);
-const checkedDeepDives = computed(() => store.state.deepDives);
+const checkedDeepDives = computed(() => store.deepDives);
 const allDeepDives = computed(() => {
   const deepDiveStages = getStagesFromTourWhere(
     "type",
@@ -99,18 +99,15 @@ function isDeepDiveChecked(deepDive) {
   return checkedDeepDives.value.indexOf(deepDive) !== -1;
 }
 
-const setChecked = (deepdive, isChecked) => {
-  console.log({ deepdive, isChecked });
+const setChecked = (deepdive: DeepDiveItem, isChecked: boolean) => {
   return isChecked
-    ? store.dispatch("addDeepDive", deepdive)
-    : store.dispatch("removeDeepDive", deepdive);
+    ? store.addDeepDive(deepdive)
+    : store.removeDeepDive(deepdive);
 };
 
-function toggleSelectAll(selectAll) {
+function toggleSelectAll(selectAll: boolean) {
   allDeepDives.value.forEach((d) =>
-    selectAll
-      ? store.dispatch("addDeepDive", d)
-      : store.dispatch("removeDeepDive", d)
+    selectAll ? store.addDeepDive(d) : store.removeDeepDive(d)
   );
 }
 

@@ -32,7 +32,7 @@
 </template>
 <script setup>
 import { computed } from "vue";
-import getAllStopPoints from "../../../util/getAllStopPoints.js";
+import getAllStopPoints from "../../../util/getAllStopPoints";
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
@@ -52,9 +52,9 @@ const props = defineProps({
   },
 });
 
-const tourStore = useCreatorStore();
-const tourLanguages = tourStore.getTourLanguages(props.tourId);
-const tour = tourStore.getTour(props.tourId);
+const creatorStore = useCreatorStore();
+const tourLanguages = creatorStore.getTourLanguages(props.tourId);
+const tour = creatorStore.getTour(props.tourId);
 const currentStopIndex = computed(() =>
   tour.stops.findIndex((s) => s.id === props.stopId)
 );

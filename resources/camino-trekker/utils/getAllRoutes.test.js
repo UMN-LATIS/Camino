@@ -1,4 +1,4 @@
-import getAllRoutes from "./getAllRoutes.js";
+import getAllRoutes from "./getAllRoutes";
 
 const tour = {
   start_location: { lng: 1, lat: 2 },

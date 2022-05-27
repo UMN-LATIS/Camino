@@ -20,18 +20,18 @@
     </ol>
   </Sheet>
 </template>
-<script setup>
+<script setup lang="ts">
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useStopIndex, useLocale } from "../../common/hooks";
 import Sheet from "../Sheet/Sheet.vue";
 
 defineEmits(["close"]);
 
-const store = useStore();
+const store = useTrekkerStore();
 const { stopIndex } = useStopIndex();
 const { locale } = useLocale();
-const stops = computed(() => store.getters.allStops);
+const stops = computed(() => store.allStops);
 const getStopTitle = (stop) => stop.stop_content.title[locale.value];
 </script>
 <style scoped>

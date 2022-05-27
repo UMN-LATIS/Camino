@@ -5,6 +5,11 @@ import SettingsPage from "./pages/SettingsPage.vue";
 import HelpPage from "./pages/HelpPage.vue";
 import config from "./config";
 
+const toInt = (value, fallback = undefined) => {
+  const n = Number.parseInt(value);
+  return Number.isNaN(n) ? fallback : n;
+};
+
 const routes = [
   { path: "/", component: HomePage },
   {
@@ -14,6 +19,10 @@ const routes = [
   {
     path: "/tours/:tourId/stops/:stopIndex",
     component: TourPage,
+    props: (route) => ({
+      tourId: toInt(route.params.tourId),
+      stopIndex: toInt(route.params.stopIndex),
+    }),
   },
   {
     path: "/settings",

@@ -24,18 +24,18 @@ export const toursService = {
   },
 };
 
-function replaceObjectKeys([oldKeyName, newKeyName], obj) {
-  const ObjAsString = JSON.stringify(obj);
-  const newObjAsString = ObjAsString.replace(
-    new RegExp(`"${oldKeyName}":`, "g"),
-    `"${newKeyName}":`
-  );
-  return JSON.parse(newObjAsString);
-}
+// function replaceObjectKeys([oldKeyName, newKeyName], obj) {
+//   const ObjAsString = JSON.stringify(obj);
+//   const newObjAsString = ObjAsString.replace(
+//     new RegExp(`"${oldKeyName}":`, "g"),
+//     `"${newKeyName}":`
+//   );
+//   return JSON.parse(newObjAsString);
+// }
 
-function convertEnglishToEn(response) {
-  const newData = replaceObjectKeys(["English", "en"], response.data);
-  return { ...response, data: newData };
-}
+// function convertEnglishToEn(response) {
+//   const newData = replaceObjectKeys(["English", "en"], response.data);
+//   return { ...response, data: newData };
+// }
 
-toursService.use(convertEnglishToEn);
+// toursService.use(convertEnglishToEn);

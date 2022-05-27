@@ -1,9 +1,9 @@
 <template>
   <div class="app">
-    <div v-if="!tourStore.isReady" class="spinner-border" role="status">
+    <div v-if="!creatorStore.isReady" class="spinner-border" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
-    <div v-if="tourStore.isReady" class="container py-4 h-100">
+    <div v-if="creatorStore.isReady" class="container py-4 h-100">
       <router-view></router-view>
     </div>
   </div>
@@ -12,8 +12,8 @@
 import { onMounted } from "vue";
 import { useCreatorStore } from "./stores/useCreatorStore";
 
-const tourStore = useCreatorStore();
-onMounted(() => tourStore.init());
+const creatorStore = useCreatorStore();
+onMounted(() => creatorStore.init());
 </script>
 
 <style scoped>

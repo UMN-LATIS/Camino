@@ -30,8 +30,8 @@ const props = defineProps({
   }),
 });
 
-const tourStore = useCreatorStore();
-const tourLanguages = tourStore.getTourLanguages(props.tourId);
+const creatorStore = useCreatorStore();
+const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits(["update"]);
 

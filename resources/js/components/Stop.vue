@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import usePermissions from "../hooks/usePermissions.js";
+import usePermissions from "../hooks/usePermissions";
 
 const { userCan } = usePermissions();
 

@@ -80,8 +80,6 @@
     "vue-router": "^4.0.15",
     "vue-types": "^4.1.1",
     "vuedraggable": "^4.1.0",
-    "vuex": "^4.0.2",
-    "vuex-router-sync": "^6.0.0-rc.1",
     "webpack": "^5.72.1"
   },
   "browserslist": [

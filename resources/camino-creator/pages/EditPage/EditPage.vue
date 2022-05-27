@@ -94,7 +94,7 @@ import QrCode from "qrcode.vue";
 import Error from "../../components/Error.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "./InitialLocation.vue";
-import usePermissions from "../../hooks/usePermissions.js";
+import usePermissions from "../../hooks/usePermissions";
 import TourTitleInput from "./TourTitleInput.vue";
 import SelectLanguages from "./SelectLanguages.vue";
 import SelectTransport from "./SelectTransport.vue";
@@ -104,7 +104,7 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import createDefaultTour from "../../common/createDefaultTour.js";
+import createDefaultTour from "../../common/createDefaultTour";
 
 const { userCan } = usePermissions();
 
@@ -118,7 +118,7 @@ const props = defineProps({
 
 const error = ref(null);
 const showAlert = ref(false);
-const tourStore = useCreatorStore();
+const creatorStore = useCreatorStore();
 const tour = ref(createDefaultTour());
 const errors = ref([]);
 const router = useRouter();
@@ -136,7 +136,7 @@ onMounted(() => {
   if (!props.tourId) return;
 
   // load existing tour info
-  tour.value = tourStore.getTour(props.tourId);
+  tour.value = creatorStore.getTour(props.tourId);
 });
 
 function validate(tour) {
@@ -165,13 +165,13 @@ async function save() {
 
   if (!tour.value.id) {
     // create tour
-    const { payload } = await tourStore
+    const { payload } = await creatorStore
       .createTour(tour.value)
       .catch(handleError);
     router.replace({ name: "editTour", params: { tourId: payload.id } });
   } else {
     // update tour
-    tourStore.updateTour(tour.value).catch(handleError);
+    creatorStore.updateTour(tour.value).catch(handleError);
   }
   showAlert.value = true;
 }

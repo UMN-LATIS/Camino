@@ -15,7 +15,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { toursService } from "../common/api.service.js";
+import { toursService } from "../common/api.service";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 
 const tours = ref([]);

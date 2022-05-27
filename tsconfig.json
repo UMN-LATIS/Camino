@@ -17,6 +17,7 @@
       "@/*": ["*"],
       "@trekker/*": ["camino-trekker/*"],
       "@creator/*": ["camino-creator/*"]
-    }
+    },
+    "sourceMap": true
   }
 }

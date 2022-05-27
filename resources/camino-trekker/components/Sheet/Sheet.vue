@@ -14,18 +14,21 @@
     </div>
   </aside>
 </template>
-<script setup>
-defineEmits(["close"]);
-defineProps({
-  title: {
-    type: String,
-    default: "",
-  },
-  isOpen: {
-    type: Boolean,
-    default: true,
-  },
+<script setup lang="ts">
+interface Props {
+  title?: string;
+  isOpen?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  title: "",
+  isOpen: false,
 });
+
+interface Emits {
+  (eventName: "close"): void;
+}
+defineEmits<Emits>();
 </script>
 
 <style scoped>

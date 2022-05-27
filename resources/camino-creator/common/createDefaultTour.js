@@ -1,4 +1,4 @@
-import { TOUR_STYLES } from "./constants.js";
+import { TOUR_STYLES } from "./constants";
 
 export default () => ({
   public: false,

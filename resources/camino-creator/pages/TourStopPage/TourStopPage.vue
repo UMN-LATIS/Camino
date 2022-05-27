@@ -59,7 +59,7 @@
           v-for="stage in stop.stop_content.stages"
           :key="stage.id"
           :stage="stage"
-          :tour="tourStore.getTour(tourId)"
+          :tour="creatorStore.getTour(tourId)"
           :stop="stop"
           :tourId="tourId"
           :stopId="stopId"
@@ -146,7 +146,7 @@ import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
-import createDefaultStop from "../../common/createDefaultStop.js";
+import createDefaultStop from "../../common/createDefaultStop";
 import stageFactory from "../../components/Stage/stages/stageFactory";
 import { StageType } from "../../../types";
 
@@ -162,7 +162,7 @@ const props = defineProps({
   },
 });
 
-const tourStore = useCreatorStore();
+const creatorStore = useCreatorStore();
 const { userCan } = usePermissions();
 const isSaving = ref(false);
 const isDirty = ref(false);
@@ -170,9 +170,9 @@ const showSaveSuccessful = ref(false);
 const errors = ref([]);
 const error = ref(null);
 const router = useRouter();
-const tourTitle = tourStore.getTourTitle(props.tourId);
-const tourLanguages = tourStore.getTourLanguages(props.tourId);
-const defaultTourLanguage = tourStore.getDefaultTourLanguage(props.tourId);
+const tourTitle = creatorStore.getTourTitle(props.tourId);
+const tourLanguages = creatorStore.getTourLanguages(props.tourId);
+const defaultTourLanguage = creatorStore.getDefaultTourLanguage(props.tourId);
 
 const stageTypes = ref({
   [StageType.Separator]: "Separator",
@@ -195,7 +195,7 @@ const newStageType = ref(null);
 const stop = ref(createDefaultStop());
 
 onMounted(() => {
-  const currentStop = tourStore.getTourStop(props.tourId, props.stopId);
+  const currentStop = creatorStore.getTourStop(props.tourId, props.stopId);
 
   // merge with default stop in case new props have been added to the
   // stop since created. For example: `header_image`
@@ -288,7 +288,7 @@ function save() {
 
   console.log("save", { stop: stop.value });
   if (!props.stopId) {
-    tourStore
+    creatorStore
       .createTourStop(props.tourId, stop.value)
       .then(({ payload }) => {
         router.replace(`/creator/${props.tourId}/edit/${payload.id}`);
@@ -301,7 +301,7 @@ function save() {
         errors.value.push(err);
       });
   } else {
-    tourStore
+    creatorStore
       .updateTourStop(props.tourId, stop.value)
       .then(() => {
         isSaving.value = false;

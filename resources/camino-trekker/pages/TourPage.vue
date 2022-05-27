@@ -3,27 +3,32 @@
     <DefaultLayout>
       <TourStopSkeleton v-if="isLoading" />
       <div v-else>
-        <TourStop v-if="!isLoading" :stopIndex="stopIndex" />
+        <TourStop v-if="!isLoading" :stopIndex="store.stopIndex" />
         <BottomNav v-if="!isLoading" />
       </div>
     </DefaultLayout>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { onMounted, computed } from "vue";
-import { useStore } from "vuex";
-import { useStopIndex } from "../common/hooks";
 import BottomNav from "../components/BottomNav/BottomNav.vue";
 import DefaultLayout from "../layouts/DefaultLayout.vue";
 import TourStopSkeleton from "../components/TourStopSkeleton/TourStopSkeleton.vue";
 import TourStop from "../components/TourStop/TourStop.vue";
+import { useTrekkerStore } from "../stores/useTrekkerStore";
 
-const store = useStore();
-const { stopIndex } = useStopIndex();
-const isLoading = computed(() => store.state.isLoading);
+interface Props {
+  tourId: number;
+  stopIndex: number;
+}
+
+const props = defineProps<Props>();
+
+const store = useTrekkerStore();
+const isLoading = computed(() => store.isLoading);
 
 onMounted(() => {
-  store.dispatch("fetchTour", store.state.route.params.tourId);
+  store.fetchTour(props.tourId);
 });
 </script>
 <style scoped>

@@ -82,9 +82,9 @@ import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 
-const tourStore = useCreatorStore();
+const creatorStore = useCreatorStore();
 
-const { tours } = storeToRefs(tourStore);
+const { tours } = storeToRefs(creatorStore);
 const error = ref(null);
 const showCreateForm = ref(false);
 const newTitle = ref("");
@@ -98,7 +98,7 @@ function handleDelete(tourId) {
   }
   console.log({ tourId });
 
-  tourStore.deleteTour(tourId).catch((err) => {
+  creatorStore.deleteTour(tourId).catch((err) => {
     console.error(err);
     error.value = err;
   });
@@ -108,7 +108,7 @@ function createNew() {
   error.value = null;
 
   showCreateForm.value = false;
-  tourStore.createTour({
+  creatorStore.createTour({
     title: newTitle.value,
   });
 
@@ -116,7 +116,7 @@ function createNew() {
 }
 
 onMounted(() => {
-  tourStore.fetchTours();
+  creatorStore.fetchTours();
 });
 </script>
 

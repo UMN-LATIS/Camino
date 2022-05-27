@@ -20,16 +20,13 @@ mix
   .ts("resources/camino-creator/app.ts", "public/js/camino-creator.js")
   .sass("resources/camino-creator/main.scss", "public/css/camino-creator.css");
 
-mix
-  .vue({
-    options: {
-      compilerOptions: {
-        isCustomElement: (tag) =>
-          ["a-text", "a-scene", "a-camera"].includes(tag),
-      },
+mix.vue({
+  options: {
+    compilerOptions: {
+      isCustomElement: (tag) => ["a-text", "a-scene", "a-camera"].includes(tag),
     },
-  })
-  .sourceMaps();
+  },
+});
 
 if (mix.inProduction()) {
   mix.version();
@@ -43,6 +40,7 @@ if (mix.inProduction()) {
       },
     })
     .webpackConfig({
+      devtool: "inline-source-map",
       devServer: {
         https: {
           key: fs.readFileSync("./.cert/key.pem"),

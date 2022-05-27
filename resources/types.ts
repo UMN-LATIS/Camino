@@ -14,6 +14,11 @@ export enum Locale {
   en = "English",
   es = "Español",
   fr = "Français",
+
+  // For the future
+  // en = "en",
+  // es = "es",
+  // fr = "fr",
 }
 
 export interface LngLat {

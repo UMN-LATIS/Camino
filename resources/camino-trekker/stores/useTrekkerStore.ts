@@ -1,10 +1,9 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import { toursService } from "../common/api.service.js";
+import { toursService } from "../common/api.service";
 import { Maybe, Tour, TourStop, Locale, DeepDiveItem } from "@/types";
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
 const toInt = (str) => Number.parseInt(str, 10);
-const route = useRoute();
 
 interface State {
   tour: Maybe<Tour>;
@@ -12,7 +11,6 @@ interface State {
   locale: Locale;
   errors: Error[];
   deepDives: DeepDiveItem[];
-  route: RouteLocationNormalizedLoaded;
 }
 
 export const useTrekkerStore = defineStore("trekker", {
@@ -22,7 +20,6 @@ export const useTrekkerStore = defineStore("trekker", {
     locale: Locale.en,
     errors: [],
     deepDives: [],
-    route,
   }),
   getters: {
     allStops: (state: State): TourStop[] => {
@@ -32,11 +29,13 @@ export const useTrekkerStore = defineStore("trekker", {
       if (!state.tour) return 0;
       return state.tour.stops.length;
     },
-    stopIndex: (state: State): number => {
-      return toInt(state.route.params.stopIndex || 0);
+    stopIndex: (): number => {
+      const route = useRoute();
+      return toInt(route.params.stopIndex || 0);
     },
-    tourId: (state: State): number => {
-      return toInt(state.route.params.tourId);
+    tourId: (): number => {
+      const route = useRoute();
+      return toInt(route.params.tourId);
     },
     isFirstStop(): boolean {
       return this.stopIndex === 0;

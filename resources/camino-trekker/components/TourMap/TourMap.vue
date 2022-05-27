@@ -68,18 +68,14 @@ import MapPolyline from "../MapPolyline/MapPolyline.vue";
 import MapMarker from "../MapMarker/MapMarker.vue";
 import MapPopup from "../MapPopup/MapPopup.vue";
 import Button from "../Button/Button.vue";
-import capitalize from "../../utils/capitalize.js";
+import capitalize from "../../utils/capitalize";
 import getFullTourRoute from "../../utils/getFullTourRoute";
 import getAllStopPoints from "../../utils/getAllStopPoints";
 import getBoundingBox from "../../utils/getBoundingBox";
 import getPointsForStop from "./getPointsForStop";
 import getCenterOfBoundingBox from "./getCenterOfBoundingBox";
 import getAllRoutes from "../../utils/getAllRoutes";
-import {
-  useTour,
-  useLocale,
-  useMapBoxAccessToken,
-} from "../../common/hooks.js";
+import { useTour, useLocale, useMapBoxAccessToken } from "../../common/hooks";
 
 const props = defineProps({
   type: oneOf(["tour", "stop"]),

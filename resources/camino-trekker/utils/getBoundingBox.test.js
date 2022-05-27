@@ -1,4 +1,4 @@
-import getBoundingBoxFromRoute from "./getBoundingBoxFromRoute.js";
+import getBoundingBoxFromRoute from "./getBoundingBoxFromRoute";
 
 describe("getBoundingBoxFromRoute", () => {
   it("creates a routes bounding box", () => {

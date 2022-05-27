@@ -27,7 +27,7 @@ export interface LngLat {
 }
 
 export type LocalizedText = {
-  [localeKey in Locale]: string;
+  [localeKey in Locale]?: string;
 };
 
 export interface ARWaypoint {

@@ -27,7 +27,7 @@ export interface LngLat {
 }
 
 export type LocalizedText = {
-  [localeKey in Locale]: string;
+  [localeKey in Locale]?: string;
 };
 
 export interface ARWaypoint {
@@ -92,7 +92,7 @@ export interface Waypoint {
   location: LngLat;
 }
 
-export interface Stage {
+export interface Stage extends Record<string, any> {
   id: UUID;
   type: StageType;
 }

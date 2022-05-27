@@ -19,5 +19,6 @@
       "@creator/*": ["camino-creator/*"]
     },
     "sourceMap": true
-  }
+  },
+  "exclude": ["node_modules", "*.stories.*"]
 }

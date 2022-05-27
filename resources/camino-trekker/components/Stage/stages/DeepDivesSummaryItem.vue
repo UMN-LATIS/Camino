@@ -32,34 +32,28 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import Markdown from "../../Markdown/Markdown.vue";
 import { ref } from "vue";
 
-defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  checked: {
-    type: Boolean,
-    default: false,
-  },
-  checkboxHidden: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  id: string;
+  title: string;
+  content: string;
+  checked?: boolean;
+  checkboxHidden?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  checked: false,
+  checkboxHidden: false,
 });
 
-defineEmits(["toggleChecked"]);
+interface Emits {
+  (eventValue: "toggleChecked", isChecked: boolean): void;
+}
+
+defineEmits<Emits>();
 
 const showDetails = ref(false);
 

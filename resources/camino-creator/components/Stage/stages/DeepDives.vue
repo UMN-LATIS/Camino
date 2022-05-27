@@ -34,60 +34,66 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { createMultilingualText } from "./stageFactory";
+import type { DeepDiveStage, DeepDiveItem, Locale, Stage, Tour } from "@/types";
 
-export default {
-  components: {
-    LanguageText,
-  },
-  props: ["stage", "languages", "tour"],
-  emits: ["update"],
-  methods: {
-    addDeepDive() {
-      const updatedStage = {
-        ...this.stage,
-        deepdives: this.stage.deepdives.concat({
-          id: global.crypto.randomUUID(),
-          title: createMultilingualText(this.languages),
-          text: createMultilingualText(this.languages),
-        }),
-      };
+interface Props {
+  stage: Stage;
+  languages: Locale[];
+  tour: Tour;
+}
 
-      this.$emit("update", updatedStage);
-    },
-    updateDeepDive(index, update) {
-      const currentDeepDive = this.stage.deepdives[index];
-      const updatedStage = {
-        ...this.stage,
-        deepdives: [
-          ...this.stage.deepdives.slice(0, index),
-          {
-            ...currentDeepDive,
-            ...update,
-          },
-          ...this.stage.deepdives.slice(index + 1),
-        ],
-      };
+const props = defineProps<Props>();
 
-      this.$emit("update", updatedStage);
-    },
-    removeDeepDive(index) {
-      if (!confirm("Are you sure you wish to delete this deep dive?")) {
-        return;
-      }
+interface Emits {
+  (eventName: "update", payload: DeepDiveStage): void;
+}
+const emit = defineEmits<Emits>();
 
-      const updatedStage = {
-        ...this.stage,
-        deepdives: [
-          ...this.stage.deepdives.slice(0, index),
-          ...this.stage.deepdives.slice(index + 1),
-        ],
-      };
+function addDeepDive(): void {
+  const updatedStage = {
+    ...props.stage,
+    deepdives: props.stage.deepdives.concat({
+      id: global.crypto.randomUUID(),
+      title: createMultilingualText(props.languages),
+      text: createMultilingualText(props.languages),
+    }),
+  };
+  emit("update", updatedStage);
+}
 
-      this.$emit("update", updatedStage);
-    },
-  },
-};
+function updateDeepDive(index: number, update: Partial<DeepDiveItem>): void {
+  const currentDeepDive: DeepDiveItem = props.stage.deepdives[index];
+  const updatedStage: DeepDiveStage = {
+    ...props.stage,
+    deepdives: [
+      ...props.stage.deepdives.slice(0, index),
+      {
+        ...currentDeepDive,
+        ...update,
+      },
+      ...props.stage.deepdives.slice(index + 1),
+    ],
+  };
+
+  emit("update", updatedStage);
+}
+
+function removeDeepDive(index) {
+  if (!confirm("Are you sure you wish to delete this deep dive?")) {
+    return;
+  }
+
+  const updatedStage: DeepDiveStage = {
+    ...props.stage,
+    deepdives: [
+      ...props.stage.deepdives.slice(0, index),
+      ...props.stage.deepdives.slice(index + 1),
+    ],
+  };
+
+  emit("update", updatedStage);
+}
 </script>

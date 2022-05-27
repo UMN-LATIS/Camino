@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle" @drag="console.log('drag')">
+  <div class="toggle">
     <input
       :id="name"
       class="toggle__input sr-only"
@@ -7,7 +7,6 @@
       :checked="checked"
       :name="name"
       @change="handleInputChange($event)"
-      @drag="console.log('drag')"
     />
     <label class="toggle__label" :for="name">
       <span class="toggle__label-text">
@@ -17,20 +16,13 @@
   </div>
 </template>
 
-<script setup>
-defineProps({
-  checked: {
-    type: Boolean,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-  },
-});
+<script setup lang="ts">
+interface Props {
+  checked: boolean;
+  name: string;
+}
+
+defineProps<Props>();
 
 const emit = defineEmits(["change"]);
 
@@ -114,9 +106,5 @@ function handleInputChange(event) {
   text-align: center;
   max-width: 100%;
   word-wrap: normal;
-}
-
-/* label text when checked */
-.toggle__input:checked ~ .toggle__label .toggle__label-text {
 }
 </style>

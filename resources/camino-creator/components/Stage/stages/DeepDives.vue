@@ -5,7 +5,7 @@
         :text="deepdive.title"
         :languages="languages"
         :largetext="false"
-        @update:text="(title) => updateDeepDive(index, { title })"
+        @update:text="(title) => updateDeepDive(index as number, { title })"
       >
         Deep Dive Title
       </LanguageText>
@@ -13,14 +13,14 @@
         :text="deepdive.text"
         :languages="languages"
         :largetext="true"
-        @update:text="(text) => updateDeepDive(index, { text })"
+        @update:text="(text) => updateDeepDive(index as number, { text })"
       >
         Deep Dive Text
       </LanguageText>
       <button
         v-if="deepdive.title"
         class="btn btn-outline-danger float-right"
-        @click="removeDeepDive(index)"
+        @click="removeDeepDive(index as number)"
       >
         <i class="fas fa-trash"></i> Remove Deep Dive
       </button>

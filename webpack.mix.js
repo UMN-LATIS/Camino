@@ -30,7 +30,7 @@ mix
       },
     },
   })
-  .sourceMaps()
+  .sourceMaps(true)
   .webpackConfig({
     // uses for resolving aliases like "@/trekker/components"
     // instead of using long relative paths
@@ -53,7 +53,6 @@ if (mix.inProduction()) {
       },
     })
     .webpackConfig({
-      devtool: "inline-source-map",
       devServer: {
         https: {
           key: fs.readFileSync("./.cert/key.pem"),

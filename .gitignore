@@ -16,3 +16,4 @@ yarn-error.log
 /public/css
 docs/.vuepress/dist
 mix-manifest.json
+/.cert

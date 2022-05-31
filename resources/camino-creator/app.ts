@@ -1,4 +1,3 @@
-import "bootstrap";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import { axiosClient } from "./common/axios";
@@ -8,6 +7,8 @@ import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
+
+import "./main.scss";
 import router from "./router";
 import App from "./App.vue";
 declare global {

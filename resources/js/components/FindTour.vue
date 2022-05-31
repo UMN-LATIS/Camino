@@ -1,5 +1,5 @@
 <template>
-  <div class="find-tour-page">
+  <div>
     <div id="map" style="height: 60vh; width: 100%"></div>
 
     <div class="row mt-2">
@@ -26,37 +26,6 @@
         </div>
       </div>
     </div>
-
-    <section class="container my-4">
-      <h2 class="tourlist__heading">Public Tours</h2>
-      <ul class="tourlist">
-        <a
-          v-for="tour in tours"
-          :key="tour.id"
-          :href="`/trekker/tours/${tour.id}`"
-        >
-          <li class="tour-item">
-            <div class="tour-item__image">
-              <img
-                v-if="getTourImage(tour)"
-                :src="getTourImage(tour).src"
-                :alt="getTourImage(tour).alt"
-              />
-              <div v-else class="tour-item__image-fallback">
-                <i class="fas fa-map-marker-alt"></i>
-              </div>
-            </div>
-            <div class="tour-item__body">
-              <h3 class="tour-item__title">{{ tour.title }}</h3>
-              <p v-if="getTourSubtitle(tour)" class="tour-item__subtitle">
-                {{ getTourSubtitle(tour) }}
-              </p>
-            </div>
-            <i class="fas fa-chevron-right tour-item__chevron"></i>
-          </li>
-        </a>
-      </ul>
-    </section>
   </div>
 </template>
 
@@ -91,15 +60,6 @@ export default {
     });
   },
   methods: {
-    getTourImage(tour) {
-      return tour.stops[0]?.stop_content?.header_image;
-    },
-    getTourSubtitle(tour) {
-      if (tour?.geocoded?.city && tour?.geocoded?.state) {
-        return `${tour.geocoded.city}, ${tour.geocoded.state}`;
-      }
-      return "";
-    },
     updateMarkers: function () {
       var markers = [];
       var otherLocation = null;
@@ -210,78 +170,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.find-tour-page {
-  background: #f3f4f6;
-  color: #111827;
-}
-
-.tourlist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-auto-rows: 1fr;
-  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-  gap: 1rem;
-}
-
-.tourlist__heading {
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-
-.tourlist > a {
-  text-decoration: none;
-  color: #111827;
-  background: #fff;
-  border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  transition: cubic-bezier(0, 0, 0.2, 1) 100ms;
-  display: flex;
-}
-
-.tour-item {
-  width: 100%;
-  display: grid;
-  grid-template-columns: 8rem 1fr 2rem;
-  align-items: center;
-  gap: 1rem;
-}
-.tour-item > a:hover {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-.tour-item__image {
-  align-self: stretch;
-  display: flex;
-  background: #e5e7eb;
-  align-items: center;
-  justify-content: center;
-}
-
-.tour-item__image img {
-  object-fit: cover;
-}
-
-.tour-item__title {
-  font-size: 1rem;
-  font-weight: bold;
-  margin: 0;
-}
-.tour-item__subtitle {
-  color: #6b7280;
-  margin-top: 0.5rem;
-  margin-bottom: 0;
-}
-
-.tour-item__body {
-  padding: 1rem 0;
-}
-.tour-item__chevron {
-  color: #d1d5db;
-}
-.tour-item__image-fallback i {
-  font-size: 2rem;
-}
-</style>

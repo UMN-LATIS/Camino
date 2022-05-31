@@ -42,7 +42,7 @@
     <div class="col-md-5 p-lg-5 p-4 mx-auto my-md-5 my-4 camino-inset">
       <h1 class="display-4 font-weight-normal">Camino</h1>
       <p class="lead font-weight-normal">Guided tours, without the tour guide.</p>
-      <a class="btn btn-outline-primary find-tours" href="/findTours"><i class="fas fa-search mr-2"></i>Find Tours Near
+      <a class="btn btn-outline-primary find-tours" href="/findTours"><i class="fas fa-search me-2"></i>Find Tours Near
         Me</a>
     </div>
   </div>

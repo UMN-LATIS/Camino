@@ -34,6 +34,17 @@
       text-align: center;
     }
 
+    .home-page .btn-outline-primary {
+      --btn-color: #bf7b3f;
+      color: var(--btn-color);
+      border-color: var(--btn-color);
+    }
+
+    .home-page .btn-outline-primary:hover {
+      background: var(--btn-color);
+      color: #fff;
+    }
+
   </style>
 
   <div class="position-relative overflow-hidden p-md-5 mb-3 text-center bg-light camino-backdrop">

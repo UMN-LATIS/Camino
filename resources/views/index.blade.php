@@ -4,8 +4,6 @@
   <style>
     .camino-backdrop {
       position: relative;
-      /* background: url("/images/camino-backdrop.jpg");
-                      background-size: cover; */
     }
 
     .camino-backdrop::before {

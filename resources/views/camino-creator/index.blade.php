@@ -25,7 +25,7 @@
         <a class="p-2 text-dark" href="/creator">My Tours</a>
         <a class="p-2 text-dark" href="https://umn-latis.github.io/Camino/">Help</a>
         @impersonating
-        <a class="" href="/impersonate/leave">End Impersonation</a>
+          <a class="" href="/impersonate/leave">End Impersonation</a>
         @endImpersonating
       </nav>
       @if (Auth::user())
@@ -47,7 +47,7 @@
 </body>
 <script>
   @auth
-    window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+  window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
   @else
     window.Permissions = [];
   @endauth

@@ -24,6 +24,9 @@ module.exports = {
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "vue/multi-word-component-names": "off",
+    // prevents vars used in `<script setup>` from being reported as unused
+    // can be removed once https://github.com/vuejs/eslint-config-typescript/pull/42 is merged into eslint-config-typescript
+    "vue/script-setup-uses-vars": "error",
     "vue/attribute-hyphenation": ["error", "never"],
     "vue/v-on-event-hyphenation": ["error", "never"],
     "vue/component-definition-name-casing": "off",

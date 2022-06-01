@@ -41,7 +41,9 @@
             <i v-if="tour.biking == 1" class="fas fa-biking"></i>
             <i v-if="tour.driving == 1" class="fas fa-car"></i>
           </span>
-          {{ tour.title }}
+          <router-link :to="{ name: 'editTour', params: { tourId: tour.id } }">
+            {{ tour.title }}
+          </router-link>
         </h5>
         <div
           class="controls pt-2 pt-sm-0 d-flex gap-1 align-items-center justify-content-center"

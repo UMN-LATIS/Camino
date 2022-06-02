@@ -1,5 +1,6 @@
-export default () => ({
-  id: null,
+import { StageType, TourStop } from "@/types";
+
+export default (): Partial<TourStop> => ({
   stop_content: {
     title: {
       English: "",
@@ -7,24 +8,21 @@ export default () => ({
     subtitle: {
       English: "",
     },
-    header_image: {
-      src: null,
-      alt: null,
-    },
+    header_image: null,
     stages: [
       {
         id: global.crypto.randomUUID(),
         text: {
           English: "Navigation",
         },
-        type: "separator",
+        type: StageType.Separator,
       },
       {
         id: global.crypto.randomUUID(),
         text: {
           English: "",
         },
-        type: "navigation",
+        type: StageType.Navigation,
         targetPoint: null,
         route: [],
       },
@@ -33,14 +31,14 @@ export default () => ({
         text: {
           English: "Guide",
         },
-        type: "separator",
+        type: StageType.Separator,
       },
       {
         id: global.crypto.randomUUID(),
         text: {
           English: "",
         },
-        type: "guide",
+        type: StageType.Guide,
       },
     ],
   },

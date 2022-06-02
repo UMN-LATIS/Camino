@@ -4,7 +4,7 @@ import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
-import { Tour, Maybe, TourStop, Locale } from "@/types";
+import { Tour, Maybe, TourStop, Locale, LocalizedText } from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
 
 const route = useRoute();
@@ -151,8 +151,15 @@ export const useCreatorStore = defineStore("creator", {
       this.fetchTours();
     },
 
-    async createTourStop(tourId: number, stop: TourStop): Promise<TourStop> {
-      const newStop = mergeDeepRight(createDefaultStop(), stop);
+    async createTourStop(
+      tourId: number,
+      stopTitle: LocalizedText
+    ): Promise<TourStop> {
+      const newStop = mergeDeepRight(createDefaultStop(), {
+        stop_content: {
+          title: stopTitle,
+        },
+      });
 
       // optimistic update
       const tourIndex = this.getTourIndex(tourId);

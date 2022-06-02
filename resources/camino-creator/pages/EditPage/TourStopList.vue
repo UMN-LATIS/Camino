@@ -51,9 +51,6 @@
       </Draggable>
       <TourStopCard :tourId="tourId" :stop="lastStop" :showMoveHandle="false" />
     </div>
-    <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
-
-    <!-- </draggable> -->
   </section>
 </template>
 <script setup lang="ts">

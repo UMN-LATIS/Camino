@@ -3,7 +3,7 @@ import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
-import { Tour, Maybe, TourStop, Locale, LocalizedText } from "@/types";
+import { Tour, Maybe, TourStop, Locale, LocalizedText, Stage } from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
 
 interface State {
@@ -263,6 +263,53 @@ export const useCreatorStore = defineStore("creator", {
           );
         })
         .finally(() => this.fetchTours());
+    },
+    deleteStopHeaderImage(tourId: number, stopId: number) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const image =
+        this.tours[tourIndex].stops[stopIndex].stop_content.header_image;
+
+      // if no header image found, we're done!
+      if (!image) return;
+
+      // optimistic update
+      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = null;
+
+      axios.delete(`/creator/image/${image.src}`).catch((err) => {
+        console.error(`cannot delete image`, err);
+        //rollback
+        this.tours[tourIndex].stops[stopIndex].stop_content.header_image =
+          image;
+      });
+    },
+    addStopHeaderImage(tourId: number, stopId: number, image: Image) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = image;
+    },
+    getStageIndexById(tourId: number, stopId: number, stageId: string) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const stageIndex = this.tours[tourIndex].stops[
+        stopIndex
+      ].stop_content.stages.findIndex((s) => s.id === stageId);
+
+      if (stageIndex === -1) {
+        throw new Error(`Cannot find stage with id ${stageId}`);
+      }
+
+      return {
+        tourIndex,
+        stopIndex,
+        stageIndex,
+      };
+    },
+    updateTourStopStage(tourId: number, stopId: number, stage: Stage) {
+      const { tourIndex, stopIndex, stageIndex } = this.getStageIndexById(
+        tourId,
+        stopId,
+        stage.id
+      );
+      this.tours[tourIndex].stops[stopIndex].stop_content.stages[stageIndex] =
+        stage;
     },
   },
 });

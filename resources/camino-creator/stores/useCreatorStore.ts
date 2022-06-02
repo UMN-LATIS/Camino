@@ -4,7 +4,14 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { Locale } from "@/types";
-import type { Tour, Maybe, TourStop, Stage, Image } from "@/types";
+import type {
+  Tour,
+  Maybe,
+  TourStop,
+  Stage,
+  Image,
+  RecursivePartial,
+} from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
 
 interface State {
@@ -103,17 +110,17 @@ export const useCreatorStore = defineStore("creator", {
 
     async createTour(tour: Tour): Promise<Tour> {
       // update store optimisticly
-      this.tours.push(tour);
+      // this.tours.push(tour);
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",
           mergeDeepRight(createDefaultTour(), tour)
         );
+        this.tours.push(res.data);
+
         return res.data;
       } catch (err) {
         console.error(`Cannot create tour ${tour}`, err);
-        // rollback tours
-        this.tours = this.tours.filter((t) => t !== tour);
         throw err;
       }
     },
@@ -149,42 +156,21 @@ export const useCreatorStore = defineStore("creator", {
 
     async createTourStop(
       tourId: number,
-      stop: Partial<TourStop>
+      stop: RecursivePartial<TourStop>
     ): Promise<TourStop> {
       const newStop = mergeDeepRight(createDefaultStop(), stop);
-
-      // optimistic update
-      const tourIndex = this.getTourIndex(tourId);
-
-      // add stop right before last stop
-      const currentStops: TourStop[] = this.tours[tourIndex].stops;
-      const updatedStops: TourStop[] = insert(
-        currentStops.length - 2,
-        newStop,
-        currentStops
-      );
-
-      // update store
-      this.tours[tourIndex].stops = updatedStops;
 
       try {
         const res = await axios.post<TourStop>(
           `/creator/edit/${tourId}/stop/`,
           newStop
         );
-
-        // update tour cache
         this.fetchTours();
-
         return res.data;
       } catch (err) {
         console.error(`Could not create new stop in tour ${tourId}`, err);
-        // rollback changes
-        this.tours[tourIndex].stops = currentStops;
-
         // update tour cache
         this.fetchTours();
-
         throw err;
       }
     },

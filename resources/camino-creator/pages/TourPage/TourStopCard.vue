@@ -13,7 +13,11 @@
         </router-link>
       </h4>
       <div class="controls d-flex gap-1">
-        <button class="btn btn-outline-danger" @click="handleDeleteStopClick">
+        <button
+          v-if="showDelete"
+          class="btn btn-outline-danger"
+          @click="handleDeleteStopClick"
+        >
           <i class="fas fa-trash"></i> Delete
         </button>
 
@@ -45,17 +49,19 @@ interface Props {
   tourId: number;
   stop: TourStop;
   showMoveHandle?: boolean;
+  showDelete?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
   showMoveHandle: true,
+  showDelete: true,
 });
 
 const creatorStore = useCreatorStore();
 const locale = creatorStore.getDefaultTourLanguage(props.tourId);
 
-function handleDeleteStopClick(stopId) {
+function handleDeleteStopClick() {
   if (confirm("Are you sure you wish to delete this stop?")) {
-    creatorStore.deleteTourStop(props.tourId, stopId);
+    creatorStore.deleteTourStop(props.tourId, props.stop.id);
   }
 }
 </script>

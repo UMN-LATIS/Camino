@@ -32,6 +32,7 @@
         :tourId="tourId"
         :stop="firstStop"
         :showMoveHandle="false"
+        :showDelete="false"
       />
       <Draggable
         :modelValue="moveableStops"
@@ -46,10 +47,16 @@
             :tourId="tourId"
             :stop="element"
             :showMoveHandle="true"
+            :showDelete="true"
           />
         </template>
       </Draggable>
-      <TourStopCard :tourId="tourId" :stop="lastStop" :showMoveHandle="false" />
+      <TourStopCard
+        :tourId="tourId"
+        :stop="lastStop"
+        :showMoveHandle="false"
+        :showDelete="false"
+      />
     </div>
   </section>
 </template>

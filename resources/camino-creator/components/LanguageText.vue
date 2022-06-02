@@ -12,7 +12,7 @@
           </label>
           <MarkdownEditor
             v-if="largetext"
-            :modelValue="text[language]"
+            :modelValue="t(text, language)"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
             "

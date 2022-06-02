@@ -34,7 +34,7 @@
               type="text"
               class="form-control"
               :value="text[language]"
-              @input="handleTextUpdate(language, $event.target.value)"
+              @input="handleTextUpdate(language, ($event.target as HTMLInputElement).value)"
             />
           </div>
           <div class="col-sm-4">
@@ -45,34 +45,26 @@
     </template>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import MarkdownEditor from "./MarkdownEditor.vue";
+import { Locale, LocalizedText } from "@/types";
+import t from "@/shared/t";
 
-const props = defineProps({
-  languages: {
-    type: Array,
-    required: true,
-  },
-  // FIXME: text is actually a localized text object of the form
-  // { 'en': 'Hello', 'es': 'Hola' }
-  // currently it's not using two-letter locale codes.
-  text: {
-    type: Object,
-    required: true,
-  },
-  // FIXME: unclear that this is a boolean to turn this into a textarea in
-  // perhaps just make a separate textare component?
-  largetext: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  languages: Locale[];
+  text: LocalizedText;
+  largetext: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  largetext: false,
 });
 
 const emit = defineEmits(["update:text"]);
 
 const randomIdentifier = Math.round(Math.random() * 10000).toString();
 
-function handleTextUpdate(language, updatedText) {
+function handleTextUpdate(language: Locale, updatedText: string) {
   const updatedTextObj = {
     ...props.text,
     [language]: updatedText,

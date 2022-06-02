@@ -20,8 +20,8 @@
       >
         <DeepDivesSummaryItem
           :id="`deepdive-${key}`"
-          :title="t(deepdive.title, locale, '')"
-          :content="t(deepdive.text, locale, '')"
+          :title="translate(deepdive.title, locale)"
+          :content="translate(deepdive.text, locale)"
           :checked="isDeepDiveChecked(deepdive)"
           :checkboxHidden="!stage.request_email"
           @toggleChecked="(isChecked) => setChecked(deepdive, isChecked)"
@@ -63,7 +63,7 @@ import Button from "../../Button/Button.vue";
 import Input from "../../Input/Input.vue";
 import config from "../../../config";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
-import t from "@/shared/t";
+import { translate } from "@/shared/i18n";
 import type {
   DeepDiveItem,
   DeepDiveSummaryStage,

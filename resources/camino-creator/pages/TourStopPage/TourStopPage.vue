@@ -237,7 +237,6 @@ function handleImageUpload(imgSrc) {
 }
 
 function handleStageUpdate(stageId, updatedStage) {
-  console.log("stageUpdated", { stageId, updatedStage });
   if (!stop.value) {
     throw new Error(`No stop value. Cannot update stage ${stageId}`);
   }
@@ -293,37 +292,40 @@ function validate(stop) {
   return errors.value.length === 0;
 }
 
-function save() {
+async function saveAsNewStop(tourId: number, newStop: Partial<TourStop>) {
+  isSaving.value = true;
+  errors.value = [];
+  try {
+    stop.value = await creatorStore.createTourStop(props.tourId, newStop);
+    isSaving.value = false;
+    showSaveSuccessful.value = true;
+    isDirty.value = false;
+    router.replace(`/creator/${props.tourId}/edit/${stop.value.id}`);
+  } catch (err) {
+    errors.value.push(String(err));
+  }
+}
+
+async function updateStop(tourId: number, updatedStop: TourStop) {
+  isSaving.value = true;
+  errors.value = [];
+  try {
+    stop.value = await creatorStore.updateTourStop(props.tourId, updatedStop);
+    isSaving.value = false;
+    showSaveSuccessful.value = true;
+    isDirty.value = false;
+  } catch (err) {
+    errors.value.push(String(err));
+  }
+}
+
+async function save() {
+  if (!stop.value) throw new Error("cannot save null stop");
   if (!validate(stop.value)) return;
 
-  isSaving.value = true;
-
-  console.log("save", { stop: stop.value });
-  if (!props.stopId) {
-    creatorStore
-      .createTourStop(props.tourId, stop.value)
-      .then(({ payload }) => {
-        router.replace(`/creator/${props.tourId}/edit/${payload.id}`);
-        isSaving.value = false;
-        showSaveSuccessful.value = true;
-        isDirty.value = false;
-      })
-      .catch((err) => {
-        console.error(err);
-        errors.value.push(err);
-      });
-  } else {
-    creatorStore
-      .updateTourStop(props.tourId, stop.value)
-      .then(() => {
-        isSaving.value = false;
-        showSaveSuccessful.value = true;
-        isDirty.value = false;
-      })
-      .catch((err) => {
-        console.error(err);
-        errors.value.push(err);
-      });
-  }
+  // if stop id exists, then it's an update, otherwise save as new
+  return props.stopId
+    ? updateStop(props.tourId, stop.value)
+    : saveAsNewStop(props.tourId, stop.value);
 }
 </script>

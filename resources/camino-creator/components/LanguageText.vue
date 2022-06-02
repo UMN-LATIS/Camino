@@ -53,7 +53,7 @@ import t from "@/shared/t";
 interface Props {
   languages: Locale[];
   text: LocalizedText;
-  largetext: boolean;
+  largetext?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

@@ -12,7 +12,7 @@
           </label>
           <MarkdownEditor
             v-if="largetext"
-            :modelValue="t(text, language)"
+            :modelValue="translate(text, language)"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
             "
@@ -33,7 +33,7 @@
               :id="'field' + key + randomIdentifier"
               type="text"
               class="form-control"
-              :value="text[language]"
+              :value="translate(text, language)"
               @input="handleTextUpdate(language, ($event.target as HTMLInputElement).value)"
             />
           </div>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import MarkdownEditor from "./MarkdownEditor.vue";
 import { Locale, LocalizedText } from "@/types";
-import t from "@/shared/t";
+import { translate } from "@/shared/i18n";
 
 interface Props {
   languages: Locale[];

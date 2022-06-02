@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
@@ -7,13 +6,10 @@ import createDefaultTour from "../common/createDefaultTour";
 import { Tour, Maybe, TourStop, Locale, LocalizedText } from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
 
-const route = useRoute();
-
 interface State {
   tours: Tour[];
   error: Maybe<Error>;
   isReady: boolean;
-  route: RouteLocationNormalizedLoaded;
 }
 
 export const useCreatorStore = defineStore("creator", {
@@ -21,7 +17,6 @@ export const useCreatorStore = defineStore("creator", {
     tours: [],
     error: null,
     isReady: false,
-    route,
   }),
   getters: {
     getTour:
@@ -242,6 +237,7 @@ export const useCreatorStore = defineStore("creator", {
       const updatedTourStops = insert(index, stop, prevTourStops);
       this.tours[tourIndex].stops = updatedTourStops;
     },
+
     async deleteTourStop(tourId, stopId): Promise<void> {
       const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
 

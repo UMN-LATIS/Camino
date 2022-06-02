@@ -160,7 +160,7 @@ export interface Image {
 export type DateTime = Brand<string, "DateTime">;
 
 export interface TourStop {
-  id?: number;
+  id: number;
   tour_id: number;
   stop_content: {
     title: LocalizedText;

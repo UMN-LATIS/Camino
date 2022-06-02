@@ -86,8 +86,6 @@ export enum StageType {
   Separator = "separator",
   Quiz = "quiz",
 }
-
-export type UUID = Brand<string, "UUID">;
 export interface Waypoint {
   text: LocalizedText;
   altitude: Maybe<number>;
@@ -95,7 +93,7 @@ export interface Waypoint {
 }
 
 export interface Stage extends Record<string, any> {
-  id: UUID;
+  id: string; // uuid
   type: StageType;
 }
 
@@ -117,7 +115,7 @@ export interface DeepDiveSummaryStage extends Stage {
 }
 
 export interface EmbedStage extends Stage {
-  source: URL;
+  source: string;
 }
 
 export interface FeedbackStage extends Stage {
@@ -154,22 +152,21 @@ export interface QuizStage extends Stage {
 }
 export type SeparatorStage = Stage;
 
-export type URL = Brand<string, "URL">;
-
 export interface Image {
-  src: URL;
+  src: string;
   alt: string;
 }
 
 export type DateTime = Brand<string, "DateTime">;
 
 export interface TourStop {
-  id: number;
+  id?: number;
   tour_id: number;
   stop_content: {
     title: LocalizedText;
+    subtitle: LocalizedText;
     stages: Stage[];
-    header_image: Image;
+    header_image: Maybe<Image>;
   };
   sort_order: number;
   deleted_at: Maybe<DateTime>;

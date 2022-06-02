@@ -45,52 +45,62 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    imageSrc: {
-      type: String,
-      default: null,
-    },
-  },
-  emits: ["imageuploaded"],
-  data() {
-    return {
-      isUploading: false,
-      errorText: null,
-    };
-  },
-  methods: {
-    onFileChange(e) {
-      const selectedFile = e.target.files[0];
-      this.errorText = null;
-      this.isUploading = true;
+<script setup lang="ts">
+import { ref } from "vue";
+import type { Image, Maybe } from "@/types";
+import { axiosClient as axios } from "@creator/common/axios";
 
-      const formData = new FormData();
-      formData.append("image", selectedFile);
+interface Props {
+  imageSrc: Maybe<string>;
+}
+defineProps<Props>();
 
-      axios
-        .post("/creator/image/store", formData)
-        .then((response) => {
-          this.isUploading = false;
-          if (!response.data.success) {
-            console.error(`Error: ${response.data.message}`);
-            this.errorText = response.data.message;
-            return;
-          }
+interface Emits {
+  (eventName: "imageuploaded", payload: Maybe<Image>);
+}
+const emit = defineEmits<Emits>();
 
-          // this.imageUrl = `/storage/${response.data.image}`;
-          // console.log({ image: response.data.image });
-          this.$emit("imageuploaded", response.data.image);
-        })
-        .catch((error) => {
-          console.error({ error });
-          this.errorText = error.message;
-          this.isUploading = false;
-        });
-    },
-  },
-};
+const isUploading = ref<boolean>(false);
+const errorText = ref<Maybe<string>>(null);
+
+function onFileChange(e: Event) {
+  const { files } = e.target as HTMLInputElement;
+  if (!files) {
+    throw new Error(`No file list exists on target ${e.target}`);
+  }
+
+  // if the file was removed from the input
+  // we need to reset image source to null
+  if (!files.length) {
+    emit("imageuploaded", null);
+    return;
+  }
+
+  const selectedFile = files[0];
+  errorText.value = null;
+  isUploading.value = true;
+
+  const formData = new FormData();
+  formData.append("image", selectedFile);
+
+  axios
+    .post("/creator/image/store", formData)
+    .then((response) => {
+      isUploading.value = false;
+      if (!response.data.success) {
+        console.error(`Error: ${response.data.message}`);
+        errorText.value = response.data.message;
+        return;
+      }
+
+      emit("imageuploaded", response.data.image);
+    })
+    .catch((error) => {
+      console.error({ error });
+      errorText.value = error.message;
+      isUploading.value = false;
+    });
+}
 </script>
 <style scoped>
 .image-upload__preview {

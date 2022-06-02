@@ -27,70 +27,49 @@
       </form>
     </header>
 
-    <!-- <draggable v-model="tour.stops" :move="checkMove" handle=".handle"> -->
-    <div
-      v-for="stop in creatorStore.getTour(tourId).stops"
-      :key="stop.id"
-      class="card mt-2"
-    >
-      <div class="card-body d-flex justify-content-between align-items-center">
-        <h4 class="card-title">
-          <i v-if="!isLockedItem(stop)" class="fas fa-grip-vertical handle"></i>
-          <router-link
-            :to="{
-              name: 'editStop',
-              params: { tourId, stopId: stop.id },
-            }"
-          >
-            {{ stop.stop_content.title[locale] }}
-          </router-link>
-        </h4>
-        <div class="controls d-flex gap-1">
-          <button class="btn btn-outline-danger" @click="deleteStop(stop.id)">
-            <i class="fas fa-trash"></i> Delete
-          </button>
-
-          <a
-            :href="`/trekker/tours/${tourId}/stops/${stop.sort_order}`"
-            class="btn btn-outline-success"
-            target="_blank"
-            ><i class="fas fa-eye"></i>
-            <span class="d-none d-sm-inline">Preview</span>
-          </a>
-          <router-link
-            :to="{
-              name: 'editStop',
-              params: { tourId, stopId: stop.id },
-            }"
-            class="btn btn-outline-primary"
-            ><i class="fas fa-edit"></i>
-            <span class="d-none d-sm-inline">Edit</span></router-link
-          >
-        </div>
-      </div>
+    <div class="stop-list">
+      <TourStopCard
+        :tourId="tourId"
+        :stop="firstStop"
+        :showMoveHandle="false"
+      />
+      <Draggable
+        :modelValue="moveableStops"
+        itemKey="id"
+        class="stop-list__movable-stops"
+        handle=".handle"
+        ghostClass="ghost"
+        @change="handleTourStopMove"
+      >
+        <template #item="{ element }">
+          <TourStopCard
+            :tourId="tourId"
+            :stop="element"
+            :showMoveHandle="true"
+          />
+        </template>
+      </Draggable>
+      <TourStopCard :tourId="tourId" :stop="lastStop" :showMoveHandle="false" />
     </div>
-    <!-- </draggable> -->
   </section>
 </template>
-<script setup>
-import { ref } from "vue";
+<script setup lang="ts">
+import { ref, computed, nextTick } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
+import TourStopCard from "./TourStopCard.vue";
+import { Locale, type TourStop } from "@/types";
+import Draggable from "vuedraggable";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stops: {
-    type: Array,
-    required: true,
-  },
-  locale: {
-    type: String,
-    default: "English",
-  },
+interface Props {
+  tourId: number;
+  stops: TourStop[];
+  locale: Locale;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  locale: Locale.en,
 });
 
 const creatorStore = useCreatorStore();
@@ -101,26 +80,36 @@ const languages = creatorStore.getTourLanguages(props.tourId);
 const newTitle = ref(createMultilingualText(languages));
 
 function createNew() {
-  creatorStore.createTourStop(props.tourId, {
-    stop_content: {
-      title: newTitle.value,
-    },
-  });
+  creatorStore.createTourStop(props.tourId, newTitle.value);
   showCreateForm.value = false;
   newTitle.value = createMultilingualText(languages);
 }
 
-function isLockedItem(stop) {
-  return (
-    stop.sort_order === 0 ||
-    stop.sort_order ===
-      props.stops.map((s) => s.sort_order).reduce((a, b) => Math.max(a, b))
-  );
-}
+const tourStops = computed<TourStop[]>(
+  () => creatorStore.getTour(props.tourId).stops
+);
 
-function deleteStop(stopId) {
-  if (confirm("Are you sure you wish to delete this stop?")) {
-    creatorStore.deleteTourStop(props.tourId, stopId);
-  }
+const firstStop = computed<TourStop>(() => tourStops.value[0]);
+const lastStop = computed<TourStop>(
+  () => tourStops.value[tourStops.value.length - 1]
+);
+const moveableStops = computed<TourStop[]>(() =>
+  tourStops.value.filter(
+    (s) => s.id !== firstStop.value.id && s.id !== lastStop.value.id
+  )
+);
+
+const draggableKey = ref(0);
+function handleTourStopMove(event) {
+  if (!event.moved) return;
+  const { oldIndex, newIndex } = event.moved;
+
+  // old and new indices are from the movable stops
+  // array and don't account for the the static first
+  // stop. So, we need to shift the indices by 1;
+  creatorStore.moveTourStopByIndex(props.tourId, oldIndex + 1, newIndex + 1);
+
+  // force rerender
+  nextTick(() => (draggableKey.value += 1));
 }
 </script>

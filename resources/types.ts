@@ -1,3 +1,5 @@
+import { useCreatorStore } from "@creator/stores/useCreatorStore";
+
 export type Maybe<T> = T | null;
 
 /**
@@ -129,7 +131,7 @@ export interface GalleryStage extends Stage {
 export interface GuideStage extends Stage {
   text: LocalizedText;
 }
-export interface LanguageSelectorStage extends Stage {}
+export type LanguageSelectorStage = Stage;
 export interface NavigationStage extends Stage {
   text: LocalizedText;
   route: LngLat[];
@@ -150,7 +152,7 @@ export interface QuizStage extends Stage {
   hintText: LocalizedText;
   responses: QuizChoice[];
 }
-export interface SeparatorStage extends Stage {}
+export type SeparatorStage = Stage;
 
 export type URL = Brand<string, "URL">;
 
@@ -243,3 +245,5 @@ export interface FeedbackResponse {
   created_at: DateTime;
   feedback: string;
 }
+
+export type CreatorStore = ReturnType<typeof useCreatorStore>;

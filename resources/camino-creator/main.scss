@@ -25,3 +25,8 @@ a {
 a:hover:not(.btn) {
   text-decoration: underline;
 }
+
+/* Move Handle */
+.handle {
+  cursor: move;
+}

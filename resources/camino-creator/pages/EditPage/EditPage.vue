@@ -178,10 +178,6 @@ async function save() {
 </script>
 
 <style scoped>
-.handle {
-  cursor: move;
-}
-
 .col-form-label {
   font-weight: bold;
 }

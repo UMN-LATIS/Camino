@@ -1,4 +1,4 @@
-import type { LocalizedText, Locale, Maybe } from "@/types";
+import { Locale, type LocalizedText, type Maybe } from "@/types";
 
 /**
  * Given a localized text object and a locale, gets
@@ -16,11 +16,21 @@ export const getLocalizedText = (
 
 export const translate = getLocalizedText;
 
-export const makeLocalizedText = (
-  text: string,
+export const setLocalizedText = (
   locale: Locale,
+  text: string,
   localizedTextObj = {} as LocalizedText
 ): LocalizedText => ({
   ...localizedTextObj,
   [locale]: text,
 });
+
+export function createEmptyLocalizedText(locales: Locale[] = [Locale.en]) {
+  return locales.reduce(
+    (acc, locale) => ({
+      ...acc,
+      [locale]: "",
+    }),
+    {}
+  );
+}

@@ -10,7 +10,14 @@ export type Maybe<T> = T | null;
  * type USD = Brand<number, 'USD'>
  * type EUR = Brand<number, 'EUR'>
  */
-type Brand<BaseType, BrandedType> = BaseType & { __brand: BrandedType };
+export type Brand<BaseType, BrandedType> = BaseType & { __brand: BrandedType };
+
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
+
+export type PartialExcept<T, K extends keyof T> = RecursivePartial<T> &
+  Pick<T, K>;
 
 export enum Locale {
   en = "English",

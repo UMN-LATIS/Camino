@@ -78,7 +78,7 @@
 <script>
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
-import { createMultilingualText } from "./stageFactory";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 export default {
   components: {
     LanguageText,
@@ -110,7 +110,7 @@ export default {
       const updatedStage = {
         ...this.stage,
         waypoints: this.stage.waypoints.concat({
-          text: createMultilingualText(this.languages),
+          text: createEmptyLocalizedText(this.languages),
           location: null,
           altitude: null,
         }),

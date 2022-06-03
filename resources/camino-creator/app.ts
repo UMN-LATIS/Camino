@@ -7,6 +7,7 @@ import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
+import "bootstrap";
 
 import "./main.scss";
 import router from "./router";

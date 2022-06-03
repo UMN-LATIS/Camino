@@ -16,7 +16,11 @@
 
     <!-- tour needs to be created and have an id before it can be shared
      -->
-    <ShareTour v-if="tour.id" v-model:users="tour.users" :tourId="tour.id" />
+    <ShareTour
+      v-if="tour.id && tour.users"
+      v-model:users="tour.users"
+      :tourId="tour.id"
+    />
 
     <CheckboxInput
       v-model="tour.public"

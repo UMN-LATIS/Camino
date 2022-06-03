@@ -81,7 +81,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
@@ -118,10 +118,6 @@ function createNew() {
 
   newTitle.value = "";
 }
-
-onMounted(() => {
-  creatorStore.fetchTours();
-});
 </script>
 
 <style scoped>

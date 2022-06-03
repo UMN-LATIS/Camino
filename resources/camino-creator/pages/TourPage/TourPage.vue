@@ -1,7 +1,6 @@
 <template>
-  <div>
+  <div v-if="tour">
     <Error :error="error" />
-
     <TourTitleInput v-model="tour.title" />
     <SelectLanguages v-model="tour.tour_content.languages" />
     <InitialLocation
@@ -32,7 +31,7 @@
 
     <SelectCustomBaseMap
       v-model:useBaseMap="tour.tour_content.custom_base_map.use_basemap"
-      v-model:image="tour.tour_content.custom_base_map.image"
+      v-model:imageSrc="tour.tour_content.custom_base_map.image"
       v-model:upperLeftCoord="
         tour.tour_content.custom_base_map.coords.upperleft
       "
@@ -62,10 +61,14 @@
       :locale="defaultLanguage"
     />
 
-    <div v-if="errors.length > 0" class="alert alert-danger" role="alert">
+    <div
+      v-if="validationErrors.length > 0"
+      class="alert alert-danger"
+      role="alert"
+    >
       <strong>Errors</strong>
       <ul>
-        <li v-for="(err, key) in errors" :key="key">
+        <li v-for="(err, key) in validationErrors" :key="key">
           {{ err }}
         </li>
       </ul>
@@ -86,12 +89,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
 import Error from "../../components/Error.vue";
+
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "./InitialLocation.vue";
 import usePermissions from "../../hooks/usePermissions";
@@ -104,23 +108,21 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import createDefaultTour from "../../common/createDefaultTour";
+import { Locale, Maybe, Tour } from "@/types";
 
 const { userCan } = usePermissions();
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    // when creating a new tour this will be null
-    default: null,
-  },
-});
+interface Props {
+  tourId: number;
+}
 
-const error = ref(null);
+const props = defineProps<Props>();
+
 const showAlert = ref(false);
+const error = ref("");
 const creatorStore = useCreatorStore();
-const tour = ref(createDefaultTour());
-const errors = ref([]);
+const tour = ref<Maybe<Tour>>(null);
+const validationErrors = ref<string[]>([]);
 const router = useRouter();
 
 const tourURL = computed(() => {
@@ -129,50 +131,47 @@ const tourURL = computed(() => {
 });
 
 const defaultLanguage = computed(
-  () => tour.value.tour_content.languages[0] || "English"
+  () => tour.value?.tour_content.languages[0] ?? Locale.en
 );
 
 onMounted(() => {
-  if (!props.tourId) return;
-
   // load existing tour info
   tour.value = creatorStore.getTour(props.tourId);
 });
 
-function validate(tour) {
-  errors.value = [];
+function validate(tour: Tour): boolean {
+  validationErrors.value = [];
 
   if (!tour.title) {
-    errors.value.push("A title is required");
+    validationErrors.value.push("A title is required");
   }
   if (!tour.start_location) {
-    errors.value.push("A start location is required");
+    validationErrors.value.push("A start location is required");
   }
   if (tour.tour_content.languages.length === 0) {
-    errors.value.push("At least one language is required");
+    validationErrors.value.push("At least one language is required");
   }
 
-  return !errors.value.length;
+  return !validationErrors.value.length;
 }
 
-const handleError = (err) => {
-  console.error(err);
-  errors.value.push(err.message);
-};
+async function createNewTourAndGo(tour: Tour) {
+  try {
+    const newTour = await creatorStore.createTour(tour);
+    router.replace({ name: "editTour", params: { tourId: newTour.id } });
+  } catch (err) {
+    error.value = String(err);
+  }
+}
 
 async function save() {
-  if (!validate(tour.value)) return;
+  error.value = "";
+  if (!tour.value || !validate(tour.value)) return;
 
-  if (!tour.value.id) {
-    // create tour
-    const { payload } = await creatorStore
-      .createTour(tour.value)
-      .catch(handleError);
-    router.replace({ name: "editTour", params: { tourId: payload.id } });
-  } else {
-    // update tour
-    creatorStore.updateTour(tour.value).catch(handleError);
-  }
+  // create new tour if this doesn't have id yet
+  tour.value.id
+    ? createNewTourAndGo(tour.value)
+    : creatorStore.updateTour(tour.value);
   showAlert.value = true;
 }
 </script>

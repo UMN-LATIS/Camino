@@ -6,11 +6,11 @@ import { Locale, type LocalizedText, type Maybe } from "@/types";
  */
 
 export const getLocalizedText = (
-  localizedTextObj: LocalizedText,
+  localizedTextObj: Maybe<LocalizedText>,
   locale: Locale,
   defaultValue = ""
 ): string => {
-  const text: Maybe<string> = localizedTextObj[locale] ?? null;
+  const text: Maybe<string> = localizedTextObj?.[locale] ?? null;
   return text !== null ? text : defaultValue;
 };
 
@@ -19,7 +19,7 @@ export const translate = getLocalizedText;
 export const setLocalizedText = (
   locale: Locale,
   text: string,
-  localizedTextObj = {} as LocalizedText
+  localizedTextObj: Maybe<LocalizedText> = {}
 ): LocalizedText => ({
   ...localizedTextObj,
   [locale]: text,

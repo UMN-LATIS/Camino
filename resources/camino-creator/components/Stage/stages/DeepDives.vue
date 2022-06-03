@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
-import { createMultilingualText } from "./stageFactory";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 import type { DeepDiveStage, DeepDiveItem, Locale, Stage, Tour } from "@/types";
 
 interface Props {
@@ -57,8 +57,8 @@ function addDeepDive(): void {
     ...props.stage,
     deepdives: props.stage.deepdives.concat({
       id: global.crypto.randomUUID(),
-      title: createMultilingualText(props.languages),
-      text: createMultilingualText(props.languages),
+      title: createEmptyLocalizedText(props.languages),
+      text: createEmptyLocalizedText(props.languages),
     }),
   };
   emit("update", updatedStage);

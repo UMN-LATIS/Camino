@@ -1,17 +1,11 @@
-import { StageType } from "../../../../types";
-
-export function createMultilingualText(languages = ["English"]) {
-  return languages.reduce((acc, lang) => {
-    acc[lang] = "";
-    return acc;
-  }, {});
-}
+import { StageType } from "@/types";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 
 const factories = {
   [StageType.AR]: ({ languages }) => ({
     type: StageType.AR,
     id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
     waypoints: [],
   }),
 
@@ -25,19 +19,19 @@ const factories = {
     type: StageType.DeepDivesSummary,
     id: global.crypto.randomUUID(),
     request_email: true,
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
   }),
 
   [StageType.Guide]: ({ languages }) => ({
     type: StageType.Guide,
     id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
   }),
 
   [StageType.Feedback]: ({ languages }) => ({
     type: StageType.Feedback,
     id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
   }),
 
   [StageType.Gallery]: () => ({
@@ -49,7 +43,7 @@ const factories = {
   [StageType.Navigation]: ({ languages }) => ({
     type: StageType.Navigation,
     id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
     targetPoint: null,
     route: [],
   }),
@@ -57,16 +51,16 @@ const factories = {
   [StageType.Separator]: ({ languages }) => ({
     type: StageType.Separator,
     id: global.crypto.randomUUID(),
-    text: createMultilingualText(languages),
+    text: createEmptyLocalizedText(languages),
   }),
 
   [StageType.Quiz]: ({ languages }) => ({
     type: StageType.Quiz,
     id: global.crypto.randomUUID(),
-    questionText: createMultilingualText(languages),
+    questionText: createEmptyLocalizedText(languages),
     quizType: "multiple_choice",
     responses: [],
-    hintText: createMultilingualText(languages),
+    hintText: createEmptyLocalizedText(languages),
   }),
 
   // fallback for undefined types

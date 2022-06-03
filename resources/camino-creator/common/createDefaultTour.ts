@@ -1,6 +1,7 @@
-import { TOUR_STYLES } from "./constants";
+import { Tour } from "@/types";
+import { TourStyle, Locale } from "@/types";
 
-export default () => ({
+export default (): Partial<Tour> => ({
   public: false,
   active: false,
   title: "",
@@ -11,22 +12,16 @@ export default () => ({
   walking: false,
   biking: false,
   driving: false,
-  style: TOUR_STYLES.ENTIRE_TOUR,
+  style: TourStyle.EntireTour,
   tour_content: {
     use_template: true,
-    languages: ["English"],
+    languages: [Locale.en],
     custom_base_map: {
       use_basemap: false,
       image: null,
       coords: {
-        upperleft: {
-          lat: null,
-          lng: null,
-        },
-        lowerright: {
-          lat: null,
-          lng: null,
-        },
+        upperleft: null,
+        lowerright: null,
       },
     },
   },

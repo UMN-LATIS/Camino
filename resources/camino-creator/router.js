@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "./pages/HomePage.vue";
-import EditPage from "./pages/EditPage/EditPage.vue";
+import TourPage from "./pages/TourPage/TourPage.vue";
 import TourStopPage from "./pages/TourStopPage/TourStopPage.vue";
 import FeedbackViewPage from "./pages/FeedbackViewPage.vue";
 
@@ -12,12 +12,12 @@ const routes = [
   {
     path: "/creator/tours/create",
     name: "createTour",
-    component: EditPage,
+    component: TourPage,
   },
   {
     path: "/creator/tours/:tourId",
     name: "editTour",
-    component: EditPage,
+    component: TourPage,
     props: (route) => ({
       tourId: Number.parseInt(route.params.tourId, 10),
     }),

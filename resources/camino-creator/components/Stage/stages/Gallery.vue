@@ -42,7 +42,7 @@
 import LanguageText from "../../LanguageText.vue";
 import ImageUpload from "../../ImageUpload.vue";
 import { useCreatorStore } from "../../../stores/useCreatorStore";
-import { createMultilingualText } from "./stageFactory";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 
 const props = defineProps({
   stage: {
@@ -65,7 +65,7 @@ function handleAddImage() {
     ...props.stage,
     images: props.stage.images.concat({
       src: null,
-      text: createMultilingualText(languages),
+      text: createEmptyLocalizedText(languages),
     }),
   });
 }

@@ -32,6 +32,7 @@
         :tourId="tourId"
         :stop="firstStop"
         :showMoveHandle="false"
+        :showDelete="false"
       />
       <Draggable
         :modelValue="moveableStops"
@@ -46,10 +47,16 @@
             :tourId="tourId"
             :stop="element"
             :showMoveHandle="true"
+            :showDelete="true"
           />
         </template>
       </Draggable>
-      <TourStopCard :tourId="tourId" :stop="lastStop" :showMoveHandle="false" />
+      <TourStopCard
+        :tourId="tourId"
+        :stop="lastStop"
+        :showMoveHandle="false"
+        :showDelete="false"
+      />
     </div>
   </section>
 </template>
@@ -57,7 +64,7 @@
 import { ref, computed, nextTick } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
-import { createMultilingualText } from "../../components/Stage/stages/stageFactory";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 import TourStopCard from "./TourStopCard.vue";
 import { Locale, type TourStop } from "@/types";
 import Draggable from "vuedraggable";
@@ -77,12 +84,16 @@ const showCreateForm = ref(false);
 const languages = creatorStore.getTourLanguages(props.tourId);
 
 // localized titles
-const newTitle = ref(createMultilingualText(languages));
+const newTitle = ref(createEmptyLocalizedText(languages));
 
 function createNew() {
-  creatorStore.createTourStop(props.tourId, newTitle.value);
+  creatorStore.createTourStop(props.tourId, {
+    stop_content: {
+      title: newTitle.value,
+    },
+  });
   showCreateForm.value = false;
-  newTitle.value = createMultilingualText(languages);
+  newTitle.value = createEmptyLocalizedText(languages);
 }
 
 const tourStops = computed<TourStop[]>(

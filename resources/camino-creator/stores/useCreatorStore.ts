@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
-import { Tour, Maybe, TourStop, Locale, LocalizedText } from "@/types";
+import { Locale } from "@/types";
+import type {
+  Tour,
+  Maybe,
+  TourStop,
+  Stage,
+  Image,
+  RecursivePartial,
+} from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
-
-const route = useRoute();
 
 interface State {
   tours: Tour[];
   error: Maybe<Error>;
   isReady: boolean;
-  route: RouteLocationNormalizedLoaded;
 }
 
 export const useCreatorStore = defineStore("creator", {
@@ -21,7 +25,6 @@ export const useCreatorStore = defineStore("creator", {
     tours: [],
     error: null,
     isReady: false,
-    route,
   }),
   getters: {
     getTour:
@@ -107,17 +110,17 @@ export const useCreatorStore = defineStore("creator", {
 
     async createTour(tour: Tour): Promise<Tour> {
       // update store optimisticly
-      this.tours.push(tour);
+      // this.tours.push(tour);
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",
           mergeDeepRight(createDefaultTour(), tour)
         );
+        this.tours.push(res.data);
+
         return res.data;
       } catch (err) {
         console.error(`Cannot create tour ${tour}`, err);
-        // rollback tours
-        this.tours = this.tours.filter((t) => t !== tour);
         throw err;
       }
     },
@@ -153,51 +156,28 @@ export const useCreatorStore = defineStore("creator", {
 
     async createTourStop(
       tourId: number,
-      stopTitle: LocalizedText
+      stop: RecursivePartial<TourStop>
     ): Promise<TourStop> {
-      const newStop = mergeDeepRight(createDefaultStop(), {
-        stop_content: {
-          title: stopTitle,
-        },
-      });
-
-      // optimistic update
-      const tourIndex = this.getTourIndex(tourId);
-
-      // add stop right before last stop
-      const currentStops: TourStop[] = this.tours[tourIndex].stops;
-      const updatedStops: TourStop[] = insert(
-        currentStops.length - 2,
-        newStop,
-        currentStops
-      );
-
-      // update store
-      this.tours[tourIndex].stops = updatedStops;
+      const newStop = mergeDeepRight(createDefaultStop(), stop);
 
       try {
         const res = await axios.post<TourStop>(
           `/creator/edit/${tourId}/stop/`,
           newStop
         );
-
-        // update tour cache
         this.fetchTours();
-
         return res.data;
       } catch (err) {
         console.error(`Could not create new stop in tour ${tourId}`, err);
-        // rollback changes
-        this.tours[tourIndex].stops = currentStops;
-
         // update tour cache
         this.fetchTours();
-
         throw err;
       }
     },
 
     async updateTourStop(tourId: number, stop: TourStop): Promise<TourStop> {
+      if (!stop.id) throw Error("No stop id.");
+
       const { tourIndex, stopIndex } = this.getTourAndStopIndex(
         tourId,
         stop.id
@@ -242,6 +222,7 @@ export const useCreatorStore = defineStore("creator", {
       const updatedTourStops = insert(index, stop, prevTourStops);
       this.tours[tourIndex].stops = updatedTourStops;
     },
+
     async deleteTourStop(tourId, stopId): Promise<void> {
       const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
 
@@ -267,6 +248,53 @@ export const useCreatorStore = defineStore("creator", {
           );
         })
         .finally(() => this.fetchTours());
+    },
+    deleteStopHeaderImage(tourId: number, stopId: number) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const image =
+        this.tours[tourIndex].stops[stopIndex].stop_content.header_image;
+
+      // if no header image found, we're done!
+      if (!image) return;
+
+      // optimistic update
+      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = null;
+
+      axios.delete(`/creator/image/${image.src}`).catch((err) => {
+        console.error(`cannot delete image`, err);
+        //rollback
+        this.tours[tourIndex].stops[stopIndex].stop_content.header_image =
+          image;
+      });
+    },
+    addStopHeaderImage(tourId: number, stopId: number, image: Image) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = image;
+    },
+    getStageIndexById(tourId: number, stopId: number, stageId: string) {
+      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const stageIndex = this.tours[tourIndex].stops[
+        stopIndex
+      ].stop_content.stages.findIndex((s) => s.id === stageId);
+
+      if (stageIndex === -1) {
+        throw new Error(`Cannot find stage with id ${stageId}`);
+      }
+
+      return {
+        tourIndex,
+        stopIndex,
+        stageIndex,
+      };
+    },
+    updateTourStopStage(tourId: number, stopId: number, stage: Stage) {
+      const { tourIndex, stopIndex, stageIndex } = this.getStageIndexById(
+        tourId,
+        stopId,
+        stage.id
+      );
+      this.tours[tourIndex].stops[stopIndex].stop_content.stages[stageIndex] =
+        stage;
     },
   },
 });

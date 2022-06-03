@@ -6,27 +6,27 @@
         type="checkbox"
         class="form-check-input"
         :disabled="disabled"
-        @change="$emit('update:modelValue', $event.target.checked)"
+        @change="$emit('update:modelValue', ($event.target as HTMLInputElement).checked)"
       />
       {{ label }}
     </label>
     <slot />
   </div>
 </template>
-<script setup>
-defineProps({
-  modelValue: {
-    type: Boolean,
-    required: true,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  label: {
-    type: String,
-    default: "Checkbox Text",
-  },
+<script setup lang="ts">
+interface Props {
+  modelValue: boolean;
+  label: string;
+  disabled?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  disabled: false,
+  label: "Checkbox Text",
 });
-defineEmits(["update:modelValue"]);
+
+interface Emits {
+  (eventName: "update:modelValue", isChecked: boolean);
+}
+defineEmits<Emits>();
 </script>

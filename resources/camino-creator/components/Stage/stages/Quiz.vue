@@ -58,7 +58,7 @@
 <script setup>
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../LanguageText.vue";
-import { createMultilingualText } from "./stageFactory";
+import { createEmptyLocalizedText } from "@/shared/i18n";
 
 const props = defineProps({
   stage: {
@@ -87,7 +87,7 @@ function handleAddResponse() {
   emit("update", {
     ...props.stage,
     responses: props.stage.responses.concat({
-      text: createMultilingualText(languages),
+      text: createEmptyLocalizedText(languages),
       correct: false,
     }),
   });

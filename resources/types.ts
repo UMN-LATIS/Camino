@@ -10,7 +10,14 @@ export type Maybe<T> = T | null;
  * type USD = Brand<number, 'USD'>
  * type EUR = Brand<number, 'EUR'>
  */
-type Brand<BaseType, BrandedType> = BaseType & { __brand: BrandedType };
+export type Brand<BaseType, BrandedType> = BaseType & { __brand: BrandedType };
+
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};
+
+export type PartialExcept<T, K extends keyof T> = RecursivePartial<T> &
+  Pick<T, K>;
 
 export enum Locale {
   en = "English",
@@ -41,8 +48,8 @@ export interface ARWaypoint {
 export interface CustomBaseMap {
   image: Maybe<string>;
   coords: {
-    upperleft: LngLat;
-    lowerright: LngLat;
+    upperleft: Maybe<LngLat>;
+    lowerright: Maybe<LngLat>;
   };
   use_basemap: boolean;
 }
@@ -86,8 +93,6 @@ export enum StageType {
   Separator = "separator",
   Quiz = "quiz",
 }
-
-export type UUID = Brand<string, "UUID">;
 export interface Waypoint {
   text: LocalizedText;
   altitude: Maybe<number>;
@@ -95,7 +100,7 @@ export interface Waypoint {
 }
 
 export interface Stage extends Record<string, any> {
-  id: UUID;
+  id: string; // uuid
   type: StageType;
 }
 
@@ -117,7 +122,7 @@ export interface DeepDiveSummaryStage extends Stage {
 }
 
 export interface EmbedStage extends Stage {
-  source: URL;
+  source: string;
 }
 
 export interface FeedbackStage extends Stage {
@@ -154,10 +159,8 @@ export interface QuizStage extends Stage {
 }
 export type SeparatorStage = Stage;
 
-export type URL = Brand<string, "URL">;
-
 export interface Image {
-  src: URL;
+  src: string;
   alt: string;
 }
 
@@ -168,8 +171,9 @@ export interface TourStop {
   tour_id: number;
   stop_content: {
     title: LocalizedText;
+    subtitle: LocalizedText;
     stages: Stage[];
-    header_image: Image;
+    header_image: Maybe<Image>;
   };
   sort_order: number;
   deleted_at: Maybe<DateTime>;

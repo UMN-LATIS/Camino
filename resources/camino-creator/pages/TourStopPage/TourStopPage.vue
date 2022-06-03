@@ -1,7 +1,7 @@
 <template>
   <div>
     <Error :error="error" />
-    <div class="mb-2">
+    <div v-if="stop" class="mb-2">
       <div class="mb-4">
         <router-link :to="{ name: 'editTour', params: { tourId } }">{{
           tourTitle
@@ -27,18 +27,21 @@
             Subtitle
           </LanguageText>
           <ImageUpload
-            :imageSrc="stop.stop_content.header_image.src"
+            :imageSrc="stop.stop_content.header_image?.src ?? null"
             class="mb-4"
             @imageuploaded="handleImageUpload"
           />
           <button
-            v-if="stop.stop_content.header_image.src"
+            v-if="stop.stop_content.header_image"
             class="btn btn-outline-danger float-right"
             @click="removeHeaderImage"
           >
             <i class="fas fa-trash"></i> Remove Image
           </button>
-          <div v-if="stop.stop_content.header_image.src" class="form-group row">
+          <div
+            v-if="stop.stop_content.header_image?.src"
+            class="form-group row"
+          >
             <label class="col-sm-2 col-form-label" for="header-image-alt">
               Image Alt
             </label>
@@ -89,7 +92,7 @@
             <span class="d-none d-sm-inline">Back to Tour</span></router-link
           >
           <a
-            v-if="stop.id"
+            v-if="stopId"
             :href="previewLink"
             class="btn btn-outline-success"
             target="_blank"
@@ -134,10 +137,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // import draggable from "vuedraggable";
-import { mergeDeepRight } from "ramda";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
@@ -146,9 +148,8 @@ import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
-import createDefaultStop from "../../common/createDefaultStop";
 import stageFactory from "../../components/Stage/stages/stageFactory";
-import { StageType } from "../../../types";
+import { StageType, TourStop, Maybe } from "@/types";
 
 const props = defineProps({
   tourId: {
@@ -165,9 +166,8 @@ const props = defineProps({
 const creatorStore = useCreatorStore();
 const { userCan } = usePermissions();
 const isSaving = ref(false);
-const isDirty = ref(false);
 const showSaveSuccessful = ref(false);
-const errors = ref([]);
+const errors = ref<string[]>([]);
 const error = ref(null);
 const router = useRouter();
 const tourTitle = creatorStore.getTourTitle(props.tourId);
@@ -192,27 +192,22 @@ if (userCan("administer site")) {
 }
 
 const newStageType = ref(null);
-const stop = ref(createDefaultStop());
+const stop = ref<Maybe<TourStop>>(null);
+const lastSavedStopJson = ref("");
+
+function pageHasUnsavedChanges(): boolean {
+  return lastSavedStopJson.value !== JSON.stringify(stop.value);
+}
 
 onMounted(() => {
-  const currentStop = creatorStore.getTourStop(props.tourId, props.stopId);
-
-  // merge with default stop in case new props have been added to the
-  // stop since created. For example: `header_image`
-  stop.value = mergeDeepRight(stop.value, currentStop);
-});
-
-// if there are any object changes
-// mark the page as dirty to prevent
-// accidentally leaving
-watch(stop, () => {
-  isDirty.value = true;
+  stop.value = creatorStore.getTourStop(props.tourId, props.stopId);
+  lastSavedStopJson.value = JSON.stringify(stop.value);
 });
 
 onBeforeRouteLeave((to, from, next) => {
   // if we're just replacing the route during save step
   // or we haven't made any changes, carry-on...
-  if (isSaving.value || !isDirty.value) {
+  if (isSaving.value || !pageHasUnsavedChanges()) {
     return next();
   }
 
@@ -222,16 +217,28 @@ onBeforeRouteLeave((to, from, next) => {
   }
 });
 
-const previewLink = computed(
-  () => `/trekker/tours/${props.tourId}/stops/${stop.value.sort_order}`
+const previewLink = computed(() =>
+  stop.value
+    ? `/trekker/tours/${props.tourId}/stops/${stop.value.sort_order}`
+    : `/trekker/tours/${props.tourId}`
 );
 
 function handleImageUpload(imgSrc) {
-  stop.value.stop_content.header_image.src = `/storage/${imgSrc}`;
+  if (!stop.value) {
+    throw new Error(`Cannot set header image source: No loaded yet`);
+  }
+
+  creatorStore.addStopHeaderImage(props.tourId, props.stopId, {
+    src: `/storage/${imgSrc}`,
+    alt: "",
+  });
 }
 
 function handleStageUpdate(stageId, updatedStage) {
-  console.log("stageUpdated", { stageId, updatedStage });
+  if (!stop.value) {
+    throw new Error(`No stop value. Cannot update stage ${stageId}`);
+  }
+
   const stageIndex = stop.value.stop_content.stages.findIndex(
     (s) => s.id === stageId
   );
@@ -240,36 +247,38 @@ function handleStageUpdate(stageId, updatedStage) {
 }
 
 function handleDeleteStage(stageId) {
+  if (!stop.value) {
+    throw new Error(`Cannot delete stage ${stageId}. No stop value.`);
+  }
+
   stop.value.stop_content.stages = stop.value.stop_content.stages.filter(
     (s) => s.id !== stageId
   );
 }
 
 function handleAddStage() {
+  if (!stop.value) {
+    throw new Error(`Cannot add stage. No stop value.`);
+  }
+
   if (!newStageType.value) {
-    console.error("No stage type selected", newStageType.value);
-    return;
+    throw new Error("Cannot add stage. No stage type selected.");
   }
 
   const newStage = stageFactory.create(newStageType.value, {
     languages: tourLanguages,
   });
-  console.log("addStage", newStage);
+
   stop.value.stop_content.stages.push(newStage);
 }
 
 function removeHeaderImage() {
-  const image = stop.value.stop_content.header_image;
-  if (!image.src) {
-    return;
+  if (!stop.value) {
+    throw new Error(`Cannot remove header image. No stop value.`);
   }
+
   if (confirm("Are you sure you wish to delete this image?")) {
-    axios.delete("/creator/image/" + image.src).then(() => {
-      stop.value.stop_content.header_image = {
-        src: null,
-        alt: null,
-      };
-    });
+    creatorStore.deleteStopHeaderImage(props.tourId, props.stopId);
   }
 }
 
@@ -281,37 +290,40 @@ function validate(stop) {
   return errors.value.length === 0;
 }
 
-function save() {
+async function saveAsNewStop(tourId: number, newStop: Partial<TourStop>) {
+  isSaving.value = true;
+  errors.value = [];
+  try {
+    stop.value = await creatorStore.createTourStop(props.tourId, newStop);
+    lastSavedStopJson.value = JSON.stringify(stop.value);
+    isSaving.value = false;
+    showSaveSuccessful.value = true;
+    router.replace(`/creator/${props.tourId}/edit/${stop.value.id}`);
+  } catch (err) {
+    errors.value.push(String(err));
+  }
+}
+
+async function updateStop(tourId: number, updatedStop: TourStop) {
+  isSaving.value = true;
+  errors.value = [];
+  try {
+    stop.value = await creatorStore.updateTourStop(props.tourId, updatedStop);
+    lastSavedStopJson.value = JSON.stringify(stop.value);
+    isSaving.value = false;
+    showSaveSuccessful.value = true;
+  } catch (err) {
+    errors.value.push(String(err));
+  }
+}
+
+async function save() {
+  if (!stop.value) throw new Error("cannot save null stop");
   if (!validate(stop.value)) return;
 
-  isSaving.value = true;
-
-  console.log("save", { stop: stop.value });
-  if (!props.stopId) {
-    creatorStore
-      .createTourStop(props.tourId, stop.value)
-      .then(({ payload }) => {
-        router.replace(`/creator/${props.tourId}/edit/${payload.id}`);
-        isSaving.value = false;
-        showSaveSuccessful.value = true;
-        isDirty.value = false;
-      })
-      .catch((err) => {
-        console.error(err);
-        errors.value.push(err);
-      });
-  } else {
-    creatorStore
-      .updateTourStop(props.tourId, stop.value)
-      .then(() => {
-        isSaving.value = false;
-        showSaveSuccessful.value = true;
-        isDirty.value = false;
-      })
-      .catch((err) => {
-        console.error(err);
-        errors.value.push(err);
-      });
-  }
+  // if stop id exists, then it's an update, otherwise save as new
+  return props.stopId
+    ? updateStop(props.tourId, stop.value)
+    : saveAsNewStop(props.tourId, stop.value);
 }
 </script>

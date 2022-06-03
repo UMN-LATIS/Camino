@@ -48,8 +48,8 @@ export interface ARWaypoint {
 export interface CustomBaseMap {
   image: Maybe<string>;
   coords: {
-    upperleft: LngLat;
-    lowerright: LngLat;
+    upperleft: Maybe<LngLat>;
+    lowerright: Maybe<LngLat>;
   };
   use_basemap: boolean;
 }

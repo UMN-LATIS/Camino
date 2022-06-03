@@ -139,7 +139,7 @@
 
 <script setup lang="ts">
 // import draggable from "vuedraggable";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
@@ -166,7 +166,6 @@ const props = defineProps({
 const creatorStore = useCreatorStore();
 const { userCan } = usePermissions();
 const isSaving = ref(false);
-const isDirty = ref(false);
 const showSaveSuccessful = ref(false);
 const errors = ref<string[]>([]);
 const error = ref(null);
@@ -194,22 +193,21 @@ if (userCan("administer site")) {
 
 const newStageType = ref(null);
 const stop = ref<Maybe<TourStop>>(null);
+const lastSavedStopJson = ref("");
+
+function pageHasUnsavedChanges(): boolean {
+  return lastSavedStopJson.value !== JSON.stringify(stop.value);
+}
 
 onMounted(() => {
   stop.value = creatorStore.getTourStop(props.tourId, props.stopId);
-});
-
-// if there are any object changes
-// mark the page as dirty to prevent
-// accidentally leaving
-watch(stop, () => {
-  isDirty.value = true;
+  lastSavedStopJson.value = JSON.stringify(stop.value);
 });
 
 onBeforeRouteLeave((to, from, next) => {
   // if we're just replacing the route during save step
   // or we haven't made any changes, carry-on...
-  if (isSaving.value || !isDirty.value) {
+  if (isSaving.value || !pageHasUnsavedChanges()) {
     return next();
   }
 
@@ -297,9 +295,9 @@ async function saveAsNewStop(tourId: number, newStop: Partial<TourStop>) {
   errors.value = [];
   try {
     stop.value = await creatorStore.createTourStop(props.tourId, newStop);
+    lastSavedStopJson.value = JSON.stringify(stop.value);
     isSaving.value = false;
     showSaveSuccessful.value = true;
-    isDirty.value = false;
     router.replace(`/creator/${props.tourId}/edit/${stop.value.id}`);
   } catch (err) {
     errors.value.push(String(err));
@@ -311,9 +309,9 @@ async function updateStop(tourId: number, updatedStop: TourStop) {
   errors.value = [];
   try {
     stop.value = await creatorStore.updateTourStop(props.tourId, updatedStop);
+    lastSavedStopJson.value = JSON.stringify(stop.value);
     isSaving.value = false;
     showSaveSuccessful.value = true;
-    isDirty.value = false;
   } catch (err) {
     errors.value.push(String(err));
   }

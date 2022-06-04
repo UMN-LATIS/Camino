@@ -47,12 +47,12 @@
 </template>
 <script setup lang="ts">
 import MarkdownEditor from "./MarkdownEditor.vue";
-import { Locale, LocalizedText } from "@/types";
+import { Locale, LocalizedText, Maybe } from "@/types";
 import { translate } from "@/shared/i18n";
 
 interface Props {
   languages: Locale[];
-  text: LocalizedText;
+  text: Maybe<LocalizedText>;
   largetext?: boolean;
 }
 

@@ -57,19 +57,26 @@
           </div>
         </section>
 
-        <!-- <draggable v-model="stop.stop_content.stages" handle=".handle"> -->
-        <Stage
-          v-for="stage in stop.stop_content.stages"
-          :key="stage.id"
-          :stage="stage"
-          :tour="creatorStore.getTour(tourId)"
-          :stop="stop"
-          :tourId="tourId"
-          :stopId="stopId"
-          @update="(updatedStage) => handleStageUpdate(stage.id, updatedStage)"
-          @remove="handleDeleteStage(stage.id)"
-        />
-        <!-- </draggable> -->
+        <Draggable
+          v-model="stop.stop_content.stages"
+          itemKey="id"
+          handle=".handle"
+          ghostClass="ghost"
+        >
+          <template #item="{ element }">
+            <Stage
+              :stage="element"
+              :tour="creatorStore.getTour(tourId)"
+              :stop="stop"
+              :tourId="tourId"
+              :stopId="stopId"
+              @update="
+                (updatedStage) => handleStageUpdate(element.id, updatedStage)
+              "
+              @remove="handleDeleteStage(element.id)"
+            />
+          </template>
+        </Draggable>
       </div>
     </div>
 
@@ -138,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-// import draggable from "vuedraggable";
+import Draggable from "vuedraggable";
 import { ref, computed, onMounted } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";

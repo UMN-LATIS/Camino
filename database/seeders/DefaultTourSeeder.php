@@ -45,7 +45,7 @@ class DefaultTourSeeder extends Seeder
                 "English": "Start",
                 "placeholder": null
             },
-            "subtitle": {},
+            "subtitle": null,
             "stages": [
                 {
                     "type": "language"
@@ -78,7 +78,7 @@ class DefaultTourSeeder extends Seeder
                 "English": "Finish",
                 "placeholder": null
             },
-            "subtitle": {},
+            "subtitle": null,
             "stages": [
                 {
                     "text": {

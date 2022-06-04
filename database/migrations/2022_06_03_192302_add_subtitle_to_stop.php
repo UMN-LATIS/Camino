@@ -23,7 +23,7 @@ return new class extends Migration
                 // add an empty {} LocalizedText object
                 $stop->stop_content = [
                     ...$stop->stop_content,
-                    'subtitle' => new ArrayObject([]),
+                    'subtitle' => NULL,
                 ];
                 $stop->save();
             });

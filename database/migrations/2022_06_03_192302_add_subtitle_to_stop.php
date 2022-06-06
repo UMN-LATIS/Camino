@@ -14,17 +14,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('stop', function (Blueprint $table) {
+        Schema::table('stop', function () {
             Stop::all()->each(function ($stop) {
-                if (isset($stop->stop_content['subtitle'])) {
+                if (array_key_exists('subtitle', $stop->stop_content)) {
                     return;
                 }
 
-                // add an empty {} LocalizedText object
-                $stop->stop_content = [
-                    ...$stop->stop_content,
-                    'subtitle' => NULL,
-                ];
+                $stop->stop_content['subtitle'] = NULL;
                 $stop->save();
             });
         });

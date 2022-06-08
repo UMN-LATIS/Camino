@@ -9,14 +9,14 @@ class DefaultTourSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @return void`                    
+     * @return void
      */
     public function run()
     {
         $tour = \App\Tour::create([
-            'title' => 'Default Tour',
-            'active' => 0,
-            'public' => 0,
+            'title'=>'Default Tour',
+            'active'=>0,
+            'public'=>0,
             'tour_content' => json_decode('{
                 "languages": [
                     "English"
@@ -39,13 +39,12 @@ class DefaultTourSeeder extends Seeder
             }'),
             'template' => 1
         ]);
-        $stop = new \App\Stop;
+         $stop = new \App\Stop;
         $stop->stop_content = json_decode('{
             "title": {
                 "English": "Start",
                 "placeholder": null
             },
-            "subtitle": null,
             "stages": [
                 {
                     "type": "language"
@@ -78,7 +77,6 @@ class DefaultTourSeeder extends Seeder
                 "English": "Finish",
                 "placeholder": null
             },
-            "subtitle": null,
             "stages": [
                 {
                     "text": {

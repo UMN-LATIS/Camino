@@ -29,7 +29,7 @@
     "@types/leaflet": "^1.7.10",
     "@types/webpack-env": "^1.17.0",
     "@vue/compiler-sfc": "^3.2.36",
-    "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/eslint-config-typescript": "https://github.com/vuejs/eslint-config-typescript.git",
     "cross-env": "^7.0.3",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",

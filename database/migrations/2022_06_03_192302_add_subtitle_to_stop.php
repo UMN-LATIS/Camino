@@ -21,10 +21,7 @@ return new class extends Migration
                 }
 
                 // set a default null on subtitle
-                $updatedStopContent = $stop->stop_content;
-                $updatedStopContent['subtitle'] = NULL;                
-                $stop->stop_content = $updatedStopContent;
-
+                $stop->stop_content->subtitle = NULL;
                 $stop->save();
             });
         });

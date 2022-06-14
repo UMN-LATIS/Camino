@@ -1,5 +1,24 @@
 describe("My Tours Page", () => {
-  it("creates a new tour");
+  beforeEach(() => {
+    cy.refreshDatabase();
+    cy.seed();
+    cy.login({ unique_id: "admin" });
+    cy.visit("/creator");
+  });
+
+  it("shows a list of my tours", () => {
+    cy.get("#app")
+      .should("contain.text", "My Tours")
+      .should("contain.text", "Stone Arch Bridge")
+      .should("contain.text", "Chroma Zone Mural Tour");
+  });
+
+  it("creates a tour", () => {
+    cy.contains("New Tour").click();
+    cy.get("#new-title").type("Test Tour{enter}");
+    cy.get("[data-cy=tour-list]").should("contain.text", "Test Tour");
+  });
+
   it("deletes a tour");
   it("changes the tour name");
   it("sets the tour language to spanish");

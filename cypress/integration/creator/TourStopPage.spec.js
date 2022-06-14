@@ -1,11 +1,11 @@
 describe("Tour Stop Page", () => {
-  it.todo("changes the stop name");
-  it.todo("adds a stop subtitle");
-  it.todo("adds a stop image");
-  it.todo("changes the stop image");
-  it.todo("removes a stop image");
-  it.todo("edits a separator stage title");
-  it.todo("removes a stage");
-  it.todo("adds a stage");
-  it.todo("adds a stop location via the navigation stage");
+  it("changes the stop name");
+  it("adds a stop subtitle");
+  it("adds a stop image");
+  it("changes the stop image");
+  it("removes a stop image");
+  it("edits a separator stage title");
+  it("removes a stage");
+  it("adds a stage");
+  it("adds a stop location via the navigation stage");
 });

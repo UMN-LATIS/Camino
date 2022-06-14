@@ -1,4 +1,4 @@
 describe("Home Page", () => {
-  it.todo("gets the home page");
-  it.todo("finds public tours");
+  it("gets the home page");
+  it("finds public tours");
 });

@@ -1,5 +1,15 @@
 {
   "baseUrl": "http://localhost",
+  "chromeWebSecurity": false,
+  "retries": 2,
+  "defaultCommandTimeout": 5000,
+  "watchForFileChanges": true,
+  "integrationFolder": "cypress/integration",
+  "pluginsFile": "cypress/plugins/index.js",
+  "videosFolder": "cypress/videos",
+  "supportFile": "cypress/support/index.js",
+  "screenshotsFolder": "cypress/screenshots",
+  "fixturesFolder": "cypress/fixture",
   "testFiles": "**/*.{test,spec}.js",
   "video": false,
   "viewportWidth": 1920,
@@ -7,7 +17,9 @@
   "matchImageSnapshot": {
     "failureThreshold": 0.1,
     "failureThresholdType": "percent",
-    "customDiffConfig": { "threshold": 0.1 },
+    "customDiffConfig": {
+      "threshold": 0.1
+    },
     "capture": "viewport"
   }
 }

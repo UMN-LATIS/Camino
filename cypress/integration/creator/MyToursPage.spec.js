@@ -19,14 +19,13 @@ describe("My Tours Page", () => {
     cy.get("[data-cy=tour-list]").should("contain.text", "Test Tour");
   });
 
-  it("deletes a tour");
-  it("changes the tour name");
-  it("sets the tour language to spanish");
-  it("sets the starting location");
-  it("sets the tour as public");
-  it("sets the tour as active");
-  it("creates a new tour");
-  it("deletes a tour");
-  it("opens a preview link");
-  it("shows tour feedback");
+  it("deletes a tour", () => {
+    // verify that the tour exists
+    cy.contains("Stone Arch Bridge").should("exist");
+    // get the 3rd tour, "Stone Arch Bridge"
+    cy.get(":nth-child(3) > .card-body").contains("Delete").click();
+
+    // verify that the tour is deleted
+    cy.contains("Stone Arch Bridge").should("not.exist");
+  });
 });

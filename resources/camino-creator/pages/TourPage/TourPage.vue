@@ -173,7 +173,7 @@ async function save() {
   if (!tour.value || !validate(tour.value)) return;
 
   // create new tour if this doesn't have id yet
-  tour.value.id
+  !tour.value.id
     ? createNewTourAndGo(tour.value)
     : creatorStore.updateTour(tour.value);
   showAlert.value = true;

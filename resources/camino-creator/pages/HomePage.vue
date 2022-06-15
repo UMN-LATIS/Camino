@@ -30,7 +30,11 @@
     </div>
 
     <div data-cy="tour-list">
-      <div v-for="tour in toursSortedByTitle" :key="tour.id" class="card mt-2">
+      <div
+        v-for="tour in toursSortedByTitle"
+        :key="tour.id"
+        class="card mt-2 tour-list-item"
+      >
         <div
           class="card-body d-flex justify-content-between align-items-center flex-wrap"
         >

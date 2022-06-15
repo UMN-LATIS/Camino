@@ -119,7 +119,7 @@ class TourEditController extends Controller
         $this->authorize('update', $tour);
         $request = $request->all();
         $locationDirty = false;
-        if ($request["start_location"]) {
+        if (isset($request["start_location"])) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
             if ($request["start_location"] != $tour->start_location) {
                 $locationDirty = true;

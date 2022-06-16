@@ -65,7 +65,21 @@ describe("Tour Page", () => {
     cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.975876");
   });
 
-  it("sets the starting location");
+  it("sets the starting location", () => {
+    cy.contains("Set Location").click();
+
+    // expect the modal to be visible
+    cy.get("#setLocation").should("exist");
+
+    // click on a location
+    cy.get("#setLocation #map").click(100, 200);
+    cy.get("#setLocation").contains("Done").click();
+
+    // new location should be set
+    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.23723");
+    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.97858");
+  });
+
   it("sets the tour as public");
   it("sets the tour as active");
   it("creates a new tour stop");

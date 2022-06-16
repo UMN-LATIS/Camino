@@ -7,7 +7,7 @@ use App\Tour;
 use App\Stop;
 use Illuminate\Http\Request;
 use Auth;
-use App\Http\Resources\Tour as TourResource;
+use App\Http\Resources\TourResource;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TourInvite;
 
@@ -69,7 +69,7 @@ class TourEditController extends Controller
 
         $tour->load("stops");
 
-        return response()->json($tour);
+        return new TourResource($tour);
     }
 
     public function createStop(Request $request, Tour $tour)
@@ -119,7 +119,7 @@ class TourEditController extends Controller
         $this->authorize('update', $tour);
         $request = $request->all();
         $locationDirty = false;
-        if ($request["start_location"]) {
+        if (isset($request["start_location"])) {
             $request["start_location"] = new Point($request["start_location"]["lat"], $request["start_location"]["lng"]);
             if ($request["start_location"] != $tour->start_location) {
                 $locationDirty = true;

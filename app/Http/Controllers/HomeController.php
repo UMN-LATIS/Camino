@@ -8,7 +8,7 @@ use App\Tour;
 use App\Feedback;
 
 
-use App\Http\Resources\Tour as TourResource;
+use App\Http\Resources\TourResource;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\DeepDiveDigest;
 

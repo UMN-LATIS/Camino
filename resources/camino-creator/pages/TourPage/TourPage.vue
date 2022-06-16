@@ -85,7 +85,7 @@
         target="_blank"
         ><i class="fas fa-eye"></i> Preview</a
       >
-      <button class="btn btn-primary" @click="save">
+      <button class="btn btn-primary" data-cy="save-button" @click="save">
         <i class="fas fa-save"></i> Save
       </button>
       <SaveAlert v-model:show-alert="showAlert" />
@@ -173,7 +173,7 @@ async function save() {
   if (!tour.value || !validate(tour.value)) return;
 
   // create new tour if this doesn't have id yet
-  tour.value.id
+  !tour.value.id
     ? createNewTourAndGo(tour.value)
     : creatorStore.updateTour(tour.value);
   showAlert.value = true;

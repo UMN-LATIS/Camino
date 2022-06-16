@@ -29,51 +29,62 @@
       </form>
     </div>
 
-    <div v-for="tour in toursSortedByTitle" :key="tour.id" class="card mt-2">
+    <div data-cy="tour-list">
       <div
-        class="card-body d-flex justify-content-between align-items-center flex-wrap"
+        v-for="tour in toursSortedByTitle"
+        :key="tour.id"
+        class="card mt-2 tour-list-item"
       >
-        <h5 class="card-title">
-          <i v-if="tour.active" class="fas fa-check-circle me-2"></i
-          ><i v-if="tour.public" class="fas fa-globe me-2"></i>
-          <span>
-            <i v-if="tour.walking == 1" class="fas fa-walking"></i>
-            <i v-if="tour.biking == 1" class="fas fa-biking"></i>
-            <i v-if="tour.driving == 1" class="fas fa-car"></i>
-          </span>
-          <router-link :to="{ name: 'editTour', params: { tourId: tour.id } }">
-            {{ tour.title }}
-          </router-link>
-        </h5>
         <div
-          class="controls pt-2 pt-sm-0 d-flex gap-1 align-items-center justify-content-center"
+          class="card-body d-flex justify-content-between align-items-center flex-wrap"
         >
-          <router-link
-            :to="{ name: 'tourFeedback', params: { tourId: tour.id } }"
-            class="btn btn-outline-info d-flex gap-1 align-items-center justify-content-center"
-            ><i class="fas fa-comment"></i>
-            <span class="d-none d-sm-inline">Feedback</span></router-link
+          <h5 class="card-title">
+            <i v-if="tour.active" class="fas fa-check-circle me-2"></i
+            ><i v-if="tour.public" class="fas fa-globe me-2"></i>
+            <span>
+              <i v-if="tour.walking == 1" class="fas fa-walking"></i>
+              <i v-if="tour.biking == 1" class="fas fa-biking"></i>
+              <i v-if="tour.driving == 1" class="fas fa-car"></i>
+            </span>
+            <router-link
+              :to="{ name: 'editTour', params: { tourId: tour.id } }"
+            >
+              {{ tour.title }}
+            </router-link>
+          </h5>
+          <div
+            class="controls pt-2 pt-sm-0 d-flex gap-1 align-items-center justify-content-center"
           >
-          <a
-            href="#"
-            class="btn btn-outline-danger d-flex gap-1 align-items-center justify-content-center"
-            @click="handleDelete(tour.id)"
-            ><i class="fas fa-trash"></i>
-            <span class="d-none d-sm-inline">Delete</span></a
-          >
-          <a
-            :href="'/trekker/tours/' + tour.id"
-            class="btn btn-outline-success d-flex gap-1 align-items-center justify-content-center"
-            target="_blank"
-            ><i class="fas fa-eye"></i>
-            <span class="d-none d-sm-inline">Preview</span></a
-          >
-          <router-link
-            :to="{ name: 'editTour', params: { tourId: tour.id } }"
-            class="btn btn-outline-primary d-flex gap-1 align-items-center justify-content-center"
-            ><i class="fas fa-edit"></i>
-            <span class="d-none d-sm-inline">Edit</span></router-link
-          >
+            <router-link
+              :to="{
+                name: 'tourFeedback',
+                params: { tourId: tour.id },
+              }"
+              class="btn btn-outline-info d-flex gap-1 align-items-center justify-content-center"
+              ><i class="fas fa-comment"></i>
+              <span class="d-none d-sm-inline">Feedback</span>
+            </router-link>
+            <a
+              href="#"
+              class="btn btn-outline-danger d-flex gap-1 align-items-center justify-content-center"
+              @click="handleDelete(tour.id)"
+              ><i class="fas fa-trash"></i>
+              <span class="d-none d-sm-inline">Delete</span></a
+            >
+            <a
+              :href="'/trekker/tours/' + tour.id"
+              class="btn btn-outline-success d-flex gap-1 align-items-center justify-content-center"
+              target="_blank"
+              ><i class="fas fa-eye"></i>
+              <span class="d-none d-sm-inline">Preview</span></a
+            >
+            <router-link
+              :to="{ name: 'editTour', params: { tourId: tour.id } }"
+              class="btn btn-outline-primary d-flex gap-1 align-items-center justify-content-center"
+              ><i class="fas fa-edit"></i>
+              <span class="d-none d-sm-inline">Edit</span>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -124,12 +135,15 @@ function createNew() {
 .card-title {
   margin-bottom: 0px;
 }
+
 .fa-check-circle {
   color: green;
 }
+
 .fa-globe {
   color: darkblue;
 }
+
 .controls {
   white-space: nowrap;
 }

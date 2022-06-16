@@ -109,8 +109,6 @@ export const useCreatorStore = defineStore("creator", {
     },
 
     async createTour(tour: Tour): Promise<Tour> {
-      // update store optimisticly
-      // this.tours.push(tour);
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",

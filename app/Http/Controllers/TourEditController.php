@@ -69,7 +69,7 @@ class TourEditController extends Controller
 
         $tour->load("stops");
 
-        return response()->json($tour);
+        return new TourResource($tour);
     }
 
     public function createStop(Request $request, Tour $tour)

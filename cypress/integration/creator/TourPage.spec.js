@@ -57,6 +57,14 @@ describe("Tour Page", () => {
     cy.contains("Stop Title (English)").should("not.exist");
   });
 
+  it("has a default location of UMN", () => {
+    cy.get('[data-cy="tour-location-lng"]').should(
+      "contain.text",
+      "-93.234375"
+    );
+    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.975876");
+  });
+
   it("sets the starting location");
   it("sets the tour as public");
   it("sets the tour as active");

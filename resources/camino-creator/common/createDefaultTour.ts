@@ -8,8 +8,8 @@ export default (): Partial<Tour> => ({
 
   // University of Minnesota
   start_location: {
-    lng: 44.975876,
-    lat: -93.234375,
+    lat: 44.975876,
+    lng: -93.234375,
   },
   walking: false,
   biking: false,

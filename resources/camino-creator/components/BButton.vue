@@ -1,6 +1,20 @@
 <template>
-  <button class="btn btn-outline-dark">
+  <button
+    class="btn"
+    :class="{
+      'btn-outline-dark': variant === 'default',
+      'btn-dark': variant === 'primary',
+    }"
+  >
     <slot />
   </button>
 </template>
-<script setup></script>
+<script setup lang="ts">
+interface Props {
+  variant?: "primary" | "default";
+}
+
+withDefaults(defineProps<Props>(), {
+  variant: "default",
+});
+</script>

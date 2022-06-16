@@ -13,22 +13,28 @@
       title="Set Location"
       @close="isModalOpen = false"
     >
-      <div>
-        <div id="map" style="height: 70vh; width: 100%"></div>
-        <footer class="w-100">
+      <div id="map" style="height: 70vh; width: 100%" />
+      <template #footer>
+        <div
+          class="d-flex flex-direction-row-reverse gap-1 justify-content-between w-100"
+        >
+          <BButton v-if="true || locationAvailable" @click="useCurrentLocation"
+            >Use Current Location
+          </BButton>
           <BButton
-            v-if="locationAvailable"
-            class="float-left"
-            @click="useCurrentLocation"
-            >Use Current Location</BButton
-          >
-        </footer>
-      </div>
+            variant="primary"
+            data-bs-dismiss="modal"
+            @click="isModalOpen = false"
+            >Done
+          </BButton>
+        </div>
+      </template>
     </BModal>
   </div>
 </template>
 
 <script>
+/* eslint-disable @typescript-eslint/no-this-alias */
 import BButton from "./BButton.vue";
 import BModal from "./BModal.vue";
 var map;

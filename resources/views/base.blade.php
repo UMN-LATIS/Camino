@@ -166,9 +166,7 @@
 
 <script>
   window.pusherKey = '{{ env('PUSHER_APP_KEY') }}'
-</script>
-<script>
-  window.mapbox = "{{ env('MIX_MAPBOX_ACCESS_TOKEN') }}";
+  window.mapbox = "{{ config('services.mapbox') }}";
 </script>
 <script src="{{ mix('js/app.js') }}"></script>
 

@@ -7,7 +7,7 @@ use App\Tour;
 use App\Stop;
 use Illuminate\Http\Request;
 use Auth;
-use App\Http\Resources\Tour as TourResource;
+use App\Http\Resources\TourResource;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TourInvite;
 

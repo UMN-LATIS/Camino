@@ -1,5 +1,5 @@
 <template>
-  <section class="tour-stop-list my-4">
+  <section class="tour-stop-list my-4" data-cy="tour-stop-list">
     <header>
       <h3 class="mb-3">Tour Stops</h3>
 

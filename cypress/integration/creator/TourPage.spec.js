@@ -29,7 +29,34 @@ describe("Tour Page", () => {
     cy.contains("Updated").should("exist");
     cy.contains("Test Tour").should("not.exist");
   });
-  it("sets the tour language to spanish");
+
+  it("adds spanish as tour language", () => {
+    // expect the tour language to be english by default
+    cy.get('[data-cy="select-languages-input-group');
+
+    // change the tour language to spanish
+    cy.get('[data-cy="select-languages-input-group')
+      .contains("Español")
+      .click();
+
+    cy.get('[data-cy="select-languages-input-group')
+      .contains("English")
+      .click();
+
+    cy.contains("Save").click();
+
+    // expect the tour language to be spanish
+    // so there should be two fields for each stop
+    // check the first stop
+    cy.get('[data-cy="tour-stop-list"] :nth-child(1) > .card-body')
+      .contains("Edit")
+      .click();
+
+    // expect that the Stop title has beoth English and Spanish fields
+    cy.contains("Stop Title (Español)").should("exist");
+    cy.contains("Stop Title (English)").should("not.exist");
+  });
+
   it("sets the starting location");
   it("sets the tour as public");
   it("sets the tour as active");

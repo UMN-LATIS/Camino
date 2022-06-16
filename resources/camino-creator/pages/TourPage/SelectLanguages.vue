@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group row my-4">
+  <div class="form-group row my-4" data-cy="select-languages-input-group">
     <label class="col-sm-2">Languages</label>
     <div class="col-sm-10 flex-wrap flex-column language-container">
       <div v-for="(_, key) in possibleLanguages" :key="key" class="form-check">

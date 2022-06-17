@@ -35,7 +35,7 @@ jobs:
           docker-compose ps --all
 
       - name: Laravel Setup
-        run: docker-compose exec -T app ./bin/ci.sh
+        run: docker-compose exec -T laravel.test ./bin/ci.sh
 
       - name: Install JS dependencies
         run: |

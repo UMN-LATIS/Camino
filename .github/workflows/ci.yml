@@ -54,6 +54,8 @@ jobs:
           wait-on: "https://localhost"
           browser: chrome
           config: baseUrl=https://localhost
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
 
       - name: Upload test screenshots if any
         uses: actions/upload-artifact@v3

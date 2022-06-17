@@ -90,7 +90,7 @@ export default {
   computed: {
     currentLocation() {
       if (this.stop.id) {
-        const nav = this.stop.stop_content.stages.filter(
+        var nav = this.stop.stop_content.stages.filter(
           (s) => s.type == "navigation"
         );
         if (nav.length > 0 && nav[0].targetPoint) {

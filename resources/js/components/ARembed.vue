@@ -75,10 +75,10 @@ export default {
 
     cameraSettings: function () {
       if (this.simulateLocation == "true" && this.tour) {
-        const currentStopLocation = this.currentStop.stages.find(
+        var currentStopLocation = this.currentStop.stages.find(
           (elem) => elem.type == "navigation"
         );
-        let startLocation = this.tour.start_location;
+        var startLocation = this.tour.start_location;
         if (currentStopLocation) {
           startLocation = currentStopLocation.targetPoint;
         }
@@ -110,28 +110,28 @@ export default {
       return this.getSizeForPoint(waypoint) / 1.5;
     },
     getTextHeight(waypoint) {
-      const distance = this.getDistanceFromWaypoint(waypoint);
+      var distance = this.getDistanceFromWaypoint(waypoint);
       return Math.pow(Math.log(distance), 2) * 1.5;
     },
     getDistanceFromWaypoint(waypoint) {
-      const nav = this.currentStop.stages.find(
+      var nav = this.currentStop.stages.find(
         (elem) => elem.type == "navigation"
       );
       if (!nav) {
         return 2000;
       }
-      const stageLocation = nav.targetPoint;
+      var stageLocation = nav.targetPoint;
 
-      const a = waypoint.location.lat - stageLocation.lat;
-      const b = waypoint.location.lng - stageLocation.lng;
-      const distance = Math.sqrt(a * a + b * b) * 111139; //meters per degree
+      var a = waypoint.location.lat - stageLocation.lat;
+      var b = waypoint.location.lng - stageLocation.lng;
+      var distance = Math.sqrt(a * a + b * b) * 111139; //meters per degree
       return distance;
     },
     getScaledDistanceFromWaypoint(waypoint) {
       return Math.pow(Math.log(this.getDistanceFromWaypoint(waypoint)), 2);
     },
     getSizeForPoint(waypoint) {
-      const scaledDistance = this.getScaledDistanceFromWaypoint(waypoint);
+      var scaledDistance = this.getScaledDistanceFromWaypoint(waypoint);
       return scaledDistance * waypoint.text[this.locale].length;
     },
   },

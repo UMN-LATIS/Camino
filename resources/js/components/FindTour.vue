@@ -30,9 +30,9 @@
 </template>
 
 <script>
-let map;
-let lc;
-let markerGroup;
+var map;
+var lc;
+var markerGroup;
 export default {
   data() {
     return {
@@ -61,8 +61,8 @@ export default {
   },
   methods: {
     updateMarkers: function () {
-      const markers = [];
-      let otherLocation = null;
+      var markers = [];
+      var otherLocation = null;
       this.tours
         .filter((tour) => {
           return (
@@ -72,7 +72,7 @@ export default {
           );
         })
         .forEach((targetPoint) => {
-          const myIcon = L.icon({
+          var myIcon = L.icon({
             // iconSize: [38, 95],
             iconAnchor: [12, 40],
             popupAnchor: [0, -30],
@@ -89,7 +89,7 @@ export default {
             }
           );
 
-          let iconAppend = "";
+          var iconAppend = "";
           if (targetPoint.transport_type == 0) {
             iconAppend = '<i class="fas fa-walking me-2"></i>';
           } else if (targetPoint.transport_type == 1) {
@@ -129,7 +129,7 @@ export default {
         tap: false,
       });
 
-      const streets = L.tileLayer(
+      var streets = L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
         {
           // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -138,7 +138,7 @@ export default {
           accessToken: window.mapbox,
         }
       ).addTo(map);
-      const satellite = L.tileLayer(
+      var satellite = L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
         {
           // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -147,7 +147,7 @@ export default {
           accessToken: window.mapbox,
         }
       );
-      const baseMaps = {
+      var baseMaps = {
         Streets: streets,
         Satellite: satellite,
       };

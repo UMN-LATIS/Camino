@@ -73,7 +73,7 @@
     >
       <strong>Errors</strong>
       <ul>
-        <li v-for="(err, key) in validationErrors" :key="(key as number)">
+        <li v-for="(err, key) in validationErrors" :key="key">
           {{ err }}
         </li>
       </ul>

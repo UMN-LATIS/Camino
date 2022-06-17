@@ -26,8 +26,8 @@ jobs:
 
       - name: make test certs
         run: |
-          echo "${{ secrets.TEST_CERT_PEM }}" > .cert/cert.pem
-          echo "${{ secrets.TEST_KEY_PEM }}" > .cert/key.pem
+          echo "${{ secrets.TEST_CERT_PEM_BASE64 }}" | base64 -d > .cert/cert.pem
+          echo "${{ secrets.TEST_KEY_PEM_BASE64 }}" | base64 -d > .cert/key.pem
 
       - name: Build
         run: docker-compose build
@@ -75,3 +75,18 @@ jobs:
         with:
           name: cypress-snapshots
           path: cypress/snapshots
+
+      - name: Collect docker logs on failure
+        if: failure()
+        uses: jwalton/gh-docker-logs@v1
+        with:
+          dest: "./logs"
+      - name: Tar logs
+        if: failure()
+        run: tar cvzf ./logs.tgz ./logs
+      - name: Upload logs to GitHub
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: logs.tgz
+          path: ./logs.tgz

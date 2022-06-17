@@ -34,13 +34,13 @@ jobs:
         run: |
           docker-compose ps --all
 
-      - name: Laravel Setup
-        run: docker-compose exec -T laravel.test ./bin/ci.sh
-
       - name: Install JS dependencies
         run: |
           yarn --frozen-lockfile
           yarn prod
+
+      - name: Laravel Setup
+        run: docker-compose exec -T laravel.test ./bin/ci.sh
 
       - name: Lint code
         run: yarn lint

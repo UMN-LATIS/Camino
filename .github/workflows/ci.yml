@@ -51,9 +51,9 @@ jobs:
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v2
         with:
-          wait-on: "http://localhost"
+          wait-on: "https://localhost"
           browser: chrome
-          config: baseUrl=http://localhost
+          config: baseUrl=https://localhost
 
       - name: Upload test screenshots if any
         uses: actions/upload-artifact@v3

@@ -24,6 +24,9 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
 
+      - name: generate certs
+        run: npm run cert
+
       - name: Build
         run: docker-compose build
 

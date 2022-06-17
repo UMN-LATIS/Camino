@@ -5,6 +5,7 @@ on: [push, pull_request]
 env:
   WWWGROUP: 1000
   WWWUSER: 1000
+  MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
 jobs:
   tests:

@@ -35,9 +35,10 @@ jobs:
       - name: Start
         run: docker-compose up -d
 
-      - name: Check
+      - name: Check that all services are up
         run: |
           docker-compose ps --all
+          [ $(docker-compose ps -aq --filter  status=exited) ] && exit 1
 
       - name: Install JS dependencies
         run: |

@@ -30,15 +30,16 @@ jobs:
           echo "${{ secrets.TEST_KEY_PEM_BASE64 }}" | base64 -d > .cert/key.pem
 
       - name: Build
-        run: docker-compose build
+        run: docker compose build
 
       - name: Start
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Check that all services are up
         run: |
-          docker-compose ps --all
-          [ $(docker-compose ps -aq --filter  status=exited) ] && exit 1
+          docker compose version
+          docker compose ps --all
+          [ $(docker compose ps -aq --filter  status=exited) ] && exit 1
 
       - name: Install JS dependencies
         run: |
@@ -46,7 +47,7 @@ jobs:
           npm run prod
 
       - name: Laravel Setup
-        run: docker-compose exec -T laravel.test ./bin/ci.sh
+        run: docker compose exec -T laravel.test ./bin/ci.sh
 
       # - name: Lint code
       #   run: npm run lint

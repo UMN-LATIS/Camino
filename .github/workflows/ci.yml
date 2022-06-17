@@ -36,17 +36,17 @@ jobs:
 
       - name: Install JS dependencies
         run: |
-          yarn --frozen-lockfile
-          yarn prod
+          npm ci
+          npm run prod
 
       - name: Laravel Setup
         run: docker-compose exec -T laravel.test ./bin/ci.sh
 
       - name: Lint code
-        run: yarn lint
+        run: npm run lint
 
       - name: Run unit tests with Jest
-        run: yarn jest
+        run: npm run jest
 
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v2

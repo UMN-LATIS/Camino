@@ -24,9 +24,6 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
 
-      - name: generate certs
-        run: npm run cert
-
       - name: Build
         run: docker-compose build
 
@@ -54,9 +51,9 @@ jobs:
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v2
         with:
-          wait-on: "https://localhost"
+          wait-on: "http://localhost:8000"
           browser: chrome
-          config: baseUrl=https://localhost
+          config: baseUrl=http://localhost:8000
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
 

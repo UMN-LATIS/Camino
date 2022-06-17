@@ -40,7 +40,8 @@ jobs:
         run: |
           docker compose version
           docker compose ps --all
-          [ $(docker compose ps -aq --filter  status=exited) ] && exit 1
+          docker compose ps -aq --filter status=exited
+          [ $(docker compose ps -aq --filter status=exited) ] && exit 1
 
       - name: Install JS dependencies
         run: |

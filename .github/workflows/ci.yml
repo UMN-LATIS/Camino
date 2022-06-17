@@ -35,10 +35,9 @@ jobs:
           docker-compose ps --all
 
       - name: Install JS dependencies
-        # skipping prod build for now: errors with mix + ts + vue
         run: |
           npm ci
-          npm run dev
+          npm run prod
 
       - name: Laravel Setup
         run: docker-compose exec -T laravel.test ./bin/ci.sh

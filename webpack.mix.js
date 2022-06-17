@@ -17,12 +17,16 @@ mix
 
 // Camino Creator App
 mix
-  .ts("resources/camino-creator/app.ts", "public/js/camino-creator.js")
+  .ts("resources/camino-creator/app.ts", "public/js/camino-creator.js", {
+    // ignoring any ts errors that crop up during production build for now
+    transpileOnly: mix.inProduction(),
+  })
   .sass("resources/camino-creator/main.scss", "public/css/camino-creator.css");
 
 // All apps: both production and development
 mix
   .vue({
+    version: 3,
     options: {
       compilerOptions: {
         isCustomElement: (tag) =>

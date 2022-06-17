@@ -24,7 +24,7 @@ jobs:
       - name: Laravel Setup
         run: |
           composer install --no-interaction --prefer-dist --ignore-platform-reqs
-           docker-compose exec -T app ./bin/ci.sh
+          docker-compose exec -T app ./bin/ci.sh
 
       - name: Build
         run: docker-compose build

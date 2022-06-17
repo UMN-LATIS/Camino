@@ -9,4 +9,4 @@ chmod -R 777 ./storage
 chmod -R 777 ./bootstrap/cache
 php artisan config:clear
 
- php artisan migrate:fresh --seed
+php artisan migrate:fresh --seed

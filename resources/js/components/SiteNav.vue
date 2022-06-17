@@ -21,6 +21,6 @@
 
 <script>
 export default {
-  props: ["current-route"],
+  props: ["currentRoute"],
 };
 </script>

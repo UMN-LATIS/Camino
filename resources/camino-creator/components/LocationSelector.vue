@@ -37,13 +37,13 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import BButton from "./BButton.vue";
 import BModal from "./BModal.vue";
-var map;
-var lc;
-var targetLocationCssIcon = null;
-var otherLocationsCssIcon = null;
-var marker;
-var polyline;
-var otherMarkerGroup;
+let map;
+let lc;
+let targetLocationCssIcon = null;
+let otherLocationsCssIcon = null;
+let marker;
+let polyline;
+let otherMarkerGroup;
 
 export default {
   components: {
@@ -81,7 +81,7 @@ export default {
       }
       // a route with less than two points is obviously invalid, just rebuild it
       if (!this.route || this.route.length < 2) {
-        var previousStop = null;
+        let previousStop = null;
         if (!this.stop.id) {
           // this is a new stop, we know it's at the end
           if (this.tour.stops.length >= 2) {
@@ -99,20 +99,20 @@ export default {
           return;
         }
 
-        var targetNav = previousStop.stop_content.stages.filter((stage) => {
+        const targetNav = previousStop.stop_content.stages.filter((stage) => {
           return stage.type == "navigation";
         });
         if (targetNav.length == 0) {
           this.$emit("update:route", []);
           return;
         }
-        var previousTarget = targetNav[0].targetPoint;
+        const previousTarget = targetNav[0].targetPoint;
 
-        var route = [previousTarget, this.location];
+        const route = [previousTarget, this.location];
         console.log(route);
         this.$emit("update:route", route);
       } else {
-        var oldRoute = this.route;
+        const oldRoute = this.route;
         oldRoute.pop();
         oldRoute.push(this.location);
         this.$emit("update:route", oldRoute);
@@ -132,7 +132,7 @@ export default {
       if (!this.tour) {
         return [];
       }
-      var targetPoints = this.tour.stops
+      const targetPoints = this.tour.stops
         .map((stop) => stop.stop_content.stages)
         .map((stages) => {
           return stages.filter((stage) => stage.type == "navigation");
@@ -181,15 +181,15 @@ export default {
       marker.addTo(map);
     },
     drawOtherPoints: function () {
-      var targetNavs = this.allLocations();
+      const targetNavs = this.allLocations();
       otherLocationsCssIcon = L.divIcon({
         // Specify a class name we can refer to in CSS.
         className: "other-css-icon css-icon",
         html: '<div class="other_ring"></div>',
         iconSize: [15, 15],
       });
-      var otherLocation = null;
-      var otherLocations = [];
+      let otherLocation = null;
+      const otherLocations = [];
       targetNavs.forEach((targetPoint) => {
         if (
           targetPoint.targetPoint != this.location &&
@@ -211,12 +211,12 @@ export default {
       otherMarkerGroup.addTo(map);
     },
     drawWalkingPath: function () {
-      var targetNavs = this.allLocations();
-      var localPolyline;
-      var decorator;
-      var decorator2;
-      var layerGroupItems = [];
-      var previousPoint = null;
+      const targetNavs = this.allLocations();
+      let localPolyline;
+      let decorator;
+      let decorator2;
+      const layerGroupItems = [];
+      let previousPoint = null;
 
       if (this.location && (!this.stop || !this.stop.id)) {
         targetNavs.push({ targetPoint: this.location, route: this.route });
@@ -287,7 +287,7 @@ export default {
       }).fitWorld();
 
       if (this.basemap.use_basemap) {
-        var imageUrl = "/storage/" + this.basemap.image,
+        const imageUrl = "/storage/" + this.basemap.image,
           imageBounds = [
             [
               this.basemap.coords.upperleft.lat,
@@ -300,7 +300,7 @@ export default {
           ];
         L.imageOverlay(imageUrl, imageBounds).addTo(map);
       } else {
-        var streets = L.tileLayer(
+        const streets = L.tileLayer(
           "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
           {
             // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -309,7 +309,7 @@ export default {
             accessToken: window.mapbox,
           }
         ).addTo(map);
-        var satellite = L.tileLayer(
+        const satellite = L.tileLayer(
           "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
           {
             // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -318,14 +318,14 @@ export default {
             accessToken: window.mapbox,
           }
         );
-        var baseMaps = {
+        const baseMaps = {
           Streets: streets,
           Satellite: satellite,
         };
         L.control.layers(baseMaps).addTo(map);
       }
 
-      var self = this;
+      const self = this;
 
       function onLocationFound(e) {
         self.currentLocation = e.latlng;

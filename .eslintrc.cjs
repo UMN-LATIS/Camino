@@ -50,7 +50,6 @@ module.exports = {
       },
     ],
   },
-  ignorePatterns: ["**/vendor/**/*.js", "**/public/**/*.js"],
   globals: {
     axios: true,
     Echo: true,

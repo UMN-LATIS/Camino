@@ -99,7 +99,7 @@ export interface Waypoint {
   location: LngLat;
 }
 
-export interface Stage extends Record<string, any> {
+export interface Stage extends Record<string, unknown> {
   id: string; // uuid
   type: StageType;
 }

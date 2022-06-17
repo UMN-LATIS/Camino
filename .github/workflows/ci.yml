@@ -1,0 +1,68 @@
+name: CI
+
+on: [push, pull_request]
+
+env:
+  WWWGROUP: 1000
+  WWWUSER: 1000
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: cp .env.example .env
+
+      - name: Setup PHP 8.1 to match server
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+
+      - name: Laravel Setup
+        run: |
+          composer install --no-interaction --prefer-dist --ignore-platform-reqs
+           docker-compose exec -T app ./bin/ci.sh
+
+      - name: Build
+        run: docker-compose build
+
+      - name: Start
+        run: docker-compose up -d
+
+      - name: Check
+        run: |
+          docker-compose ps --all
+
+      - name: Install NPM deps
+        run: |
+          yarn --frozen-lockfile
+          yarn prod
+
+      - name: Lint code
+        run: yarn lint
+
+      - name: Run unit tests with Jest
+        run: yarn jest
+
+      - name: Run E2E tests with Cypress
+        uses: cypress-io/github-action@v2
+        with:
+          wait-on: "http://localhost"
+          browser: chrome
+          config: baseUrl=http://localhost
+
+      - name: Upload test screenshots if any
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload snapshots
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: cypress-snapshots
+          path: cypress/snapshots

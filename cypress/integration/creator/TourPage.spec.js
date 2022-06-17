@@ -80,8 +80,49 @@ describe("Tour Page", () => {
     cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.97858");
   });
 
-  it("sets the tour as public");
-  it("sets the tour as active");
+  it("sets the tour as active and public", () => {
+    // verify that test tour is not active or public
+    cy.visit("/creator/");
+    // look for active icon
+    cy.get(":nth-child(4) > .card-body")
+      .find(".fa-check-circle")
+      .should("not.exist");
+    // look for public icon
+    cy.get(":nth-child(4) > .card-body").find(".fa-globe").should("not.exist");
+
+    // public tour should be listed public
+    cy.visit("/findTours");
+    cy.contains("Test Tour").should("not.exist");
+
+    // should only be able to do this if admin
+    // TODO: test that this doesn't happen for normal users
+    cy.visit("/creator/tours/4");
+
+    cy.contains("Active").click();
+    cy.contains("Public").click();
+    cy.contains("Save").click();
+
+    // tour should be accessible using the active URL
+    cy.get('[data-cy="active-tour-url"]')
+      .should("contain", "/trekker/tours/4")
+      .click();
+    cy.url().should("include", "/trekker/tours/4");
+    cy.contains("Test Tour");
+
+    // on the my tours page, the tour should be marked as active and public
+    cy.visit("/creator/");
+    // look for active icon
+    cy.get(":nth-child(4) > .card-body")
+      .find(".fa-check-circle")
+      .should("exist");
+    // look for public icon
+    cy.get(":nth-child(4) > .card-body").find(".fa-globe").should("exist");
+
+    // public tour should be listed public
+    cy.visit("/findTours");
+    cy.contains("Test Tour").should("exist");
+  });
+
   it("creates a new tour stop");
   it("deletes a tour stop");
   it("reorders a tour stop");

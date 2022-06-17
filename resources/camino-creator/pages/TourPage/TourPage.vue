@@ -52,7 +52,8 @@
     <CheckboxInput v-model="tour.active" label="Active">
       <div v-if="tour.active" id="activeHelpId" class="form-text">
         <p>
-          Tour URL: <a :href="tourURL">{{ tourURL }}</a>
+          Tour URL:
+          <a :href="tourURL" data-cy="active-tour-url">{{ tourURL }}</a>
         </p>
         <p><QrCode :size="120" :value="tourURL" /></p>
       </div>

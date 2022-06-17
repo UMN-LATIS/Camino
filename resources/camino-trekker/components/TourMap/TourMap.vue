@@ -36,8 +36,8 @@
       <MapMarker
         v-for="(stopPoint, i) in allStopPointsRef"
         :key="i"
-        :lng="stopPoint.lng"
-        :lat="stopPoint.lat"
+        :lng="stopPoint?.lng ?? tour.start_location?.lng"
+        :lat="stopPoint?.lat ?? tour.start_location?.lat"
         :color="getStopColor(i)"
       >
         <MapPopup>
@@ -134,7 +134,7 @@ if (props.type === "stop") {
     allStopPointsRef.value,
     allStopRoutesRef.value
   );
-  boundsRef.value = getBoundingBox(stopPoints);
+  boundsRef.value = getBoundingBox(stopPoints.filter(Boolean));
   centerRef.value = getCenterOfBoundingBox(boundsRef.value);
   zoomRef.value = 16;
 }
@@ -164,6 +164,7 @@ watch(stopIndex, () => {
   display: flex;
   justify-content: flex-end;
 }
+
 .button-bar__button {
   border: 0;
   outline: 0;
@@ -183,6 +184,7 @@ watch(stopIndex, () => {
   background: none;
   color: var(--black);
 }
+
 .button-bar__button--is-active {
   color: var(--black);
 }
@@ -191,6 +193,7 @@ watch(stopIndex, () => {
   text-align: right;
   margin-top: 0.5rem;
 }
+
 .map-popup__link {
   display: inline-flex;
   border: none;
@@ -207,6 +210,7 @@ watch(stopIndex, () => {
   background: var(--black);
   color: var(--white);
 }
+
 .map-popup__link .material-icons {
   font-size: 1.25rem;
 }
@@ -226,6 +230,7 @@ watch(stopIndex, () => {
   justify-content: center;
   align-items: center;
 }
+
 .map-popup__stop-number-container {
   text-align: left;
 }
@@ -233,9 +238,11 @@ watch(stopIndex, () => {
 .tour-map--dark .button-bar__button {
   color: var(--gray-dark);
 }
+
 .tour-map--dark .button-bar__button--is-active {
   color: var(--gray-light);
 }
+
 .map-sheet__map-container {
   border-radius: 0.5rem;
   border: 1px solid var(--gray-light);

@@ -1,5 +1,5 @@
 <template>
-  <section class="tour-stop-list my-4">
+  <section class="tour-stop-list my-4" data-cy="tour-stop-list">
     <header>
       <h3 class="mb-3">Tour Stops</h3>
 
@@ -13,6 +13,7 @@
       <form
         v-if="showCreateForm"
         class="p-2 bg-body bg-gradient shadow-sm p-3 mb-3 rounded"
+        data-cy="add-stop-form"
         @submit.prevent="createNew"
       >
         <LanguageText
@@ -27,7 +28,7 @@
       </form>
     </header>
 
-    <div class="stop-list">
+    <div class="stop-list" data-cy="stop-list">
       <TourStopCard
         :tourId="tourId"
         :stop="firstStop"

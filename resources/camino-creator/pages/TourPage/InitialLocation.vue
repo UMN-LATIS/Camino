@@ -3,8 +3,14 @@
     <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
     <div class="col-sm-6">
       <div v-if="modelValue">
-        <b>Latitude:</b> {{ modelValue.lat }}, <b>Longitude:</b>
-        {{ modelValue.lng }}
+        <b>Latitude:</b>
+        <span data-cy="tour-location-lat">
+          {{ modelValue.lat }} </span
+        >,
+        <b>Longitude:</b>
+        <span data-cy="tour-location-lng">
+          {{ modelValue.lng }}
+        </span>
       </div>
       <LocationSelector
         :basemap="basemap"

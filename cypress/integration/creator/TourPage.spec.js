@@ -123,7 +123,12 @@ describe("Tour Page", () => {
     cy.contains("Test Tour").should("exist");
   });
 
-  it("creates a new tour stop");
+  it("creates a new tour stop", () => {
+    cy.contains("New Stop").click();
+    cy.get('[data-cy="add-stop-form"] input').type("Test Stop{enter}");
+    // it should be added before the last stop
+    cy.get('[data-cy="stop-list"] :nth-child(2)').contains("Test Stop");
+  });
   it("deletes a tour stop");
   it("reorders a tour stop");
 });

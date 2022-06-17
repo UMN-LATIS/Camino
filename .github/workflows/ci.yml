@@ -42,8 +42,8 @@ jobs:
       - name: Laravel Setup
         run: docker-compose exec -T laravel.test ./bin/ci.sh
 
-      - name: Lint code
-        run: npm run lint
+      # - name: Lint code
+      #   run: npm run lint
 
       - name: Run unit tests with Jest
         run: npm run jest

@@ -26,6 +26,7 @@ jobs:
 
       - name: make test certs
         run: |
+          mkdir .cert
           echo "${{ secrets.TEST_CERT_PEM_BASE64 }}" | base64 -d > .cert/cert.pem
           echo "${{ secrets.TEST_KEY_PEM_BASE64 }}" | base64 -d > .cert/key.pem
 

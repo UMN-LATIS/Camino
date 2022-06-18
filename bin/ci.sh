@@ -10,6 +10,3 @@ chmod -R 777 ./bootstrap/cache
 php artisan config:clear
 
 php artisan migrate:fresh --seed
-
-# Fix Ownership
-chown -R 1000:1000 storage

@@ -47,7 +47,7 @@ jobs:
       #   run: npm run lint
 
       - name: Run unit tests with Jest
-        run: npm run jest
+        run: yarn jest
 
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v2

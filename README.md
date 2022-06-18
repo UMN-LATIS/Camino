@@ -6,11 +6,19 @@
 
 ## Set Up
 
-Camino uses Laravel's docker environment, [Laravel Sail](https://laravel.com/docs/8.x/sail) for development. To get sarted:
+Camino uses Laravel's docker environment, [Laravel Sail](https://laravel.com/docs/8.x/sail) for development.
+
+You will also need certs for your local dev environment. Recommended install: [mkcert](https://github.com/FiloSottile/mkcert).
+
+To get started:
 
 ```sh
 # Create a .env file
 cp .env.example .env
+
+# Set up local certs with `mkcert`
+# Run `mkcert -install` first if this is your first time using mkcert
+yarn cert
 
 # Instal php deps
 docker run --rm \
@@ -21,11 +29,8 @@ docker run --rm \
     composer install --ignore-platform-reqs
 
 # Build docker image
+# Assuming you have `sail` aliased to `./vendor/bin/sail`
 sail build --no-cache
-
-# Create SSL Certs
-# You may need to tweak the script in package.json to get your localip address
-npm run cert
 
 # Start Sail
 sail up
@@ -37,26 +42,16 @@ sail exec laravel.test ./bin/ci.sh
 sail artisan migrate:fresh --seed
 
 # Install node modules
-npm ci
+yarn
 
-# Start Laravel Mix to compile Vue
-npm run hot
+# Start in watch or hot module replacement mode
+yarn hot
 
 ```
-
-The application will be running on <https://localhost>.
 
 ## Using the Application
 
-```sh
-sail up
-npm run watch
-
-# For Hot Module Replacement (HMR), do:
-# yarn run dev && yarn run hot
-```
-
-Load <http://localhost> in your browser.
+Go to <https://localhost> in your browser.
 
 Login with:
 

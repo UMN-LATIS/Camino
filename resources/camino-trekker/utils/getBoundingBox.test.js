@@ -1,4 +1,4 @@
-import getBoundingBoxFromRoute from "./getBoundingBoxFromRoute";
+import getBoundingBox from "./getBoundingBox";
 
 describe("getBoundingBoxFromRoute", () => {
   it("creates a routes bounding box", () => {
@@ -8,7 +8,7 @@ describe("getBoundingBoxFromRoute", () => {
       { lng: 23, lat: 0 },
       { lng: 7, lat: -3 },
     ];
-    expect(getBoundingBoxFromRoute(route)).toEqual([
+    expect(getBoundingBox(route)).toEqual([
       [-4.0, -3],
       [23, 5.0],
     ]);

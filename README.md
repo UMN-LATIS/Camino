@@ -1,8 +1,8 @@
 # Camino
 
-> Create and share media-rich educational tours
-
 [![CI](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml/badge.svg)](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml)
+
+> Create and share media-rich educational tours
 
 ## Set Up
 

@@ -13,4 +13,3 @@ php artisan migrate:fresh --seed
 
 # Fix Ownership
 chown -R 1000:1000 storage
-chown -R 1000:1000 bootstrap/cache

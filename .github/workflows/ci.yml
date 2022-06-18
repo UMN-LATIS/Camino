@@ -34,9 +34,6 @@ jobs:
       - name: Start Docker Containers
         run: docker compose up -d
 
-      - name: Check that all services are up
-        run: ./bin/check-services.sh
-
       - name: Install JS dependencies
         run: yarn && yarn prod
 

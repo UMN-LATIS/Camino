@@ -14,7 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - run: cp .env.example .env
+      - name: Create .env file
+        run: cp .env.example .env
+
+      - name: Make test certs
+        run: ./bin/make-test-certs.sh
 
       - name: Setup PHP 8.1 to match server
         uses: shivammathur/setup-php@v2
@@ -24,28 +28,19 @@ jobs:
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
 
-      - name: make test certs
-        run: |
-          mkdir .cert
-          echo "${{ secrets.TEST_CERT_PEM_BASE64 }}" | base64 -d > .cert/cert.pem
-          echo "${{ secrets.TEST_KEY_PEM_BASE64 }}" | base64 -d > .cert/key.pem
-
-      - name: Build
+      - name: Build Docker Image
         run: docker compose build
 
-      - name: Start
+      - name: Start Docker Containers
         run: docker compose up -d
 
       - name: Check that all services are up
-        run: |
-          docker compose ps --all
-          docker compose ps -aq --filter status=exited
-          if [[ $(docker compose ps -aq --filter status=exited) ]]; then exit 1; else exit 0; fi
+        run: ./bin/check-services.sh
 
       - name: Install JS dependencies
         run: yarn && yarn prod
 
-      - name: Laravel Setup
+      - name: Setup Laravel
         run: docker compose exec -T laravel.test ./bin/ci.sh
 
       # - name: Lint code

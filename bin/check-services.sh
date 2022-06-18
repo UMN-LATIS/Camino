@@ -4,6 +4,6 @@ echo "Checking services..."
 docker compose ps --all
 
 if [[ $(docker compose ps -aq --filter status=exited) ]]; then 
-  err "Error: Some services are not running."
+  echo "Error: Some services are not running." 1>&2
   exit 1;
 fi

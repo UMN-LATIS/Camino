@@ -2,6 +2,8 @@
 
 > Create and share media-rich educational tours
 
+[![CI](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml/badge.svg)](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml)
+
 ## Set Up
 
 Camino uses Laravel's docker environment, [Laravel Sail](https://laravel.com/docs/8.x/sail) for development. To get sarted:

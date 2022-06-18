@@ -38,16 +38,12 @@ jobs:
 
       - name: Check that all services are up
         run: |
-          docker compose version
           docker compose ps --all
-          echo "Exited:"
           docker compose ps -aq --filter status=exited
           if [[ $(docker compose ps -aq --filter status=exited) ]]; then exit 1; else exit 0; fi
 
       - name: Install JS dependencies
-        run: |
-          npm ci
-          npm run prod
+        run: yarn && yarn prod
 
       - name: Laravel Setup
         run: docker compose exec -T laravel.test ./bin/ci.sh
@@ -67,6 +63,7 @@ jobs:
         env:
           NODE_TLS_REJECT_UNAUTHORIZED: 0
 
+      ## Grab any useful artifacts before exiting
       - name: Upload test screenshots if any
         uses: actions/upload-artifact@v3
         if: failure()
@@ -86,9 +83,11 @@ jobs:
         uses: jwalton/gh-docker-logs@v1
         with:
           dest: "./logs"
+
       - name: Tar logs
         if: failure()
         run: tar cvzf ./logs.tgz ./logs
+
       - name: Upload logs to GitHub
         if: failure()
         uses: actions/upload-artifact@master

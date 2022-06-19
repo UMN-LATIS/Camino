@@ -1,3 +1,4 @@
+import { computed, ref, type ComputedRef } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
 import { Maybe, Tour, TourStop, Locale, DeepDiveItem } from "@/types";
@@ -5,83 +6,82 @@ import { useRoute } from "vue-router";
 
 const toInt = (str) => Number.parseInt(str, 10);
 
-interface State {
-  tour: Maybe<Tour>;
-  isLoading: boolean;
-  locale: Locale;
-  errors: Error[];
-  deepDives: DeepDiveItem[];
-}
+export const useTrekkerStore = defineStore("trekker", () => {
+  const route = useRoute();
 
-export const useTrekkerStore = defineStore("trekker", {
-  state: (): State => ({
-    tour: null,
-    isLoading: true,
-    locale: Locale.en,
-    errors: [],
-    deepDives: [],
-  }),
-  getters: {
-    allStops: (state: State): TourStop[] => {
-      return state.tour?.stops ?? [];
-    },
-    totalStops: (state: State): number => {
-      if (!state.tour) return 0;
-      return state.tour.stops.length;
-    },
-    stopIndex: (): number => {
-      const route = useRoute();
-      return toInt(route.params.stopIndex || 0);
-    },
-    tourId: (): number => {
-      const route = useRoute();
-      return toInt(route.params.tourId);
-    },
-    isFirstStop(): boolean {
-      return this.stopIndex === 0;
-    },
-    isLastStop(): boolean {
-      return this.stopIndex === this.totalStops - 1;
-    },
-    currentStop(): TourStop {
-      return this.allStops[this.stopIndex];
-    },
-    nextStop(): Maybe<TourStop> {
-      if (this.isLastStop) return null;
-      return this.allStops[this.stopIndex + 1];
-    },
-    previousStop(): Maybe<TourStop> {
-      if (this.isFirstStop) return null;
-      return this.allStops[this.stopIndex - 1];
-    },
-  },
-  actions: {
+  // STATE
+  const state = {
+    tour: ref<Maybe<Tour>>(null),
+    isLoading: ref<boolean>(true),
+    locale: ref<Locale>(Locale.en),
+    errors: ref<string[]>([]),
+    deepDives: ref<DeepDiveItem[]>([]),
+  };
+
+  // GETTERS (computed)
+  const getters = {
+    allStops: computed(() => state.tour.value?.stops ?? []),
+    totalStops: computed(() => state.tour.value?.stops.length ?? 0),
+    stopIndex: computed((): number => {
+      const stopIndex = Array.isArray(route.params.stopIndex)
+        ? route.params.stopIndex[0]
+        : route.params.stopIndex;
+      return Number.parseInt(stopIndex) ?? 0;
+    }),
+    tourId: computed(() => toInt(route.params.tourId)),
+    isFirstStop: computed((): boolean => getters.stopIndex.value === 0),
+    isLastStop: computed(
+      (): boolean => getters.stopIndex.value === getters.totalStops.value - 1
+    ),
+    currentStop: computed(
+      (): TourStop => getters.allStops.value[getters.stopIndex.value]
+    ),
+    nextStop: computed((): Maybe<TourStop> => {
+      if (getters.isLastStop.value) return null;
+      return getters.allStops.value[getters.stopIndex.value + 1];
+    }),
+    previousStop: computed((): Maybe<TourStop> => {
+      if (getters.isFirstStop.value) return null;
+      return getters.allStops.value[getters.stopIndex.value - 1];
+    }),
+  };
+
+  // ACTIONS
+  const actions = {
     fetchTour(tourId) {
-      this.isLoading = true;
+      state.isLoading.value = true;
       toursService
         .get(tourId)
         .then((tour) => {
-          this.isLoading = false;
-          this.tour = tour;
+          state.isLoading.value = false;
+          state.tour.value = tour;
         })
         .catch((err) => {
           console.error(err);
-          this.isLoading = false;
-          this.errors.push(err);
+          state.isLoading.value = false;
+          state.errors.value.push(err);
         });
     },
     setLocale(locale) {
-      this.locale = locale;
+      state.locale.value = locale;
     },
     addDeepDive(deepdive) {
-      const hasDeepDive = this.deepDives.indexOf(deepdive) > -1;
+      const hasDeepDive = state.deepDives.value.indexOf(deepdive) > -1;
       if (hasDeepDive) return;
-      this.deepDives.push(deepdive);
+      state.deepDives.value.push(deepdive);
     },
     removeDeepDive(deepdive) {
-      this.deepDives = this.deepDives.filter((d) => d !== deepdive);
+      state.deepDives.value = state.deepDives.value.filter(
+        (d) => d !== deepdive
+      );
     },
-  },
+  };
+
+  return {
+    ...state,
+    ...getters,
+    ...actions,
+  };
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html

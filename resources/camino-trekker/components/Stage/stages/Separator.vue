@@ -1,20 +1,18 @@
 <template>
   <h3 class="separator-stage">{{ text }}</h3>
 </template>
-<script setup>
+<script setup lang="ts">
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
+import { SeparatorStage } from "@/types";
 import { computed } from "vue";
-import { object, shape, string } from "vue-types";
 
-const props = defineProps({
-  stage: shape({
-    text: object().def({
-      en: "",
-    }),
-  }).loose,
-  locale: string().isRequired,
-});
+interface Props {
+  stage: SeparatorStage;
+}
 
-const text = computed(() => props.stage.text[props.locale]);
+const props = defineProps<Props>();
+const store = useTrekkerStore();
+const text = computed(() => props.stage.text[store.locale]);
 </script>
 <style scoped>
 .separator-stage {

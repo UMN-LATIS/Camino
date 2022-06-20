@@ -1,27 +1,31 @@
 <template>
-  <div class="tour-stop">
+  <div v-if="store.tour" class="tour-stop">
     <StopHeader
       class="tour-stop__header"
-      :title="isFirstStop ? tour.title : stop.stop_content.title[locale]"
-      :subtitle="tour.subtitle || ''"
-      :stopNumber="stopIndex + 1"
-      :imageSrc="headerImageSrc"
-      :imageAlt="headerImageAlt"
+      :title="title"
+      :subtitle="subtitle"
+      :stopNumber="store.stopIndex + 1"
+      :headerImage="headerImage"
     >
-      <TourAuthor v-if="isFirstStop && tour.author" :author="tour.author" />
+      <!-- <TourAuthor v-if="isFirstStop && tour.author" :author="tour.author" /> -->
     </StopHeader>
     <div class="tour-stop__stages container">
       <div class="tour-stop__contents">
-        <h2 v-if="isFirstStop">Start</h2>
-        <section v-for="stage in stages" :key="`${stop.id}-${stage.id}`">
-          <Stage :stage="stage" :locale="locale" />
+        <h2 v-if="store.isFirstStop">Start</h2>
+        <section
+          v-for="stage in stages"
+          :key="`${store.currentStop.id}-${stage.id}`"
+        >
+          <Stage :stage="stage" />
         </section>
         <Button
-          v-if="!isLastStop"
+          v-if="!store.isLastStop"
           icon="arrow_forward"
-          iconPosition="end"
+          iconPosition="after"
           variant="primary"
-          @click="$router.push(`/tours/${tour.id}/stops/${stopIndex + 1}`)"
+          @click="
+            $router.push(`/tours/${store.tourId}/stops/${store.stopIndex + 1}`)
+          "
         >
           Continue
         </Button>
@@ -29,39 +33,33 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import Button from "../Button/Button.vue";
 import StopHeader from "../StopHeader/StopHeader.vue";
-import TourAuthor from "../TourAuthor/TourAuthor.vue";
+// import TourAuthor from "../TourAuthor/TourAuthor.vue";
 import Stage from "../Stage/Stage.vue";
 import { computed } from "vue";
-import { useTour, useLocale } from "../../common/hooks";
-import { number } from "vue-types";
-import config from "../../config";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
+import { Maybe, Image } from "@/types";
 
-const props = defineProps({
-  stopIndex: number().def(0),
-});
+const store = useTrekkerStore();
 
-const { tour } = useTour();
-const { locale } = useLocale();
-const stop = computed(() => tour.value?.stops[props.stopIndex]);
-const isFirstStop = computed(() => props.stopIndex === 0);
-const isLastStop = computed(
-  () => props.stopIndex === tour.value.stops.length - 1
+const stages = computed(() => store.currentStop.stop_content.stages) || [];
+
+const headerImage = computed(
+  (): Maybe<Image> => store.currentStop.stop_content.header_image || null
 );
-const stages = computed(() => stop.value?.stop_content?.stages) || [];
-const headerImageSrc = computed(() => {
-  const image = stop.value?.stop_content?.header_image;
-  if (!image) return null;
-  return `${config.appUrl}${image.src}`;
+
+const title = computed((): string => {
+  if (!store.tour) return "";
+  return store.isFirstStop
+    ? store.tour.title
+    : store.currentStop.stop_content.title?.[store.locale] ?? "";
 });
 
-const headerImageAlt = computed(() => {
-  const image = stop.value?.stop_content?.header_image;
-  if (!image) return null;
-  return image.alt;
-});
+const subtitle = computed(
+  (): string => store.currentStop.stop_content.subtitle?.[store.locale] ?? ""
+);
 </script>
 <style scoped>
 .tour-stop {

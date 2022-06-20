@@ -20,8 +20,8 @@
       >
         <DeepDivesSummaryItem
           :id="`deepdive-${key}`"
-          :title="translate(deepdive.title, locale)"
-          :content="translate(deepdive.text, locale)"
+          :title="translate(deepdive.title, store.locale)"
+          :content="translate(deepdive.text, store.locale)"
           :checked="isDeepDiveChecked(deepdive)"
           :checkboxHidden="!stage.request_email"
           @toggleChecked="(isChecked) => setChecked(deepdive, isChecked)"
@@ -54,7 +54,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import axios from "axios";
-import { useTour, useLocale } from "@trekker/common/hooks";
 import Markdown from "../../Markdown/Markdown.vue";
 import Error from "../../Error/Error.vue";
 import getStagesFromTourWhere from "../../../utils/getStagesFromTourWhere";
@@ -77,23 +76,21 @@ interface Props {
 const props = defineProps<Props>();
 
 const store = useTrekkerStore();
-const { tour } = useTour();
-const { locale } = useLocale();
 const email = ref("");
 const isSendingEmail = ref(false);
 const isSent = ref(false);
 const error = ref("");
 
 const deepDiveSummaryText = computed(
-  () => props.stage.text[locale.value] || ""
+  () => props.stage.text[store.locale] || ""
 );
 const checkedDeepDives = computed(() => store.deepDives);
 const allDeepDives = computed(() => {
-  if (!tour.value) return [];
+  if (!store.tour) return [];
   const deepDiveStages = getStagesFromTourWhere<DeepDiveStage>(
     "type",
     "deepdives",
-    tour.value
+    store.tour
   );
   const allDeepDives = deepDiveStages.flatMap((stage) => stage.deepdives);
   return allDeepDives;

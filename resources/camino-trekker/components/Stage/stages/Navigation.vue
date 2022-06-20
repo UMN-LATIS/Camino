@@ -5,32 +5,36 @@
       Show Map
     </Button>
     <div v-if="showMap" class="navigation-stage__tour-map-wrapper">
-      <TourMap initialMapStyle="streets" type="stop" :stopIndex="stopIndex" />
+      <TourMap
+        v-if="stage.targetPoint"
+        initialMapStyle="streets"
+        type="stop"
+        :stopIndex="store.stopIndex"
+      />
+      <div v-else class="tour-map-error">
+        <p>No target point set for navigation stage.</p>
+      </div>
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
-import { bool, shape, string } from "vue-types";
-import { useStopIndex } from "../../../common/hooks";
 import Markdown from "../../Markdown/Markdown.vue";
 import Button from "../../Button/Button.vue";
 import TourMap from "../../TourMap/TourMap.vue";
+import { NavigationStage } from "@/types";
+import { useTrekkerStore } from "@trekker/stores/useTrekkerStore";
 
-const props = defineProps({
-  stage: shape({
-    // I18n object like: { en: 'hello', es: 'hola'}
-    text: Object,
-  }).loose,
-  locale: string().isRequired,
-  hasShowMapToggle: bool().def(true),
+interface Props {
+  stage: NavigationStage;
+  hasShowMapToggle?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  hasShowMapToggle: true,
 });
-
-const markdown = computed(() => props.stage.text[props.locale]);
-const { stopIndex } = useStopIndex();
-
-// if no toggle, show map by default
-// if toggle, hide map
+const store = useTrekkerStore();
+const markdown = computed(() => props.stage.text[store.locale] ?? "");
 const showMap = ref(!props.hasShowMapToggle);
 
 const toggleShowMap = () => (showMap.value = !showMap.value);
@@ -41,5 +45,13 @@ const toggleShowMap = () => (showMap.value = !showMap.value);
 }
 .navigation-stage__tour-map-wrapper {
   height: 50vh;
+}
+.tour-map-error {
+  background: #ddd;
+  font-size: 2rem;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

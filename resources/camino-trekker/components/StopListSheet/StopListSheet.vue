@@ -4,17 +4,17 @@
       <router-link
         v-for="(stop, index) in stops"
         :key="stop.id"
-        :to="`/tours/${stop.tour_id}/stops/${index}`"
+        :to="`/tours/${store.tourId}/stops/${index}`"
         @click="$emit('close')"
       >
         <li
           class="stoplist__item"
-          :class="{ 'stoplist__item--is-active': index === stopIndex }"
+          :class="{ 'stoplist__item--is-active': index === store.stopIndex }"
         >
           <div class="stoplist__number">
             {{ index + 1 }}
           </div>
-          {{ getStopTitle(stop) }}
+          {{ selectStopTitle(stop) }}
         </li>
       </router-link>
     </ol>
@@ -23,16 +23,18 @@
 <script setup lang="ts">
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { computed } from "vue";
-import { useStopIndex, useLocale } from "../../common/hooks";
 import Sheet from "../Sheet/Sheet.vue";
+import { TourStop } from "@/types";
 
-defineEmits(["close"]);
+interface Emits {
+  (eventName: "close"): void;
+}
+defineEmits<Emits>();
 
 const store = useTrekkerStore();
-const { stopIndex } = useStopIndex();
-const { locale } = useLocale();
 const stops = computed(() => store.allStops);
-const getStopTitle = (stop) => stop.stop_content.title[locale.value];
+const selectStopTitle = (stop: TourStop) =>
+  stop.stop_content.title?.[store.locale] ?? "";
 </script>
 <style scoped>
 .stoplist {

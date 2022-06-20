@@ -7,7 +7,9 @@
           tourTitle
         }}</router-link>
         >
-        {{ stop.stop_content.title[defaultTourLanguage] }}
+        <span data-cy="stop-title">{{
+          stop.stop_content.title[defaultTourLanguage]
+        }}</span>
       </div>
 
       <div>
@@ -15,6 +17,7 @@
           <LanguageText
             v-model:text="stop.stop_content.title"
             class="mb-4"
+            data-cy="stop-title-input-group"
             :languages="tourLanguages"
           >
             Stop Title
@@ -98,11 +101,7 @@
             <i class="fas fa-arrow-left"></i>
             <span class="d-none d-sm-inline">Back to Tour</span></router-link
           >
-          <a
-            v-if="stopId"
-            :href="previewLink"
-            class="btn btn-outline-success"
-            target="_blank"
+          <a v-if="stopId" :href="previewLink" class="btn btn-outline-success"
             ><i class="fas fa-eye"></i>
             <span class="d-none d-sm-inline">Preview</span></a
           >

@@ -1,18 +1,27 @@
 <template>
   <div class="bottom-nav">
     <nav class="bottom-nav__navbar">
-      <button class="bottom-nav__button" @click="setActiveSheet(SHEETS.MENU)">
+      <button
+        class="bottom-nav__button"
+        @click="store.setActiveSheet(BottomNavSheet.Menu)"
+      >
         <span class="material-icons">menu</span>
         <span class="sr-only">Menu</span>
       </button>
       <button
         class="bottom-nav__progress-button"
-        @click="setActiveSheet(SHEETS.STOPLIST)"
+        @click="store.setActiveSheet(BottomNavSheet.Stoplist)"
       >
-        <ProgressIndicator :total="totalStops" :active="stopIndex" />
+        <ProgressIndicator
+          :total="store.totalStops"
+          :active="store.stopIndex"
+        />
         <span class="sr-only">Open Tour Stops</span>
       </button>
-      <button class="bottom-nav__button" @click="setActiveSheet(SHEETS.MAP)">
+      <button
+        class="bottom-nav__button"
+        @click="store.setActiveSheet(BottomNavSheet.Map)"
+      >
         <span class="material-icons">map</span>
         <span class="sr-only">Map</span>
       </button>
@@ -20,50 +29,30 @@
     <div>
       <Teleport to="#modals">
         <MenuSheet
-          :isOpen="isActiveSheet(SHEETS.MENU)"
-          @close="handleSheetClose()"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Menu).value"
+          @close="store.closeActiveSheet()"
         />
         <StopListSheet
-          :isOpen="isActiveSheet(SHEETS.STOPLIST)"
-          @close="handleSheetClose()"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Stoplist).value"
+          @close="store.closeActiveSheet()"
         />
         <MapSheet
-          :isOpen="isActiveSheet(SHEETS.MAP)"
-          @close="handleSheetClose()"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Map).value"
+          @close="store.closeActiveSheet()"
         />
       </Teleport>
     </div>
   </div>
 </template>
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.vue";
 import MapSheet from "../MapSheet/MapSheet.vue";
 import MenuSheet from "../MenuSheet/MenuSheet.vue";
 import StopListSheet from "../StopListSheet/StopListSheet.vue";
-import { useStopIndex, useTour } from "../../common/hooks";
+import { BottomNavSheet } from "@/types";
 
-const SHEETS = {
-  MENU: "MENU",
-  STOPLIST: "STOPLIST",
-  MAP: "MAP",
-};
-
-const activeSheet = ref(null);
-
-const { stopIndex } = useStopIndex();
-const { tour } = useTour();
-const totalStops = computed(() => tour.value?.stops.length || 0);
-
-const setActiveSheet = (sheetKey) => {
-  activeSheet.value = SHEETS[sheetKey];
-};
-
-const handleSheetClose = () => (activeSheet.value = null);
-
-const isActiveSheet = (sheetKey) => {
-  return activeSheet.value === sheetKey;
-};
+const store = useTrekkerStore();
 </script>
 <style scoped>
 .bottom-nav {

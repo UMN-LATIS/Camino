@@ -1,17 +1,16 @@
 <template>
   <PureLanguageSelect
-    :locale="locale"
-    :locales="tourLocales"
-    @setLocale="setLocale"
+    :locale="store.locale"
+    :supportedLocales="store.supportedLocales"
+    @setLocale="store.setLocale"
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import PureLanguageSelect from "./PureLanguageSelect.vue";
-import { useLocale, useTourLocales } from "../../../common/hooks";
+import { useTrekkerStore } from "@trekker/stores/useTrekkerStore";
 
-const { locale, setLocale } = useLocale();
-const { tourLocales } = useTourLocales();
+const store = useTrekkerStore();
 </script>
 <style scoped>
 .input-group {

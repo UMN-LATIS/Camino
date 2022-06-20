@@ -14,9 +14,11 @@
             type="checkbox"
             :value="deepdive"
             :checked="isChecked(deepdive)"
-            @change="setChecked(($event.target as HTMLInputElement).checked, deepdive)"
+            @change="
+              setChecked(($event.target as HTMLInputElement).checked, deepdive)
+            "
           />
-          {{ deepdive.title[locale] }}
+          {{ deepdive.title[store.locale] }}
         </label>
       </li>
     </ul>
@@ -25,19 +27,15 @@
 
 <script setup lang="ts">
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
-import { useLocale } from "../../../common/hooks";
-import type { DeepDiveItem } from "@/types";
+import type { DeepDiveItem, DeepDiveStage } from "@/types";
 
-defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-});
+interface Props {
+  stage: DeepDiveStage;
+}
+
+defineProps<Props>();
 
 const store = useTrekkerStore();
-const { locale } = useLocale();
-
 function setChecked(checked: boolean, deepdive: DeepDiveItem): void {
   checked ? store.addDeepDive(deepdive) : store.removeDeepDive(deepdive);
 }

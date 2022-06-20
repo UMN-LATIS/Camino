@@ -10,148 +10,167 @@
         :key="styleChoice"
         class="button-bar__button"
         :class="{
-          'button-bar__button--is-active': styleChoice === mapStyleRef,
+          'button-bar__button--is-active': styleChoice === mapStyle,
         }"
         @click="setMapStyle(styleChoice)"
       >
         {{ capitalize(styleChoice) }}
       </Button>
     </div>
-    <Map
-      v-if="centerRef"
+    <MapboxGlMap
+      v-if="canCreateMap"
       class="map-sheet__map-container"
-      :center="centerRef"
-      :zoom="zoomRef"
-      :bounds="boundsRef"
-      :mapStyle="mapStyleRef"
-      :accessToken="accessToken"
+      :center="center"
+      :zoom="type === 'tour' ? 16 : 10"
+      :bounds="bounds"
+      :mapStyle="mapStyle"
+      :accessToken="config.mapBox.accessToken"
     >
-      <MapPolyline
-        v-for="(route, i) in allStopRoutesRef"
-        :id="`route-${i}`"
-        :key="i"
-        :positions="route"
-        :color="getStopColor(i)"
-      />
-      <MapMarker
-        v-for="(stopPoint, i) in allStopPointsRef"
-        :key="i"
-        :lng="stopPoint?.lng ?? tour.start_location?.lng"
-        :lat="stopPoint?.lat ?? tour.start_location?.lat"
-        :color="getStopColor(i)"
-      >
-        <MapPopup>
-          <p class="map-popup__stop-number-container">
-            <span class="map-popup__stop-number">
-              {{ allStopLabelsRef[i].number }}
-            </span>
-          </p>
-          <h2 class="map-popup__stop-title">
-            {{ allStopLabelsRef[i].title }}
-          </h2>
-          <p class="map-popup__link-container">
-            <router-link :to="allStopLabelsRef[i].href" class="map-popup__link">
-              <span class="material-icons">arrow_forward</span>
-              <span class="sr-only">Go to Stop</span>
-            </router-link>
-          </p>
-        </MapPopup>
-      </MapMarker>
-    </Map>
+      <div v-for="(stop, i) in mapStops" :key="i" class="map-stop">
+        <MapPolyline
+          :id="`route-${i}`"
+          :key="i"
+          :positions="stop.route"
+          :color="stop.color"
+        />
+        <MapMarker
+          :key="i"
+          :lng="stop.stopPoint.lng"
+          :lat="stop.stopPoint.lat"
+          :color="stop.color"
+          class="tour-map__marker"
+          :class="{
+            'tour-map__marker--is-active': stop.isActive,
+          }"
+        >
+          <MapPopup>
+            <p class="map-popup__stop-number-container">
+              <span class="map-popup__stop-number">
+                {{ stop.number }}
+              </span>
+            </p>
+            <h2 class="map-popup__stop-title">
+              {{ stop.title }}
+            </h2>
+            <p class="map-popup__link-container">
+              <button
+                class="map-popup__link"
+                @click="handleGoToStopButtonClick(stop)"
+              >
+                <span class="material-icons">arrow_forward</span>
+                <span class="sr-only">Go to Stop</span>
+              </button>
+            </p>
+          </MapPopup>
+        </MapMarker>
+      </div>
+    </MapboxGlMap>
   </div>
 </template>
-<script setup>
-import { ref, computed, watch, toRefs } from "vue";
-import { string, oneOf, bool, number } from "vue-types";
-import Map from "../Map/Map.vue";
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import MapboxGlMap from "../Map/Map.vue";
 import MapPolyline from "../MapPolyline/MapPolyline.vue";
 import MapMarker from "../MapMarker/MapMarker.vue";
 import MapPopup from "../MapPopup/MapPopup.vue";
 import Button from "../Button/Button.vue";
 import capitalize from "../../utils/capitalize";
-import getFullTourRoute from "../../utils/getFullTourRoute";
-import getAllStopPoints from "../../utils/getAllStopPoints";
 import getBoundingBox from "../../utils/getBoundingBox";
-import getPointsForStop from "./getPointsForStop";
-import getCenterOfBoundingBox from "./getCenterOfBoundingBox";
-import getAllRoutes from "../../utils/getAllRoutes";
-import { useTour, useLocale, useMapBoxAccessToken } from "../../common/hooks";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
+import config from "@trekker/config";
+import { getStopPointAtIndex } from "@/camino-trekker/utils/getStopPointAtIndex";
+import { BoundingBox, LngLat } from "@/types";
+import { getStopRouteAtIndex } from "@/camino-trekker/utils/getStopRouteAtIndex";
+import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
+import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
+import { useRouter } from "vue-router";
 
-const props = defineProps({
-  type: oneOf(["tour", "stop"]),
-  stopIndex: number().isRequired,
-  initialMapStyle: string().def("light"),
-  showMapStyleControl: bool().def(true),
+interface Props {
+  type: "tour" | "stop";
+  initialMapStyle: string;
+  showMapStyleControl?: boolean;
+}
+const props = withDefaults(defineProps<Props>(), {
+  initialMapStyle: "light",
+  showMapStyleControl: true,
 });
 
-function createAllStopLabels({ tour, locale }) {
+/**
+ * COMPUTED
+ */
+const store = useTrekkerStore();
+const router = useRouter();
+const canCreateMap = computed(
+  () => store.tour && store.tour.stops && store.tour.start_location
+);
+const mapStyleChoices = ["dark", "satellite", "streets", "light"].sort();
+const mapStyle = ref(props.initialMapStyle);
+
+interface MapStop {
+  index: number;
+  number: number;
+  title: string;
+  href: string;
+  startPoint: LngLat;
+  stopPoint: LngLat;
+  route: LngLat[];
+  isActive: boolean;
+  color: string;
+}
+
+const mapStops = computed((): MapStop[] => {
+  const tour = store.tour;
+  if (!tour) return [];
+  if (!tour.stops) return [];
+
   return tour.stops.map((stop, index) => ({
-    title: stop.stop_content.title[locale],
-    href: `/tours/${stop.tour_id}/stops/${index}`,
+    index,
     number: index + 1,
+    title: stop.stop_content.title?.[store.locale] ?? `Stop ${index}`,
+    href: `/tours/${store.tourId}/stops/${index}`,
+    startPoint: getStopPointAtIndex(tour, index - 1),
+    stopPoint: getStopPointAtIndex(tour, index),
+    route: getStopRouteAtIndex(tour, index),
+    isActive: index === store.stopIndex,
+    color: getStopColor(index),
   }));
+});
+
+const fullTourRoute = computed((): LngLat[] => getFullTourRoute(store.tour));
+
+// BOUNDS
+const bounds = computed((): BoundingBox => {
+  if (props.type === "tour") {
+    return getBoundingBox(fullTourRoute.value);
+  }
+
+  // get a bounding box for the current stop
+  const stop = mapStops.value[store.stopIndex];
+  return getBoundingBox([stop.startPoint, ...stop.route, stop.stopPoint]);
+});
+
+// CENTER
+const center = computed((): LngLat => getCenterOfBoundingBox(bounds.value));
+
+/**
+ * METHODS
+ */
+
+function setMapStyle(updatedStyle: string) {
+  mapStyle.value = updatedStyle;
 }
 
 function getStopColor(index) {
-  if (index < stopIndex.value) return "#7EEAFC";
-  if (index === stopIndex.value) return "#0A84FF";
+  if (index > store.stopIndex) return "#333";
+  if (index === store.stopIndex) return "#0A84FF";
   return "#999";
 }
 
-function setMapStyle(updatedStyle) {
-  mapStyleRef.value = updatedStyle;
+function handleGoToStopButtonClick(stop: MapStop) {
+  // close map sheet and then go to the stop
+  store.closeActiveSheet();
+  router.push(stop.href);
 }
-
-const { tour } = useTour();
-const { stopIndex } = toRefs(props);
-const { locale } = useLocale();
-const { accessToken } = useMapBoxAccessToken();
-const boundsRef = ref(null);
-const centerRef = ref(null);
-const zoomRef = ref(10);
-const mapStyleChoices = ["dark", "satellite", "streets", "light"].sort();
-const mapStyleRef = ref(props.initialMapStyle);
-const fullTourRouteRef = computed(() =>
-  getFullTourRoute(tour.value).filter(Boolean)
-);
-const allStopRoutesRef = computed(() => getAllRoutes(tour.value));
-const allStopPointsRef = computed(() => getAllStopPoints(tour.value));
-const startPointRef = computed(() => tour.value.start_location);
-const allStopLabelsRef = computed(() =>
-  createAllStopLabels({
-    tour: tour.value,
-    locale: locale.value,
-  })
-);
-
-if (props.type === "tour") {
-  boundsRef.value = getBoundingBox(fullTourRouteRef.value);
-  centerRef.value = startPointRef.value;
-}
-if (props.type === "stop") {
-  const stopPoints = getPointsForStop(
-    stopIndex.value,
-    allStopPointsRef.value,
-    allStopRoutesRef.value
-  );
-  boundsRef.value = getBoundingBox(stopPoints.filter(Boolean));
-  centerRef.value = getCenterOfBoundingBox(boundsRef.value);
-  zoomRef.value = 16;
-}
-
-// update bounds when stop changes
-// if stop map
-watch(stopIndex, () => {
-  if (props.type !== "stop") return;
-
-  const stopPoints = getPointsForStop(
-    stopIndex.value,
-    allStopPointsRef.value,
-    allStopRoutesRef.value
-  );
-  boundsRef.value = getBoundingBox(stopPoints);
-  centerRef.value = getCenterOfBoundingBox(boundsRef.value);
-});
 </script>
 <style scoped>
 .tour-map {
@@ -246,5 +265,9 @@ watch(stopIndex, () => {
 .map-sheet__map-container {
   border-radius: 0.5rem;
   border: 1px solid var(--gray-light);
+}
+
+.tour-map__marker--is-active {
+  z-index: 10;
 }
 </style>

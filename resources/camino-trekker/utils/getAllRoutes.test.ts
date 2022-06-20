@@ -1,3 +1,4 @@
+import { expect, it, describe } from "@jest/globals";
 import getAllRoutes from "./getAllRoutes";
 
 const tour = {

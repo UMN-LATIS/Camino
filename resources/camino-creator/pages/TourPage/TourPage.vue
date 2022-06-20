@@ -83,7 +83,6 @@
         v-if="tour.id"
         :href="'/trekker/tours/' + tour.id"
         class="btn btn-outline-success"
-        target="_blank"
         ><i class="fas fa-eye"></i> Preview</a
       >
       <button class="btn btn-primary" data-cy="save-button" @click="save">

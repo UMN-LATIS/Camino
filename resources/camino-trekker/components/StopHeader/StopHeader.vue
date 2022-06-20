@@ -2,43 +2,38 @@
   <header
     class="stop-header"
     :class="{
-      'stop-header--no-img': !imageSrc,
+      'stop-header--no-img': !headerImage,
     }"
   >
     <div class="stop-header__content">
       <p class="stop-header__number">
         {{ stopNumber }}
       </p>
-      <h2 class="stop-header__title h2">{{ title }}</h2>
+      <h2 class="stop-header__title h2" data-cy="stop-title">{{ title }}</h2>
       <p v-if="subtitle" class="stop-header__subtitle">{{ subtitle }}</p>
       <slot />
     </div>
     <div class="stop-header__img-container">
       <img
-        v-if="imageSrc"
+        v-if="headerImage"
         class="stop-header__img"
-        :src="imageSrc"
-        :alt="imageAlt"
+        :src="headerImage.src"
+        :alt="headerImage.alt"
       />
     </div>
   </header>
 </template>
-<script setup>
-import { number, string } from "vue-types";
+<script setup lang="ts">
+import { Image, Maybe } from "@/types";
 
-defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  subtitle: {
-    type: String,
-    required: true,
-  },
-  stopNumber: number().isRequired,
-  imageSrc: string(),
-  imageAlt: string(),
-});
+interface Props {
+  title: string;
+  subtitle: Maybe<string>;
+  stopNumber: number;
+  headerImage: Maybe<Image>;
+}
+
+defineProps<Props>();
 </script>
 <style scoped>
 .stop-header {

@@ -4,8 +4,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, toRefs, provide } from "vue";
+<script setup lang="ts">
+import { ref, watch, onMounted, provide } from "vue";
 import { useResizeObserver } from "@vueuse/core";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -14,27 +14,21 @@ import {
   GeolocateControl,
   ScaleControl,
 } from "mapbox-gl";
-import { arrayOf, number, string, shape } from "vue-types";
+import type { LngLat, BoundingBox, Maybe } from "@/types";
+import { MapInjectionKey } from "@/shared/constants";
 
-const props = defineProps({
-  center: shape({
-    lng: number().isRequired,
-    lat: number().isRequired,
-  }).isRequired,
-  zoom: number().isRequired,
-  bounds: arrayOf(arrayOf(number())),
-  mapStyle: string().def("streets"),
-  accessToken: string().isRequired,
-});
+interface Props {
+  center: LngLat;
+  zoom: number;
+  bounds?: Maybe<BoundingBox>;
+  mapStyle: string;
+  accessToken: string;
+}
 
-const mapContainerRef = ref(null);
-const mapRef = ref(null);
-const {
-  center: centerRef,
-  zoom: zoomRef,
-  bounds: boundsRef,
-  mapStyle: mapStyleRef,
-} = toRefs(props);
+const props = defineProps<Props>();
+
+const mapContainerRef = ref<HTMLDivElement>();
+const mapRef = ref<Maybe<Map>>(null);
 
 const MAP_STYLES = {
   streets: "mapbox://styles/mapbox/streets-v11",
@@ -47,14 +41,37 @@ const MAP_STYLES = {
 };
 
 // satellite gets a bit too pixelated up close
-const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 22);
+const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 20);
 
-function setupMap() {
+// watch style changes
+watch(
+  () => props.mapStyle,
+  () => {
+    if (!mapRef.value) return;
+    mapRef.value.setStyle(MAP_STYLES[props.mapStyle]);
+    mapRef.value.setMaxZoom(getMaxZoomForStyle(props.mapStyle));
+  }
+);
+
+// watch map bounds changes
+watch([() => props.bounds, mapRef], () => {
+  if (!mapRef.value || !props.bounds) return;
+  mapRef.value.fitBounds(props.bounds, { padding: 64 });
+});
+
+onMounted(() => {
+  if (!mapContainerRef.value) {
+    throw Error(
+      "Cannot create Map: container not defined:",
+      mapContainerRef.value
+    );
+  }
+
   mapRef.value = new Map({
     container: mapContainerRef.value,
     style: MAP_STYLES[props.mapStyle],
-    center: [centerRef.value.lng, centerRef.value.lat],
-    zoom: zoomRef.value,
+    center: [props.center.lng, props.center.lat],
+    zoom: props.zoom,
     accessToken: props.accessToken,
     maxZoom: getMaxZoomForStyle(props.mapStyle),
   });
@@ -65,31 +82,16 @@ function setupMap() {
     .addControl(new ScaleControl({ unit: "imperial" }));
 
   if (props.bounds) {
-    mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
+    mapRef.value.fitBounds(props.bounds, { padding: 64 });
   }
 
   useResizeObserver(mapContainerRef, () => {
+    if (!mapRef.value) return;
     mapRef.value.resize();
   });
-}
-
-// watch style changes
-watch(mapStyleRef, () => {
-  const mapStyle = mapStyleRef.value;
-  mapRef.value.setStyle(MAP_STYLES[mapStyle]);
-  mapRef.value.setMaxZoom(getMaxZoomForStyle(mapStyle));
 });
 
-// watch map bounds changes
-watch(boundsRef, () => {
-  mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
-});
-
-onMounted(() => {
-  setupMap();
-});
-
-provide("map", mapRef);
+provide(MapInjectionKey, mapRef);
 </script>
 
 <style scoped>

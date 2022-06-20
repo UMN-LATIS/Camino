@@ -1,40 +1,45 @@
-<template><slot></slot></template>
-<script setup>
-import { arrayOf, number, shape, string } from "vue-types";
-import { watch, inject, toRefs } from "vue";
+<template>
+  <div>
+    <slot></slot>
+  </div>
+</template>
+<script setup lang="ts">
+import { watch, inject } from "vue";
 import { toGeoJsonLineString } from "./toGeoJson";
+import type { LngLat } from "@/types";
+import { MapInjectionKey } from "@/shared/constants";
 
-const props = defineProps({
-  positions: arrayOf(
-    shape({
-      lng: number().isRequired,
-      lat: number().isRequired,
-    })
-  ),
+interface Props {
+  positions: LngLat[];
   // unique ID for this data source
-  id: string().isRequired,
-  color: string(),
-});
+  id: string;
+  color: string;
+}
 
-const mapRef = inject("map", null);
-const { color: colorRef } = toRefs(props);
+const props = defineProps<Props>();
+const map = inject(MapInjectionKey, null);
 
 function addDataLayer({ id, positions, color }) {
-  const map = mapRef.value;
-
   if (!map) return;
+
   if (!id) {
     throw Error(`addDataLayer is missing id '${id}'`);
   }
+
   if (!Array.isArray(positions)) {
     throw Error(`addDataLayer is missing positions '${positions}'`);
   }
 
   // remove existing data layer and source if it exists
-  if (map.getLayer(id)) map.removeLayer(id);
-  if (map.getSource(id)) map.removeSource(id);
+  if (map.value.getLayer(id)) {
+    map.value.removeLayer(id);
+  }
 
-  mapRef.value
+  if (map.value.getSource(id)) {
+    map.value.removeSource(id);
+  }
+
+  map.value
     .addSource(id, {
       type: "geojson",
       data: toGeoJsonLineString(positions.filter(Boolean)),
@@ -54,21 +59,27 @@ function addDataLayer({ id, positions, color }) {
     });
 }
 
-watch(mapRef, () => {
-  if (!mapRef.value) return;
+watch([map], () => {
+  if (!map) return;
+
   // wait for map to load before adding data
-  mapRef.value.on("load", () => addDataLayer(props));
+  map.value.on("load", () => addDataLayer(props));
   // redraw if map style changes
-  mapRef.value.on("style.load", () => addDataLayer(props));
+  map.value.on("style.load", () => addDataLayer(props));
 });
 
 // update line color if props change
-watch(colorRef, () => {
-  const updateLineColor = () =>
-    mapRef.value.setPaintProperty(props.id, "line-color", colorRef.value);
-  if (mapRef.value.isStyleLoaded()) {
-    return updateLineColor();
+watch(
+  () => props.color,
+  () => {
+    if (!map) return;
+    const updateLineColor = () =>
+      map.value.setPaintProperty(props.id, "line-color", props.color);
+
+    if (map.value.isStyleLoaded()) {
+      return updateLineColor();
+    }
+    map.value.on("style.load", updateLineColor);
   }
-  mapRef.value.on("style.load", updateLineColor);
-});
+);
 </script>

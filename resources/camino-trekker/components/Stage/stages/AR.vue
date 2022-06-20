@@ -50,23 +50,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
-import { object, string } from "vue-types";
 import Button from "../../Button/Button.vue";
-import { useStopIndex, useTour } from "../../../common/hooks";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "../../../config";
 import Toggle from "../../Toggle/Toggle.vue";
 import Alert from "../../Alert/Alert.vue";
+import { ARStage } from "@/types";
 
-defineProps({
-  stage: object().isRequired,
-  locale: string().def("en"),
-});
+interface Props {
+  stage: ARStage;
+}
 
+defineProps<Props>();
+
+const store = useTrekkerStore();
 const isSimulatingLocation = ref(false);
-const { tour } = useTour();
-const { stopIndex } = useStopIndex();
 const isShowingAR = ref(false);
 
 function toggleShowAr() {
@@ -74,8 +74,7 @@ function toggleShowAr() {
 }
 
 const src = computed(() => {
-  // TODO: change this to use 2 letter locales
-  return `${config.appUrl}/ar/${tour.value.id}/${stopIndex.value}/English/${isSimulatingLocation.value}`;
+  return `${config.appUrl}/ar/${store.tourId}/${store.stopIndex}/English/${isSimulatingLocation.value}`;
 });
 
 const isMobile = computed(

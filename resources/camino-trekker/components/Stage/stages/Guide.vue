@@ -4,22 +4,18 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
+import { GuideStage } from "@/types";
 import { computed } from "vue";
-import { shape } from "vue-types";
 import Markdown from "../../Markdown/Markdown.vue";
 
-const props = defineProps({
-  stage: shape({
-    // I18n object like: { en: 'hello', es: 'hola'}
-    text: Object,
-  }).loose,
-  locale: {
-    type: String,
-    default: "en",
-  },
-});
-const markdown = computed(() => props.stage.text[props.locale]);
+interface Props {
+  stage: GuideStage;
+}
+const props = defineProps<Props>();
+const store = useTrekkerStore();
+const markdown = computed(() => props.stage.text?.[store.locale] ?? "");
 </script>
 
 <style scoped>

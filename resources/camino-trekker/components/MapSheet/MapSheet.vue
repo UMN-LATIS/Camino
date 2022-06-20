@@ -1,23 +1,28 @@
 <template>
   <Sheet class="map-sheet" title="Map" :isOpen="isOpen" @close="$emit('close')">
-    <TourMap initialMapStyle="streets" type="tour" :stopIndex="stopIndex" />
+    <TourMap
+      initialMapStyle="streets"
+      type="tour"
+      :stopIndex="store.stopIndex"
+    />
   </Sheet>
 </template>
-<script setup>
-import { useStopIndex } from "../../common/hooks";
+<script setup lang="ts">
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import Sheet from "../Sheet/Sheet.vue";
 import TourMap from "../TourMap/TourMap.vue";
 
-defineProps({
-  isOpen: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  isOpen?: boolean;
+}
+
+withDefaults(defineProps<Props>(), {
+  isOpen: false,
 });
 
-defineEmits(["close"]);
+const store = useTrekkerStore();
 
-const { stopIndex } = useStopIndex();
+defineEmits(["close"]);
 </script>
 
 <style>

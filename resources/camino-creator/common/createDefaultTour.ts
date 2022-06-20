@@ -1,16 +1,11 @@
-import { Tour } from "@/types";
-import { TourStyle, Locale } from "@/types";
+import { Tour, TourStyle, Locale } from "@/types";
+import { UMN_LNGLAT } from "@/shared/constants";
 
 export default (): Partial<Tour> => ({
   public: false,
   active: false,
   title: "",
-
-  // University of Minnesota
-  start_location: {
-    lat: 44.975876,
-    lng: -93.234375,
-  },
+  start_location: UMN_LNGLAT,
   walking: false,
   biking: false,
   driving: false,

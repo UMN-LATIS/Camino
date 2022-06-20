@@ -14,7 +14,7 @@
           <div class="stoplist__number">
             {{ index + 1 }}
           </div>
-          {{ selectLocalizedTitleFromStop(stop, store.locale) }}
+          {{ selectStopTitle(stop) }}
         </li>
       </router-link>
     </ol>
@@ -24,6 +24,7 @@
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { computed } from "vue";
 import Sheet from "../Sheet/Sheet.vue";
+import { TourStop } from "@/types";
 
 interface Emits {
   (eventName: "close"): void;
@@ -32,8 +33,8 @@ defineEmits<Emits>();
 
 const store = useTrekkerStore();
 const stops = computed(() => store.allStops);
-const selectLocalizedTitleFromStop = (stop, locale) =>
-  stop.stop_content.title[locale.value] ?? "";
+const selectStopTitle = (stop: TourStop) =>
+  stop.stop_content.title?.[store.locale] ?? "";
 </script>
 <style scoped>
 .stoplist {

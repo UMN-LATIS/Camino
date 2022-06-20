@@ -1,12 +1,11 @@
 <template>
-  <div>
-    <div ref="mapContainerRef" class="map-container" />
+  <div ref="mapContainerRef" class="map-container">
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, toRefs, provide } from "vue";
+import { ref, watch, onMounted, provide } from "vue";
 import { useResizeObserver } from "@vueuse/core";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
@@ -21,7 +20,7 @@ import { MapInjectionKey } from "@/shared/constants";
 interface Props {
   center: LngLat;
   zoom: number;
-  bounds: BoundingBox;
+  bounds?: Maybe<BoundingBox>;
   mapStyle: string;
   accessToken: string;
 }
@@ -30,13 +29,6 @@ const props = defineProps<Props>();
 
 const mapContainerRef = ref<HTMLDivElement>();
 const mapRef = ref<Maybe<Map>>(null);
-
-const {
-  center: centerRef,
-  zoom: zoomRef,
-  bounds: boundsRef,
-  mapStyle: mapStyleRef,
-} = toRefs(props);
 
 const MAP_STYLES = {
   streets: "mapbox://styles/mapbox/streets-v11",
@@ -49,22 +41,22 @@ const MAP_STYLES = {
 };
 
 // satellite gets a bit too pixelated up close
-const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 22);
+const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 20);
 
 // watch style changes
-watch(mapStyleRef, () => {
-  if (!mapRef.value) return;
-
-  const mapStyle = mapStyleRef.value;
-  mapRef.value.setStyle(MAP_STYLES[mapStyle]);
-  mapRef.value.setMaxZoom(getMaxZoomForStyle(mapStyle));
-});
+watch(
+  () => props.mapStyle,
+  () => {
+    if (!mapRef.value) return;
+    mapRef.value.setStyle(MAP_STYLES[props.mapStyle]);
+    mapRef.value.setMaxZoom(getMaxZoomForStyle(props.mapStyle));
+  }
+);
 
 // watch map bounds changes
-watch(boundsRef, () => {
-  if (!mapRef.value) return;
-
-  mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
+watch([() => props.bounds, mapRef], () => {
+  if (!mapRef.value || !props.bounds) return;
+  mapRef.value.fitBounds(props.bounds, { padding: 64 });
 });
 
 onMounted(() => {
@@ -78,8 +70,8 @@ onMounted(() => {
   mapRef.value = new Map({
     container: mapContainerRef.value,
     style: MAP_STYLES[props.mapStyle],
-    center: [centerRef.value.lng, centerRef.value.lat],
-    zoom: zoomRef.value,
+    center: [props.center.lng, props.center.lat],
+    zoom: props.zoom,
     accessToken: props.accessToken,
     maxZoom: getMaxZoomForStyle(props.mapStyle),
   });
@@ -90,7 +82,7 @@ onMounted(() => {
     .addControl(new ScaleControl({ unit: "imperial" }));
 
   if (props.bounds) {
-    mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
+    mapRef.value.fitBounds(props.bounds, { padding: 64 });
   }
 
   useResizeObserver(mapContainerRef, () => {

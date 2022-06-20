@@ -145,8 +145,8 @@ export type LanguageSelectorStage = Stage;
 export type TourStopRoute = LngLat[];
 export interface NavigationStage extends Stage {
   text: LocalizedText;
-  route: TourStopRoute;
-  targetPoint: LngLat;
+  route: Maybe<TourStopRoute>;
+  targetPoint: Maybe<LngLat>;
 }
 
 export enum QuizType {

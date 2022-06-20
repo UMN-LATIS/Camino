@@ -3,8 +3,8 @@ import { LngLat } from "@/types";
 import { Map, Marker } from "mapbox-gl";
 
 export const UMN_LNGLAT: LngLat = {
-  lat: 44.975876,
-  lng: -93.234375,
+  lat: 44.972109,
+  lng: -93.24287,
 };
 
 export const MapInjectionKey: InjectionKey<Ref<Map>> = Symbol("MapboxGLMap");

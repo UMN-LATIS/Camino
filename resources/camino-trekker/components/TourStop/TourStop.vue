@@ -39,27 +39,24 @@ import StopHeader from "../StopHeader/StopHeader.vue";
 // import TourAuthor from "../TourAuthor/TourAuthor.vue";
 import Stage from "../Stage/Stage.vue";
 import { computed } from "vue";
-import config from "../../config";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { Maybe, Image } from "@/types";
 
 const store = useTrekkerStore();
+
 const stages = computed(() => store.currentStop.stop_content.stages) || [];
-const headerImage = computed((): Maybe<Image> => {
-  const image = store.currentStop.stop_content.header_image;
-  return image
-    ? {
-        src: `${config.imageStorageBase}/${image.src}`,
-        alt: image.alt || "",
-      }
-    : null;
-});
+
+const headerImage = computed(
+  (): Maybe<Image> => store.currentStop.stop_content.header_image || null
+);
+
 const title = computed((): string => {
   if (!store.tour) return "";
   return store.isFirstStop
     ? store.tour.title
     : store.currentStop.stop_content.title?.[store.locale] ?? "";
 });
+
 const subtitle = computed(
   (): string => store.currentStop.stop_content.subtitle?.[store.locale] ?? ""
 );

@@ -15,6 +15,7 @@ import {
   ScaleControl,
 } from "mapbox-gl";
 import type { LngLat, BoundingBox, Maybe } from "@/types";
+import { MapInjectionKey } from "@/shared/constants";
 
 interface Props {
   center: LngLat;
@@ -97,7 +98,7 @@ onMounted(() => {
   });
 });
 
-provide("map", mapRef);
+provide(MapInjectionKey, mapRef);
 </script>
 
 <style scoped>

@@ -3,17 +3,18 @@
     <slot></slot>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { inject, watch, ref } from "vue";
 import { Popup } from "mapbox-gl";
+import { MarkerInjectionKey } from "@/shared/constants";
 
-const markerRef = inject("marker");
+const markerRef = inject(MarkerInjectionKey);
 const popupRef = ref(null);
 
 // use ref to get the content of the slot
 // and then put it in the popup using setDOMContent
 watch([markerRef, popupRef], () => {
-  if (!markerRef.value || !popupRef.value) return;
+  if (!markerRef || !markerRef.value || !popupRef.value) return;
   const popup = new Popup().setDOMContent(popupRef.value);
   markerRef.value.setPopup(popup);
 });

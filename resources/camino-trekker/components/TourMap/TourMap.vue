@@ -31,13 +31,17 @@
           :id="`route-${i}`"
           :key="i"
           :positions="stop.route"
-          color="#111"
+          :color="stop.color"
         />
         <MapMarker
           :key="i"
           :lng="stop.stopPoint.lng"
           :lat="stop.stopPoint.lat"
-          color="#111"
+          :color="stop.color"
+          class="tour-map__marker"
+          :class="{
+            'tour-map__marker--is-active': stop.isActive,
+          }"
         >
           <MapPopup>
             <p class="map-popup__stop-number-container">
@@ -105,6 +109,7 @@ interface MapStop {
   stopPoint: LngLat;
   route: LngLat[];
   isActive: boolean;
+  color: string;
 }
 
 const mapStops = computed((): MapStop[] => {
@@ -121,6 +126,7 @@ const mapStops = computed((): MapStop[] => {
     stopPoint: getStopPointAtIndex(tour, index),
     route: getStopRouteAtIndex(tour, index),
     isActive: index === store.stopIndex,
+    color: getStopColor(index),
   }));
 });
 
@@ -153,6 +159,12 @@ const center = computed((): LngLat => getCenterOfBoundingBox(bounds.value));
 
 function setMapStyle(updatedStyle: string) {
   mapStyle.value = updatedStyle;
+}
+
+function getStopColor(index) {
+  if (index > store.stopIndex) return "#333";
+  if (index === store.stopIndex) return "#0A84FF";
+  return "#999";
 }
 </script>
 <style scoped>
@@ -248,5 +260,9 @@ function setMapStyle(updatedStyle: string) {
 .map-sheet__map-container {
   border-radius: 0.5rem;
   border: 1px solid var(--gray-light);
+}
+
+.tour-map__marker--is-active {
+  z-index: 10;
 }
 </style>

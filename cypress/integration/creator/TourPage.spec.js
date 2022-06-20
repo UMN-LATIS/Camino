@@ -58,11 +58,8 @@ describe("Tour Page", () => {
   });
 
   it("has a default location of UMN", () => {
-    cy.get('[data-cy="tour-location-lng"]').should(
-      "contain.text",
-      "-93.234375"
-    );
-    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.975876");
+    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.24287");
+    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.972109");
   });
 
   it("sets the starting location", () => {
@@ -76,8 +73,8 @@ describe("Tour Page", () => {
     cy.get("#setLocation").contains("Done").click();
 
     // new location should be set
-    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.23723");
-    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.97858");
+    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.24573");
+    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.97482");
   });
 
   it("sets the tour as active and public", () => {

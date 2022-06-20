@@ -1,6 +1,6 @@
 import { UMN_LNGLAT } from "@/shared/constants";
 import getStagesFromStopWhere from "./getStagesFromStopWhere";
-import { Tour, LngLat, NavigationStage, StageType } from "@/types";
+import { Tour, LngLat, NavigationStage, StageType, Maybe } from "@/types";
 
 /**
  * finds the target point for a last navigation stage tour stop at a given index
@@ -14,11 +14,12 @@ import { Tour, LngLat, NavigationStage, StageType } from "@/types";
  * the start location will be return
  */
 export function getStopPointAtIndex(
-  tour: Tour,
+  tour: Maybe<Tour>,
   index: number,
   defaultLngLat: LngLat = UMN_LNGLAT
 ): LngLat {
   // base case
+  if (!tour) return defaultLngLat;
   if (index < 0) {
     return tour.start_location ?? defaultLngLat;
   }

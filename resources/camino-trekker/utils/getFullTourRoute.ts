@@ -1,5 +1,5 @@
-import getStagesFromTourWhere from "./getStagesFromTourWhere";
-import type { LngLat } from "../../types";
+import type { LngLat, Tour, Maybe } from "../../types";
+import { getStopRouteAtIndex } from "./getStopRouteAtIndex";
 
 /**
  * gets all route points from a given tour, including
@@ -8,8 +8,7 @@ import type { LngLat } from "../../types";
  * @returns {LngLat[]} - array of route points from every
  * stage
  */
-export default (tour): LngLat[] => {
-  const navStages = getStagesFromTourWhere("type", "navigation", tour);
-  const routePoints = navStages.flatMap((stage) => stage.route);
-  return [tour.start_location, ...routePoints];
+export default (tour: Maybe<Tour>): LngLat[] => {
+  if (!tour || !tour.stops.length) return [];
+  return tour.stops.flatMap((_, i) => getStopRouteAtIndex(tour, i));
 };

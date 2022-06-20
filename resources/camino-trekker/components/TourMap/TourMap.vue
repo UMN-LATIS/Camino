@@ -79,6 +79,7 @@ import { getStopPointAtIndex } from "@/camino-trekker/utils/getStopPointAtIndex"
 import { BoundingBox, LngLat } from "@/types";
 import { getStopRouteAtIndex } from "@/camino-trekker/utils/getStopRouteAtIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
+import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
 
 interface Props {
   type: "tour" | "stop";
@@ -130,16 +131,7 @@ const mapStops = computed((): MapStop[] => {
   }));
 });
 
-const fullTourRoute = computed((): LngLat[] => {
-  if (!store.tour) return [];
-  const stopRoutes: LngLat[] = mapStops.value
-    .flatMap((stop) => stop.route)
-    .filter(Boolean);
-
-  return store.tour.start_location
-    ? [store.tour.start_location, ...stopRoutes]
-    : stopRoutes;
-});
+const fullTourRoute = computed((): LngLat[] => getFullTourRoute(store.tour));
 
 // BOUNDS
 const bounds = computed((): BoundingBox => {

@@ -5,8 +5,8 @@
 
 <script setup lang="ts">
 import { marked } from "marked";
-import DOMPurify from "dompurify";
-import pipe from "../../utils/pipe";
+import { sanitize } from "dompurify";
+import { pipe } from "ramda";
 import { computed } from "vue";
 import type { Maybe } from "@/types";
 
@@ -17,7 +17,7 @@ interface Props {
 const props = defineProps<Props>();
 
 // parse markdown, THEN sanitize the resulting HTML
-const toCleanHtml = pipe(marked.parse, DOMPurify.sanitize);
+const toCleanHtml = pipe(marked.parse, sanitize);
 const cleanHtml = computed(() => toCleanHtml(props.content ?? ""));
 </script>
 

@@ -55,8 +55,8 @@ export interface CustomBaseMap {
 }
 
 export interface GeocodedLocation {
-  streetNumber: Maybe<string>;
-  streetName: Maybe<string>;
+  streetNumber?: Maybe<string>;
+  streetName?: Maybe<string>;
 
   /** @example 'Minneapolis' */
   city: Maybe<string>;
@@ -129,17 +129,23 @@ export interface FeedbackStage extends Stage {
   text: LocalizedText;
 }
 
+interface GalleryImage {
+  src: string;
+  text: LocalizedText;
+}
 export interface GalleryStage extends Stage {
-  images: Image[];
+  images: GalleryImage[];
 }
 
 export interface GuideStage extends Stage {
   text: LocalizedText;
 }
 export type LanguageSelectorStage = Stage;
+
+export type TourStopRoute = LngLat[];
 export interface NavigationStage extends Stage {
   text: LocalizedText;
-  route: LngLat[];
+  route: TourStopRoute;
   targetPoint: LngLat;
 }
 
@@ -164,7 +170,7 @@ export interface Image {
   alt: string;
 }
 
-export type DateTime = Brand<string, "DateTime">;
+export type DateTime = string;
 
 export interface TourStop {
   id: number;
@@ -176,9 +182,9 @@ export interface TourStop {
     header_image: Maybe<Image>;
   };
   sort_order: number;
-  deleted_at: Maybe<DateTime>;
+  deleted_at?: Maybe<DateTime>;
   created_at: DateTime;
-  updated_at: DateTime;
+  updated_at?: DateTime;
 }
 
 export enum AuthProvider {
@@ -251,3 +257,16 @@ export interface FeedbackResponse {
 }
 
 export type CreatorStore = ReturnType<typeof useCreatorStore>;
+
+/**
+ * [[minLng, minLat],
+ *  [maxLng, maxLat]]
+ **/
+export type BoundingBox = [[number, number], [number, number]];
+
+export enum MapboxMapStyle {
+  dark = "dark",
+  light = "light",
+  satellite = "satellite",
+  streets = "streets",
+}

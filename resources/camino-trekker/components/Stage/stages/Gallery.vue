@@ -30,28 +30,26 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from "vue";
 import config from "../../../config";
 import VueEasyLightbox from "vue-easy-lightbox";
+import { GalleryStage } from "@/types";
+import { useTrekkerStore } from "@trekker/stores/useTrekkerStore";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-  locale: {
-    type: String,
-    default: "en",
-  },
-});
+interface Props {
+  stage: GalleryStage;
+}
+
+const props = defineProps<Props>();
+const store = useTrekkerStore();
 
 const onStageIndex = ref(0);
 const images = computed(() =>
   props.stage.images.map((img) => ({
     src: `${config.imageStorageBase}/${img.src}`,
-    alt: img.text[props.locale],
-    title: img.text[props.locale],
+    alt: img.text[store.locale],
+    title: img.text[store.locale],
   }))
 );
 const lightboxVisible = ref(false);

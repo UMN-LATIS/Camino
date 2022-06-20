@@ -3,25 +3,25 @@
     <h3>Feedback</h3>
     <Input v-model="name" label="Name" type="text" required />
     <Input v-model="email" label="Email" type="email" required />
-    <TextArea v-model="feedback" label="Comment" required />
+    <TextArea v-model="feedback" label="Comment" required></TextArea>
     <Error v-if="error"> {{ error }} </Error>
     <div class="feedback-stage__actions">
       <Button variant="link" type="reset">Cancel</Button>
-      <Button type="submit" iconPosition="end">Submit</Button>
+      <Button type="submit" iconPosition="after">Submit</Button>
     </div>
   </form>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import axios from "axios";
 import Input from "../../Input/Input.vue";
 import TextArea from "../../TextArea/TextArea.vue";
 import Button from "../../Button/Button.vue";
 import Error from "../../Error/Error.vue";
-import { useTour } from "../../../common/hooks";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "../../../config";
 
-const { tour } = useTour();
+const store = useTrekkerStore();
 const name = ref("");
 const email = ref("");
 const feedback = ref("");
@@ -32,7 +32,7 @@ const error = ref("");
 function submitFeedback() {
   isSubmitting.value = true;
   axios
-    .post(`${config.appUrl}/feedback/${tour.value.id}`, {
+    .post(`${config.appUrl}/feedback/${store.tourId}`, {
       name: name.value,
       email: email.value,
       feedback: feedback.value,

@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, watch, onMounted, toRefs, provide } from "vue";
 import { useResizeObserver } from "@vueuse/core";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -14,21 +14,21 @@ import {
   GeolocateControl,
   ScaleControl,
 } from "mapbox-gl";
-import { arrayOf, number, string, shape } from "vue-types";
+import type { LngLat, BoundingBox, Maybe } from "@/types";
 
-const props = defineProps({
-  center: shape({
-    lng: number().isRequired,
-    lat: number().isRequired,
-  }).isRequired,
-  zoom: number().isRequired,
-  bounds: arrayOf(arrayOf(number())),
-  mapStyle: string().def("streets"),
-  accessToken: string().isRequired,
-});
+interface Props {
+  center: LngLat;
+  zoom: number;
+  bounds: BoundingBox;
+  mapStyle: string;
+  accessToken: string;
+}
 
-const mapContainerRef = ref(null);
-const mapRef = ref(null);
+const props = defineProps<Props>();
+
+const mapContainerRef = ref<HTMLDivElement>();
+const mapRef = ref<Maybe<Map>>(null);
+
 const {
   center: centerRef,
   zoom: zoomRef,
@@ -49,7 +49,30 @@ const MAP_STYLES = {
 // satellite gets a bit too pixelated up close
 const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 22);
 
-function setupMap() {
+// watch style changes
+watch(mapStyleRef, () => {
+  if (!mapRef.value) return;
+
+  const mapStyle = mapStyleRef.value;
+  mapRef.value.setStyle(MAP_STYLES[mapStyle]);
+  mapRef.value.setMaxZoom(getMaxZoomForStyle(mapStyle));
+});
+
+// watch map bounds changes
+watch(boundsRef, () => {
+  if (!mapRef.value) return;
+
+  mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
+});
+
+onMounted(() => {
+  if (!mapContainerRef.value) {
+    throw Error(
+      "Cannot create Map: container not defined:",
+      mapContainerRef.value
+    );
+  }
+
   mapRef.value = new Map({
     container: mapContainerRef.value,
     style: MAP_STYLES[props.mapStyle],
@@ -69,24 +92,9 @@ function setupMap() {
   }
 
   useResizeObserver(mapContainerRef, () => {
+    if (!mapRef.value) return;
     mapRef.value.resize();
   });
-}
-
-// watch style changes
-watch(mapStyleRef, () => {
-  const mapStyle = mapStyleRef.value;
-  mapRef.value.setStyle(MAP_STYLES[mapStyle]);
-  mapRef.value.setMaxZoom(getMaxZoomForStyle(mapStyle));
-});
-
-// watch map bounds changes
-watch(boundsRef, () => {
-  mapRef.value.fitBounds(boundsRef.value, { padding: 64 });
-});
-
-onMounted(() => {
-  setupMap();
 });
 
 provide("map", mapRef);

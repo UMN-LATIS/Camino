@@ -1,4 +1,4 @@
-import { computed, ref, type ComputedRef } from "vue";
+import { computed, ComputedRef, ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
 import { Maybe, Tour, TourStop, Locale, DeepDiveItem } from "@/types";
@@ -44,6 +44,9 @@ export const useTrekkerStore = defineStore("trekker", () => {
       if (getters.isFirstStop.value) return null;
       return getters.allStops.value[getters.stopIndex.value - 1];
     }),
+    supportedLocales: computed((): Locale[] => {
+      return state.tour.value?.tour_content?.languages ?? [];
+    }),
   };
 
   // ACTIONS
@@ -62,7 +65,7 @@ export const useTrekkerStore = defineStore("trekker", () => {
           state.errors.value.push(err);
         });
     },
-    setLocale(locale) {
+    setLocale(locale: Locale) {
       state.locale.value = locale;
     },
     addDeepDive(deepdive) {

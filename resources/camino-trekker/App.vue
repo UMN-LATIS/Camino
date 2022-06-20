@@ -1,8 +1,8 @@
 <script setup>
-import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
+// import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
-const creatorStore = useCreatorStore();
-creatorStore.init();
+// const creatorStore = useCreatorStore();
+// creatorStore.init();
 </script>
 
 <template>

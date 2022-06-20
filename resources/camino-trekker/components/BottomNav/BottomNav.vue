@@ -9,7 +9,10 @@
         class="bottom-nav__progress-button"
         @click="setActiveSheet(SHEETS.STOPLIST)"
       >
-        <ProgressIndicator :total="totalStops" :active="stopIndex" />
+        <ProgressIndicator
+          :total="store.totalStops"
+          :active="store.stopIndex"
+        />
         <span class="sr-only">Open Tour Stops</span>
       </button>
       <button class="bottom-nav__button" @click="setActiveSheet(SHEETS.MAP)">
@@ -35,13 +38,15 @@
     </div>
   </div>
 </template>
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
+import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import ProgressIndicator from "../ProgressIndicator/ProgressIndicator.vue";
 import MapSheet from "../MapSheet/MapSheet.vue";
 import MenuSheet from "../MenuSheet/MenuSheet.vue";
 import StopListSheet from "../StopListSheet/StopListSheet.vue";
-import { useStopIndex, useTour } from "../../common/hooks";
+
+const store = useTrekkerStore();
 
 const SHEETS = {
   MENU: "MENU",
@@ -50,10 +55,6 @@ const SHEETS = {
 };
 
 const activeSheet = ref(null);
-
-const { stopIndex } = useStopIndex();
-const { tour } = useTour();
-const totalStops = computed(() => tour.value?.stops.length || 0);
 
 const setActiveSheet = (sheetKey) => {
   activeSheet.value = SHEETS[sheetKey];

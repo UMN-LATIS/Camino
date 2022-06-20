@@ -4,7 +4,7 @@
       <iframe
         width="640"
         height="360"
-        :src="source"
+        :src="stage.source"
         title="Embedded Player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -14,20 +14,14 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    stage: {
-      type: Object,
-      required: true,
-    },
-  },
-  computed: {
-    source() {
-      return this.stage.source;
-    },
-  },
-};
+<script setup lang="ts">
+import { EmbedStage } from "@/types";
+
+interface Props {
+  stage: EmbedStage;
+}
+
+defineProps<Props>();
 </script>
 
 <style scoped>

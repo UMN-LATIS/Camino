@@ -45,8 +45,11 @@ jobs:
       - name: Laravel Setup
         run: |
           docker compose exec -T laravel.test ./bin/ci.sh
-          docker compose exec -T laravel.test chown -R 1000:1000 storage
           docker compose exec -T laravel.test php artisan migrate:fresh --seed
+
+      - name: Set ownership
+        run: |
+          docker compose exec -T laravel.test chown -R $WWWUSER:$WWWGROUP storage
 
       # - name: Lint code
       #   run: yarn lint

@@ -132,7 +132,9 @@ const mapStops = computed((): MapStop[] => {
 
 const fullTourRoute = computed((): LngLat[] => {
   if (!store.tour) return [];
-  const stopRoutes: LngLat[] = mapStops.value.flatMap((stop) => stop.route);
+  const stopRoutes: LngLat[] = mapStops.value
+    .flatMap((stop) => stop.route)
+    .filter(Boolean);
 
   return store.tour.start_location
     ? [store.tour.start_location, ...stopRoutes]

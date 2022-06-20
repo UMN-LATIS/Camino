@@ -1,5 +1,6 @@
 <template>
-  <div ref="mapContainerRef" class="map-container">
+  <div>
+    <div ref="mapContainerRef" class="map-container" />
     <slot />
   </div>
 </template>

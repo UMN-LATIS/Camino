@@ -6,10 +6,14 @@
     </Button>
     <div v-if="showMap" class="navigation-stage__tour-map-wrapper">
       <TourMap
+        v-if="stage.targetPoint"
         initialMapStyle="streets"
         type="stop"
         :stopIndex="store.stopIndex"
       />
+      <div v-else class="tour-map-error">
+        <p>No target point set for navigation stage.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -30,11 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
   hasShowMapToggle: true,
 });
 const store = useTrekkerStore();
-
 const markdown = computed(() => props.stage.text[store.locale] ?? "");
-
-// if no toggle, show map by default
-// if toggle, hide map
 const showMap = ref(!props.hasShowMapToggle);
 
 const toggleShowMap = () => (showMap.value = !showMap.value);
@@ -45,5 +45,13 @@ const toggleShowMap = () => (showMap.value = !showMap.value);
 }
 .navigation-stage__tour-map-wrapper {
   height: 50vh;
+}
+.tour-map-error {
+  background: #ddd;
+  font-size: 2rem;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

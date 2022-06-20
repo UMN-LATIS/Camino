@@ -31,9 +31,13 @@ export function getStopPointAtIndex(
     stopAtIndex
   ) as NavigationStage[];
 
-  return navStagesAtStop.length
-    ? //get the target point of the last nav stage
-      navStagesAtStop[navStagesAtStop.length - 1].targetPoint
-    : // try the previous stop point
-      getStopPointAtIndex(tour, index - 1);
+  // if no nav stages here, try the previous stop
+  if (!navStagesAtStop.length) {
+    return getStopPointAtIndex(tour, index - 1);
+  }
+
+  const targetPoint = navStagesAtStop[navStagesAtStop.length - 1].targetPoint;
+
+  // targetPoint could be null. If it is, try the previous stop
+  return targetPoint || getStopPointAtIndex(tour, index - 1);
 }

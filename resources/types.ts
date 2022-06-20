@@ -270,3 +270,9 @@ export enum MapboxMapStyle {
   satellite = "satellite",
   streets = "streets",
 }
+
+export enum BottomNavSheet {
+  Menu = "MENU",
+  Stoplist = "STOPLIST",
+  Map = "Map",
+}

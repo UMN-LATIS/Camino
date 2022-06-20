@@ -1,7 +1,14 @@
 import { computed, ComputedRef, ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
-import { Maybe, Tour, TourStop, Locale, DeepDiveItem } from "@/types";
+import {
+  Maybe,
+  Tour,
+  TourStop,
+  Locale,
+  DeepDiveItem,
+  BottomNavSheet,
+} from "@/types";
 import { useRoute } from "vue-router";
 
 const toInt = (str) => Number.parseInt(str, 10);
@@ -16,6 +23,7 @@ export const useTrekkerStore = defineStore("trekker", () => {
     locale: ref<Locale>(Locale.en),
     errors: ref<string[]>([]),
     deepDives: ref<DeepDiveItem[]>([]),
+    activeSheet: ref<Maybe<BottomNavSheet>>(null),
   };
 
   // GETTERS (computed)
@@ -47,6 +55,8 @@ export const useTrekkerStore = defineStore("trekker", () => {
     supportedLocales: computed((): Locale[] => {
       return state.tour.value?.tour_content?.languages ?? [];
     }),
+    isActiveSheet: (sheetKey: Maybe<BottomNavSheet>) =>
+      computed((): boolean => state.activeSheet.value === sheetKey),
   };
 
   // ACTIONS
@@ -67,6 +77,12 @@ export const useTrekkerStore = defineStore("trekker", () => {
     },
     setLocale(locale: Locale) {
       state.locale.value = locale;
+    },
+    setActiveSheet(sheetKey: Maybe<BottomNavSheet>) {
+      state.activeSheet.value = sheetKey;
+    },
+    closeActiveSheet() {
+      actions.setActiveSheet(null);
     },
     addDeepDive(deepdive) {
       const hasDeepDive = state.deepDives.value.indexOf(deepdive) > -1;

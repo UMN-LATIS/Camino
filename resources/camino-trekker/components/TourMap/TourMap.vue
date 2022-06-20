@@ -53,10 +53,13 @@
               {{ stop.title }}
             </h2>
             <p class="map-popup__link-container">
-              <router-link :to="stop.href" class="map-popup__link">
+              <button
+                class="map-popup__link"
+                @click="handleGoToStopButtonClick(stop)"
+              >
                 <span class="material-icons">arrow_forward</span>
                 <span class="sr-only">Go to Stop</span>
-              </router-link>
+              </button>
             </p>
           </MapPopup>
         </MapMarker>
@@ -80,6 +83,7 @@ import { BoundingBox, LngLat } from "@/types";
 import { getStopRouteAtIndex } from "@/camino-trekker/utils/getStopRouteAtIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
+import { useRouter } from "vue-router";
 
 interface Props {
   type: "tour" | "stop";
@@ -95,6 +99,7 @@ const props = withDefaults(defineProps<Props>(), {
  * COMPUTED
  */
 const store = useTrekkerStore();
+const router = useRouter();
 const canCreateMap = computed(
   () => store.tour && store.tour.stops && store.tour.start_location
 );
@@ -159,6 +164,12 @@ function getStopColor(index) {
   if (index > store.stopIndex) return "#333";
   if (index === store.stopIndex) return "#0A84FF";
   return "#999";
+}
+
+function handleGoToStopButtonClick(stop: MapStop) {
+  // close map sheet and then go to the stop
+  store.closeActiveSheet();
+  router.push(stop.href);
 }
 </script>
 <style scoped>

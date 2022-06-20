@@ -9,7 +9,7 @@
       <p class="stop-header__number">
         {{ stopNumber }}
       </p>
-      <h2 class="stop-header__title h2">{{ title }}</h2>
+      <h2 class="stop-header__title h2" data-cy="stop-title">{{ title }}</h2>
       <p v-if="subtitle" class="stop-header__subtitle">{{ subtitle }}</p>
       <slot />
     </div>

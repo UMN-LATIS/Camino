@@ -24,7 +24,6 @@
         <a
           :href="`/trekker/tours/${tourId}/stops/${stop.sort_order}`"
           class="btn btn-outline-success"
-          target="_blank"
           ><i class="fas fa-eye"></i>
           <span class="d-none d-sm-inline">Preview</span>
         </a>

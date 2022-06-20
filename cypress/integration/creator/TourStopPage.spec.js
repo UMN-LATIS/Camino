@@ -25,15 +25,16 @@ describe("Tour Stop Page", () => {
     cy.contains("Save").click();
     cy.get('[data-cy="stop-title"]').should("contain.text", "Stop 1");
 
+    // Preview the stop should show the new stop name
+    cy.contains("Preview").click();
+    cy.get('[data-cy="stop-title"]').should("contain.text", "Stop 1");
+    cy.go("back");
+
     // check that the Tour Page also shows the new stop name
     cy.contains("Back to Tour").click();
     cy.get('[data-cy="tour-stop-list"]')
       .should("contain.text", "Stop 1")
       .should("not.contain.text", "Test Stop");
-
-    // Preview the stop should show the new stop name
-    cy.contains("Preview").click();
-    cy.get('[data-cy="stop-title"]').should("contain.text", "Stop 1");
   });
 
   it("adds a stop subtitle");

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+
 import TourPage from "./pages/TourPage/TourPage.vue";
 import TourStopPage from "./pages/TourStopPage/TourStopPage.vue";
 import FeedbackViewPage from "./pages/FeedbackViewPage.vue";
@@ -52,6 +53,13 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
 });
 
 export default router;

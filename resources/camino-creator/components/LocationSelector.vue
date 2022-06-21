@@ -15,13 +15,15 @@
     >
       <div id="map" style="height: 70vh; width: 100%" />
       <template #footer>
-        <Alert v-if="!locationAvailable">
-          Location not available. Check your browser settings.
+        <Alert v-if="!locationAvailable" variant="warning">
+          Your current location is unavailable. Check your browser settings.
         </Alert>
         <div
           class="d-flex flex-direction-row-reverse gap-1 justify-content-between w-100"
         >
-          <BButton @click="useCurrentLocation">Use Current Location</BButton>
+          <BButton :disabled="!locationAvailable" @click="useCurrentLocation"
+            >Use Current Location</BButton
+          >
           <BButton
             variant="primary"
             data-bs-dismiss="modal"
@@ -59,16 +61,17 @@ export default {
   props: ["location", "generalarea", "basemap", "tour", "route", "stop"],
   emits: ["update:location", "update:route"],
   setup() {
-    const { coords } = useGeolocation();
+    const { coords, error: geolocationError } = useGeolocation();
 
     return {
       coords,
+      geolocationError,
     };
   },
   data() {
     return {
       // currentLocation: null,
-      locationAvailable: false,
+      // locationAvailable: false,
       randomIdentifier: Math.round(Math.random() * 100000),
       isModalOpen: false,
     };
@@ -82,6 +85,9 @@ export default {
         lng: this.coords.longitude,
         lat: this.coords.latitude,
       };
+    },
+    locationAvailable() {
+      return !this.geolocationError;
     },
   },
   watch: {

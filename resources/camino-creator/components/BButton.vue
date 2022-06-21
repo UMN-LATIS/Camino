@@ -18,3 +18,11 @@ withDefaults(defineProps<Props>(), {
   variant: "default",
 });
 </script>
+
+<style scoped>
+.btn-outline-dark:disabled {
+  background: #ddd;
+  border-color: #aaa;
+  color: #aaa;
+}
+</style>

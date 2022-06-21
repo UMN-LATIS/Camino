@@ -1,6 +1,6 @@
 <template>
   <div
-    class="alert alert-dismissible fade show d-flex align-items-center"
+    class="alert alert-dismissible fade show d-flex align-items-center gap-2"
     :class="{
       'alert-danger': variant === 'danger',
       'alert-warning': variant === 'warning',
@@ -39,7 +39,7 @@
     >
       <use xlink:href="#exclamation-triangle-fill" />
     </svg>
-    <div>
+    <div class="alert_content">
       <slot />
     </div>
     <button

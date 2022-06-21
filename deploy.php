@@ -3,7 +3,7 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
-require 'contrib/npm.php';
+require 'contrib/yarn.php';
 
 // Configuration
 set('ssh_type', 'native');
@@ -45,7 +45,7 @@ host('prod')
 
 task('assets:generate', function () {
     cd('{{release_path}}');
-    run('npm run production');
+    run('yarn production');
 })->desc('Assets generation');
 
 task('fix_storage_perms', function () {
@@ -61,5 +61,5 @@ after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'artisan:migrate');
-after('deploy:update_code', 'npm:install');
+after('deploy:update_code', 'yarn:install');
 after('deploy:shared', 'assets:generate');

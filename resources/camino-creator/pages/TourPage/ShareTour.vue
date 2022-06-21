@@ -19,9 +19,9 @@
             </button>
           </div>
         </div>
-        <ErrorAlert v-if="error" class="my-2">
+        <Alert v-if="error" class="my-2">
           {{ error }}
-        </ErrorAlert>
+        </Alert>
         <strong v-if="invitationSent">Invitation Sent</strong>
         <!-- show users list if there's more than just the tour owner -->
         <div v-if="users.length > 1">
@@ -37,7 +37,7 @@
 
 <script setup>
 import { ref } from "vue";
-import ErrorAlert from "../../components/ErrorAlert.vue";
+import Alert from "../../components/Alert.vue";
 
 const props = defineProps({
   users: {

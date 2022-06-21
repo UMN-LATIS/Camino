@@ -111,7 +111,6 @@ function handleDelete(tourId) {
   if (!confirm("Are you sure you wish to delete this tour?")) {
     return;
   }
-  console.log({ tourId });
 
   creatorStore.deleteTour(tourId).catch((err) => {
     console.error(err);

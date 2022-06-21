@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "./pages/HomePage.vue";
 import TourPage from "./pages/TourPage/TourPage.vue";
 import TourStopPage from "./pages/TourStopPage/TourStopPage.vue";
 import FeedbackViewPage from "./pages/FeedbackViewPage.vue";
+import MyToursPage from "./pages/MyToursPage.vue";
 
 const routes = [
   {
     path: "/creator",
-    component: HomePage,
+    component: MyToursPage,
   },
   {
     path: "/creator/tours/create",

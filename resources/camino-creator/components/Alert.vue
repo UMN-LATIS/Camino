@@ -1,6 +1,12 @@
 <template>
   <div
-    class="alert alert-danger alert-dismissible fade show d-flex align-items-center"
+    class="alert alert-dismissible fade show d-flex align-items-center"
+    :class="{
+      'alert-danger': variant === 'danger',
+      'alert-warning': variant === 'warning',
+      'alert-success': variant === 'success',
+      'alert-dismissible': isDismissable,
+    }"
     role="alert"
   >
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
@@ -44,4 +50,13 @@
     ></button>
   </div>
 </template>
-<script setup></script>
+<script setup lang="ts">
+interface Props {
+  variant?: "danger" | "warning" | "success";
+  isDismissable?: boolean;
+}
+withDefaults(defineProps<Props>(), {
+  variant: "danger",
+  isDismissable: true,
+});
+</script>

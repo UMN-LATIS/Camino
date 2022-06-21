@@ -1,9 +1,7 @@
 <template>
   <div class="app">
-    <div v-if="!creatorStore.isReady" class="spinner-border" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <div v-if="creatorStore.isReady" class="container py-4 h-100">
+    <Spinner v-if="!creatorStore.isReady" />
+    <div v-else class="container py-4 h-100">
       <router-view></router-view>
     </div>
   </div>
@@ -11,6 +9,7 @@
 <script setup>
 import { onMounted } from "vue";
 import { useCreatorStore } from "./stores/useCreatorStore";
+import Spinner from "./components/Spinner.vue";
 
 const creatorStore = useCreatorStore();
 onMounted(() => creatorStore.init());

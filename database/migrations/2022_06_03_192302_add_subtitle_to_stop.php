@@ -20,8 +20,12 @@ return new class extends Migration
                     return;
                 }
 
-                // set a default null on subtitle
-                $stop->stop_content->subtitle = NULL;
+                // update stop_content json, changing stop_content.subtitle to 
+                // null
+                $stop->stop_content = [
+                    ...$stop->stop_content,
+                    'subtitle' => NULL
+                ];
                 $stop->save();
             });
         });

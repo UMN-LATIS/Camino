@@ -15,12 +15,13 @@
     >
       <div id="map" style="height: 70vh; width: 100%" />
       <template #footer>
+        <Alert v-if="!locationAvailable">
+          Location not available. Check your browser settings.
+        </Alert>
         <div
           class="d-flex flex-direction-row-reverse gap-1 justify-content-between w-100"
         >
-          <BButton v-if="true || locationAvailable" @click="useCurrentLocation"
-            >Use Current Location
-          </BButton>
+          <BButton @click="useCurrentLocation">Use Current Location</BButton>
           <BButton
             variant="primary"
             data-bs-dismiss="modal"
@@ -37,6 +38,9 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import BButton from "./BButton.vue";
 import BModal from "./BModal.vue";
+import { useGeolocation } from "@vueuse/core";
+import Alert from "./Alert.vue";
+
 let map;
 let lc;
 let targetLocationCssIcon = null;
@@ -49,13 +53,21 @@ export default {
   components: {
     BButton,
     BModal,
+    Alert,
   },
   // eslint-disable-next-line vue/require-prop-types
   props: ["location", "generalarea", "basemap", "tour", "route", "stop"],
   emits: ["update:location", "update:route"],
+  setup() {
+    const { coords } = useGeolocation();
+
+    return {
+      coords,
+    };
+  },
   data() {
     return {
-      currentLocation: null,
+      // currentLocation: null,
       locationAvailable: false,
       randomIdentifier: Math.round(Math.random() * 100000),
       isModalOpen: false,
@@ -64,6 +76,12 @@ export default {
   computed: {
     randomizedModalName: function () {
       return "navModal" + this.randomIdentifier;
+    },
+    currentLocation() {
+      return {
+        lng: this.coords.longitude,
+        lat: this.coords.latitude,
+      };
     },
   },
   watch: {
@@ -142,10 +160,9 @@ export default {
       return targetPoints;
     },
     useCurrentLocation: function () {
-      this.$emit(
-        "update:location",
-        this.roundCoordinates(this.currentLocation)
-      );
+      const loc = this.roundCoordinates(this.currentLocation);
+      this.$emit("update:location", loc);
+      map.flyTo(loc);
     },
     roundCoordinates: function (coordinates) {
       return {

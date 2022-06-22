@@ -152,18 +152,21 @@ export default {
     },
   },
   methods: {
-    allLocations: function () {
+    /**
+     * gets a list of all nav stages within the tour
+     */
+    allNavStages: function () {
       if (!this.tour) {
         return [];
       }
-      const targetPoints = this.tour.stops
+      const navStages = this.tour.stops
         .map((stop) => stop.stop_content.stages)
         .map((stages) => {
           return stages.filter((stage) => stage.type == "navigation");
         })
         .flat();
 
-      return targetPoints;
+      return navStages;
     },
     useCurrentLocation: function () {
       const loc = this.roundCoordinates(this.currentLocation);
@@ -204,7 +207,7 @@ export default {
       marker.addTo(map);
     },
     drawOtherPoints: function () {
-      const targetNavs = this.allLocations();
+      const targetNavs = this.allNavStages();
       otherLocationsCssIcon = L.divIcon({
         // Specify a class name we can refer to in CSS.
         className: "other-css-icon css-icon",
@@ -234,7 +237,7 @@ export default {
       otherMarkerGroup.addTo(map);
     },
     drawWalkingPath: function () {
-      const targetNavs = this.allLocations();
+      const targetNavs = this.allNavStages();
       let localPolyline;
       let decorator;
       let decorator2;
@@ -350,19 +353,6 @@ export default {
 
       const self = this;
 
-      function onLocationFound(e) {
-        self.currentLocation = e.latlng;
-        self.locationAvailable = true;
-      }
-
-      function clickEvent(e) {
-        self.$emit("update:location", self.roundCoordinates(e.latlng));
-      }
-
-      function vertexEdit(e) {
-        self.$emit("update:route", e.poly.getLatLngs());
-      }
-
       if (this.location) {
         map.setView(new L.LatLng(this.location.lat, this.location.lng), 16);
       } else if (this.generalarea) {
@@ -372,9 +362,18 @@ export default {
         );
       }
 
-      map.on("locationfound", onLocationFound);
-      map.on("click", clickEvent);
-      map.on("draw:editvertex", vertexEdit);
+      map.on("locationfound", function onLocationFound(e) {
+        self.currentLocation = e.latlng;
+        self.locationAvailable = true;
+      });
+
+      map.on("click", function clickEvent(e) {
+        self.$emit("update:location", self.roundCoordinates(e.latlng));
+      });
+
+      map.on("draw:editvertex", function vertexEdit(e) {
+        self.$emit("update:route", e.poly.getLatLngs());
+      });
 
       this.drawWalkingPath();
       this.drawMarker();

@@ -140,7 +140,7 @@ const defaultLanguage = computed(
 
 onMounted(() => {
   // load existing tour info
-  tour.value = creatorStore.getTour(props.tourId);
+  tour.value = creatorStore.getTour(props.tourId).value;
 });
 
 function validate(tour: Tour): boolean {

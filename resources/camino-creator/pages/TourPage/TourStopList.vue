@@ -85,7 +85,7 @@ const showCreateForm = ref(false);
 const languages = creatorStore.getTourLanguages(props.tourId);
 
 // localized titles
-const newTitle = ref(createEmptyLocalizedText(languages));
+const newTitle = ref(createEmptyLocalizedText(languages.value));
 
 function createNew() {
   creatorStore.createTourStop(props.tourId, {
@@ -94,11 +94,11 @@ function createNew() {
     },
   });
   showCreateForm.value = false;
-  newTitle.value = createEmptyLocalizedText(languages);
+  newTitle.value = createEmptyLocalizedText(languages.value);
 }
 
 const tourStops = computed<TourStop[]>(
-  () => creatorStore.getTour(props.tourId).stops
+  () => creatorStore.getTour(props.tourId).value.stops
 );
 
 const firstStop = computed<TourStop>(() => tourStops.value[0]);

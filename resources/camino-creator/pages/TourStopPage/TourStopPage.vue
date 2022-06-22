@@ -206,7 +206,7 @@ function pageHasUnsavedChanges(): boolean {
 }
 
 onMounted(() => {
-  stop.value = creatorStore.getTourStop(props.tourId, props.stopId);
+  stop.value = creatorStore.getTourStop(props.tourId, props.stopId).value;
   lastSavedStopJson.value = JSON.stringify(stop.value);
 });
 
@@ -290,7 +290,7 @@ function removeHeaderImage() {
 
 function validate(stop) {
   errors.value = [];
-  if (!stop.stop_content.title[defaultTourLanguage]) {
+  if (!stop.stop_content.title[defaultTourLanguage.value]) {
     errors.value.push("A title is required");
   }
   return errors.value.length === 0;

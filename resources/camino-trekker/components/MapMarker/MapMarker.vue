@@ -12,10 +12,12 @@ import { MapInjectionKey, MarkerInjectionKey } from "@/shared/constants";
 interface Props {
   lng: number;
   lat: number;
-  color: string;
+  color?: string;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  color: "#111",
+});
 const mapRef = inject(MapInjectionKey);
 const marker = ref<Marker | null>(null);
 

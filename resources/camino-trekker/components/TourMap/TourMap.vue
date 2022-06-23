@@ -78,7 +78,7 @@ import capitalize from "../../utils/capitalize";
 import getBoundingBox from "../../utils/getBoundingBox";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "@trekker/config";
-import { getStopPointAtIndex } from "@/camino-trekker/utils/getStopPointAtIndex";
+import { findLastTargetPoint } from "@/camino-trekker/utils/findLastTargetPoint";
 import { BoundingBox, LngLat } from "@/types";
 import { getStopRouteAtIndex } from "@/camino-trekker/utils/getStopRouteAtIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
@@ -128,8 +128,8 @@ const mapStops = computed((): MapStop[] => {
     number: index + 1,
     title: stop.stop_content.title?.[store.locale] ?? `Stop ${index}`,
     href: `/tours/${store.tourId}/stops/${index}`,
-    startPoint: getStopPointAtIndex(tour, index - 1),
-    stopPoint: getStopPointAtIndex(tour, index),
+    startPoint: findLastTargetPoint(tour, index - 1),
+    stopPoint: findLastTargetPoint(tour, index),
     route: getStopRouteAtIndex(tour, index),
     isActive: index === store.stopIndex,
     color: getStopColor(index),

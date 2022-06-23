@@ -7,7 +7,7 @@ import {
   LngLat,
   Maybe,
 } from "@/types";
-import { getStopPointAtIndex } from "./getStopPointAtIndex";
+import { findLastTargetPoint } from "./findLastTargetPoint";
 
 export function getStopRouteAtIndex(
   tour: Maybe<Tour>,
@@ -32,8 +32,8 @@ export function getStopRouteAtIndex(
   // make sure the previous stop target point begins the route
   // and the current stop target point ends the route
   return [
-    getStopPointAtIndex(tour, index - 1),
+    findLastTargetPoint(tour, index - 1),
     ...fullStopRoute,
-    getStopPointAtIndex(tour, index),
+    findLastTargetPoint(tour, index),
   ];
 }

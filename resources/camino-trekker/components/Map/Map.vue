@@ -9,26 +9,14 @@ import { ref, watch, onMounted, provide } from "vue";
 import { useResizeObserver } from "@vueuse/core";
 import "mapbox-gl/dist/mapbox-gl.css";
 import {
-  Map,
+  Map as MapboxMap,
   FullscreenControl,
   GeolocateControl,
   ScaleControl,
+  MapMouseEvent,
 } from "mapbox-gl";
 import type { LngLat, BoundingBox, Maybe } from "@/types";
 import { MapInjectionKey } from "@/shared/constants";
-
-interface Props {
-  center: LngLat;
-  zoom: number;
-  bounds?: Maybe<BoundingBox>;
-  mapStyle: string;
-  accessToken: string;
-}
-
-const props = defineProps<Props>();
-
-const mapContainerRef = ref<HTMLDivElement>();
-const mapRef = ref<Maybe<Map>>(null);
 
 const MAP_STYLES = {
   streets: "mapbox://styles/mapbox/streets-v11",
@@ -39,6 +27,22 @@ const MAP_STYLES = {
   "navigation-day": "mapbox://styles/mapbox/navigation-day-v1",
   "navigation-night": "mapbox://styles/mapbox/navigation-night-v1",
 };
+
+const props = defineProps<{
+  center: Maybe<LngLat>;
+  zoom: number;
+  bounds?: Maybe<BoundingBox>;
+  mapStyle: keyof typeof MAP_STYLES;
+  accessToken: string;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "click", mapMouseEvent: MapMouseEvent, mapboxMap: MapboxMap);
+  (eventName: "load", mapboxMap: MapboxMap);
+}>();
+
+const mapContainerRef = ref<HTMLDivElement>();
+const mapRef = ref<Maybe<MapboxMap>>(null);
 
 // satellite gets a bit too pixelated up close
 const getMaxZoomForStyle = (mapStyle) => (mapStyle === "satellite" ? 18 : 20);
@@ -67,10 +71,10 @@ onMounted(() => {
     );
   }
 
-  mapRef.value = new Map({
+  mapRef.value = new MapboxMap({
     container: mapContainerRef.value,
     style: MAP_STYLES[props.mapStyle],
-    center: [props.center.lng, props.center.lat],
+    center: props.center ? [props.center.lng, props.center.lat] : undefined,
     zoom: props.zoom,
     accessToken: props.accessToken,
     maxZoom: getMaxZoomForStyle(props.mapStyle),
@@ -78,12 +82,39 @@ onMounted(() => {
 
   mapRef.value
     .addControl(new FullscreenControl())
-    .addControl(new GeolocateControl())
+    .addControl(
+      new GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        // When active the map will receive updates to the device's location as it changes.
+        trackUserLocation: true,
+        // Draw an arrow next to the location dot to indicate which direction the device is heading.
+        showUserHeading: true,
+      })
+    )
     .addControl(new ScaleControl({ unit: "imperial" }));
 
   if (props.bounds) {
     mapRef.value.fitBounds(props.bounds, { padding: 64 });
   }
+
+  // add click handler
+  mapRef.value.on("click", (event: MapMouseEvent) => {
+    if (!mapRef.value) {
+      // this shouldn't happen
+      throw new Error("there was a click but no map");
+    }
+
+    emit("click", event, mapRef.value);
+  });
+
+  mapRef.value.on("load", () => {
+    if (!mapRef.value) {
+      throw new Error("cannot emit load event: no mapRef");
+    }
+    emit("load", mapRef.value);
+  });
 
   useResizeObserver(mapContainerRef, () => {
     if (!mapRef.value) return;

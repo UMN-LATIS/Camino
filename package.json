@@ -69,6 +69,7 @@
     "@fontsource/material-icons": "^4.5.4",
     "@fontsource/poppins": "^4.5.8",
     "@popperjs/core": "^2.11.5",
+    "@types/leaflet-draw": "^1.0.5",
     "@vueuse/core": "^8.7.4",
     "aframe": "^1.3.0",
     "aframe-look-at-component": "^1.0.0",

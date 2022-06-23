@@ -4,9 +4,7 @@
     <div class="col-sm-6">
       <div v-if="modelValue">
         <b>Latitude:</b>
-        <span data-cy="tour-location-lat">
-          {{ modelValue.lat }} </span
-        >,
+        <span data-cy="tour-location-lat"> {{ modelValue.lat }} </span>,
         <b>Longitude:</b>
         <span data-cy="tour-location-lng">
           {{ modelValue.lng }}
@@ -23,7 +21,7 @@
 
 <script setup lang="ts">
 import { CustomBaseMap, LngLat, Maybe } from "@/types";
-import LocationSelector from "../../components/LocationSelector.vue";
+import LocationSelector from "../../components/MapboxLocationSelector.vue";
 
 interface Props {
   modelValue: Maybe<LngLat>;

@@ -1,5 +1,5 @@
 import type { LngLat, Tour, Maybe } from "../../types";
-import { getStopRouteAtIndex } from "./getStopRouteAtIndex";
+import { getStopRouteByIndex } from "./getStopRouteByIndex";
 
 /**
  * gets all route points from a given tour, including
@@ -10,5 +10,5 @@ import { getStopRouteAtIndex } from "./getStopRouteAtIndex";
  */
 export default (tour: Maybe<Tour>): LngLat[] => {
   if (!tour || !tour.stops.length) return [];
-  return tour.stops.flatMap((_, i) => getStopRouteAtIndex(tour, i));
+  return tour.stops.flatMap((_, i) => getStopRouteByIndex(tour, i));
 };

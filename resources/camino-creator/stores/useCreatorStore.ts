@@ -1,67 +1,44 @@
-import { ref, type ComputedRef, computed } from "vue";
+import { ref, type Ref, type ComputedRef, computed } from "vue";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { axiosClient as axios } from "@creator/common/axios";
-import { Locale } from "@/types";
+import {
+  Locale,
+  Maybe,
+  NavigationStage,
+  StageType,
+  TourStopRoute,
+  LngLat,
+} from "@/types";
 import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
+import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
+import * as selectors from "./creatorStoreSelectors";
+export interface CreatorStoreState {
+  tours: Ref<Tour[]>;
+  error: Ref<string | null>;
+  isReady: Ref<boolean>;
+}
 
 export const useCreatorStore = defineStore("creator", () => {
-  const state = {
-    tours: ref<Tour[]>([]),
-    error: ref<string | null>(null),
-    isReady: ref<boolean>(false),
+  const state: CreatorStoreState = {
+    tours: ref([]),
+    error: ref(null),
+    isReady: ref(false),
   };
 
+  // computed version of the selectors
   const getters = {
-    /**
-     * Get a tour by id
-     */
     getTour: (tourId: number) =>
-      computed((): Tour => {
-        const tour = state.tours.value.find((tour) => tour.id === tourId);
-        if (!tour) {
-          throw new Error(
-            `a tour with id ${tourId} does not exist in the store`
-          );
-        }
-        return tour;
-      }),
+      computed(() => selectors.selectTour(state, tourId)),
 
-    /**
-     * get a tour stop by tour id and stop id
-     */
     getTourStop: (tourId: number, stopId: number) =>
-      computed((): TourStop => {
-        const tour = getters.getTour(tourId);
-        const stop = tour.value.stops.find((stop) => stop.id === stopId);
-        if (!stop) {
-          throw new Error(
-            `tour stop with tour id ${tourId} and stop id $${stopId} does not exist in the`
-          );
-        }
-        return stop;
-      }),
+      computed(() => selectors.selectTourStop(state, tourId, stopId)),
 
-    /**
-     * gets the index of a tour in the store.tours array
-     */
     getTourIndex: (tourId: number) =>
-      computed((): number => {
-        const index = state.tours.value.findIndex((t) => t.id === tourId);
-        if (index === -1) {
-          throw new Error(`cannot find index of tourId: ${tourId}`);
-        }
-        return index;
-      }),
+      computed(() => selectors.selectTourIndex(state, tourId)),
 
-    /**
-     * gets the location of a tour stop by index in store.tours
-     * that is, it gets index of tour in `store.tours`
-     * and then the index of the stop in
-     * `store.tours[tourIndex].stops`
-     */
     getTourAndStopIndex: (
       tourId: number,
       stopId: number
@@ -69,75 +46,59 @@ export const useCreatorStore = defineStore("creator", () => {
       tourIndex: number;
       stopIndex: number;
     }> =>
-      computed(() => {
-        const tourIndex = getters.getTourIndex(tourId).value;
-        const stopIndex = state.tours.value[tourIndex].stops.findIndex(
-          (stop) => stop.id === stopId
-        );
-        if (stopIndex === -1) {
-          throw new Error(`stop with id ${stopId} does not exist`);
-        }
-        return {
-          tourIndex,
-          stopIndex,
-        };
-      }),
+      computed(() => selectors.selectTourAndStopIndex(state, tourId, stopId)),
 
-    /**
-     * gets the title of a tour
-     **/
     getTourTitle: (tourId: number) =>
-      computed((): string => getters.getTour(tourId).value.title),
+      computed(() => selectors.selectTourTitle(state, tourId)),
 
-    /**
-     * gets supported languages for a given tour
-     */
     getTourLanguages: (tourId: number) =>
-      computed(
-        (): Locale[] => getters.getTour(tourId).value.tour_content.languages
-      ),
+      computed(() => selectors.selectTourLanguages(state, tourId)),
 
     /**
      * gets the first supported language for a given tour
      * if no languages are supported, defaults to english
      */
     getDefaultTourLanguage: (tourId: number) =>
-      computed(
-        (): Locale =>
-          getters.getTour(tourId).value.tour_content.languages[0] || Locale.en
-      ),
+      computed(() => selectors.selectDefaultTourLanguage(state, tourId)),
 
     /**
      * gets index of a stage by its stage id
      */
-    getStageIndexById: (
-      tourId: number,
-      stopId: number,
-      stageId: string
-    ): ComputedRef<{
-      tourIndex: number;
-      stopIndex: number;
-      stageIndex: number;
-    }> =>
-      computed(() => {
-        const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
-          tourId,
-          stopId
-        ).value;
-        const stageIndex = state.tours.value[tourIndex].stops[
-          stopIndex
-        ].stop_content.stages.findIndex((s) => s.id === stageId);
+    getStageIndexById: (tourId: number, stopId: number, stageId: string) =>
+      computed(() =>
+        selectors.selectStageIndexById(state, tourId, stopId, stageId)
+      ),
 
-        if (stageIndex === -1) {
-          throw new Error(`Cannot find stage with id ${stageId}`);
-        }
+    /**
+     * get tour stop route by tour id and stop id
+     */
+    getTourStopRoute: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectTourStopRoute(state, tourId, stopId)),
 
-        return {
-          tourIndex,
-          stopIndex,
-          stageIndex,
-        };
-      }),
+    /**
+     * gets the target point set at a given stop
+     * if no target point is set, returns null
+     *
+     * to get the last non-null target point, use
+     * @see findLastTargetPoint
+     */
+    getTourStopTargetPoint: (tourId: number, stopId: number) =>
+      computed(() =>
+        selectors.selectTourStopTargetPoint(state, tourId, stopId)
+      ),
+
+    /**
+     * gets the next stop in the tour
+     * if no next stop exists, returns null
+     */
+    getNextTourStop: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectNextTourStop(state, tourId, stopId)),
+
+    /**
+     * gets the previous stop in the tour
+     */
+    getPrevTourStop: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectPrevTourStop(state, tourId, stopId)),
   };
 
   const actions = {

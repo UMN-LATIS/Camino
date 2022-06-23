@@ -80,7 +80,7 @@ import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "@trekker/config";
 import { findLastTargetPoint } from "@/camino-trekker/utils/findLastTargetPoint";
 import { BoundingBox, LngLat } from "@/types";
-import { getStopRouteAtIndex } from "@/camino-trekker/utils/getStopRouteAtIndex";
+import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
 import { useRouter } from "vue-router";
@@ -130,7 +130,7 @@ const mapStops = computed((): MapStop[] => {
     href: `/tours/${store.tourId}/stops/${index}`,
     startPoint: findLastTargetPoint(tour, index - 1),
     stopPoint: findLastTargetPoint(tour, index),
-    route: getStopRouteAtIndex(tour, index),
+    route: getStopRouteByIndex(tour, index),
     isActive: index === store.stopIndex,
     color: getStopColor(index),
   }));

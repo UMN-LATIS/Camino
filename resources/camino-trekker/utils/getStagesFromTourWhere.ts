@@ -1,5 +1,5 @@
 import { Stage, Tour } from "@/types";
-import getStagesFromStopWhere from "./getStagesFromStopWhere";
+import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
 
 export default <T extends Stage>(
   stageKey: string,

@@ -1,5 +1,5 @@
 import { UMN_LNGLAT } from "@/shared/constants";
-import getStagesFromStopWhere from "./getStagesFromStopWhere";
+import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
 import { Tour, LngLat, NavigationStage, StageType, Maybe } from "@/types";
 
 /**

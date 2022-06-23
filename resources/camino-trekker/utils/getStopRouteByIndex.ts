@@ -1,4 +1,4 @@
-import getStagesFromStopWhere from "./getStagesFromStopWhere";
+import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
 import {
   Tour,
   NavigationStage,
@@ -9,7 +9,7 @@ import {
 } from "@/types";
 import { findLastTargetPoint } from "./findLastTargetPoint";
 
-export function getStopRouteAtIndex(
+export function getStopRouteByIndex(
   tour: Maybe<Tour>,
   index: number
 ): TourStopRoute {

@@ -1,20 +1,12 @@
-import { ref, type Ref, type ComputedRef, computed } from "vue";
+import { ref, type Ref, type ComputedRef, computed, reactive } from "vue";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { axiosClient as axios } from "@creator/common/axios";
-import {
-  Locale,
-  Maybe,
-  NavigationStage,
-  StageType,
-  TourStopRoute,
-  LngLat,
-} from "@/types";
 import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
-import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
 import * as selectors from "./creatorStoreSelectors";
+
 export interface CreatorStoreState {
   tours: Ref<Tour[]>;
   error: Ref<string | null>;
@@ -30,6 +22,8 @@ export const useCreatorStore = defineStore("creator", () => {
 
   // computed version of the selectors
   const getters = {
+    getState: () => state,
+
     getTour: (tourId: number) =>
       computed(() => selectors.selectTour(state, tourId)),
 
@@ -339,6 +333,7 @@ export const useCreatorStore = defineStore("creator", () => {
 
   return {
     ...state,
+    ...selectors,
     ...getters,
     ...actions,
   };

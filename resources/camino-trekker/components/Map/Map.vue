@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mapbox-map">
     <div ref="mapContainerRef" class="map-container" />
     <slot />
   </div>
@@ -127,6 +127,7 @@ provide(MapInjectionKey, mapRef);
 </script>
 
 <style scoped>
+.mapbox-map,
 .map-container {
   width: 100%;
   height: 100%;

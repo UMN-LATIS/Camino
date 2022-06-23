@@ -59,6 +59,11 @@ function addDataLayer({ id, positions, color }) {
     });
 }
 
+watch(
+  () => props.positions,
+  () => addDataLayer(props)
+);
+
 watch([map], () => {
   if (!map) return;
 

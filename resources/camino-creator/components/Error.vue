@@ -16,8 +16,10 @@
 </template>
 
 <script setup lang="ts">
+import { Maybe } from "@/types";
+
 defineProps<{
-  error: string;
+  error: Maybe<string>;
 }>();
 </script>
 

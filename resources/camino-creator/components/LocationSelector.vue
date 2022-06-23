@@ -155,7 +155,7 @@ export default {
     /**
      * gets a list of all nav stages within the tour
      */
-    allNavStages: function () {
+    getAllNavStages: function () {
       if (!this.tour) {
         return [];
       }
@@ -207,7 +207,7 @@ export default {
       marker.addTo(map);
     },
     drawOtherPoints: function () {
-      const targetNavs = this.allNavStages();
+      const allNavStages = this.getAllNavStages();
       otherLocationsCssIcon = L.divIcon({
         // Specify a class name we can refer to in CSS.
         className: "other-css-icon css-icon",
@@ -216,13 +216,10 @@ export default {
       });
       let otherLocation = null;
       const otherLocations = [];
-      targetNavs.forEach((targetPoint) => {
-        if (
-          targetPoint.targetPoint != this.location &&
-          targetPoint.targetPoint
-        ) {
+      allNavStages.forEach((navStage) => {
+        if (navStage.targetPoint != this.location && navStage.targetPoint) {
           otherLocation = L.marker(
-            [targetPoint.targetPoint.lat, targetPoint.targetPoint.lng],
+            [navStage.targetPoint.lat, navStage.targetPoint.lng],
             {
               icon: otherLocationsCssIcon,
             }
@@ -237,49 +234,77 @@ export default {
       otherMarkerGroup.addTo(map);
     },
     drawWalkingPath: function () {
-      const targetNavs = this.allNavStages();
+      const allNavStages = this.getAllNavStages();
       let localPolyline;
       let decorator;
       let decorator2;
       const layerGroupItems = [];
-      let previousPoint = null;
+      let previousNavStage = null;
 
       if (this.location && (!this.stop || !this.stop.id)) {
-        targetNavs.push({ targetPoint: this.location, route: this.route });
+        // if location is set, but this isn't a stop (? why?)
+        // put the targetpoint and route on allNavStages?
+        // what's the intent of this? Is this for setting a tour location rather setting a stop location/route?
+        // perhaps it's better to have a separate component for each?
+        allNavStages.push({ targetPoint: this.location, route: this.route });
       }
 
-      targetNavs.forEach((targetPoint) => {
-        if (!targetPoint) {
+      // for all nav stages, grab the target point
+      allNavStages.forEach((navStage) => {
+        // if there's none, move on
+        if (!navStage) {
           return;
         }
-        if (!targetPoint.targetPoint) {
+
+        // if there's no target point, skip this one
+        if (!navStage.targetPoint) {
           return;
         }
-        if (!targetPoint.route) {
-          previousPoint = targetPoint;
+
+        // if there's a target point, but no route
+        // set `previousPoint` to the current navStage
+        // and then move on
+        // when would this happen?
+        // route is null, but a target point is set?
+        // maybe just on the first point – the start point?
+        // Might be better to just always use start_location?
+        if (!navStage.route) {
+          previousNavStage = navStage;
           return;
         }
 
         // make sure the path is contiguous
-        if (previousPoint) {
-          targetPoint.route[0] = previousPoint.targetPoint;
+        // if there's a route for this stage AND there's a previous nav stage set (which means there wasn't a route for the last stage)
+        // set the current nav stage's first route point to the previous stage's target point
+        // this makes sense, but Wouldn't we always want to do this?
+        // why the conditional?
+        if (previousNavStage) {
+          navStage.route[0] = previousNavStage.targetPoint;
         }
 
-        localPolyline = L.polyline(targetPoint.route, {
+        // now create a localPolyline with the route
+        localPolyline = L.polyline(navStage.route, {
           color: "gray",
           opacity: 0.4,
         });
 
-        if (targetPoint.route == this.route) {
+        // if the current navStage's route is this route
+        // i.e. we're on this stop, allow editing
+        if (navStage.route == this.route) {
           localPolyline.editing.enable();
         }
 
+        // decorate the line wtih dashes?
         decorator = L.polylineDecorator(localPolyline, {
           patterns: [
             // defines a pattern of 10px-wide dashes, repeated every 20px on the line
             { offset: 0, repeat: 20, symbol: L.Symbol.dash({ pixelSize: 10 }) },
           ],
         });
+
+        // decorate the line with more dashes? Why two decorators?
+        // this one has an arrowhead. Maybe only draw a line with an arrowhead
+        // if it's long enough?
         decorator2 = L.polylineDecorator(localPolyline, {
           patterns: [
             // defines a pattern of 10px-wide dashes, repeated every 20px on the line
@@ -295,10 +320,14 @@ export default {
           ],
         });
 
+        // add the line and the decorators to the layerGroupItems array
+        // so that by the end, we' have all the lines and decorators
         layerGroupItems.push(localPolyline, decorator, decorator2);
-        previousPoint = targetPoint;
-      });
+        previousNavStage = navStage;
+      }); // end forEach navStage
 
+      // if polyline? why does polyline represent?
+      // polyline is defined at the the component level
       if (polyline) {
         polyline.clearLayers();
       }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Error :error="error" />
+    <Error v-if="error" :error="error" />
     <div>
       <h1 class="mb-3">My Tours</h1>
       <button
@@ -42,9 +42,9 @@
             <i v-if="tour.active" class="fas fa-check-circle me-2"></i
             ><i v-if="tour.public" class="fas fa-globe me-2"></i>
             <span>
-              <i v-if="tour.walking == 1" class="fas fa-walking"></i>
-              <i v-if="tour.biking == 1" class="fas fa-biking"></i>
-              <i v-if="tour.driving == 1" class="fas fa-car"></i>
+              <i v-if="tour.walking" class="fas fa-walking"></i>
+              <i v-if="tour.biking" class="fas fa-biking"></i>
+              <i v-if="tour.driving" class="fas fa-car"></i>
             </span>
             <router-link
               :to="{ name: 'editTour', params: { tourId: tour.id } }"
@@ -91,7 +91,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
 import Error from "../components/Error.vue";

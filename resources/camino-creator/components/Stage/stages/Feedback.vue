@@ -12,24 +12,21 @@
 </template>
 
 <script setup lang="ts">
+import { FeedbackStage } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../LanguageText.vue";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-  tourId: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  stage: FeedbackStage;
+  tourId: number;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", stage: FeedbackStage);
+}>();
 
 const creatorStore = useCreatorStore();
 const languages = creatorStore.getTourLanguages(props.tourId);
-
-const emit = defineEmits(["update"]);
 
 function handleUpdate(change) {
   emit("update", {

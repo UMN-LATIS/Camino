@@ -158,7 +158,7 @@ export const useCreatorStore = defineStore("creator", () => {
     /**
      * creates a new tour and adds it to the store
      */
-    async createTour(tour: Tour): Promise<Tour> {
+    async createTour(tour: Partial<Tour>): Promise<Tour> {
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",

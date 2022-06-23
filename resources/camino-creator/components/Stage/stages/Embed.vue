@@ -9,7 +9,9 @@
           class="form-control"
           :value="stage.source"
           aria-describedby="helpId"
-          @input="updateStage({ source: $event.target.value })"
+          @input="
+            updateStage({ source: ($event.target as HTMLInputElement).value })
+          "
         />
         <!-- eslint-enable -->
         <small id="helpId" class="form-text text-muted"
@@ -20,15 +22,16 @@
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-});
+<script setup lang="ts">
+import { EmbedStage } from "@/types";
 
-const emit = defineEmits(["update"]);
+const props = defineProps<{
+  stage: EmbedStage;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", stage: EmbedStage);
+}>();
 
 function updateStage(change) {
   emit("update", {

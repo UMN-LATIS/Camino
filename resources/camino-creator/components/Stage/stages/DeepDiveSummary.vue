@@ -22,22 +22,24 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { DeepDiveSummaryStage, Locale, Tour } from "@/types";
 import LanguageText from "../../LanguageText.vue";
-export default {
-  components: {
-    LanguageText,
-  },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour"],
-  emits: ["update"],
-  methods: {
-    handleUpdate(change) {
-      this.$emit("update", {
-        ...this.stage,
-        ...change,
-      });
-    },
-  },
-};
+
+const props = defineProps<{
+  stage: DeepDiveSummaryStage;
+  languages: Locale[];
+  tour: Tour;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", updatedStage: DeepDiveSummaryStage);
+}>();
+
+function handleUpdate(change) {
+  emit("update", {
+    ...props.stage,
+    ...change,
+  });
+}
 </script>

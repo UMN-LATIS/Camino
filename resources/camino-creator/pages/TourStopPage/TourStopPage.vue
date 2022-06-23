@@ -69,7 +69,7 @@
           <template #item="{ element }">
             <Stage
               :stage="element"
-              :tour="creatorStore.getTour(tourId)"
+              :tour="tour"
               :stop="stop"
               :tourId="tourId"
               :stopId="stopId"
@@ -157,17 +157,12 @@ import SaveAlert from "../../components/SaveAlert.vue";
 import stageFactory from "../../components/Stage/stages/stageFactory";
 import { StageType, TourStop, Maybe } from "@/types";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: Number,
-    // new stops will be null
-    default: null,
-  },
-});
+interface Props {
+  tourId: number;
+  stopId: number;
+}
+
+const props = defineProps<Props>();
 
 const creatorStore = useCreatorStore();
 const { userCan } = usePermissions();
@@ -176,6 +171,7 @@ const showSaveSuccessful = ref(false);
 const errors = ref<string[]>([]);
 const error = ref(null);
 const router = useRouter();
+const tour = creatorStore.getTour(props.tourId);
 const tourTitle = creatorStore.getTourTitle(props.tourId);
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 const defaultTourLanguage = creatorStore.getDefaultTourLanguage(props.tourId);
@@ -205,7 +201,9 @@ function pageHasUnsavedChanges(): boolean {
   return lastSavedStopJson.value !== JSON.stringify(stop.value);
 }
 
-onMounted(() => {
+onMounted(async () => {
+  await creatorStore.fetchTours();
+
   stop.value = creatorStore.getTourStop(props.tourId, props.stopId).value;
   lastSavedStopJson.value = JSON.stringify(stop.value);
 });

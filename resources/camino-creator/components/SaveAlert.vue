@@ -5,21 +5,24 @@
     </p>
   </Transition>
 </template>
-<script>
-export default {
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["showAlert"],
-  emits: ["update:showAlert"],
-  watch: {
-    showAlert: function (value) {
-      if (value == true) {
-        setTimeout(() => {
-          this.$emit("update:showAlert", false);
-        }, 1500);
-      }
-    },
-  },
-};
+<script setup lang="ts">
+import { watch } from "vue";
+
+const props = defineProps<{
+  showAlert: boolean;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update:showAlert", boolean);
+}>();
+
+watch(
+  () => props.showAlert,
+  (showAlert) => {
+    if (!showAlert) return;
+    setTimeout(() => emit("update:showAlert", false), 1500);
+  }
+);
 </script>
 <style scoped>
 .saveAlert {

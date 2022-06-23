@@ -30,39 +30,33 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import getAllStopPoints from "../../../util/getAllStopPoints";
 import LanguageText from "../../LanguageText.vue";
 import LocationSelector from "../../LocationSelector.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
+import { NavigationStage } from "@/types";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: [Number, null],
-    default: null,
-  },
-  stage: {
-    type: Object,
-    required: true,
-  },
-});
+interface Props {
+  tourId: number;
+  stopId: number;
+  stage: NavigationStage;
+}
+
+const props = defineProps<Props>();
 
 const creatorStore = useCreatorStore();
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 const tour = creatorStore.getTour(props.tourId);
 const currentStopIndex = computed(() =>
-  tour.stops.findIndex((s) => s.id === props.stopId)
+  tour.value.stops.findIndex((s) => s.id === props.stopId)
 );
-const currentStop = computed(() => tour.stops[currentStopIndex.value]);
+const currentStop = computed(() => tour.value.stops[currentStopIndex.value]);
 const previousStopTargetPoint = computed(() => {
   // if stop id not found or first stop, return tour start location
   if (currentStopIndex.value <= 0) {
-    return tour.start_location;
+    return tour.value.start_location;
   }
 
   const allStopPoints = getAllStopPoints(tour);

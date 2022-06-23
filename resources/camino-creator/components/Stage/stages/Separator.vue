@@ -9,31 +9,23 @@
     </LanguageText>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import { shape, string, object } from "vue-types";
+import { SeparatorStage } from "@/types";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: [Number, null],
-    default: null,
-  },
-  stage: shape({
-    id: string().isRequired,
-    type: "separator".isRequired,
-    text: object(),
-  }),
-});
+const props = defineProps<{
+  tourId: number;
+  stopId: number;
+  stage: SeparatorStage;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", stage: SeparatorStage);
+}>();
 
 const creatorStore = useCreatorStore();
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
-
-const emit = defineEmits(["update"]);
 
 function handleStageUpdate(updatedLocalizedText) {
   emit("update", {

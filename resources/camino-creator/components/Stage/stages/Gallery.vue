@@ -38,35 +38,34 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import ImageUpload from "../../ImageUpload.vue";
 import { useCreatorStore } from "../../../stores/useCreatorStore";
 import { createEmptyLocalizedText } from "@/shared/i18n";
+import { GalleryStage, GalleryImage } from "@/types";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-  tourId: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  stage: GalleryStage;
+  tourId: number;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", stage: GalleryStage);
+}>();
 
 const creatorStore = useCreatorStore();
 const languages = creatorStore.getTourLanguages(props.tourId);
 
-const emit = defineEmits(["update"]);
-
 function handleAddImage() {
+  const newImage: GalleryImage = {
+    src: "",
+    text: createEmptyLocalizedText(languages.value),
+  };
+
   emit("update", {
     ...props.stage,
-    images: props.stage.images.concat({
-      src: null,
-      text: createEmptyLocalizedText(languages),
-    }),
+    images: props.stage.images.concat(newImage),
   });
 }
 

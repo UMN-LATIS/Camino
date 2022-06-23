@@ -32,24 +32,25 @@
       />
 
       <!-- Dotted line between current stop target and next route -->
-      <!-- <MapPolyline
+      <MapPolyline
         v-if="routeToNextRoute"
-        id="target-to-next-route"
+        id="route-to-next-route"
         :positions="routeToNextRoute"
-        color="#000"
-      /> -->
+        color="red"
+        variant="dashed"
+      />
 
       <!-- Current Stop Route (Editable) -->
     </Map>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, type ComputedRef } from "vue";
+import { ref, computed } from "vue";
 import Map from "@trekker/components/Map/Map.vue";
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap, MapMouseEvent } from "mapbox-gl";
-import { LngLat, Maybe, Tour, TourStopRoute } from "@/types";
+import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { findLastTargetPoint } from "@/camino-trekker/utils/findLastTargetPoint";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
@@ -71,7 +72,7 @@ interface Emits {
 const emit = defineEmits<Emits>();
 
 const store = useCreatorStore();
-const tour: ComputedRef<Tour> = store.getTour(props.tourId);
+const tour = store.getTour(props.tourId);
 // const stop: ComputedRef<TourStop> = store.getTourStop(
 //   props.tourId,
 //   props.stopId
@@ -97,25 +98,6 @@ const otherStopTargetPoints = computed((): Maybe<LngLat>[] => {
   );
 });
 
-// const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
-//   if (!props.targetPoint) return null;
-
-//   // get the first point of the next stop route, if it exists
-//   // if not, return null
-//   const nextStop = store.getNextTourStop(props.tourId, props.stopId).value;
-//   if (!nextStop) return null;
-
-//   const nextStopRoute = store.getTourStopRoute(props.tourId, nextStop.id).value;
-
-//   if (!nextStopRoute || !nextStopRoute.length) {
-//     return null;
-//   }
-
-//   const routeToRoute = [props.targetPoint, nextStopRoute[0]];
-//   console.log(routeToRoute);
-//   return routeToRoute;
-// });
-
 const mapCenter = computed((): LngLat => {
   // use the targetPoint if we have it
   // otherwise find most recent targetPoint starting at index
@@ -123,6 +105,31 @@ const mapCenter = computed((): LngLat => {
     props.targetPoint ||
     findLastTargetPoint(tour.value, tourAndStopIndex.value.stopIndex)
   );
+});
+
+const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
+  if (!props.targetPoint) return null;
+
+  const currentState = store.getState();
+  const nextStop = store.selectNextTourStop(
+    currentState,
+    props.tourId,
+    props.stopId
+  );
+
+  if (!nextStop) return null;
+  const nextStopRoute = store.selectTourStopRoute(
+    currentState,
+    props.tourId,
+    nextStop.id
+  );
+
+  if (!nextStopRoute || !nextStopRoute.length) {
+    return null;
+  }
+
+  const routeToRoute = [props.targetPoint, nextStopRoute[0]];
+  return routeToRoute;
 });
 
 function handleMapLoad(map: MapboxMap) {

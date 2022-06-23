@@ -8,15 +8,19 @@ import { watch, inject } from "vue";
 import { toGeoJsonLineString } from "./toGeoJson";
 import type { LngLat } from "@/types";
 import { MapInjectionKey } from "@/shared/constants";
+import { type LineLayer } from "mapbox-gl";
 
 interface Props {
   positions: LngLat[];
   // unique ID for this data source
   id: string;
   color: string;
+  variant?: "solid" | "dashed";
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  variant: "solid",
+});
 const map = inject(MapInjectionKey, null);
 
 function addDataLayer({ id, positions, color }) {
@@ -39,6 +43,30 @@ function addDataLayer({ id, positions, color }) {
     map.value.removeSource(id);
   }
 
+  const layerVariants: Record<string, Partial<LineLayer>> = {
+    solid: {
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": color || "#0472f8",
+        "line-width": 6,
+      },
+    },
+    dashed: {
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": color || "#0472f8",
+        "line-dasharray": [0, 2],
+        "line-width": 3,
+      },
+    },
+  };
+
   map.value
     .addSource(id, {
       type: "geojson",
@@ -48,14 +76,7 @@ function addDataLayer({ id, positions, color }) {
       id,
       source: id,
       type: "line",
-      layout: {
-        "line-join": "round",
-        "line-cap": "round",
-      },
-      paint: {
-        "line-color": color || "#0472f8",
-        "line-width": 6,
-      },
+      ...layerVariants[props.variant],
     });
 }
 

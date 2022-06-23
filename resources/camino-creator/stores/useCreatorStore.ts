@@ -141,10 +141,10 @@ export const useCreatorStore = defineStore("creator", () => {
   };
 
   const actions = {
-    // async init() {
-    //   await actions.fetchTours();
-    //   state.isReady.value = true;
-    // },
+    async init() {
+      await actions.fetchTours();
+      state.isReady.value = true;
+    },
 
     /**
      * fetches tours from the server and sets them in the store

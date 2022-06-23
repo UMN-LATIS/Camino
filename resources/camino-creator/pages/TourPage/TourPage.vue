@@ -138,8 +138,12 @@ const defaultLanguage = computed(
   () => tour.value?.tour_content.languages[0] ?? Locale.en
 );
 
-onMounted(() => {
+onMounted(async () => {
   // load existing tour info
+  if (!creatorStore.isReady) {
+    await creatorStore.init();
+  }
+
   tour.value = creatorStore.getTour(props.tourId).value;
 });
 

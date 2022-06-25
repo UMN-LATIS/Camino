@@ -78,12 +78,12 @@ import capitalize from "../../utils/capitalize";
 import getBoundingBox from "../../utils/getBoundingBox";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "@trekker/config";
-import { findLastTargetPoint } from "@/camino-trekker/utils/findLastTargetPoint";
 import { BoundingBox, LngLat } from "@/types";
 import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
 import { useRouter } from "vue-router";
+import { findLastTargetPointByIndex } from "@/camino-trekker/utils/findLastTargetPointByIndex";
 
 interface Props {
   type: "tour" | "stop";
@@ -128,8 +128,8 @@ const mapStops = computed((): MapStop[] => {
     number: index + 1,
     title: stop.stop_content.title?.[store.locale] ?? `Stop ${index}`,
     href: `/tours/${store.tourId}/stops/${index}`,
-    startPoint: findLastTargetPoint(tour, index - 1),
-    stopPoint: findLastTargetPoint(tour, index),
+    startPoint: findLastTargetPointByIndex(tour, index - 1),
+    stopPoint: findLastTargetPointByIndex(tour, index),
     route: getStopRouteByIndex(tour, index),
     isActive: index === store.stopIndex,
     color: getStopColor(index),

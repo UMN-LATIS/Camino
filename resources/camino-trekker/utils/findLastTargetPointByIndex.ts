@@ -13,7 +13,7 @@ import { Tour, LngLat, NavigationStage, StageType, Maybe } from "@/types";
  * @param {number}  stopIndex - the stop index. If index is negative,
  * the start location will be return
  */
-export function findLastTargetPoint(
+export function findLastTargetPointByIndex(
   tour: Maybe<Tour>,
   stopIndex: number,
   defaultLngLat: LngLat = UMN_LNGLAT
@@ -34,11 +34,11 @@ export function findLastTargetPoint(
 
   // if no nav stages here, try the previous stop
   if (!navStagesAtStop.length) {
-    return findLastTargetPoint(tour, stopIndex - 1);
+    return findLastTargetPointByIndex(tour, stopIndex - 1);
   }
 
   const targetPoint = navStagesAtStop[navStagesAtStop.length - 1].targetPoint;
 
   // targetPoint could be null. If it is, try the previous stop
-  return targetPoint || findLastTargetPoint(tour, stopIndex - 1);
+  return targetPoint || findLastTargetPointByIndex(tour, stopIndex - 1);
 }

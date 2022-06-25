@@ -1,4 +1,4 @@
-import { computed, ComputedRef, ref } from "vue";
+import { computed, ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
 import {

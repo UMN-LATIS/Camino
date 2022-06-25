@@ -10,6 +10,7 @@ import {
   StageType,
   LngLat,
 } from "@/types";
+import { UMN_LNGLAT } from "@/shared/constants";
 
 /**
  * Selectors are:
@@ -89,6 +90,14 @@ export const selectTourAndStopIndex = (
     tourIndex,
     stopIndex,
   };
+};
+
+export const selectStopIndex = (
+  currentState: CreatorStoreState,
+  tourId,
+  stopId
+): number => {
+  return selectTourAndStopIndex(currentState, tourId, stopId).stopIndex;
 };
 
 /**
@@ -176,8 +185,8 @@ export const selectTourStopRoute = (
  * select the target point set at a given stop
  * if no target point is set, returns null
  *
- * to get the last non-null target point, use
- * @see findLastTargetPoint
+ * @see store.findValuedTargetPoint to get a
+ * a target point that is not null
  */
 export const selectTourStopTargetPoint = (
   currentState: CreatorStoreState,
@@ -230,4 +239,88 @@ export const selectPrevTourStop = (
     stopId
   );
   return currentState.tours.value[tourIndex].stops[stopIndex - 1] ?? null;
+};
+
+/**
+ * selecst the next stop route in the tour
+ */
+export const selectNextTourStopRoute = (
+  currentState: CreatorStoreState,
+  tourId: number,
+  stopId: number
+): Maybe<TourStopRoute> => {
+  const nextStop = selectNextTourStop(currentState, tourId, stopId);
+  if (!nextStop) {
+    return null;
+  }
+  return selectTourStopRoute(currentState, tourId, nextStop.id);
+};
+
+/**
+ * selects the starting point for a given tour stop
+ */
+export const selectTourStopStartPoint = (
+  currentState: CreatorStoreState,
+  tourId: number,
+  stopId: number
+): Maybe<LngLat> => {
+  const stop = selectTourStop(currentState, tourId, stopId);
+  const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
+    "type",
+    StageType.Navigation,
+    stop
+  );
+
+  return navStagesAtStop?.[0]?.route?.[0] ?? null;
+};
+
+/**
+ * selects the next stop's starting point
+ */
+export const selectNextTourStopStartPoint = (
+  currentState: CreatorStoreState,
+  tourId: number,
+  stopId: number
+): Maybe<LngLat> => {
+  const nextStop = selectNextTourStop(currentState, tourId, stopId);
+  if (!nextStop) {
+    return null;
+  }
+  return selectTourStopStartPoint(currentState, tourId, nextStop.id);
+};
+
+/**
+ * finds a non-null target point for a given stop, searching
+ * previous stops and the tour's starting point until one
+ * is found
+ *
+ * if no target point is found, retuns a default LngLat
+ */
+export const findValuedTargetPoint = (
+  currentState: CreatorStoreState,
+  tourId: number | null | undefined,
+  stopId: number | null | undefined
+): LngLat => {
+  const DEFAULT_TARGET_POINT = UMN_LNGLAT;
+
+  // assuming valid ids are always positive
+  if (!tourId || !stopId) {
+    return DEFAULT_TARGET_POINT;
+  }
+
+  try {
+    const tour = selectTour(currentState, tourId);
+    // first try the
+    const targetPoint = selectTourStopTargetPoint(currentState, tourId, stopId);
+    if (targetPoint) return targetPoint;
+
+    // if no nav stages here, recursively try the previous stop
+    const prevStop = selectPrevTourStop(currentState, tourId, stopId);
+    return prevStop
+      ? findValuedTargetPoint(currentState, tourId, prevStop.id)
+      : tour.start_location ?? DEFAULT_TARGET_POINT;
+  } catch (e) {
+    // if tour or stop not found, return default
+    return DEFAULT_TARGET_POINT;
+  }
 };

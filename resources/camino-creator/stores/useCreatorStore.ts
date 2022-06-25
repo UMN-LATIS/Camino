@@ -4,7 +4,14 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { axiosClient as axios } from "@creator/common/axios";
-import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
+import type {
+  Tour,
+  Maybe,
+  TourStop,
+  Stage,
+  Image,
+  RecursivePartial,
+} from "@/types";
 import * as selectors from "./creatorStoreSelectors";
 
 export interface CreatorStoreState {
@@ -42,57 +49,51 @@ export const useCreatorStore = defineStore("creator", () => {
     }> =>
       computed(() => selectors.selectTourAndStopIndex(state, tourId, stopId)),
 
+    getStopIndex: (tourId: number, stopId: number) =>
+      computed((): number => selectors.selectStopIndex(state, tourId, stopId)),
+
     getTourTitle: (tourId: number) =>
       computed(() => selectors.selectTourTitle(state, tourId)),
 
     getTourLanguages: (tourId: number) =>
       computed(() => selectors.selectTourLanguages(state, tourId)),
 
-    /**
-     * gets the first supported language for a given tour
-     * if no languages are supported, defaults to english
-     */
     getDefaultTourLanguage: (tourId: number) =>
       computed(() => selectors.selectDefaultTourLanguage(state, tourId)),
 
-    /**
-     * gets index of a stage by its stage id
-     */
     getStageIndexById: (tourId: number, stopId: number, stageId: string) =>
       computed(() =>
         selectors.selectStageIndexById(state, tourId, stopId, stageId)
       ),
 
-    /**
-     * get tour stop route by tour id and stop id
-     */
     getTourStopRoute: (tourId: number, stopId: number) =>
       computed(() => selectors.selectTourStopRoute(state, tourId, stopId)),
 
-    /**
-     * gets the target point set at a given stop
-     * if no target point is set, returns null
-     *
-     * to get the last non-null target point, use
-     * @see findLastTargetPoint
-     */
     getTourStopTargetPoint: (tourId: number, stopId: number) =>
       computed(() =>
         selectors.selectTourStopTargetPoint(state, tourId, stopId)
       ),
 
-    /**
-     * gets the next stop in the tour
-     * if no next stop exists, returns null
-     */
     getNextTourStop: (tourId: number, stopId: number) =>
       computed(() => selectors.selectNextTourStop(state, tourId, stopId)),
 
-    /**
-     * gets the previous stop in the tour
-     */
     getPrevTourStop: (tourId: number, stopId: number) =>
       computed(() => selectors.selectPrevTourStop(state, tourId, stopId)),
+
+    getNextTourStopRoute: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectNextTourStopRoute(state, tourId, stopId)),
+
+    getTourStopStartPoint: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectTourStopStartPoint(state, tourId, stopId)),
+
+    getNextTourStopStartPoint: (tourId: number, stopId: number) =>
+      computed(() =>
+        selectors.selectNextTourStopStartPoint(state, tourId, stopId)
+      ),
+    findValuedTargetPoint: (
+      tourId: number | null | undefined,
+      stopId: number | null | undefined
+    ) => computed(() => selectors.findValuedTargetPoint(state, tourId, stopId)),
   };
 
   const actions = {

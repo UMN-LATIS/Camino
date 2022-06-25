@@ -39,25 +39,26 @@
 <script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import { NavigationStage } from "@/types";
+import { NavigationStage, LngLat } from "@/types";
 import NavStageRouteMapper from "../../NavStageRouteMapper.vue";
 
-interface Props {
+const props = defineProps<{
   tourId: number;
   stopId: number;
   stage: NavigationStage;
-}
+}>();
 
-const props = defineProps<Props>();
+const emit = defineEmits<{
+  (eventName: "update", stage: NavigationStage);
+}>();
 
 const creatorStore = useCreatorStore();
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 
-const emit = defineEmits(["update"]);
-function handleUpdateTargetPoint(targetPoint) {
+function handleUpdateTargetPoint(newTargetPoint: LngLat) {
   emit("update", {
     ...props.stage,
-    targetPoint,
+    targetPoint: newTargetPoint,
   });
 }
 

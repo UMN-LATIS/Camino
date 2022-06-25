@@ -7,7 +7,6 @@
       mapStyle="streets"
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
-      @click="handleMapClick"
     >
       <!-- Tour Start Location -->
       <MapMarker
@@ -36,6 +35,8 @@
         :lng="valuedTargetPoint.lng"
         :lat="valuedTargetPoint.lat"
         color="#f00"
+        :draggable="true"
+        @drag="handleMapMarkerDrag"
       />
 
       <!-- Dotted line between current stop target and next route -->
@@ -48,13 +49,13 @@
       />
 
       <!-- Current Stop Route (Editable) -->
-      <MapPolylineEditable
+      <!-- <MapPolylineEditable
         v-if="route"
         id="current-stop-route"
         :startPoint="lastTargetPoint"
         :route="route"
         :endPoint="valuedTargetPoint"
-      />
+      /> -->
     </Map>
   </div>
 </template>
@@ -67,7 +68,7 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
-import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+// import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 
 interface Props {
   tourId: number;
@@ -83,7 +84,7 @@ interface Emits {
   (eventName: "update:route", route: LngLat[]);
 }
 
-defineEmits<Emits>();
+const emit = defineEmits<Emits>();
 
 const store = useCreatorStore();
 const tour = store.getTour(props.tourId);
@@ -167,11 +168,11 @@ function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
 }
 
-function handleMapClick() {
-  // emit("update:targetPoint", {
-  //   lng: event.lngLat.lng,
-  //   lat: event.lngLat.lat,
-  // });
+function handleMapMarkerDrag(coords: LngLat) {
+  emit("update:targetPoint", {
+    lng: coords.lng,
+    lat: coords.lat,
+  });
 }
 </script>
 

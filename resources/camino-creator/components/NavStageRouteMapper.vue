@@ -2,7 +2,7 @@
   <div class="route-mapper">
     <Map
       class="map-container"
-      :center="mapCenter"
+      :center="currentValuedTargetPoint"
       :zoom="16"
       mapStyle="streets"
       :accessToken="config.mapBox.accessToken"
@@ -32,8 +32,8 @@
 
       <!-- Current Stop Target (Editable)-->
       <MapMarker
-        :lng="valuedTargetPoint.lng"
-        :lat="valuedTargetPoint.lat"
+        :lng="currentValuedTargetPoint.lng"
+        :lat="currentValuedTargetPoint.lat"
         color="#f00"
         :draggable="true"
         @drag="handleMapMarkerDrag"
@@ -49,13 +49,13 @@
       />
 
       <!-- Current Stop Route (Editable) -->
-      <!-- <MapPolylineEditable
+      <MapPolylineEditable
         v-if="route"
         id="current-stop-route"
-        :startPoint="lastTargetPoint"
+        :startPoint="lastValuedTargetPoint"
         :route="route"
-        :endPoint="valuedTargetPoint"
-      /> -->
+        :endPoint="currentValuedTargetPoint"
+      />
     </Map>
   </div>
 </template>
@@ -68,7 +68,7 @@ import { Map as MapboxMap } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
-// import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 
 interface Props {
   tourId: number;
@@ -90,9 +90,30 @@ const store = useCreatorStore();
 const tour = store.getTour(props.tourId);
 const mapRef = ref<MapboxMap | null>(null);
 const config = useConfig();
-const lastTargetPoint = computed((): LngLat => {
+
+/**
+ * last target point set before this stop
+ */
+const lastValuedTargetPoint = computed((): LngLat => {
   const prevStop = store.getPrevTourStop(props.tourId, props.stopId).value;
   return store.findValuedTargetPoint(props.tourId, prevStop?.id).value;
+});
+
+/**
+ * always returns some target point
+ * - props.targetPoint, then
+ * - next stop's route start point, then
+ * - last stop's target point offset by a bit
+ */
+const currentValuedTargetPoint = computed((): LngLat => {
+  // use current passed target point
+  // which may be different from the store's target point
+  // if we haven't saved yet
+  return (
+    props.targetPoint ??
+    store.getNextTourStopStartPoint(props.tourId, props.stopId).value ??
+    getOffsetPointFrom(lastValuedTargetPoint.value)
+  );
 });
 
 // RENDER OTHER STOPS and ROUTES
@@ -110,12 +131,6 @@ const otherStopTargetPoints = computed((): Maybe<LngLat>[] => {
       store.getTourStopTargetPoint(props.tourId, otherStopId).value
   );
 });
-
-// use the targetPoint if we have it
-// otherwise find most recent targetPoint starting at index
-const mapCenter = computed(
-  (): LngLat => props.targetPoint || lastTargetPoint.value
-);
 
 const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   if (!props.targetPoint) return null;
@@ -149,20 +164,6 @@ function getOffsetPointFrom(pt: LngLat) {
     lat: pt.lat + offset,
   };
 }
-
-/**
- * always returns some target point
- * - props.targetPoint, then
- * - next stop's route start point, then
- * - last stop's target point offset by a bit
- */
-const valuedTargetPoint = computed((): LngLat => {
-  return (
-    props.targetPoint ??
-    store.getNextTourStopStartPoint(props.tourId, props.stopId).value ??
-    getOffsetPointFrom(lastTargetPoint.value)
-  );
-});
 
 function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;

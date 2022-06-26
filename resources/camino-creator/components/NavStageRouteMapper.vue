@@ -21,13 +21,15 @@
         <MapPolyline
           :id="`otherStopRoute-${index}`"
           :positions="otherStopRoute || []"
-          color="#999"
+          color="#bbb"
         />
       </div>
 
       <!-- Other Stop Targets -->
       <div v-for="(pt, index) in otherStopTargetPoints" :key="index">
-        <MapMarker v-if="pt" :lng="pt.lng" :lat="pt.lat" color="#777" />
+        <MapMarker v-if="pt" :lng="pt.lng" :lat="pt.lat" color="#bbb">
+          <MapMarkerLabel>{{ index + 1 }}</MapMarkerLabel>
+        </MapMarker>
       </div>
 
       <!-- Current Stop Target (Editable)-->
@@ -37,7 +39,9 @@
         color="#f00"
         :draggable="true"
         @drag="handleMapMarkerDrag"
-      />
+      >
+        <MapMarkerLabel> ⭐️ </MapMarkerLabel>
+      </MapMarker>
 
       <!-- Dotted line between current stop target and next route -->
       <MapPolyline
@@ -62,13 +66,14 @@
 </template>
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import Map from "@trekker/components/Map/Map.vue";
-import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
+import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
+import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarkerLabel.vue";
+import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 
 interface Props {

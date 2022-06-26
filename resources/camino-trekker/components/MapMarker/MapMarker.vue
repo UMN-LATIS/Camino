@@ -1,10 +1,12 @@
 <template>
   <div class="map-marker">
-    <slot></slot>
+    <div ref="mapContents" class="map-marker__contents">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { watch, ref, unref } from "vue";
+import { watch, ref, unref, useSlots } from "vue";
 import { Marker } from "mapbox-gl";
 import { inject, provide } from "vue";
 import { MapInjectionKey, MarkerInjectionKey } from "@/shared/constants";
@@ -29,6 +31,9 @@ const emit = defineEmits<Emits>();
 
 const mapRef = inject(MapInjectionKey);
 const marker = ref<Marker | null>(null);
+const mapContents = ref<HTMLDivElement | undefined>();
+const slots = useSlots();
+console.log({ slots });
 
 watch([mapRef, props], () => {
   const map = unref(mapRef);
@@ -43,6 +48,7 @@ watch([mapRef, props], () => {
   marker.value = new Marker({
     color: props.color,
     draggable: props.draggable,
+    element: mapContents.value,
   })
     .setLngLat([props.lng, props.lat])
     .addTo(map)

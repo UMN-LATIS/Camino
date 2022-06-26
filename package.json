@@ -109,9 +109,8 @@
   ],
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
-    "*.{js,vue}": [
-      "eslint --fix",
-      "git add"
+    "*.{js,ts,vue}": [
+      "eslint --fix"
     ]
   },
   "resolutions": {

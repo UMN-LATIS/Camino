@@ -7,7 +7,8 @@ import { watch, inject, onMounted, computed, ref } from "vue";
 import { MapInjectionKey } from "@/shared/constants";
 import type { LngLat, TourStopRoute } from "@/types";
 import { toGeoJsonLineString } from "@/camino-trekker/components/MapPolyline/toGeoJson";
-import { fixedEndpointsMode } from "./fixedEndpointMode";
+import * as MapboxDrawWaypoint from "mapbox-gl-draw-waypoint";
+import { Feature, LineString } from "geojson";
 
 interface Props {
   startPoint: LngLat;
@@ -16,13 +17,20 @@ interface Props {
   id: string;
 }
 const props = defineProps<Props>();
+
+const emit = defineEmits<{
+  (eventName: "update:route", route: LngLat[]);
+}>();
+
 const isReady = ref<boolean>(false);
 const map = inject(MapInjectionKey, null);
+let modes = MapboxDraw.modes;
+modes = MapboxDrawWaypoint.enable(modes);
+
 const draw = new MapboxDraw({
   displayControlsDefault: false,
   modes: {
-    ...MapboxDraw.modes,
-    fixed_endpoint: fixedEndpointsMode as unknown as MapboxDraw.DrawCustomMode,
+    ...modes,
   },
 });
 
@@ -55,10 +63,25 @@ function renderLine() {
   });
 }
 
+function toLngLats(geojson: Feature<LineString>): LngLat[] {
+  return geojson.geometry.coordinates.map((coord) => ({
+    lng: coord[0],
+    lat: coord[1],
+  }));
+}
+
+function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
+  if (event.action !== "change_coordinates") return;
+  const linestrings = event.features as Feature<LineString>[];
+  const route = toLngLats(linestrings[0]);
+  emit("update:route", route);
+}
+
 function initDrawOnMapLoad() {
   const unwatch = watch([map], () => {
     if (!map) return;
     map.value.addControl(draw);
+    map.value.on("draw.update", handleUpdate);
     isReady.value = true;
     unwatch();
   });

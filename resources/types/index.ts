@@ -1,5 +1,4 @@
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-export type { MyCustomDrawMode } from "./MyCustomDrawMode";
 
 export type Maybe<T> = T | null;
 

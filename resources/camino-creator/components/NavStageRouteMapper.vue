@@ -55,6 +55,7 @@
         :startPoint="lastValuedTargetPoint"
         :route="route"
         :endPoint="currentValuedTargetPoint"
+        @update:route="(route: LngLat[]) => $emit('update:route', route)"
       />
     </Map>
   </div>

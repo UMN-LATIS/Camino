@@ -29,14 +29,8 @@
     </header>
 
     <div class="stop-list" data-cy="stop-list">
-      <TourStopCard
-        :tourId="tourId"
-        :stop="firstStop"
-        :showMoveHandle="false"
-        :showDelete="false"
-      />
       <Draggable
-        :modelValue="moveableStops"
+        :modelValue="stops"
         itemKey="id"
         class="stop-list__movable-stops"
         handle=".handle"
@@ -52,17 +46,11 @@
           />
         </template>
       </Draggable>
-      <TourStopCard
-        :tourId="tourId"
-        :stop="lastStop"
-        :showMoveHandle="false"
-        :showDelete="false"
-      />
     </div>
   </section>
 </template>
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, nextTick } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
@@ -97,29 +85,12 @@ function createNew() {
   newTitle.value = createEmptyLocalizedText(languages.value);
 }
 
-const tourStops = computed<TourStop[]>(
-  () => creatorStore.getTour(props.tourId).value.stops
-);
-
-const firstStop = computed<TourStop>(() => tourStops.value[0]);
-const lastStop = computed<TourStop>(
-  () => tourStops.value[tourStops.value.length - 1]
-);
-const moveableStops = computed<TourStop[]>(() =>
-  tourStops.value.filter(
-    (s) => s.id !== firstStop.value.id && s.id !== lastStop.value.id
-  )
-);
-
 const draggableKey = ref(0);
 function handleTourStopMove(event) {
   if (!event.moved) return;
   const { oldIndex, newIndex } = event.moved;
 
-  // old and new indices are from the movable stops
-  // array and don't account for the the static first
-  // stop. So, we need to shift the indices by 1;
-  creatorStore.moveTourStopByIndex(props.tourId, oldIndex + 1, newIndex + 1);
+  creatorStore.moveTourStopByIndex(props.tourId, oldIndex, newIndex);
 
   // force rerender
   nextTick(() => (draggableKey.value += 1));

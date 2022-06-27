@@ -8,7 +8,7 @@
       }"
     >
       <div v-if="draggable" class="map-marker__drag-handle">
-        <i class="fas fa-grip-horizontal"></i>
+        <i class="fas fa-arrows-alt"></i>
       </div>
       <slot></slot>
     </div>

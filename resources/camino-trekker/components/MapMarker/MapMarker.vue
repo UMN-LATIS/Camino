@@ -1,6 +1,12 @@
 <template>
   <div class="map-marker">
-    <div ref="mapContents" class="map-marker__contents">
+    <div
+      ref="mapContents"
+      class="map-marker__contents"
+      :class="{
+        'map-marker__contents--is-active': active,
+      }"
+    >
       <slot></slot>
     </div>
   </div>
@@ -17,6 +23,7 @@ interface Props {
   lat: number;
   color?: string;
   draggable?: boolean;
+  active?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -64,3 +71,8 @@ watch([mapRef, props], () => {
 
 provide(MarkerInjectionKey, marker);
 </script>
+<style scoped>
+.map-marker__contents--is-active {
+  z-index: 1;
+}
+</style>

@@ -39,9 +39,7 @@
           :lat="stop.stopPoint.lat"
           :color="stop.color"
           class="tour-map__marker"
-          :class="{
-            'tour-map__marker--is-active': stop.isActive,
-          }"
+          :active="stop.isActive"
         >
           <MapMarkerLabel
             :color="getMapMarkerColor(stop.index)"
@@ -290,9 +288,5 @@ function handleGoToStopButtonClick(stop: MapStop) {
 .map-sheet__map-container {
   border-radius: 0.5rem;
   border: 1px solid var(--gray-light);
-}
-
-.tour-map__marker--is-active {
-  z-index: 10;
 }
 </style>

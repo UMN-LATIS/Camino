@@ -13,7 +13,11 @@
         v-if="tour.start_location"
         :lng="tour.start_location.lng"
         :lat="tour.start_location.lat"
-      />
+      >
+        <MapMarkerLabel>
+          <i class="fas fa-star"></i>
+        </MapMarkerLabel>
+      </MapMarker>
 
       <div v-for="stop in otherStops" :key="stop.id">
         <MapPolyline

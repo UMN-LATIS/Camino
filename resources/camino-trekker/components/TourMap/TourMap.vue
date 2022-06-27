@@ -39,7 +39,6 @@
           :lat="stop.stopPoint.lat"
           :color="stop.color"
           class="tour-map__marker"
-          :active="stop.isActive"
         >
           <MapMarkerLabel
             :color="getMapMarkerColor(stop.index)"

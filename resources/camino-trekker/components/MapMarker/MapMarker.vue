@@ -26,13 +26,11 @@ interface Props {
   lat: number;
   color?: string;
   draggable?: boolean;
-  active?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: "#111",
   draggable: false,
-  active: false,
 });
 
 interface Emits {
@@ -76,9 +74,6 @@ provide(MarkerInjectionKey, marker);
 <style scoped>
 .map-marker {
   position: relative;
-}
-.map-marker__contents--is-active {
-  z-index: 1;
 }
 .map-marker__drag-handle {
   position: absolute;

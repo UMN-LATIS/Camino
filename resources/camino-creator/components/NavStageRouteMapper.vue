@@ -70,8 +70,8 @@
         @update:route="(route: LngLat[]) => $emit('update:route', route)"
       />
     </Map>
-    <Alert v-if="geolocationError">
-      {{ geolocationError }}
+    <Alert v-if="geolocationError" class="my-2" variant="warning">
+      {{ geolocationError.message }}
     </Alert>
     <div class="route-mapper__button-group d-flex justify-content-end mt-3">
       <BButton variant="tertiary" @click="$emit('update:route', [])"
@@ -97,7 +97,7 @@ import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue
 import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 import BButton from "./BButton.vue";
 import { useGeolocation } from "@vueuse/core";
-import Alert from "@/camino-trekker/components/Alert/Alert.vue";
+import Alert from "./Alert.vue";
 
 const props = defineProps<{
   tourId: number;

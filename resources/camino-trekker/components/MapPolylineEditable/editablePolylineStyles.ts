@@ -2,6 +2,8 @@
 
 // Colors
 const orange = "#FF9D25";
+const pink = "#ff295d";
+// const pinkLight = "rgba(255, 190, 206, 0.5)";
 
 export default [
   {
@@ -69,7 +71,7 @@ export default [
       ["!=", "mode", "static"],
     ],
     paint: {
-      "circle-radius": 6,
+      "circle-radius": 7,
       "circle-color": "#fff",
     },
   },
@@ -83,8 +85,8 @@ export default [
       ["!=", "mode", "static"],
     ],
     paint: {
-      "circle-radius": 4,
-      "circle-color": orange,
+      "circle-radius": 5,
+      "circle-color": pink,
     },
   },
   {

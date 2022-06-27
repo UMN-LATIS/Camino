@@ -30,7 +30,6 @@
           :lng="stop.targetPoint.lng"
           :lat="stop.targetPoint.lat"
         >
-          <!-- -->
           <MapMarkerLabel
             :pulse="currentStop ? currentStop.index - 1 === stop.index : false"
           >

@@ -6,12 +6,14 @@
 <script setup lang="ts">
 import * as MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
+
 import { watch, inject, onMounted, computed, ref } from "vue";
 import { MapInjectionKey } from "@/shared/constants";
 import type { LngLat, TourStopRoute } from "@/types";
 import { toGeoJsonLineString } from "@/camino-trekker/components/MapPolyline/toGeoJson";
 import * as MapboxDrawWaypoint from "mapbox-gl-draw-waypoint";
 import { Feature, LineString } from "geojson";
+import editablePolylineStyles from "./editablePolylineStyles";
 
 interface Props {
   startPoint: LngLat;
@@ -38,6 +40,7 @@ const draw = new MapboxDraw({
   modes: {
     ...modes,
   },
+  styles: editablePolylineStyles,
 });
 
 const midpoint = computed(

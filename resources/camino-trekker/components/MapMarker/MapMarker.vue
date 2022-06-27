@@ -7,6 +7,9 @@
         'map-marker__contents--is-active': active,
       }"
     >
+      <div v-if="draggable" class="map-marker__drag-handle">
+        <i class="fas fa-grip-horizontal"></i>
+      </div>
       <slot></slot>
     </div>
   </div>
@@ -71,7 +74,17 @@ watch([mapRef, props], () => {
 provide(MarkerInjectionKey, marker);
 </script>
 <style scoped>
+.map-marker {
+  position: relative;
+}
 .map-marker__contents--is-active {
   z-index: 1;
+}
+.map-marker__drag-handle {
+  position: absolute;
+  top: -2.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
 }
 </style>

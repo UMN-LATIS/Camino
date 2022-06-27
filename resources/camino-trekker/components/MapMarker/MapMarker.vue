@@ -12,7 +12,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { watch, ref, unref, useSlots } from "vue";
+import { watch, ref, unref } from "vue";
 import { Marker } from "mapbox-gl";
 import { inject, provide } from "vue";
 import { MapInjectionKey, MarkerInjectionKey } from "@/shared/constants";
@@ -29,6 +29,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   color: "#111",
   draggable: false,
+  active: false,
 });
 
 interface Emits {
@@ -39,8 +40,6 @@ const emit = defineEmits<Emits>();
 const mapRef = inject(MapInjectionKey);
 const marker = ref<Marker | null>(null);
 const mapContents = ref<HTMLDivElement | undefined>();
-const slots = useSlots();
-console.log({ slots });
 
 watch([mapRef, props], () => {
   const map = unref(mapRef);

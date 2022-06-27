@@ -1,8 +1,11 @@
 <template>
-  <slot />
+  <div class="map-polyline-editable">
+    <slot />
+  </div>
 </template>
 <script setup lang="ts">
 import * as MapboxDraw from "@mapbox/mapbox-gl-draw";
+import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { watch, inject, onMounted, computed, ref } from "vue";
 import { MapInjectionKey } from "@/shared/constants";
 import type { LngLat, TourStopRoute } from "@/types";
@@ -24,11 +27,14 @@ const emit = defineEmits<{
 
 const isReady = ref<boolean>(false);
 const map = inject(MapInjectionKey, null);
-let modes = MapboxDraw.modes;
-modes = MapboxDrawWaypoint.enable(modes);
+
+const modes = MapboxDrawWaypoint.enable(MapboxDraw.modes);
 
 const draw = new MapboxDraw({
   displayControlsDefault: false,
+  controls: {
+    trash: true,
+  },
   modes: {
     ...modes,
   },
@@ -57,7 +63,7 @@ function renderLine() {
     props.endPoint,
   ]);
   const featureIds = draw.add(lineFeature);
-  console.log({ featureIds });
+
   draw.changeMode("direct_select", {
     featureId: featureIds[0],
   });
@@ -71,6 +77,7 @@ function toLngLats(geojson: Feature<LineString>): LngLat[] {
 }
 
 function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
+  event;
   if (event.action !== "change_coordinates") return;
   const linestrings = event.features as Feature<LineString>[];
   const route = toLngLats(linestrings[0]);
@@ -80,6 +87,7 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
 function initDrawOnMapLoad() {
   const unwatch = watch([map], () => {
     if (!map) return;
+    console.log({ map: map.value });
     map.value.addControl(draw);
     map.value.on("draw.update", handleUpdate);
     isReady.value = true;
@@ -87,8 +95,7 @@ function initDrawOnMapLoad() {
   });
 }
 
-watch([isReady, () => props.endPoint], () => {
-  console.log("rendering line");
+watch([isReady, () => props.endPoint, () => props.route], () => {
   renderLine();
 });
 

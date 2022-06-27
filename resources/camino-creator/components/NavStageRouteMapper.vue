@@ -15,22 +15,27 @@
         :lat="tour.start_location.lat"
       />
 
-      <div v-for="otherStop in otherStops" :key="otherStop.id">
+      <div v-for="stop in otherStops" :key="stop.id">
         <MapPolyline
-          :id="`otherStopRoute-${otherStop.id}`"
-          :positions="otherStop.route || []"
-          :variant="getPolylineVariant(otherStop.index, currentStop?.index)"
+          :id="`otherStopRoute-${stop.id}`"
+          :positions="stop.route || []"
+          :variant="
+            currentStop?.index === stop.index
+              ? 'gradient-active'
+              : 'gradient-inactive'
+          "
         />
         <MapMarker
-          v-if="otherStop.targetPoint"
-          :lng="otherStop.targetPoint.lng"
-          :lat="otherStop.targetPoint.lat"
+          v-if="stop.targetPoint"
+          :lng="stop.targetPoint.lng"
+          :lat="stop.targetPoint.lat"
         >
+          <!-- -->
           <MapMarkerLabel
-            :color="getMapMarkerLabelColor(otherStop.index, currentStop?.index)"
-            :pulse="true"
-            >{{ otherStop.index + 1 }}</MapMarkerLabel
+            :pulse="currentStop ? currentStop.index - 1 === stop.index : false"
           >
+            {{ stop.index + 1 }}
+          </MapMarkerLabel>
         </MapMarker>
       </div>
 
@@ -39,6 +44,7 @@
         :lng="currentValuedTargetPoint.lng"
         :lat="currentValuedTargetPoint.lat"
         :draggable="true"
+        :active="true"
         @drag="handleMapMarkerDrag"
       >
         <MapMarkerLabel v-if="currentStop" color="pink" :pulse="true">
@@ -65,6 +71,16 @@
         @update:route="(route: LngLat[]) => $emit('update:route', route)"
       />
     </Map>
+    <BButton @click="$emit('update:route', [])">Clear Route</BButton>
+    <BButton
+      @click="
+        () => {
+          $emit('update:targetPoint', offsetPointFromLastTarget);
+          $emit('update:route', []);
+        }
+      "
+      >Clear Target Point</BButton
+    >
   </div>
 </template>
 <script setup lang="ts">
@@ -78,6 +94,7 @@ import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
 import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarkerLabel.vue";
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+import BButton from "./BButton.vue";
 
 const props = defineProps<{
   tourId: number;
@@ -104,6 +121,10 @@ const lastValuedTargetPoint = computed((): LngLat => {
   return store.findValuedTargetPoint(props.tourId, prevStop?.id).value;
 });
 
+const offsetPointFromLastTarget = computed(
+  (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value)
+);
+
 /**
  * always returns some target point
  * - props.targetPoint, then
@@ -117,7 +138,7 @@ const currentValuedTargetPoint = computed((): LngLat => {
   return (
     props.targetPoint ??
     store.getNextTourStopStartPoint(props.tourId, props.stopId).value ??
-    getOffsetPointFrom(lastValuedTargetPoint.value)
+    offsetPointFromLastTarget.value
   );
 });
 
@@ -192,21 +213,6 @@ function handleMapMarkerDrag(coords: LngLat) {
     lng: coords.lng,
     lat: coords.lat,
   });
-}
-
-function getMapMarkerLabelColor(
-  thisIndex: number,
-  currentStopIndex: number | undefined
-) {
-  if (!currentStopIndex) return "default";
-  if (thisIndex === currentStopIndex) return "pink";
-  if (thisIndex === currentStopIndex - 1) return "orange";
-  return "default";
-}
-
-function getPolylineVariant(stopIndex: number, currentStopIndex?: number) {
-  if (stopIndex === currentStopIndex) return "gradient-active";
-  return "gradient-inactive";
 }
 </script>
 

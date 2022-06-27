@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="map-marker-label"
-    :class="{
-      'map-marker-label--is-active': active,
-    }"
-  >
+  <div class="map-marker-label" :class="`map-marker-label--${variant}`">
     <div class="map-marker-label__content">
       <slot />
     </div>
@@ -13,21 +8,31 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    active?: boolean;
+    variant?: "pink" | "orange" | "default";
   }>(),
   {
-    active: false,
+    variant: "default",
   }
 );
 </script>
 <style scoped>
 .map-marker-label {
   position: relative;
-  width: 1rem;
-  height: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  --pink: #ff295d;
+  --pink-light: rgba(255, 190, 206, 0.75);
+  --orange: #ff9d25;
+  --orange-light: rgba(255, 229, 0, 0.5);
+  --gray: #999;
+  --gray-light: #bbb;
+
+  --color: var(--gray);
+  --color-light: var(--gray-light);
 }
 
 /* Map Dot */
@@ -38,15 +43,16 @@ withDefaults(
   height: 0.75rem;
   border-radius: 50%;
   background: #fff;
-  border: 2px solid #bbb;
+  border: 2px solid var(--color);
 }
 
 .map-marker-label__content {
   position: absolute;
-  left: -0.33rem;
-  top: -1.5rem;
-  border: 0.125rem solid #999;
-  color: #999;
+  left: 50%;
+  top: -1rem;
+  transform: translate(-50%, 0);
+  border: 0.125rem solid var(--color);
+  color: var(--color);
   background: #fff;
   display: flex;
   font-size: 0.75rem;
@@ -57,7 +63,28 @@ withDefaults(
   height: 1.5rem;
   border-radius: 0.25rem;
 }
-.map-marker-label--is-active {
-  background: blue;
+.map-marker-label--pink {
+  --color: var(--pink);
+  --color-light: var(--pink-light);
+}
+
+.map-marker-label--orange {
+  --color: var(--orange);
+  --color-light: var(--orange-light);
+}
+.map-marker-label--pink,
+.map-marker-label--orange {
+  background: var(--color-light);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    /* box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2); */
+    box-shadow: 0 0 0 0px var(--color-light);
+  }
+  100% {
+    box-shadow: 0 0 0 1.5rem rgba(0, 0, 0, 0);
+  }
 }
 </style>

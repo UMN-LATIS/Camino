@@ -16,19 +16,22 @@
         color="green"
       />
 
-      <!-- Other Stop Routes -->
-      <div v-for="(otherStopRoute, index) in otherStopRoutes" :key="index">
+      <div v-for="otherStop in otherStops" :key="otherStop.id">
         <MapPolyline
-          :id="`otherStopRoute-${index}`"
-          :positions="otherStopRoute || []"
+          :id="`otherStopRoute-${otherStop.id}`"
+          :positions="otherStop.route || []"
           color="#bbb"
         />
-      </div>
-
-      <!-- Other Stop Targets -->
-      <div v-for="(pt, index) in otherStopTargetPoints" :key="index">
-        <MapMarker v-if="pt" :lng="pt.lng" :lat="pt.lat" color="#bbb">
-          <MapMarkerLabel>{{ index + 1 }}</MapMarkerLabel>
+        <MapMarker
+          v-if="otherStop.targetPoint"
+          :lng="otherStop.targetPoint.lng"
+          :lat="otherStop.targetPoint.lat"
+          color="#bbb"
+        >
+          <MapMarkerLabel
+            :variant="getMapMarkerVariant(otherStop.index, currentStop?.index)"
+            >{{ otherStop.index + 1 }}</MapMarkerLabel
+          >
         </MapMarker>
       </div>
 
@@ -40,7 +43,9 @@
         :draggable="true"
         @drag="handleMapMarkerDrag"
       >
-        <MapMarkerLabel> ⭐️ </MapMarkerLabel>
+        <MapMarkerLabel v-if="currentStop" variant="pink">
+          {{ currentStop?.index + 1 }}
+        </MapMarkerLabel>
       </MapMarker>
 
       <!-- Dotted line between current stop target and next route -->
@@ -48,7 +53,7 @@
         v-if="routeToNextRoute"
         id="route-to-next-route"
         :positions="routeToNextRoute"
-        color="red"
+        color="#bbb"
         variant="dashed"
       />
 
@@ -76,26 +81,22 @@ import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarker
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 
-interface Props {
+const props = defineProps<{
   tourId: number;
   stopId: number;
   route: Maybe<LngLat[]>;
   targetPoint: Maybe<LngLat>;
-}
+}>();
 
-const props = defineProps<Props>();
-
-interface Emits {
+const emit = defineEmits<{
   (eventName: "update:targetPoint", lnglat: LngLat);
   (eventName: "update:route", route: LngLat[]);
-}
-
-const emit = defineEmits<Emits>();
+}>();
 
 const store = useCreatorStore();
-const tour = store.getTour(props.tourId);
-const mapRef = ref<MapboxMap | null>(null);
 const config = useConfig();
+const mapRef = ref<MapboxMap | null>(null);
+const tour = store.getTour(props.tourId);
 
 /**
  * last target point set before this stop
@@ -122,21 +123,34 @@ const currentValuedTargetPoint = computed((): LngLat => {
   );
 });
 
-// RENDER OTHER STOPS and ROUTES
-const idsForOtherStops = computed((): number[] =>
-  tour.value.stops.map((s) => s.id).filter((stopId) => stopId !== props.stopId)
+interface MappedStop {
+  id: number;
+  index: number;
+  targetPoint: Maybe<LngLat>;
+  route: Maybe<TourStopRoute>;
+  lastValuedTargetPoint?: LngLat;
+  currentValuedTargetPoint?: LngLat;
+}
+
+const toMappedStop = (stop, index) => ({
+  id: stop.id,
+  index,
+  targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
+  route: store.getTourStopRoute(props.tourId, stop.id).value,
+});
+
+const mappedStops = computed((): MappedStop[] =>
+  tour.value.stops.map(toMappedStop)
 );
-const otherStopRoutes = computed((): Maybe<TourStopRoute>[] => {
-  return idsForOtherStops.value.map(
-    (otherStopId) => store.getTourStopRoute(props.tourId, otherStopId).value
-  );
-});
-const otherStopTargetPoints = computed((): Maybe<LngLat>[] => {
-  return idsForOtherStops.value.map(
-    (otherStopId) =>
-      store.getTourStopTargetPoint(props.tourId, otherStopId).value
-  );
-});
+
+const currentStop = computed(
+  (): Maybe<MappedStop> =>
+    mappedStops.value.find((s) => s.id === props.stopId) ?? null
+);
+
+const otherStops = computed((): MappedStop[] =>
+  mappedStops.value.filter((stop) => stop.id !== props.stopId)
+);
 
 const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   if (!props.targetPoint) return null;
@@ -180,6 +194,16 @@ function handleMapMarkerDrag(coords: LngLat) {
     lng: coords.lng,
     lat: coords.lat,
   });
+}
+
+function getMapMarkerVariant(
+  thisIndex: number,
+  currentStopIndex: number | undefined
+) {
+  if (!currentStopIndex) return "default";
+  if (thisIndex === currentStopIndex) return "pink";
+  if (thisIndex === currentStopIndex - 1) return "orange";
+  return "default";
 }
 </script>
 

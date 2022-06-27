@@ -304,12 +304,17 @@ export const findValuedTargetPoint = (
   const DEFAULT_TARGET_POINT = UMN_LNGLAT;
 
   // assuming valid ids are always positive
-  if (!tourId || !stopId) {
+  if (!tourId) {
     return DEFAULT_TARGET_POINT;
   }
 
   try {
     const tour = selectTour(currentState, tourId);
+
+    if (!stopId) {
+      return tour.start_location ?? DEFAULT_TARGET_POINT;
+    }
+
     // first try the
     const targetPoint = selectTourStopTargetPoint(currentState, tourId, stopId);
     if (targetPoint) return targetPoint;

@@ -5,6 +5,7 @@
     <SelectLanguages v-model="tour.tour_content.languages" />
     <InitialLocation
       v-model="tour.start_location"
+      :tourId="tourId"
       :basemap="tour.tour_content.custom_base_map"
     />
     <SelectTransport

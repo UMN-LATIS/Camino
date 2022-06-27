@@ -1,29 +1,24 @@
 <template>
   <div class="form-group row my-4">
     <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
-    <div class="col-sm-6">
-      <div v-if="modelValue">
-        <b>Latitude:</b>
-        <span data-cy="tour-location-lat"> {{ modelValue.lat }} </span>,
-        <b>Longitude:</b>
-        <span data-cy="tour-location-lng">
-          {{ modelValue.lng }}
-        </span>
-      </div>
-      <LocationSelector
-        :basemap="basemap"
+    <div class="col-sm-6 bg-white p-2 d-flex flex-column">
+      <LngLatDisplay :coord="modelValue" class="d-flex" />
+      <MapboxLocationSelector
         :location="modelValue"
+        :tourId="tourId"
         @update:location="(location: LngLat) => $emit('update:modelValue', location)"
-      ></LocationSelector>
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { CustomBaseMap, LngLat, Maybe } from "@/types";
-import LocationSelector from "../../components/MapboxLocationSelector.vue";
+import MapboxLocationSelector from "../../components/MapboxLocationSelector.vue";
+import LngLatDisplay from "@/camino-creator/components/LngLatDisplay.vue";
 
 interface Props {
+  tourId: number;
   modelValue: Maybe<LngLat>;
   basemap?: Maybe<CustomBaseMap>;
 }

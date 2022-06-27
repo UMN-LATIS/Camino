@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from "vue";
 import useConfig from "@/shared/useConfig";
-import { Map as MapboxMap } from "mapbox-gl";
+import { Map as MapboxMap, MapMouseEvent } from "mapbox-gl";
 import { LngLat, Maybe, TourStop, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
@@ -150,6 +150,12 @@ function getOffsetPointFrom(pt: LngLat) {
 
 function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
+  map.on("click", (event: MapMouseEvent) => {
+    emit("update:location", {
+      lng: event.lngLat.lng,
+      lat: event.lngLat.lat,
+    });
+  });
 }
 
 function flyTo(lnglat: LngLat) {

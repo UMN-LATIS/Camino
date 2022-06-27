@@ -1,5 +1,12 @@
 <template>
-  <div class="map-marker-label" :class="`map-marker-label--${variant}`">
+  <div
+    class="map-marker-label"
+    :class="{
+      'map-marker-label--pink': color === 'pink',
+      'map-marker-label--orange': color === 'orange',
+      'map-marker-label--bg-pulse': pulse,
+    }"
+  >
     <div class="map-marker-label__content">
       <slot />
     </div>
@@ -8,10 +15,12 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    variant?: "pink" | "orange" | "default";
+    color?: "pink" | "orange" | "default";
+    pulse?: boolean;
   }>(),
   {
-    variant: "default",
+    color: "default",
+    pulse: false,
   }
 );
 </script>
@@ -74,6 +83,10 @@ withDefaults(
 }
 .map-marker-label--pink,
 .map-marker-label--orange {
+  z-index: 10; /* special variants should appear above defaults */
+}
+
+.map-marker-label--bg-pulse {
   background: var(--color-light);
   animation: pulse 2s infinite;
 }

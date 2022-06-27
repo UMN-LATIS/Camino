@@ -13,23 +13,22 @@
         v-if="tour.start_location"
         :lng="tour.start_location.lng"
         :lat="tour.start_location.lat"
-        color="green"
       />
 
       <div v-for="otherStop in otherStops" :key="otherStop.id">
         <MapPolyline
           :id="`otherStopRoute-${otherStop.id}`"
           :positions="otherStop.route || []"
-          color="#bbb"
+          :variant="getPolylineVariant(otherStop.index, currentStop?.index)"
         />
         <MapMarker
           v-if="otherStop.targetPoint"
           :lng="otherStop.targetPoint.lng"
           :lat="otherStop.targetPoint.lat"
-          color="#bbb"
         >
           <MapMarkerLabel
-            :variant="getMapMarkerVariant(otherStop.index, currentStop?.index)"
+            :color="getMapMarkerLabelColor(otherStop.index, currentStop?.index)"
+            :pulse="true"
             >{{ otherStop.index + 1 }}</MapMarkerLabel
           >
         </MapMarker>
@@ -39,11 +38,10 @@
       <MapMarker
         :lng="currentValuedTargetPoint.lng"
         :lat="currentValuedTargetPoint.lat"
-        color="#f00"
         :draggable="true"
         @drag="handleMapMarkerDrag"
       >
-        <MapMarkerLabel v-if="currentStop" variant="pink">
+        <MapMarkerLabel v-if="currentStop" color="pink" :pulse="true">
           {{ currentStop?.index + 1 }}
         </MapMarkerLabel>
       </MapMarker>
@@ -53,7 +51,7 @@
         v-if="routeToNextRoute"
         id="route-to-next-route"
         :positions="routeToNextRoute"
-        color="#bbb"
+        color="#ccc"
         variant="dashed"
       />
 
@@ -196,7 +194,7 @@ function handleMapMarkerDrag(coords: LngLat) {
   });
 }
 
-function getMapMarkerVariant(
+function getMapMarkerLabelColor(
   thisIndex: number,
   currentStopIndex: number | undefined
 ) {
@@ -204,6 +202,11 @@ function getMapMarkerVariant(
   if (thisIndex === currentStopIndex) return "pink";
   if (thisIndex === currentStopIndex - 1) return "orange";
   return "default";
+}
+
+function getPolylineVariant(stopIndex: number, currentStopIndex?: number) {
+  if (stopIndex === currentStopIndex) return "gradient-active";
+  return "gradient-inactive";
 }
 </script>
 

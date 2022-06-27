@@ -28,13 +28,13 @@
     >
       <div v-for="(stop, i) in mapStops" :key="i" class="map-stop">
         <MapPolyline
-          :id="`route-${i}`"
+          :id="`route-${stop.id}`"
           :key="i"
           :positions="stop.route"
-          :color="stop.color"
+          :variant="getPolylineVariant(stop.index)"
         />
         <MapMarker
-          :key="i"
+          :key="`marker-${stop.id}`"
           :lng="stop.stopPoint.lng"
           :lat="stop.stopPoint.lat"
           :color="stop.color"
@@ -43,6 +43,12 @@
             'tour-map__marker--is-active': stop.isActive,
           }"
         >
+          <MapMarkerLabel
+            :color="getMapMarkerColor(stop.index)"
+            :pulse="stop.index === store.stopIndex"
+          >
+            {{ stop.index + 1 }}
+          </MapMarkerLabel>
           <MapPopup>
             <p class="map-popup__stop-number-container">
               <span class="map-popup__stop-number">
@@ -78,20 +84,21 @@ import capitalize from "../../utils/capitalize";
 import getBoundingBox from "../../utils/getBoundingBox";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "@trekker/config";
-import { BoundingBox, LngLat } from "@/types";
+import { BoundingBox, LngLat, MapboxMapStyle } from "@/types";
 import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
 import { useRouter } from "vue-router";
 import { findLastTargetPointByIndex } from "@/camino-trekker/utils/findLastTargetPointByIndex";
+import MapMarkerLabel from "../MapMarkerLabel/MapMarkerLabel.vue";
 
 interface Props {
   type: "tour" | "stop";
-  initialMapStyle: string;
+  initialMapStyle: MapboxMapStyle;
   showMapStyleControl?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-  initialMapStyle: "light",
+  initialMapStyle: MapboxMapStyle.light,
   showMapStyleControl: true,
 });
 
@@ -103,10 +110,16 @@ const router = useRouter();
 const canCreateMap = computed(
   () => store.tour && store.tour.stops && store.tour.start_location
 );
-const mapStyleChoices = ["dark", "satellite", "streets", "light"].sort();
+const mapStyleChoices = [
+  MapboxMapStyle.dark,
+  MapboxMapStyle.satellite,
+  MapboxMapStyle.streets,
+  MapboxMapStyle.light,
+].sort();
 const mapStyle = ref(props.initialMapStyle);
 
 interface MapStop {
+  id: number;
   index: number;
   number: number;
   title: string;
@@ -124,6 +137,7 @@ const mapStops = computed((): MapStop[] => {
   if (!tour.stops) return [];
 
   return tour.stops.map((stop, index) => ({
+    id: stop.id,
     index,
     number: index + 1,
     title: stop.stop_content.title?.[store.locale] ?? `Stop ${index}`,
@@ -156,7 +170,7 @@ const center = computed((): LngLat => getCenterOfBoundingBox(bounds.value));
  * METHODS
  */
 
-function setMapStyle(updatedStyle: string) {
+function setMapStyle(updatedStyle: MapboxMapStyle) {
   mapStyle.value = updatedStyle;
 }
 
@@ -164,6 +178,17 @@ function getStopColor(index) {
   if (index > store.stopIndex) return "#333";
   if (index === store.stopIndex) return "#0A84FF";
   return "#999";
+}
+
+function getPolylineVariant(index) {
+  if (index === store.stopIndex) return "gradient-active";
+  return "gradient-inactive";
+}
+
+function getMapMarkerColor(index): "pink" | "orange" | "default" {
+  if (index === store.stopIndex) return "pink";
+  if (index === store.stopIndex - 1) return "orange";
+  return "default";
 }
 
 function handleGoToStopButtonClick(stop: MapStop) {

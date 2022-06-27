@@ -70,20 +70,22 @@
         @update:route="(route: LngLat[]) => $emit('update:route', route)"
       />
     </Map>
-    <BButton @click="$emit('update:route', [])">Clear Route</BButton>
-    <BButton
-      @click="
-        () => {
-          $emit('update:targetPoint', offsetPointFromLastTarget);
-          $emit('update:route', []);
-        }
-      "
-      >Clear Target Point</BButton
-    >
+    <Alert v-if="geolocationError">
+      {{ geolocationError }}
+    </Alert>
+    <div class="route-mapper__button-group d-flex justify-content-end mt-3">
+      <BButton variant="tertiary" @click="$emit('update:route', [])"
+        >Clear Route</BButton
+      >
+      <BButton variant="tertiary" @click="handleClearTargetPoint"
+        >Clear Target Point</BButton
+      >
+      <BButton @click="handleUseCurrentLocation">Use Current Location</BButton>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
@@ -94,6 +96,8 @@ import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarker
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
 import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
 import BButton from "./BButton.vue";
+import { useGeolocation } from "@vueuse/core";
+import Alert from "@/camino-trekker/components/Alert/Alert.vue";
 
 const props = defineProps<{
   tourId: number;
@@ -111,6 +115,7 @@ const store = useCreatorStore();
 const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
 const tour = store.getTour(props.tourId);
+const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
 /**
  * last target point set before this stop
@@ -207,16 +212,50 @@ function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
 }
 
+function flyTo(lnglat: LngLat) {
+  if (!mapRef.value) return;
+  mapRef.value.flyTo({
+    center: {
+      lon: lnglat.lng,
+      lat: lnglat.lat,
+    },
+  });
+}
+
 function handleMapMarkerDrag(coords: LngLat) {
   emit("update:targetPoint", {
     lng: coords.lng,
     lat: coords.lat,
   });
+  nextTick(() => flyTo(coords));
+}
+
+function handleClearTargetPoint() {
+  const resetTargetPoint = offsetPointFromLastTarget.value;
+  emit("update:targetPoint", resetTargetPoint);
+  nextTick(() => flyTo(resetTargetPoint));
+}
+
+function handleUseCurrentLocation() {
+  if (geolocationError.value) {
+    return;
+  }
+  const currentLocation = {
+    lng: geolocationCoords.value.longitude,
+    lat: geolocationCoords.value.latitude,
+  };
+  emit("update:targetPoint", currentLocation);
+  nextTick(() => flyTo(currentLocation));
 }
 </script>
 
 <style scoped>
 .map-container {
   height: 50vh;
+}
+.route-mapper {
+  background: #f3f3f3;
+  padding: 1rem;
+  border-radius: 0.25rem;
 }
 </style>

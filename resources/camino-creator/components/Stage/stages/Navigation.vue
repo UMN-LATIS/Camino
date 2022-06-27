@@ -10,21 +10,6 @@
     </LanguageText>
 
     <section class="my-3">
-      <h3 class="fs-6">Target Point and Route</h3>
-
-      <div
-        v-if="stage.targetPoint"
-        class="d-inline-flex gap-4 my-2 bg-light p-2"
-      >
-        <div>
-          <small class="d-block">Latitude</small>
-          <span>{{ stage.targetPoint.lat.toFixed(4) }}</span>
-        </div>
-        <div>
-          <small class="d-block">Longitude</small>
-          <span>{{ stage.targetPoint.lng.toFixed(4) }}</span>
-        </div>
-      </div>
       <NavStageRouteMapper
         :tourId="tourId"
         :stopId="stopId"

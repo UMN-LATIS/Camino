@@ -136,18 +136,13 @@ const offsetPointFromLastTarget = computed(
 /**
  * always returns some target point
  * - props.targetPoint, then
- * - next stop's route start point, then
  * - last stop's target point offset by a bit
  */
 const currentValuedTargetPoint = computed((): LngLat => {
   // use current passed target point
   // which may be different from the store's target point
   // if we haven't saved yet
-  return (
-    props.targetPoint ??
-    store.getNextTourStopStartPoint(props.tourId, props.stopId).value ??
-    offsetPointFromLastTarget.value
-  );
+  return props.targetPoint ?? offsetPointFromLastTarget.value;
 });
 
 interface MappedStop {

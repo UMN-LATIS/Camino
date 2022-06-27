@@ -35,8 +35,7 @@
         @drag="handleMapMarkerDrag"
       >
         <MapMarkerLabel color="pink" :pulse="true">
-          <i v-if="!markerLabel" class="fas fa-star"></i>
-          {{ markerLabel }}
+          <i class="fas fa-star"></i>
         </MapMarkerLabel>
       </MapMarker>
     </Map>
@@ -66,11 +65,9 @@ import { UMN_LNGLAT } from "@/shared/constants";
 const props = withDefaults(
   defineProps<{
     location: Maybe<LngLat>;
-    markerLabel?: Maybe<string>;
     tourId?: Maybe<number>;
   }>(),
   {
-    markerLabel: null,
     tourId: null,
   }
 );

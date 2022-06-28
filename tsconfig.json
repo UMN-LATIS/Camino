@@ -9,6 +9,7 @@
     "noImplicitAny": false,
     "allowJs": true,
     "baseUrl": "resources",
+    "esModuleInterop": true,
     // this enables the use of `import` statements in TypeScript files
     // like `import { Component } from '@/components';
     // requires `tsconfig-paths-webpack-plugin` in order to work

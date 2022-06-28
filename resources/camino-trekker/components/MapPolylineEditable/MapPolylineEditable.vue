@@ -80,8 +80,8 @@ function toLngLats(geojson: Feature<LineString>): LngLat[] {
 }
 
 function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
-  event;
   if (event.action !== "change_coordinates") return;
+
   const linestrings = event.features as Feature<LineString>[];
   const route = toLngLats(linestrings[0]);
   emit("update:route", route);
@@ -90,10 +90,11 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
 function initDrawOnMapLoad() {
   const unwatch = watch([map], () => {
     if (!map) return;
-    console.log({ map: map.value });
     map.value.addControl(draw);
     map.value.on("draw.update", handleUpdate);
     isReady.value = true;
+
+    // remove this watch now that we're done
     unwatch();
   });
 }

@@ -1,12 +1,6 @@
 <template>
   <div class="map-marker">
-    <div
-      ref="mapContents"
-      class="map-marker__contents"
-      :class="{
-        'map-marker__contents--is-active': active,
-      }"
-    >
+    <div ref="mapContents" class="map-marker__contents">
       <div v-if="draggable" class="map-marker__drag-handle">
         <i class="fas fa-arrows-alt"></i>
       </div>

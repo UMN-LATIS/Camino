@@ -20,5 +20,6 @@
     },
     "sourceMap": true
   },
-  "exclude": ["node_modules", "*.stories.*"]
+  "include": ["resources"],
+  "exclude": ["node_modules", "*.stories.*", "vendor"]
 }

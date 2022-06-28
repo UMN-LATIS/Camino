@@ -11,7 +11,7 @@
       <!-- draw tour if tourId is given -->
       <div v-for="stop in tourStops" :key="stop.id">
         <MapPolyline
-          :id="`otherStopRoute-${stop.id}`"
+          :id="`stopRoute-${stop.id}`"
           :positions="stop.route || []"
           variant="gradient-inactive"
         />

@@ -12,7 +12,7 @@ export default function normalizeTourStopRoute(
   return [startPoint, ...route, targetPoint].reduce(
     (acc, curr, index, lnglats) => {
       if (index === 0) {
-        return acc;
+        return [...acc, curr];
       }
       return lngLatEquals(curr, lnglats[index - 1]) ? acc : [...acc, curr];
     },

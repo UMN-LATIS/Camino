@@ -26,6 +26,20 @@
       :mapStyle="mapStyle"
       :accessToken="config.mapBox.accessToken"
     >
+      <!-- Start Point -->
+      <MapMarker
+        v-if="store.tour?.start_location"
+        :lng="store.tour?.start_location.lng"
+        :lat="store.tour?.start_location.lat"
+      >
+        <MapMarkerLabel
+          class="start-point-marker-label"
+          :color="store.stopIndex === 0 ? 'orange' : 'default'"
+        >
+          <span class="material-icons">star</span>
+        </MapMarkerLabel>
+      </MapMarker>
+
       <div v-for="(stop, i) in mapStops" :key="i" class="map-stop">
         <MapPolyline
           :id="`route-${stop.id}`"

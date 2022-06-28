@@ -50,25 +50,23 @@
   </section>
 </template>
 <script setup lang="ts">
-import { ref, nextTick } from "vue";
+import { ref, nextTick, computed } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
 import TourStopCard from "./TourStopCard.vue";
-import { Locale, type TourStop } from "@/types";
+import { type TourStop } from "@/types";
 import Draggable from "vuedraggable";
 
-interface Props {
+const props = defineProps<{
   tourId: number;
-  stops: TourStop[];
-  locale: Locale;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  locale: Locale.en,
-});
+}>();
 
 const creatorStore = useCreatorStore();
+const stops = computed(
+  (): TourStop[] => creatorStore.getTour(props.tourId).value.stops ?? []
+);
+
 const showCreateForm = ref(false);
 const languages = creatorStore.getTourLanguages(props.tourId);
 

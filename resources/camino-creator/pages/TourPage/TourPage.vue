@@ -60,12 +60,7 @@
       </div>
     </CheckboxInput>
 
-    <TourStopList
-      v-if="tour.id && tour.stops"
-      :tourId="tour.id"
-      :stops="tour.stops"
-      :locale="defaultLanguage"
-    />
+    <TourStopList :tourId="tour.id" />
 
     <div
       v-if="validationErrors.length > 0"
@@ -113,7 +108,7 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import { Locale, Maybe, Tour } from "@/types";
+import { Maybe, Tour } from "@/types";
 
 const { userCan } = usePermissions();
 
@@ -134,10 +129,6 @@ const tourURL = computed(() => {
   const { origin } = window.location;
   return `${origin}/trekker/tours/${props.tourId}`;
 });
-
-const defaultLanguage = computed(
-  () => tour.value?.tour_content.languages[0] ?? Locale.en
-);
 
 onMounted(async () => {
   // load existing tour info

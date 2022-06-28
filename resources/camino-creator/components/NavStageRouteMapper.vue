@@ -93,9 +93,9 @@ import { ref, computed, nextTick } from "vue";
 import useConfig from "@/shared/useConfig";
 import {
   Map as MapboxMap,
-  MapLayerEventType,
-  MapLayerMouseEvent,
-  MapMouseEvent,
+  // MapLayerEventType,
+  // MapLayerMouseEvent,
+  // MapMouseEvent,
 } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
@@ -212,26 +212,26 @@ function getOffsetPointFrom(pt: LngLat) {
   };
 }
 
-function onMapEvent(
-  map: MapboxMap,
-  eventName: keyof MapLayerEventType,
-  handlerFn: (event: MapLayerMouseEvent) => void,
-  options: { ignoreLayerId: string }
-) {
-  // set up a handler to ignore the layer with the given layer id
-  if (options.ignoreLayerId) {
-    map.on(eventName, options.ignoreLayerId, (event) => {
-      event.originalEvent.preventDefault();
-    });
-  }
+// function onMapEvent(
+//   map: MapboxMap,
+//   eventName: keyof MapLayerEventType,
+//   handlerFn: (event: MapLayerMouseEvent) => void,
+//   options: { ignoreLayerId: string }
+// ) {
+//   // set up a handler to ignore the layer with the given layer id
+//   if (options.ignoreLayerId) {
+//     map.on(eventName, options.ignoreLayerId, (event) => {
+//       event.originalEvent.preventDefault();
+//     });
+//   }
 
-  // now we can check if default was prevented on our event
-  // before running the given handler function
-  map.on("click", (event) => {
-    if (event.originalEvent.defaultPrevented) return;
-    handlerFn(event);
-  });
-}
+//   // now we can check if default was prevented on our event
+//   // before running the given handler function
+//   map.on("click", (event) => {
+//     if (event.originalEvent.defaultPrevented) return;
+//     handlerFn(event);
+//   });
+// }
 
 function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
@@ -240,16 +240,16 @@ function handleMapLoad(map: MapboxMap) {
   // but ignore events that happen on the "gl-draw-polygon-midpoint.cold"
   // layer, since that those clicks will on the midpoint to create a new
   // waypoint on the route line
-  onMapEvent(
-    map,
-    "click",
-    (event: MapMouseEvent) =>
-      emit("update:targetPoint", {
-        lng: event.lngLat.lng,
-        lat: event.lngLat.lat,
-      }),
-    { ignoreLayerId: "gl-draw-polygon-midpoint.cold" }
-  );
+  // onMapEvent(
+  //   map,
+  //   "click",
+  //   (event: MapMouseEvent) =>
+  //     emit("update:targetPoint", {
+  //       lng: event.lngLat.lng,
+  //       lat: event.lngLat.lat,
+  //     }),
+  //   { ignoreLayerId: "gl-draw-polygon-midpoint.cold" }
+  // );
 }
 
 function flyTo(lnglat: LngLat) {

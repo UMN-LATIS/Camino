@@ -152,21 +152,18 @@ export default {
     },
   },
   methods: {
-    /**
-     * gets a list of all nav stages within the tour
-     */
-    getAllNavStages: function () {
+    allLocations: function () {
       if (!this.tour) {
         return [];
       }
-      const navStages = this.tour.stops
+      const targetPoints = this.tour.stops
         .map((stop) => stop.stop_content.stages)
         .map((stages) => {
           return stages.filter((stage) => stage.type == "navigation");
         })
         .flat();
 
-      return navStages;
+      return targetPoints;
     },
     useCurrentLocation: function () {
       const loc = this.roundCoordinates(this.currentLocation);
@@ -207,7 +204,7 @@ export default {
       marker.addTo(map);
     },
     drawOtherPoints: function () {
-      const allNavStages = this.getAllNavStages();
+      const targetNavs = this.allLocations();
       otherLocationsCssIcon = L.divIcon({
         // Specify a class name we can refer to in CSS.
         className: "other-css-icon css-icon",
@@ -216,10 +213,13 @@ export default {
       });
       let otherLocation = null;
       const otherLocations = [];
-      allNavStages.forEach((navStage) => {
-        if (navStage.targetPoint != this.location && navStage.targetPoint) {
+      targetNavs.forEach((targetPoint) => {
+        if (
+          targetPoint.targetPoint != this.location &&
+          targetPoint.targetPoint
+        ) {
           otherLocation = L.marker(
-            [navStage.targetPoint.lat, navStage.targetPoint.lng],
+            [targetPoint.targetPoint.lat, targetPoint.targetPoint.lng],
             {
               icon: otherLocationsCssIcon,
             }
@@ -234,77 +234,49 @@ export default {
       otherMarkerGroup.addTo(map);
     },
     drawWalkingPath: function () {
-      const allNavStages = this.getAllNavStages();
+      const targetNavs = this.allLocations();
       let localPolyline;
       let decorator;
       let decorator2;
       const layerGroupItems = [];
-      let previousNavStage = null;
+      let previousPoint = null;
 
       if (this.location && (!this.stop || !this.stop.id)) {
-        // if location is set, but this isn't a stop (? why?)
-        // put the targetpoint and route on allNavStages?
-        // what's the intent of this? Is this for setting a tour location rather setting a stop location/route?
-        // perhaps it's better to have a separate component for each?
-        allNavStages.push({ targetPoint: this.location, route: this.route });
+        targetNavs.push({ targetPoint: this.location, route: this.route });
       }
 
-      // for all nav stages, grab the target point
-      allNavStages.forEach((navStage) => {
-        // if there's none, move on
-        if (!navStage) {
+      targetNavs.forEach((targetPoint) => {
+        if (!targetPoint) {
           return;
         }
-
-        // if there's no target point, skip this one
-        if (!navStage.targetPoint) {
+        if (!targetPoint.targetPoint) {
           return;
         }
-
-        // if there's a target point, but no route
-        // set `previousPoint` to the current navStage
-        // and then move on
-        // when would this happen?
-        // route is null, but a target point is set?
-        // maybe just on the first point – the start point?
-        // Might be better to just always use start_location?
-        if (!navStage.route) {
-          previousNavStage = navStage;
+        if (!targetPoint.route) {
+          previousPoint = targetPoint;
           return;
         }
 
         // make sure the path is contiguous
-        // if there's a route for this stage AND there's a previous nav stage set (which means there wasn't a route for the last stage)
-        // set the current nav stage's first route point to the previous stage's target point
-        // this makes sense, but Wouldn't we always want to do this?
-        // why the conditional?
-        if (previousNavStage) {
-          navStage.route[0] = previousNavStage.targetPoint;
+        if (previousPoint) {
+          targetPoint.route[0] = previousPoint.targetPoint;
         }
 
-        // now create a localPolyline with the route
-        localPolyline = L.polyline(navStage.route, {
+        localPolyline = L.polyline(targetPoint.route, {
           color: "gray",
           opacity: 0.4,
         });
 
-        // if the current navStage's route is this route
-        // i.e. we're on this stop, allow editing
-        if (navStage.route == this.route) {
+        if (targetPoint.route == this.route) {
           localPolyline.editing.enable();
         }
 
-        // decorate the line wtih dashes?
         decorator = L.polylineDecorator(localPolyline, {
           patterns: [
             // defines a pattern of 10px-wide dashes, repeated every 20px on the line
             { offset: 0, repeat: 20, symbol: L.Symbol.dash({ pixelSize: 10 }) },
           ],
         });
-
-        // decorate the line with more dashes? Why two decorators?
-        // this one has an arrowhead. Maybe only draw a line with an arrowhead
-        // if it's long enough?
         decorator2 = L.polylineDecorator(localPolyline, {
           patterns: [
             // defines a pattern of 10px-wide dashes, repeated every 20px on the line
@@ -320,14 +292,10 @@ export default {
           ],
         });
 
-        // add the line and the decorators to the layerGroupItems array
-        // so that by the end, we' have all the lines and decorators
         layerGroupItems.push(localPolyline, decorator, decorator2);
-        previousNavStage = navStage;
-      }); // end forEach navStage
+        previousPoint = targetPoint;
+      });
 
-      // if polyline? why does polyline represent?
-      // polyline is defined at the the component level
       if (polyline) {
         polyline.clearLayers();
       }
@@ -382,6 +350,19 @@ export default {
 
       const self = this;
 
+      function onLocationFound(e) {
+        self.currentLocation = e.latlng;
+        self.locationAvailable = true;
+      }
+
+      function clickEvent(e) {
+        self.$emit("update:location", self.roundCoordinates(e.latlng));
+      }
+
+      function vertexEdit(e) {
+        self.$emit("update:route", e.poly.getLatLngs());
+      }
+
       if (this.location) {
         map.setView(new L.LatLng(this.location.lat, this.location.lng), 16);
       } else if (this.generalarea) {
@@ -391,18 +372,9 @@ export default {
         );
       }
 
-      map.on("locationfound", function onLocationFound(e) {
-        self.currentLocation = e.latlng;
-        self.locationAvailable = true;
-      });
-
-      map.on("click", function clickEvent(e) {
-        self.$emit("update:location", self.roundCoordinates(e.latlng));
-      });
-
-      map.on("draw:editvertex", function vertexEdit(e) {
-        self.$emit("update:route", e.poly.getLatLngs());
-      });
+      map.on("locationfound", onLocationFound);
+      map.on("click", clickEvent);
+      map.on("draw:editvertex", vertexEdit);
 
       this.drawWalkingPath();
       this.drawMarker();

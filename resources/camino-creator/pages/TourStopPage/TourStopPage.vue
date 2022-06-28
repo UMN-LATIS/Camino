@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Error :error="error" />
+    <ErrorDisplay :error="error" />
     <div v-if="stop" class="mb-2">
       <div class="mb-4">
         <router-link :to="{ name: 'editTour', params: { tourId } }">{{
@@ -149,13 +149,14 @@ import { ref, computed, onMounted } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import Error from "../../components/Error.vue";
+import ErrorDisplay from "../../components/ErrorDisplay.vue";
 import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import stageFactory from "../../components/Stage/stages/stageFactory";
 import { StageType, TourStop, Maybe } from "@/types";
+import { RouterLink } from "vue-router";
 
 interface Props {
   tourId: number;

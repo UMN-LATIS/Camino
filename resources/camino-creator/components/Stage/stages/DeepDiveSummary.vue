@@ -6,7 +6,11 @@
           type="checkbox"
           class="form-check-input"
           :checked="stage.request_email"
-          @change="handleUpdate({ request_email: $event.target.checked })"
+          @change="
+            handleUpdate({
+              request_email: ($event.target as HTMLInputElement).checked,
+            })
+          "
         />
         Request Email Addresses
       </label>

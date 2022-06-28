@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import type { TourStop } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
+import { RouterLink } from "vue-router";
 
 interface Props {
   tourId: number;

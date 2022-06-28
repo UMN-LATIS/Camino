@@ -1,7 +1,7 @@
 <template>
   <Sheet class="map-sheet" title="Map" :isOpen="isOpen" @close="$emit('close')">
     <TourMap
-      initialMapStyle="streets"
+      :initialMapStyle="MapboxMapStyle.streets"
       type="tour"
       :stopIndex="store.stopIndex"
     />
@@ -11,6 +11,7 @@
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import Sheet from "../Sheet/Sheet.vue";
 import TourMap from "../TourMap/TourMap.vue";
+import { MapboxMapStyle } from "@/types";
 
 interface Props {
   isOpen?: boolean;

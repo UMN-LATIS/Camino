@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Error v-if="error" :error="error" />
+    <ErrorDisplay v-if="error" :error="error" />
     <div>
       <h1 class="mb-3">My Tours</h1>
       <button
@@ -94,8 +94,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { storeToRefs } from "pinia";
-import Error from "../components/Error.vue";
+import ErrorDisplay from "../components/ErrorDisplay.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
+import { RouterLink } from "vue-router";
 
 const creatorStore = useCreatorStore();
 

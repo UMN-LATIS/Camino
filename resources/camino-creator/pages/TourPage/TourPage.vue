@@ -1,6 +1,6 @@
 <template>
   <div v-if="tour">
-    <Error :error="error" />
+    <ErrorDisplay :error="error" />
     <TourTitleInput v-model="tour.title" />
     <SelectLanguages v-model="tour.tour_content.languages" />
     <InitialLocation
@@ -94,7 +94,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
-import Error from "../../components/Error.vue";
+import ErrorDisplay from "../../components/ErrorDisplay.vue";
 
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "./InitialLocation.vue";

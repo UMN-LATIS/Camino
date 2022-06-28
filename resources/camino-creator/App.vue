@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useCreatorStore } from "./stores/useCreatorStore";
+import { RouterView } from "vue-router";
 
 const creatorStore = useCreatorStore();
 onMounted(() => creatorStore.init());

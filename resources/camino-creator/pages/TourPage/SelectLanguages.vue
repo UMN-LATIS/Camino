@@ -8,7 +8,7 @@
             type="checkbox"
             class="form-check-input"
             :value="key"
-            :checked="modelValue.includes(key)"
+            :checked="modelValue.includes(key as Locale)"
             @change="toggleLanguage(key)"
           />
           {{ key }}

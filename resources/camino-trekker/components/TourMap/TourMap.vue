@@ -91,9 +91,10 @@ import MapMarkerLabel from "../MapMarkerLabel/MapMarkerLabel.vue";
 
 interface Props {
   type: "tour" | "stop";
-  initialMapStyle: MapboxMapStyle;
+  initialMapStyle?: MapboxMapStyle;
   showMapStyleControl?: boolean;
 }
+
 const props = withDefaults(defineProps<Props>(), {
   initialMapStyle: MapboxMapStyle.light,
   showMapStyleControl: true,

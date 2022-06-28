@@ -1,9 +1,6 @@
 <template>
   <div class="map-marker">
     <div ref="mapContents" class="map-marker__contents">
-      <div v-if="draggable" class="map-marker__drag-handle">
-        <i class="fas fa-arrows-alt"></i>
-      </div>
       <slot></slot>
     </div>
   </div>
@@ -65,15 +62,3 @@ watch([mapRef, props], () => {
 
 provide(MarkerInjectionKey, marker);
 </script>
-<style scoped>
-.map-marker {
-  position: relative;
-}
-.map-marker__drag-handle {
-  position: absolute;
-  top: -2.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1rem;
-}
-</style>

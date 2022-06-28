@@ -14,6 +14,7 @@ import { toGeoJsonLineString } from "@/camino-trekker/components/MapPolyline/toG
 import * as MapboxDrawWaypoint from "mapbox-gl-draw-waypoint";
 import { Feature, LineString } from "geojson";
 import editablePolylineStyles from "./editablePolylineStyles";
+import normalizeTourStopRoute from "@/shared/normalizeTourStopRoute";
 
 interface Props {
   startPoint: LngLat;
@@ -84,7 +85,11 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
 
   const linestrings = event.features as Feature<LineString>[];
   const route = toLngLats(linestrings[0]);
-  emit("update:route", route);
+
+  emit(
+    "update:route",
+    normalizeTourStopRoute(props.startPoint, route, props.endPoint)
+  );
 }
 
 function initDrawOnMapLoad() {

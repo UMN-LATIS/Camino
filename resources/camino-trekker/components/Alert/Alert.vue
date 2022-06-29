@@ -18,28 +18,31 @@
     </button>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
-const props = defineProps({
-  icon: {
-    type: String,
-    default: "info",
-  },
-  dismissable: {
-    type: Boolean,
-    default: true,
-  },
-  variant: {
-    type: String,
-    default: "info",
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    icon?: string;
+    dismissable?: boolean;
+    variant: "info" | "warning";
+  }>(),
+  {
+    icon: "info",
+    dismissable: true,
+    variant: "info",
+  }
+);
+
+const emit = defineEmits<{
+  (eventName: "close");
+}>();
 
 const show = ref(true);
 function handleDismiss() {
   if (!props.dismissable) return;
   show.value = false;
+  emit("close");
 }
 </script>
 <style scoped>

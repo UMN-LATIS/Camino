@@ -3,6 +3,7 @@ import axios from "axios";
 export const axiosClient = axios;
 
 axiosClient.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+axiosClient.defaults.timeout = 15000;
 
 const token = document.head.querySelector(
   'meta[name="csrf-token"]'

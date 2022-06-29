@@ -1,11 +1,17 @@
 <template>
   <div class="v-editor d-flex flex-column-reverse">
     <div ref="editorContainerRef"></div>
+    <Alert v-if="uploadError" @close="uploadError = null">
+      {{ uploadError }}
+    </Alert>
   </div>
 </template>
 <script setup>
 import { onMounted, onUnmounted, ref } from "vue";
+import Alert from "@/camino-trekker/components/Alert/Alert.vue";
 import useQuill from "../hooks/useQuill.js";
+
+const uploadError = ref("");
 
 const createImageUploaderForChime = (imageUploadUrl) => (file) => {
   const form = new FormData();
@@ -13,20 +19,15 @@ const createImageUploaderForChime = (imageUploadUrl) => (file) => {
 
   console.log(`TODO: implement image uploader: ${imageUploadUrl}`);
 
-  // return axios
-  //   .post(imageUploadUrl, form)
-  //   .then((res) => {
-  //     return `/storage/${res.data.image}`;
-  //   })
-  //   .catch((err) => {
-  //     store.commit(
-  //       "message",
-  //       "Could not store this image. Please contact support at latistecharch@umn.edu. The full error was: " +
-  //         err.response
-  //     );
-  //     console.error(err);
-  //     throw err;
-  //   });
+  return axios
+    .post(imageUploadUrl, form)
+    .then((res) => {
+      return `/storage/${res.data.image}`;
+    })
+    .catch((err) => {
+      uploadError.value = `Could not store this image: ${err.response}`;
+      console.error(err);
+    });
 };
 
 const props = defineProps({

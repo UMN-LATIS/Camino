@@ -128,7 +128,7 @@ describe("Tour Page", () => {
     );
   });
 
-  it.only("deletes a tour stop", () => {
+  it("deletes a tour stop", () => {
     cy.contains("New Stop").click();
     cy.get('[data-cy="add-stop-form"] input').type("Test Stop{enter}");
     cy.get(":nth-child(2) > .card-body")

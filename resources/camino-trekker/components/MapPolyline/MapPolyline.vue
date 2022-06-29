@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 const map = inject(MapInjectionKey, null);
 
-function addDataLayer({ id, positions, color = props.color }) {
+function createOrUpdateDataLayer({ id, positions, color = props.color }) {
   if (!map) return;
 
   if (!id) {
@@ -120,19 +120,27 @@ function addDataLayer({ id, positions, color = props.color }) {
     });
 }
 
-watch(
-  () => props.positions,
-  () => addDataLayer(props)
-);
-
 watch([map], () => {
   if (!map) return;
 
   // wait for map to load before adding data
-  map.value.on("load", () => addDataLayer(props));
+  map.value.on("load", () => {
+    createOrUpdateDataLayer(props);
+  });
   // redraw if map style changes
-  map.value.on("style.load", () => addDataLayer(props));
+  map.value.on("style.load", () => {
+    createOrUpdateDataLayer(props);
+  });
 });
+
+// refresh the polyline if positions have changed
+watch(
+  () => props.positions,
+  () => {
+    if (!map?.value.isStyleLoaded()) return;
+    createOrUpdateDataLayer(props);
+  }
+);
 
 // update line color if props change
 watch(

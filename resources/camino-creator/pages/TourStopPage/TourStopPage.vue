@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Error :error="error" />
+    <ErrorDisplay :error="error" />
     <div v-if="stop" class="mb-2">
       <div class="mb-4">
         <router-link :to="{ name: 'editTour', params: { tourId } }">{{
@@ -69,7 +69,7 @@
           <template #item="{ element }">
             <Stage
               :stage="element"
-              :tour="creatorStore.getTour(tourId)"
+              :tour="tour"
               :stop="stop"
               :tourId="tourId"
               :stopId="stopId"
@@ -149,25 +149,21 @@ import { ref, computed, onMounted } from "vue";
 import { onBeforeRouteLeave, useRouter } from "vue-router";
 import usePermissions from "../../hooks/usePermissions";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import Error from "../../components/Error.vue";
+import ErrorDisplay from "../../components/ErrorDisplay.vue";
 import LanguageText from "../../components/LanguageText.vue";
 import ImageUpload from "../../components/ImageUpload.vue";
 import Stage from "../../components/Stage/Stage.vue";
 import SaveAlert from "../../components/SaveAlert.vue";
 import stageFactory from "../../components/Stage/stages/stageFactory";
 import { StageType, TourStop, Maybe } from "@/types";
+import { RouterLink } from "vue-router";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: Number,
-    // new stops will be null
-    default: null,
-  },
-});
+interface Props {
+  tourId: number;
+  stopId: number;
+}
+
+const props = defineProps<Props>();
 
 const creatorStore = useCreatorStore();
 const { userCan } = usePermissions();
@@ -176,6 +172,7 @@ const showSaveSuccessful = ref(false);
 const errors = ref<string[]>([]);
 const error = ref(null);
 const router = useRouter();
+const tour = creatorStore.getTour(props.tourId);
 const tourTitle = creatorStore.getTourTitle(props.tourId);
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 const defaultTourLanguage = creatorStore.getDefaultTourLanguage(props.tourId);
@@ -205,8 +202,10 @@ function pageHasUnsavedChanges(): boolean {
   return lastSavedStopJson.value !== JSON.stringify(stop.value);
 }
 
-onMounted(() => {
-  stop.value = creatorStore.getTourStop(props.tourId, props.stopId);
+onMounted(async () => {
+  await creatorStore.fetchTours();
+
+  stop.value = creatorStore.getTourStop(props.tourId, props.stopId).value;
   lastSavedStopJson.value = JSON.stringify(stop.value);
 });
 
@@ -290,7 +289,7 @@ function removeHeaderImage() {
 
 function validate(stop) {
   errors.value = [];
-  if (!stop.stop_content.title[defaultTourLanguage]) {
+  if (!stop.stop_content.title[defaultTourLanguage.value]) {
     errors.value.push("A title is required");
   }
   return errors.value.length === 0;

@@ -8,7 +8,7 @@
             type="checkbox"
             class="form-check-input"
             :value="key"
-            :checked="modelValue.includes(key)"
+            :checked="modelValue.includes(key as Locale)"
             @change="toggleLanguage(key)"
           />
           {{ key }}
@@ -17,17 +17,17 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { languages as possibleLanguages } from "../../languages";
+import { Locale } from "@/types";
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    required: true,
-  },
-});
+const props = defineProps<{
+  modelValue: Locale[];
+}>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits<{
+  (eventName: "update:modelValue", locales: Locale[]);
+}>();
 
 function toggleLanguage(key) {
   const updatedLanguageList = props.modelValue.includes(key)

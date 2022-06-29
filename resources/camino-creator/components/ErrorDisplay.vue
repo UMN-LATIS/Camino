@@ -9,17 +9,18 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="alert alert-danger" role="alert">
         {{ error }}. Refresh your browser. If the error continues, please
-        <a href="mailto:clatel@umn.edu">get in touch</a>.
+        <a href="mailto:latistecharch@umn.edu">get in touch</a>.
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["error"],
-};
+<script setup lang="ts">
+import { Maybe } from "@/types";
+
+defineProps<{
+  error: Maybe<string>;
+}>();
 </script>
 
 <style scoped>

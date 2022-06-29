@@ -1,10 +1,11 @@
 <template>
   <div v-if="tour">
-    <Error :error="error" />
+    <ErrorDisplay :error="error" />
     <TourTitleInput v-model="tour.title" />
     <SelectLanguages v-model="tour.tour_content.languages" />
     <InitialLocation
       v-model="tour.start_location"
+      :tourId="tourId"
       :basemap="tour.tour_content.custom_base_map"
     />
     <SelectTransport
@@ -59,12 +60,7 @@
       </div>
     </CheckboxInput>
 
-    <TourStopList
-      v-if="tour.id && tour.stops"
-      :tourId="tour.id"
-      :stops="tour.stops"
-      :locale="defaultLanguage"
-    />
+    <TourStopList :tourId="tour.id" />
 
     <div
       v-if="validationErrors.length > 0"
@@ -98,7 +94,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
-import Error from "../../components/Error.vue";
+import ErrorDisplay from "../../components/ErrorDisplay.vue";
 
 import SaveAlert from "../../components/SaveAlert.vue";
 import InitialLocation from "./InitialLocation.vue";
@@ -112,7 +108,7 @@ import CheckboxInput from "../../components/CheckboxInput.vue";
 import SelectCustomBaseMap from "./SelectCustomBaseMap.vue";
 import TourStopList from "./TourStopList.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import { Locale, Maybe, Tour } from "@/types";
+import { Maybe, Tour } from "@/types";
 
 const { userCan } = usePermissions();
 
@@ -134,13 +130,13 @@ const tourURL = computed(() => {
   return `${origin}/trekker/tours/${props.tourId}`;
 });
 
-const defaultLanguage = computed(
-  () => tour.value?.tour_content.languages[0] ?? Locale.en
-);
-
-onMounted(() => {
+onMounted(async () => {
   // load existing tour info
-  tour.value = creatorStore.getTour(props.tourId);
+  if (!creatorStore.isReady) {
+    await creatorStore.init();
+  }
+
+  tour.value = creatorStore.getTour(props.tourId).value;
 });
 
 function validate(tour: Tour): boolean {

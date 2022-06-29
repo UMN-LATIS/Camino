@@ -21,22 +21,24 @@
     </div>
   </div>
 </template>
-<script setup>
-import { TOUR_STYLES } from "../../common/constants";
-
-const { NEXT_STOP, ENTIRE_TOUR } = TOUR_STYLES;
+<script setup lang="ts">
+import { TourStyle } from "@/types";
 
 const descriptions = {
-  [NEXT_STOP]: "Only reveal next stop",
-  [ENTIRE_TOUR]: "Reveal entire tour",
+  [TourStyle.NEXT_STOP]: "Only reveal next stop",
+  [TourStyle.ENTIRE_TOUR]: "Reveal entire tour",
 };
 
-defineProps({
-  modelValue: {
-    type: String,
-    default: TOUR_STYLES.ENTIRE_TOUR,
-  },
-});
+withDefaults(
+  defineProps<{
+    modelValue: TourStyle;
+  }>(),
+  {
+    modelValue: TourStyle.ENTIRE_TOUR,
+  }
+);
 
-defineEmits(["update:modelValue"]);
+defineEmits<{
+  (eventName: "update:modelValue", tourStyle: TourStyle);
+}>();
 </script>

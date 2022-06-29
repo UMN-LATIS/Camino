@@ -8,18 +8,23 @@ import { watch, inject } from "vue";
 import { toGeoJsonLineString } from "./toGeoJson";
 import type { LngLat } from "@/types";
 import { MapInjectionKey } from "@/shared/constants";
+import { type LineLayer } from "mapbox-gl";
 
 interface Props {
   positions: LngLat[];
   // unique ID for this data source
   id: string;
-  color: string;
+  color?: string;
+  variant?: "solid" | "dashed" | "gradient-active" | "gradient-inactive";
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  color: "#0472f8",
+  variant: "solid",
+});
 const map = inject(MapInjectionKey, null);
 
-function addDataLayer({ id, positions, color }) {
+function addDataLayer({ id, positions, color = props.color }) {
   if (!map) return;
 
   if (!id) {
@@ -39,25 +44,86 @@ function addDataLayer({ id, positions, color }) {
     map.value.removeSource(id);
   }
 
-  map.value
-    .addSource(id, {
-      type: "geojson",
-      data: toGeoJsonLineString(positions.filter(Boolean)),
-    })
-    .addLayer({
-      id,
-      source: id,
-      type: "line",
+  const layerVariants: Record<string, Partial<LineLayer>> = {
+    solid: {
       layout: {
         "line-join": "round",
         "line-cap": "round",
       },
       paint: {
-        "line-color": color || "#0472f8",
+        "line-color": color,
         "line-width": 6,
       },
+    },
+    dashed: {
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": color,
+        "line-dasharray": [0, 2],
+        "line-width": 3,
+      },
+    },
+    "gradient-active": {
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": color,
+        "line-width": 6,
+        "line-gradient": [
+          "interpolate",
+          ["linear"],
+          ["line-progress"],
+          0,
+          "#FF9D25",
+          1,
+          "#FF295D",
+        ],
+      },
+    },
+    "gradient-inactive": {
+      layout: {
+        "line-join": "round",
+        "line-cap": "round",
+      },
+      paint: {
+        "line-color": color,
+        "line-width": 6,
+        "line-gradient": [
+          "interpolate",
+          ["linear"],
+          ["line-progress"],
+          0,
+          "#ccc",
+          1,
+          "#999",
+        ],
+      },
+    },
+  };
+
+  map.value
+    .addSource(id, {
+      type: "geojson",
+      data: toGeoJsonLineString(positions.filter(Boolean)),
+      lineMetrics: true,
+    })
+    .addLayer({
+      id,
+      source: id,
+      type: "line",
+      ...layerVariants[props.variant],
     });
 }
+
+watch(
+  () => props.positions,
+  () => addDataLayer(props)
+);
 
 watch([map], () => {
   if (!map) return;

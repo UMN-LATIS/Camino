@@ -2,8 +2,10 @@
   <button
     class="btn"
     :class="{
-      'btn-outline-dark': variant === 'default',
       'btn-dark': variant === 'primary',
+      'btn-outline-dark': ['default', 'secondary'].includes(variant),
+      'btn-tertiary': variant === 'tertiary',
+      'btn-link': variant === 'link',
     }"
   >
     <slot />
@@ -11,7 +13,7 @@
 </template>
 <script setup lang="ts">
 interface Props {
-  variant?: "primary" | "default";
+  variant?: "primary" | "secondary" | "tertiary" | "link" | "default";
 }
 
 withDefaults(defineProps<Props>(), {
@@ -24,5 +26,11 @@ withDefaults(defineProps<Props>(), {
   background: #ddd;
   border-color: #aaa;
   color: #aaa;
+}
+.btn-tertiary {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 0.25rem 1rem;
 }
 </style>

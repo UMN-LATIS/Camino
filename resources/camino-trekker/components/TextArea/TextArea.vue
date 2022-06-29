@@ -1,16 +1,14 @@
 <template>
   <div class="textarea-group">
     <div class="textarea-group__label-group">
-      <label :for="id" class="textarea-group__label">{{ label }}</label>
+      <label class="textarea-group__label">{{ label }}</label>
       <small v-if="isRequired" class="textarea-group__corner-hint">
         Required
       </small>
     </div>
     <div class="mt-1">
       <textarea
-        :id="id"
         rows="4"
-        :name="`textarea-${id}`"
         class="textarea-group__input"
         v-bind="$attrs"
       ></textarea>
@@ -20,19 +18,18 @@
     </div>
   </div>
 </template>
-<script setup>
+<script setup lang="ts">
 import { useAttrs, computed } from "vue";
 
-defineProps({
-  label: {
-    type: String,
-    required: true,
-  },
-  id: {
-    type: Number,
-    default: Math.ceil(Math.random() * 1000000),
-  },
-});
+withDefaults(
+  defineProps<{
+    label: string;
+    hint?: string;
+  }>(),
+  {
+    hint: "",
+  }
+);
 
 const attrs = useAttrs();
 

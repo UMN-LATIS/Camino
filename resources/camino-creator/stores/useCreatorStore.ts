@@ -1,120 +1,124 @@
-/* eslint-disable @typescript-eslint/no-this-alias */
+import { ref, type Ref, type ComputedRef, computed } from "vue";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
-import { Locale } from "@/types";
-import type {
-  Tour,
-  Maybe,
-  TourStop,
-  Stage,
-  Image,
-  RecursivePartial,
-} from "@/types";
 import { axiosClient as axios } from "@creator/common/axios";
+import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
+import * as selectors from "./creatorStoreSelectors";
+import normalizeTour from "@/shared/normalizeTour";
 
-interface State {
-  tours: Tour[];
-  error: Maybe<Error>;
-  isReady: boolean;
+export interface CreatorStoreState {
+  tours: Ref<Tour[]>;
+  error: Ref<string | null>;
+  isReady: Ref<boolean>;
 }
 
-export const useCreatorStore = defineStore("creator", {
-  state: (): State => ({
-    tours: [],
-    error: null,
-    isReady: false,
-  }),
-  getters: {
-    getTour:
-      (state: State) =>
-      (tourId: number): Tour => {
-        const tour = state.tours.find((tour) => tour.id === tourId);
-        if (!tour) {
-          throw new Error(
-            `a tour with id ${tourId} does not exist in the store`
-          );
-        }
-        return tour;
-      },
-    getTourStop() {
-      const store = this;
-      return (tourId, stopId): TourStop => {
-        const tour = store.getTour(tourId);
-        const stop = tour.stops.find((stop) => stop.id === stopId);
-        if (!stop) {
-          throw new Error(
-            `tour stop with tour id ${tourId} and stop id $${stopId} does not exist in the`
-          );
-        }
-        return stop;
-      };
-    },
-    getTourIndex() {
-      const store = this;
-      return (tourId: number): number => {
-        const index = store.tours.findIndex((t) => t.id === tourId);
-        if (index === -1) {
-          throw new Error(`cannot find index of tourId: ${tourId}`);
-        }
-        return index;
-      };
-    },
-    getTourAndStopIndex() {
-      const store = this;
-      return (
-        tourId: number,
-        stopId: number
-      ): { tourIndex: number; stopIndex: number } => {
-        const tourIndex = store.tours.findIndex((t) => t.id === tourId);
-        if (tourIndex === -1) {
-          throw new Error(`tour with id ${tourId} does not exist`);
-        }
+export const useCreatorStore = defineStore("creator", () => {
+  const state: CreatorStoreState = {
+    tours: ref([]),
+    error: ref(null),
+    isReady: ref(false),
+  };
 
-        const stopIndex = store.tours[tourIndex].stops.findIndex(
-          (s) => s.id === stopId
-        );
-        if (stopIndex === -1) {
-          throw new Error(`stop with id ${stopId} does not exist`);
-        }
-        return { tourIndex, stopIndex };
-      };
-    },
-    getTourTitle() {
-      const store = this;
-      return (tourId: number): string => store.getTour(tourId).title;
-    },
-    getTourLanguages() {
-      const store = this;
-      return (tourId: number): Locale[] =>
-        store.getTour(tourId).tour_content.languages;
-    },
-    getDefaultTourLanguage() {
-      const store = this;
-      return (tourId: number): Locale =>
-        store.getTour(tourId).tour_content.languages[0] || Locale.en;
-    },
-  },
-  actions: {
+  // computed version of the selectors
+  const getters = {
+    getState: () => state,
+
+    getTour: (tourId: number) =>
+      computed(() => selectors.selectTour(state, tourId)),
+
+    getTourStop: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectTourStop(state, tourId, stopId)),
+
+    getTourIndex: (tourId: number) =>
+      computed(() => selectors.selectTourIndex(state, tourId)),
+
+    getTourAndStopIndex: (
+      tourId: number,
+      stopId: number
+    ): ComputedRef<{
+      tourIndex: number;
+      stopIndex: number;
+    }> =>
+      computed(() => selectors.selectTourAndStopIndex(state, tourId, stopId)),
+
+    getStopIndex: (tourId: number, stopId: number) =>
+      computed((): number => selectors.selectStopIndex(state, tourId, stopId)),
+
+    getTourTitle: (tourId: number) =>
+      computed(() => selectors.selectTourTitle(state, tourId)),
+
+    getTourLanguages: (tourId: number) =>
+      computed(() => selectors.selectTourLanguages(state, tourId)),
+
+    getDefaultTourLanguage: (tourId: number) =>
+      computed(() => selectors.selectDefaultTourLanguage(state, tourId)),
+
+    getStageIndexById: (tourId: number, stopId: number, stageId: string) =>
+      computed(() =>
+        selectors.selectStageIndexById(state, tourId, stopId, stageId)
+      ),
+
+    getTourStopRoute: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectTourStopRoute(state, tourId, stopId)),
+
+    getTourStopTargetPoint: (tourId: number, stopId: number) =>
+      computed(() =>
+        selectors.selectTourStopTargetPoint(state, tourId, stopId)
+      ),
+
+    getNextTourStop: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectNextTourStop(state, tourId, stopId)),
+
+    getPrevTourStop: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectPrevTourStop(state, tourId, stopId)),
+
+    getNextTourStopRoute: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectNextTourStopRoute(state, tourId, stopId)),
+
+    getTourStopStartPoint: (tourId: number, stopId: number) =>
+      computed(() => selectors.selectTourStopStartPoint(state, tourId, stopId)),
+
+    getNextTourStopStartPoint: (tourId: number, stopId: number) =>
+      computed(() =>
+        selectors.selectNextTourStopStartPoint(state, tourId, stopId)
+      ),
+    findValuedTargetPoint: (
+      tourId: number | null | undefined,
+      stopId: number | null | undefined
+    ) => computed(() => selectors.findValuedTargetPoint(state, tourId, stopId)),
+  };
+
+  const actions = {
     async init() {
-      await this.fetchTours();
-      this.isReady = true;
+      await actions.fetchTours();
+      state.isReady.value = true;
     },
 
+    /**
+     * fetches tours from the server and sets them in the store
+     */
     async fetchTours(): Promise<Tour[]> {
-      const res = await axios.get("/creator");
-      this.tours = res.data;
+      const res = await axios.get<Tour[]>("/creator");
+      const tours = res.data;
+      // make tours continous
+      const normalizedTours = tours.map(normalizeTour);
+
+      state.tours.value = normalizedTours;
       return res.data;
     },
 
-    async createTour(tour: Tour): Promise<Tour> {
+    /**
+     * creates a new tour and adds it to the store
+     */
+    async createTour(tour: Partial<Tour>): Promise<Tour> {
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",
           mergeDeepRight(createDefaultTour(), tour)
         );
-        this.tours.push(res.data);
+        state.tours.value.push(res.data);
 
         return res.data;
       } catch (err) {
@@ -123,12 +127,15 @@ export const useCreatorStore = defineStore("creator", {
       }
     },
 
+    /**
+     * puts an updated tour on the server and updates the store
+     */
     async updateTour(updatedTour: Tour): Promise<void> {
-      const tourIndex = this.getTourIndex(updatedTour.id);
+      const tourIndex = getters.getTourIndex(updatedTour.id);
 
       // optimistic updates
-      const previousTour = this.tours[tourIndex];
-      this.tours[tourIndex] = updatedTour;
+      const previousTour = state.tours.value[tourIndex.value];
+      state.tours.value[tourIndex.value] = updatedTour;
 
       try {
         await axios.put<Tour, { data: string }>(
@@ -139,19 +146,25 @@ export const useCreatorStore = defineStore("creator", {
         console.error(`Cannot update tour: ${updatedTour}`, err);
 
         // rollback
-        this.tours[tourIndex] = previousTour;
+        state.tours.value[tourIndex.value] = previousTour;
       }
-      this.fetchTours();
+      actions.fetchTours();
     },
 
+    /**
+     * deletes a tour from the server and removes it from the store
+     */
     async deleteTour(tourId: number): Promise<void> {
       await axios
         .delete(`/creator/edit/${tourId}`)
         .catch((err) => console.error(`Cannot delete tour ${tourId}`, err));
 
-      this.fetchTours();
+      actions.fetchTours();
     },
 
+    /**
+     * posts a new tour stop to the server and adds it to the store
+     */
     async createTourStop(
       tourId: number,
       stop: RecursivePartial<TourStop>
@@ -163,32 +176,36 @@ export const useCreatorStore = defineStore("creator", {
           `/creator/edit/${tourId}/stop/`,
           newStop
         );
-        this.fetchTours();
+        actions.fetchTours();
         return res.data;
       } catch (err) {
         console.error(`Could not create new stop in tour ${tourId}`, err);
         // update tour cache
-        this.fetchTours();
+        actions.fetchTours();
         throw err;
       }
     },
 
+    /**
+     * puts an updated tour stop on the server and updates the store
+     */
     async updateTourStop(tourId: number, stop: TourStop): Promise<TourStop> {
       if (!stop.id) throw Error("No stop id.");
 
-      const { tourIndex, stopIndex } = this.getTourAndStopIndex(
+      const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
         tourId,
         stop.id
-      );
+      ).value;
 
       // optimistic update
-      const oldStop = this.tours[tourIndex].stops[stopIndex];
-      this.tours[tourIndex].stops[stopIndex] = stop;
+      const oldStop = state.tours.value[tourIndex].stops[stopIndex];
+
+      state.tours.value[tourIndex].stops[stopIndex] = stop;
 
       return axios
         .put(`/creator/edit/${tourId}/stop/${stop.id}`, stop)
         .then((res) => {
-          this.fetchTours();
+          actions.fetchTours();
           return res.data;
         })
         .catch((err) => {
@@ -198,37 +215,49 @@ export const useCreatorStore = defineStore("creator", {
           );
 
           // rollback
-          this.tours[tourIndex].stops[stopIndex] = oldStop;
-          this.fetchTours();
+          state.tours.value[tourIndex].stops[stopIndex] = oldStop;
+          actions.fetchTours();
         });
     },
 
+    /**
+     * moves a tour stop to a new position
+     */
     moveTourStopByIndex(
       tourId: number,
       oldStopIndex: number,
       newStopIndex: number
     ): void {
-      const tourIndex = this.getTourIndex(tourId);
-      const prevTourStops = this.tours[tourIndex].stops;
+      const tourIndex = getters.getTourIndex(tourId);
+      const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = move(oldStopIndex, newStopIndex, prevTourStops);
-      this.tours[tourIndex].stops = updatedTourStops;
+      state.tours.value[tourIndex.value].stops = updatedTourStops;
     },
 
+    /**
+     * inserts a given tour stop at a given position within a tour
+     */
     insertTourStopAtIndex(tourId: number, stop: TourStop, index: number): void {
-      const tourIndex = this.getTourIndex(tourId);
-      const prevTourStops = this.tours[tourIndex].stops;
+      const tourIndex = getters.getTourIndex(tourId);
+      const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = insert(index, stop, prevTourStops);
-      this.tours[tourIndex].stops = updatedTourStops;
+      state.tours.value[tourIndex.value].stops = updatedTourStops;
     },
 
+    /**
+     * deletes a tour stop from the server and removes it from the store
+     */
     async deleteTourStop(tourId, stopId): Promise<void> {
-      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
+        tourId,
+        stopId
+      ).value;
 
       // cache old stop in case we need to rollback
-      const oldStop = this.tours[tourIndex].stops[stopIndex];
+      const oldStop = state.tours.value[tourIndex].stops[stopIndex];
 
       // optimistic update
-      this.tours[tourIndex].stops.splice(stopIndex, 1);
+      state.tours.value[tourIndex].stops.splice(stopIndex, 1);
 
       axios
         .delete(`/creator/edit/${tourId}/stop/${stopId}`)
@@ -239,62 +268,74 @@ export const useCreatorStore = defineStore("creator", {
           );
 
           // rollback
-          this.tours[tourIndex].stops = insert(
+          state.tours.value[tourIndex].stops = insert(
             stopIndex,
             oldStop,
-            this.tours[tourIndex].stops
+            state.tours.value[tourIndex].stops
           );
         })
-        .finally(() => this.fetchTours());
+        .finally(() => actions.fetchTours());
     },
+
+    /**
+     * adds a header image to a given tour stop
+     */
+    addStopHeaderImage(tourId: number, stopId: number, image: Image) {
+      const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
+        tourId,
+        stopId
+      ).value;
+      state.tours.value[tourIndex].stops[stopIndex].stop_content.header_image =
+        image;
+    },
+
+    /**
+     * removes the stop header image from a given tour stop
+     * and deletes the image from the server
+     */
     deleteStopHeaderImage(tourId: number, stopId: number) {
-      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
+      const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
+        tourId,
+        stopId
+      ).value;
       const image =
-        this.tours[tourIndex].stops[stopIndex].stop_content.header_image;
+        state.tours[tourIndex].stops[stopIndex].stop_content.header_image;
 
       // if no header image found, we're done!
       if (!image) return;
 
       // optimistic update
-      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = null;
+      state.tours[tourIndex].stops[stopIndex].stop_content.header_image = null;
 
       axios.delete(`/creator/image/${image.src}`).catch((err) => {
         console.error(`cannot delete image`, err);
         //rollback
-        this.tours[tourIndex].stops[stopIndex].stop_content.header_image =
+        state.tours[tourIndex].stops[stopIndex].stop_content.header_image =
           image;
       });
     },
-    addStopHeaderImage(tourId: number, stopId: number, image: Image) {
-      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
-      this.tours[tourIndex].stops[stopIndex].stop_content.header_image = image;
-    },
-    getStageIndexById(tourId: number, stopId: number, stageId: string) {
-      const { tourIndex, stopIndex } = this.getTourAndStopIndex(tourId, stopId);
-      const stageIndex = this.tours[tourIndex].stops[
-        stopIndex
-      ].stop_content.stages.findIndex((s) => s.id === stageId);
-
-      if (stageIndex === -1) {
-        throw new Error(`Cannot find stage with id ${stageId}`);
-      }
-
-      return {
-        tourIndex,
-        stopIndex,
-        stageIndex,
-      };
-    },
+    /**
+     * updates a tour stop's stage within the store
+     * Note: does not change the server. Use updateTourStop for that.
+     */
     updateTourStopStage(tourId: number, stopId: number, stage: Stage) {
-      const { tourIndex, stopIndex, stageIndex } = this.getStageIndexById(
+      const { tourIndex, stopIndex, stageIndex } = getters.getStageIndexById(
         tourId,
         stopId,
         stage.id
-      );
-      this.tours[tourIndex].stops[stopIndex].stop_content.stages[stageIndex] =
-        stage;
+      ).value;
+      state.tours.value[tourIndex].stops[stopIndex].stop_content.stages[
+        stageIndex
+      ] = stage;
     },
-  },
+  };
+
+  return {
+    ...state,
+    ...selectors,
+    ...getters,
+    ...actions,
+  };
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html

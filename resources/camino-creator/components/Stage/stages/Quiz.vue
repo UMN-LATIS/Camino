@@ -25,7 +25,9 @@
           :checked="response.correct"
           type="checkbox"
           @change="
-            handleUpdateResponse(index, { correct: $event.target.checked })
+            handleUpdateResponse(index, {
+              correct: ($event.target as HTMLInputElement).checked,
+            })
           "
         />
         Correct
@@ -55,21 +57,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
+import { QuizStage } from "@/types";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-  tourId: {
-    type: Number,
-    required: true,
-  },
-});
+const props = defineProps<{
+  stage: QuizStage;
+  tourId: number;
+}>();
 
 const creatorStore = useCreatorStore();
 const languages = creatorStore.getTourLanguages(props.tourId);
@@ -87,7 +84,7 @@ function handleAddResponse() {
   emit("update", {
     ...props.stage,
     responses: props.stage.responses.concat({
-      text: createEmptyLocalizedText(languages),
+      text: createEmptyLocalizedText(languages.value),
       correct: false,
     }),
   });

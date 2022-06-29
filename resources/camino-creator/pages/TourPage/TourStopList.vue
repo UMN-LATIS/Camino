@@ -28,15 +28,9 @@
       </form>
     </header>
 
-    <div class="stop-list" data-cy="stop-list">
-      <TourStopCard
-        :tourId="tourId"
-        :stop="firstStop"
-        :showMoveHandle="false"
-        :showDelete="false"
-      />
+    <div class="stop-list">
       <Draggable
-        :modelValue="moveableStops"
+        :modelValue="stops"
         itemKey="id"
         class="stop-list__movable-stops"
         handle=".handle"
@@ -52,40 +46,32 @@
           />
         </template>
       </Draggable>
-      <TourStopCard
-        :tourId="tourId"
-        :stop="lastStop"
-        :showMoveHandle="false"
-        :showDelete="false"
-      />
     </div>
   </section>
 </template>
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, nextTick, computed } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import LanguageText from "../../components/LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
 import TourStopCard from "./TourStopCard.vue";
-import { Locale, type TourStop } from "@/types";
+import { type TourStop } from "@/types";
 import Draggable from "vuedraggable";
 
-interface Props {
+const props = defineProps<{
   tourId: number;
-  stops: TourStop[];
-  locale: Locale;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  locale: Locale.en,
-});
+}>();
 
 const creatorStore = useCreatorStore();
+const stops = computed(
+  (): TourStop[] => creatorStore.getTour(props.tourId).value.stops ?? []
+);
+
 const showCreateForm = ref(false);
 const languages = creatorStore.getTourLanguages(props.tourId);
 
 // localized titles
-const newTitle = ref(createEmptyLocalizedText(languages));
+const newTitle = ref(createEmptyLocalizedText(languages.value));
 
 function createNew() {
   creatorStore.createTourStop(props.tourId, {
@@ -94,32 +80,15 @@ function createNew() {
     },
   });
   showCreateForm.value = false;
-  newTitle.value = createEmptyLocalizedText(languages);
+  newTitle.value = createEmptyLocalizedText(languages.value);
 }
-
-const tourStops = computed<TourStop[]>(
-  () => creatorStore.getTour(props.tourId).stops
-);
-
-const firstStop = computed<TourStop>(() => tourStops.value[0]);
-const lastStop = computed<TourStop>(
-  () => tourStops.value[tourStops.value.length - 1]
-);
-const moveableStops = computed<TourStop[]>(() =>
-  tourStops.value.filter(
-    (s) => s.id !== firstStop.value.id && s.id !== lastStop.value.id
-  )
-);
 
 const draggableKey = ref(0);
 function handleTourStopMove(event) {
   if (!event.moved) return;
   const { oldIndex, newIndex } = event.moved;
 
-  // old and new indices are from the movable stops
-  // array and don't account for the the static first
-  // stop. So, we need to shift the indices by 1;
-  creatorStore.moveTourStopByIndex(props.tourId, oldIndex + 1, newIndex + 1);
+  creatorStore.moveTourStopByIndex(props.tourId, oldIndex, newIndex);
 
   // force rerender
   nextTick(() => (draggableKey.value += 1));

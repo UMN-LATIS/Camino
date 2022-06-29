@@ -25,6 +25,7 @@ import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { computed } from "vue";
 import Sheet from "../Sheet/Sheet.vue";
 import { TourStop } from "@/types";
+import { RouterLink } from "vue-router";
 
 interface Emits {
   (eventName: "close"): void;

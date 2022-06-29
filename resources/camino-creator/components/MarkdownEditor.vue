@@ -4,24 +4,22 @@
       class="mde__textarea form-control"
       rows="4"
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
+      @input="
+        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
     />
   </div>
 </template>
 
-<script setup>
-defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-});
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    modelValue?: string;
+  }>(),
+  {
+    modelValue: "",
+  }
+);
 
 defineEmits(["update:modelValue"]);
-</script>
-
-<script>
-export default {
-  compatConfig: { COMPONENT_V_MODEL: false },
-};
 </script>

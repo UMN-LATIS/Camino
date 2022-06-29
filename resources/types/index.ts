@@ -129,7 +129,7 @@ export interface FeedbackStage extends Stage {
   text: LocalizedText;
 }
 
-interface GalleryImage {
+export interface GalleryImage {
   src: string;
   text: LocalizedText;
 }
@@ -275,4 +275,9 @@ export enum BottomNavSheet {
   Menu = "MENU",
   Stoplist = "STOPLIST",
   Map = "Map",
+}
+
+export enum TourStyle {
+  NEXT_STOP = "next_stop",
+  ENTIRE_TOUR = "entire_tour",
 }

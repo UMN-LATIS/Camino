@@ -32,18 +32,20 @@
     </Teleport>
   </div>
 </template>
-<script setup>
-defineProps({
-  id: {
-    type: String,
-    default: "modal-id",
-  },
-  title: {
-    type: String,
-    default: "Modal Title",
-  },
-});
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    id?: string;
+    title?: string;
+  }>(),
+  {
+    id: global.crypto.randomUUID(),
+    title: "Modal Title",
+  }
+);
 
-defineEmits(["close"]);
+defineEmits<{
+  (eventName: "close");
+}>();
 </script>
 <style scoped></style>

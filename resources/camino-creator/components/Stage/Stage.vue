@@ -42,32 +42,22 @@ import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
 import Quiz from "./stages/Quiz.vue";
-import { StageType } from "../../../types";
+import { Stage, StageType, Tour, TourStop } from "@/types";
 
-const props = defineProps({
-  stage: {
-    type: Object,
-    required: true,
-  },
-  tour: {
-    type: Object,
-    required: true,
-  },
-  stop: {
-    type: Object,
-    required: true,
-  },
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: Number,
-    required: true,
-  },
-});
+interface Props {
+  stage: Stage;
+  tour: Tour;
+  stop: TourStop;
+  tourId: number;
+  stopId: number;
+}
 
-defineEmits(["remove", "update"]);
+const props = defineProps<Props>();
+
+defineEmits<{
+  (eventName: "remove", stage: Stage);
+  (eventName: "update", stage: Stage);
+}>();
 
 const componentLookup = {
   [StageType.AR]: AR,

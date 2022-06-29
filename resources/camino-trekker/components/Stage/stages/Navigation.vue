@@ -7,7 +7,7 @@
     <div v-if="showMap" class="navigation-stage__tour-map-wrapper">
       <TourMap
         v-if="stage.targetPoint"
-        initialMapStyle="streets"
+        :initialMapStyle="MapboxMapStyle.streets"
         type="stop"
         :stopIndex="store.stopIndex"
       />
@@ -22,7 +22,7 @@ import { computed, ref } from "vue";
 import Markdown from "../../Markdown/Markdown.vue";
 import Button from "../../Button/Button.vue";
 import TourMap from "../../TourMap/TourMap.vue";
-import { NavigationStage } from "@/types";
+import { NavigationStage, MapboxMapStyle } from "@/types";
 import { useTrekkerStore } from "@trekker/stores/useTrekkerStore";
 
 interface Props {

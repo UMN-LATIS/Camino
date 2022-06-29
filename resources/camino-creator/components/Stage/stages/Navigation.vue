@@ -9,71 +9,41 @@
       Navigation Text
     </LanguageText>
 
-    <div class="form-group row">
-      <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
-      <div class="col-sm-6">
-        <div v-if="stage.targetPoint">
-          <b>Latitude:</b> {{ stage.targetPoint.lat }}, <b>Longitude:</b>
-          {{ stage.targetPoint.lng }}
-        </div>
-        <LocationSelector
-          :location="stage.targetPoint"
-          :route="stage.route"
-          :generalarea="previousStopTargetPoint"
-          :tour="tour"
-          :basemap="tour.tour_content.custom_base_map"
-          :stop="currentStop"
-          @update:location="handleUpdateLocation"
-          @update:route="handleUpdateRoute"
-        />
-      </div>
-    </div>
+    <section class="my-3">
+      <NavStageRouteMapper
+        :tourId="tourId"
+        :stopId="stopId"
+        :route="stage.route"
+        :targetPoint="stage.targetPoint"
+        @update:targetPoint="handleUpdateTargetPoint"
+        @update:route="handleUpdateRoute"
+      />
+    </section>
   </div>
 </template>
-<script setup>
-import { computed } from "vue";
-import getAllStopPoints from "../../../util/getAllStopPoints";
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
-import LocationSelector from "../../LocationSelector.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
+import { NavigationStage, LngLat } from "@/types";
+import NavStageRouteMapper from "../../NavStageRouteMapper.vue";
 
-const props = defineProps({
-  tourId: {
-    type: Number,
-    required: true,
-  },
-  stopId: {
-    type: [Number, null],
-    default: null,
-  },
-  stage: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  tourId: number;
+  stopId: number;
+  stage: NavigationStage;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", stage: NavigationStage);
+}>();
 
 const creatorStore = useCreatorStore();
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
-const tour = creatorStore.getTour(props.tourId);
-const currentStopIndex = computed(() =>
-  tour.stops.findIndex((s) => s.id === props.stopId)
-);
-const currentStop = computed(() => tour.stops[currentStopIndex.value]);
-const previousStopTargetPoint = computed(() => {
-  // if stop id not found or first stop, return tour start location
-  if (currentStopIndex.value <= 0) {
-    return tour.start_location;
-  }
 
-  const allStopPoints = getAllStopPoints(tour);
-  return allStopPoints[currentStopIndex.value - 1];
-});
-
-const emit = defineEmits(["update"]);
-function handleUpdateLocation(targetPoint) {
+function handleUpdateTargetPoint(newTargetPoint: LngLat) {
   emit("update", {
     ...props.stage,
-    targetPoint,
+    targetPoint: newTargetPoint,
   });
 }
 

@@ -329,3 +329,17 @@ export const findValuedTargetPoint = (
     return DEFAULT_TARGET_POINT;
   }
 };
+
+export const findFirstValuedTargetPoint = (currentState, tourId): LngLat => {
+  const tour = selectTour(currentState, tourId);
+
+  if (tour.start_location) return tour.start_location;
+
+  // get a list of all non-null target points
+  const targetPoints = tour.stops
+    .map((stop) => selectTourStopTargetPoint(currentState, tourId, stop.id))
+    .filter(Boolean) as LngLat[];
+
+  // return the first or the default point
+  return targetPoints.length ? targetPoints[0] : UMN_LNGLAT;
+};

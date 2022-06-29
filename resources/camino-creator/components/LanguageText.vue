@@ -10,13 +10,20 @@
           <label :for="'field' + key + randomIdentifier" class="">
             <slot /> ({{ language }})
           </label>
-          <MarkdownEditor
+          <VEditor
             v-if="largetext"
             :modelValue="translate(text, language)"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
             "
           />
+          <!-- <MarkdownEditor
+            v-if="largetext"
+            :modelValue="translate(text, language)"
+            @update:modelValue="
+              (payload) => handleTextUpdate(language, payload)
+            "
+          /> -->
         </div>
       </div>
     </template>
@@ -34,7 +41,12 @@
               type="text"
               class="form-control"
               :value="translate(text, language)"
-              @input="handleTextUpdate(language, ($event.target as HTMLInputElement).value)"
+              @input="
+                handleTextUpdate(
+                  language,
+                  ($event.target as HTMLInputElement).value
+                )
+              "
             />
           </div>
           <div class="col-sm-4">
@@ -46,9 +58,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import MarkdownEditor from "./MarkdownEditor.vue";
+// import MarkdownEditor from "./MarkdownEditor.vue";
 import { Locale, LocalizedText, Maybe } from "@/types";
 import { translate } from "@/shared/i18n";
+import VEditor from "./VEditor.vue";
 
 interface Props {
   languages: Locale[];

@@ -71,8 +71,8 @@ describe("Tour Page", () => {
     cy.get(".mapboxgl-canvas").click(100, 200);
 
     // new location should be set
-    cy.get('[data-cy="location-lng"]').should("contain.text", "-93.2453");
-    cy.get('[data-cy="location-lat"]').should("contain.text", "44.9726");
+    cy.get('[data-cy="location-lng"]').should("contain.text", "-93.245");
+    cy.get('[data-cy="location-lat"]').should("contain.text", "44.972");
   });
 
   it("sets the tour as active and public", () => {

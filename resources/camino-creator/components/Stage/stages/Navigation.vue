@@ -9,7 +9,7 @@
       Navigation Text
     </LanguageText>
 
-    <section class="my-3">
+    <section class="mt-3">
       <NavStageRouteMapper
         :tourId="tourId"
         :stopId="stopId"

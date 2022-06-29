@@ -5,7 +5,8 @@
     // this enables stricter inference for data properties on `this`
     "strict": true,
     "jsx": "preserve",
-    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "moduleResolution": "Node",
     "noImplicitAny": false,
     "allowJs": true,
     "baseUrl": "resources",

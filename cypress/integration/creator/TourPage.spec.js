@@ -58,23 +58,21 @@ describe("Tour Page", () => {
   });
 
   it("has a default location of UMN", () => {
-    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.24287");
-    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.972109");
+    cy.get('[data-cy="location-lng"]').should("contain.text", "-93.2429");
+    cy.get('[data-cy="location-lat"]').should("contain.text", "44.9721");
   });
 
   it("sets the starting location", () => {
-    cy.contains("Set Location").click();
-
-    // expect the modal to be visible
-    cy.get("#setLocation").should("exist");
+    // check that map is loaded class is present
+    // before proceeding
+    cy.get(".map-container--is-loaded").should("exist");
 
     // click on a location
-    cy.get("#setLocation #map").click(100, 200);
-    cy.get("#setLocation").contains("Done").click();
+    cy.get(".mapboxgl-canvas").click(100, 200);
 
     // new location should be set
-    cy.get('[data-cy="tour-location-lng"]').should("contain.text", "-93.24573");
-    cy.get('[data-cy="tour-location-lat"]').should("contain.text", "44.97482");
+    cy.get('[data-cy="location-lng"]').should("contain.text", "-93.2453");
+    cy.get('[data-cy="location-lat"]').should("contain.text", "44.9726");
   });
 
   it("sets the tour as active and public", () => {
@@ -124,13 +122,22 @@ describe("Tour Page", () => {
     cy.contains("New Stop").click();
     cy.get('[data-cy="add-stop-form"] input').type("Test Stop{enter}");
     // it should be added before the last stop
-    cy.get('[data-cy="stop-list"] :nth-child(2)').contains("Test Stop");
+    cy.get(".stop-list__movable-stops :nth-child(2)").should(
+      "contain.text",
+      "Test Stop"
+    );
   });
 
-  it("deletes a tour stop", () => {
+  it.only("deletes a tour stop", () => {
     cy.contains("New Stop").click();
     cy.get('[data-cy="add-stop-form"] input').type("Test Stop{enter}");
-    cy.get('[data-cy="stop-list"] :nth-child(2)').contains("Delete").click();
-    cy.get('[data-cy="stop-list"]').should("not.contain.text", "Test Stop");
+    cy.get(":nth-child(2) > .card-body")
+      .should("contain.text", "Test Stop")
+      .contains("Delete")
+      .click();
+    cy.get(":nth-child(2) > .card-body").should(
+      "not.contain.text",
+      "Test Stop"
+    );
   });
 });

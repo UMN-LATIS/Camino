@@ -1,5 +1,5 @@
 <template>
-  <div class="form-group row my-4">
+  <div class="form-group row my-4 initial-location">
     <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
     <div class="col-sm-6 bg-white p-2 d-flex flex-column">
       <LngLatDisplay :coord="modelValue" class="d-flex" />

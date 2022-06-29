@@ -28,7 +28,7 @@
       </form>
     </header>
 
-    <div class="stop-list" data-cy="stop-list">
+    <div class="stop-list">
       <Draggable
         :modelValue="stops"
         itemKey="id"

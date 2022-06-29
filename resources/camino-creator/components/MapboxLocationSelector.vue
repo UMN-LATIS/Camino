@@ -2,6 +2,9 @@
   <div class="mapbox-location-selector">
     <Map
       class="map-container"
+      :class="{
+        'map-container--is-loaded': mapRef,
+      }"
       :center="currentValuedLocation"
       :zoom="16"
       mapStyle="streets"

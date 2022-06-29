@@ -13,11 +13,11 @@ import useQuill from "../hooks/useQuill.js";
 
 const uploadError = ref("");
 
-const createImageUploaderForChime = (imageUploadUrl) => (file) => {
+const handleUploadImage = (file) => {
+  const imageUploadUrl = "/creator/image/store";
+
   const form = new FormData();
   form.append("image", file);
-
-  console.log(`TODO: implement image uploader: ${imageUploadUrl}`);
 
   return axios
     .post(imageUploadUrl, form)
@@ -34,11 +34,6 @@ const props = defineProps({
   modelValue: {
     type: String,
     default: "",
-  },
-  // required to create an image uploader
-  imageUploadUrl: {
-    type: String,
-    default: null,
   },
   options: {
     type: Object,
@@ -66,12 +61,8 @@ const {
   modules: props.modules,
 });
 
-if (props.imageUploadUrl) {
-  const removeImageHandler = onAttachImage(
-    createImageUploaderForChime(props.imageUploadUrl)
-  );
-  onUnmounted(removeImageHandler);
-}
+const removeImageHandler = onAttachImage(handleUploadImage);
+onUnmounted(removeImageHandler);
 
 const removeTextChangeHandler = onTextChange((contents) => {
   emit("update:modelValue", contents);

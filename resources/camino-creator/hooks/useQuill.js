@@ -36,7 +36,6 @@ export default function useQuill({
         [{ list: "ordered" }, { list: "bullet" }],
         ["link", "image"],
       ],
-      // blotFormatter: {},
       imageUploader: {
         upload: (file) => {
           return Promise.all(

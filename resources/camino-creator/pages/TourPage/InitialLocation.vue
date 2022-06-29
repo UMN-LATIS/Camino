@@ -1,8 +1,7 @@
 <template>
   <div class="form-group row my-4 initial-location">
     <label for="tourTitle" class="col-sm-2 col-form-label">Location</label>
-    <div class="col-sm-6 bg-white p-2 d-flex flex-column">
-      <LngLatDisplay :coord="modelValue" class="d-flex" />
+    <div class="col-sm-6 bg-white p-0 rounded-3 border overflow-hidden">
       <MapboxLocationSelector
         :location="modelValue"
         :tourId="tourId"
@@ -15,7 +14,6 @@
 <script setup lang="ts">
 import { CustomBaseMap, LngLat, Maybe } from "@/types";
 import MapboxLocationSelector from "../../components/MapboxLocationSelector.vue";
-import LngLatDisplay from "@/camino-creator/components/LngLatDisplay.vue";
 
 interface Props {
   tourId: number;

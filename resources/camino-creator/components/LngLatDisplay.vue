@@ -1,5 +1,5 @@
 <template>
-  <div class="d-inline-flex gap-4 my-2 bg-light p-2">
+  <div class="d-inline-flex gap-4 p-2">
     <div>
       <small class="d-block">Latitude</small>
       <span data-cy="location-lat">{{

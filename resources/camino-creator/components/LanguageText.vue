@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="language-text">
     <template v-if="largetext">
       <div class="language-text__editor">
         <div
@@ -7,8 +7,12 @@
           :key="key"
           class="d-flex flex-column"
         >
-          <label :for="'field' + key + randomIdentifier" class="">
-            <slot /> ({{ language }})
+          <label
+            :for="'field' + key + randomIdentifier"
+            class="language-text__editor-label"
+          >
+            <span class="language-text__editor-label-slot"><slot /></span>
+            • {{ language }}
           </label>
           <VEditor
             v-if="largetext"
@@ -84,5 +88,13 @@ function handleTextUpdate(language: Locale, updatedText: string) {
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+}
+.language-text__editor-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #999;
+  display: block;
+  text-align: right;
 }
 </style>

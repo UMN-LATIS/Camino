@@ -3,6 +3,7 @@ import Quill from "quill";
 import QuillImageUploader from "quill-image-uploader";
 import mergeDeepRight from "ramda/es/mergeDeepRight.js";
 import "quill/dist/quill.snow.css";
+import "quill/dist/quill.bubble.css";
 
 const defaultModules = [
   {

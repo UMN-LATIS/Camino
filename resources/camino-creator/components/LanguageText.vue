@@ -1,11 +1,11 @@
 <template>
   <div>
     <template v-if="largetext">
-      <div class="row">
+      <div class="language-text__editor">
         <div
           v-for="(language, key) in languages"
           :key="key"
-          class="form-group col"
+          class="d-flex flex-column"
         >
           <label :for="'field' + key + randomIdentifier" class="">
             <slot /> ({{ language }})
@@ -13,23 +13,17 @@
           <VEditor
             v-if="largetext"
             :modelValue="translate(text, language)"
+            class="flex-grow-1"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
             "
           />
-          <!-- <MarkdownEditor
-            v-if="largetext"
-            :modelValue="translate(text, language)"
-            @update:modelValue="
-              (payload) => handleTextUpdate(language, payload)
-            "
-          /> -->
         </div>
       </div>
     </template>
     <template v-if="!largetext">
       <div v-for="(language, key) in languages" :key="key">
-        <div class="form-group row">
+        <div class="form-group row my-1">
           <label
             :for="'field' + key + randomIdentifier"
             class="col-sm-2 col-form-label"
@@ -58,7 +52,6 @@
   </div>
 </template>
 <script setup lang="ts">
-// import MarkdownEditor from "./MarkdownEditor.vue";
 import { Locale, LocalizedText, Maybe } from "@/types";
 import { translate } from "@/shared/i18n";
 import VEditor from "./VEditor.vue";
@@ -85,3 +78,11 @@ function handleTextUpdate(language: Locale, updatedText: string) {
   emit("update:text", updatedTextObj);
 }
 </script>
+<style scoped>
+.language-text__editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+</style>

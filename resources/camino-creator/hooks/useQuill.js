@@ -1,15 +1,10 @@
 import { onMounted, ref } from "vue";
 import Quill from "quill";
-// import BlotFormatter from "quill-blot-formatter";
 import QuillImageUploader from "quill-image-uploader";
 import mergeDeepRight from "ramda/es/mergeDeepRight.js";
 import "quill/dist/quill.snow.css";
 
 const defaultModules = [
-  // {
-  //   name: "blotFormatter",
-  //   module: BlotFormatter,
-  // },
   {
     name: "imageUploader",
     module: QuillImageUploader,
@@ -38,7 +33,6 @@ export default function useQuill({
       toolbar: [
         ["bold", "italic", "underline", "align"],
         [{ list: "ordered" }, { list: "bullet" }],
-        [{ script: "sub" }, { script: "super" }, "formula"],
         ["link", "image"],
       ],
       // blotFormatter: {},

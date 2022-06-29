@@ -16,15 +16,11 @@ import findValuedTargetPointFromTour from "./findValuedTargetPointFromTour";
 const getNavStagesFromStop = (stop: TourStop): NavigationStage[] =>
   getStagesFromStopWhere<NavigationStage>("type", StageType.Navigation, stop);
 
-// function selectFinalTargetPointFromStop(stop: TourStop): Maybe<LngLat> {
-//   const navStages = getNavStagesFromStop(stop);
-//   const targetPoints = navStages.map((s) => s.targetPoint);
-//   return targetPoints.length ? targetPoints[targetPoints.length - 1] : null;
-// }
-
-// if there's more than one nav stage,
-// make sure they all link up with well defined
-// routes and targetPoints
+/**
+ * normalize each nav stage so that the routes are connected
+ * and each stage start point is the previous stage's target point
+ * on the first stage, use the stopStartPoint as the start point
+ */
 function toNormalizedNavStages(
   navStages: NavigationStage[],
   stopStartPoint = UMN_LNGLAT
@@ -74,21 +70,13 @@ export default function normalizeTour(tour: Tour): Tour {
   // we use forEach and mutate in place so that we can
   // proceed sequentially, using previous stop targets in future targets
   updatedTour.stops.forEach((stop, index) => {
-    // if this is the first stop, use the start_location
-    // or if that doesn't exist, use a default tour point
-    // for every other stop, use the previous target point
-    // const tourStartLocation = tour.start_location ?? UMN_LNGLAT;
-    // const stopStartPoint =
-    //   index === 0
-    //     ? tourStartLocation
-    //     : selectFinalTargetPointFromStop(updatedTour.stops[index - 1]) ??
-    //       tourStartLocation;
-
+    // find the last good target point: this our starting point
     const stopStartPoint = findValuedTargetPointFromTour(updatedTour, {
       stopIndex: index - 1,
     });
 
     if (!stopStartPoint) {
+      // this shouldn't happen, but just in case...
       throw Error(
         `normalizeTour could not get a start point for stop index ${index}`
       );

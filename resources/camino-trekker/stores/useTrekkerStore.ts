@@ -10,6 +10,7 @@ import {
   BottomNavSheet,
 } from "@/types";
 import { useRoute } from "vue-router";
+import normalizeTour from "@/shared/normalizeTour";
 
 const toInt = (str) => Number.parseInt(str, 10);
 
@@ -67,7 +68,7 @@ export const useTrekkerStore = defineStore("trekker", () => {
         .get(tourId)
         .then((tour) => {
           state.isLoading.value = false;
-          state.tour.value = tour;
+          state.tour.value = normalizeTour(tour);
         })
         .catch((err) => {
           console.error(err);

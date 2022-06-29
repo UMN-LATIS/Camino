@@ -107,6 +107,7 @@ import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable
 import BButton from "./BButton.vue";
 import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
+import getOffsetPointFrom from "@/shared/getOffsetPointFrom";
 
 const props = defineProps<{
   tourId: number;
@@ -203,14 +204,6 @@ const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   const routeToRoute = [props.targetPoint, nextStopRoute[0]];
   return routeToRoute;
 });
-
-function getOffsetPointFrom(pt: LngLat) {
-  const offset = 0.0005;
-  return {
-    lng: pt.lng + offset,
-    lat: pt.lat + offset,
-  };
-}
 
 // function onMapEvent(
 //   map: MapboxMap,

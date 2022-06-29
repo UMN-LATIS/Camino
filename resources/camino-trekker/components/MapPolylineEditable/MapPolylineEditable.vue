@@ -4,7 +4,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import * as MapboxDraw from "@mapbox/mapbox-gl-draw";
+import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import { watch, inject, onMounted, computed, ref } from "vue";

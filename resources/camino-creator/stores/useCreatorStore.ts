@@ -1,18 +1,12 @@
-import { ref, type Ref, type ComputedRef, computed, reactive } from "vue";
+import { ref, type Ref, type ComputedRef, computed } from "vue";
 import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { axiosClient as axios } from "@creator/common/axios";
-import type {
-  Tour,
-  Maybe,
-  TourStop,
-  Stage,
-  Image,
-  RecursivePartial,
-} from "@/types";
+import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
 import * as selectors from "./creatorStoreSelectors";
+import normalizeTour from "@/shared/normalizeTour";
 
 export interface CreatorStoreState {
   tours: Ref<Tour[]>;
@@ -106,8 +100,12 @@ export const useCreatorStore = defineStore("creator", () => {
      * fetches tours from the server and sets them in the store
      */
     async fetchTours(): Promise<Tour[]> {
-      const res = await axios.get("/creator");
-      state.tours.value = res.data;
+      const res = await axios.get<Tour[]>("/creator");
+      const tours = res.data;
+      // make tours continous
+      const normalizedTours = tours.map(normalizeTour);
+
+      state.tours.value = normalizedTours;
       return res.data;
     },
 

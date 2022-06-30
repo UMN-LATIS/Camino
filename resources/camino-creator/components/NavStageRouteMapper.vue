@@ -77,7 +77,7 @@
     <Alert v-if="geolocationError" class="my-2" variant="warning">
       {{ geolocationError.message }}
     </Alert>
-    <div class="route-mapper__button-group d-flex justify-content-end mt-3">
+    <div class="route-mapper__button-group d-flex justify-content-end p-3">
       <BButton variant="tertiary" @click="$emit('update:route', [])"
         >Clear Route</BButton
       >
@@ -91,12 +91,7 @@
 <script setup lang="ts">
 import { ref, computed, nextTick } from "vue";
 import useConfig from "@/shared/useConfig";
-import {
-  Map as MapboxMap,
-  // MapLayerEventType,
-  // MapLayerMouseEvent,
-  // MapMouseEvent,
-} from "mapbox-gl";
+import { Map as MapboxMap } from "mapbox-gl";
 import { LngLat, Maybe, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
@@ -139,15 +134,7 @@ const offsetPointFromLastTarget = computed(
   (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value)
 );
 
-/**
- * always returns some target point
- * - props.targetPoint, then
- * - last stop's target point offset by a bit
- */
 const currentValuedTargetPoint = computed((): LngLat => {
-  // use current passed target point
-  // which may be different from the store's target point
-  // if we haven't saved yet
   return props.targetPoint ?? offsetPointFromLastTarget.value;
 });
 
@@ -205,44 +192,8 @@ const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   return routeToRoute;
 });
 
-// function onMapEvent(
-//   map: MapboxMap,
-//   eventName: keyof MapLayerEventType,
-//   handlerFn: (event: MapLayerMouseEvent) => void,
-//   options: { ignoreLayerId: string }
-// ) {
-//   // set up a handler to ignore the layer with the given layer id
-//   if (options.ignoreLayerId) {
-//     map.on(eventName, options.ignoreLayerId, (event) => {
-//       event.originalEvent.preventDefault();
-//     });
-//   }
-
-//   // now we can check if default was prevented on our event
-//   // before running the given handler function
-//   map.on("click", (event) => {
-//     if (event.originalEvent.defaultPrevented) return;
-//     handlerFn(event);
-//   });
-// }
-
 function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
-
-  // listen for click events to update the target point,
-  // but ignore events that happen on the "gl-draw-polygon-midpoint.cold"
-  // layer, since that those clicks will on the midpoint to create a new
-  // waypoint on the route line
-  // onMapEvent(
-  //   map,
-  //   "click",
-  //   (event: MapMouseEvent) =>
-  //     emit("update:targetPoint", {
-  //       lng: event.lngLat.lng,
-  //       lat: event.lngLat.lat,
-  //     }),
-  //   { ignoreLayerId: "gl-draw-polygon-midpoint.cold" }
-  // );
 }
 
 function flyTo(lnglat: LngLat) {
@@ -288,7 +239,8 @@ function handleUseCurrentLocation() {
 }
 .route-mapper {
   background: #f3f3f3;
-  padding: 1rem;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }
 </style>

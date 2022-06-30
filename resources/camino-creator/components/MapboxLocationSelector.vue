@@ -45,7 +45,10 @@
     <Alert v-if="geolocationError" class="my-2" variant="warning">
       {{ geolocationError.message }}
     </Alert>
-    <div class="route-mapper__button-group d-flex justify-content-end mt-3">
+    <div
+      class="route-mapper__button-group d-flex justify-content-between px-2 py-1 align-items-center"
+    >
+      <LngLatDisplay :coord="location" />
       <BButton @click="handleUseCurrentLocation">Use Current Location</BButton>
     </div>
   </div>
@@ -64,6 +67,7 @@ import BButton from "./BButton.vue";
 import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
 import { UMN_LNGLAT } from "@/shared/constants";
+import LngLatDisplay from "./LngLatDisplay.vue";
 
 const props = withDefaults(
   defineProps<{

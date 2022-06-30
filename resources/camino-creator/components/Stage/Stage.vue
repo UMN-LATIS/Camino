@@ -6,11 +6,9 @@
           <i class="fas fa-grip-vertical handle"></i> {{ stage.type }}
         </h5>
         <div class="controls">
-          <button
-            class="btn btn-outline-danger"
-            @click="$emit('remove', stage)"
-          >
-            <i class="fas fa-trash"></i> Remove Stage
+          <button class="stage__remove-button" @click="$emit('remove', stage)">
+            <i class="fas fa-times"></i>
+            <span class="sr-only">Remove Stage</span>
           </button>
         </div>
       </div>
@@ -80,5 +78,21 @@ const componentName = computed(() => componentLookup[props.stage.type]);
 .card-title {
   margin-bottom: 0px;
   text-transform: capitalize;
+}
+.stage__remove-button {
+  background: #f3f3f3;
+  border: none;
+  color: #777;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stage__remove-button:hover {
+  background: #333;
+  color: #fff;
 }
 </style>

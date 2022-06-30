@@ -19,7 +19,7 @@
       </LanguageText>
       <button
         v-if="deepdive.title"
-        class="btn btn-outline-danger float-right"
+        class="btn btn-outline-danger float-end"
         @click="removeDeepDive(index as number)"
       >
         <i class="fas fa-trash"></i> Remove Deep Dive

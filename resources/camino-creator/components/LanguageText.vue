@@ -17,6 +17,7 @@
           <VEditor
             v-if="largetext"
             :modelValue="translate(text, language)"
+            :withImageUpload="false"
             class="flex-grow-1"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
@@ -58,7 +59,7 @@
 <script setup lang="ts">
 import { Locale, LocalizedText, Maybe } from "@/types";
 import { translate } from "@/shared/i18n";
-import VEditor from "./VEditor.vue";
+import VEditor from "./VEditor/VEditor.vue";
 
 interface Props {
   languages: Locale[];

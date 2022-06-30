@@ -1,64 +1,68 @@
 <template>
-  <div>
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Waypoints</label>
-      <div class="col-sm-10">
-        <button class="btn btn-primary" @click="handleAddWaypoint">
-          <i class="fas fa-plus"></i> Add waypoint
-        </button>
-        <div
-          v-for="(waypoint, index) in stage.waypoints"
-          :key="index"
-          class="border rounded mt-2 p-2"
-        >
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Waypoints</label>
+    <div class="col-sm-10">
+      <button class="btn btn-primary" @click="handleAddWaypoint">
+        <i class="fas fa-plus"></i> Add waypoint
+      </button>
+      <div
+        v-for="(waypoint, index) in stage.waypoints"
+        :key="index"
+        class="border rounded mt-2 p-2 bg-light"
+      >
+        <div class="d-flex justify-content-end">
           <button class="btn float-end" @click="handleRemoveWaypoint(index)">
             <i class="fas fa-times"></i>
             <span class="sr-only">Remove Waypoint</span>
           </button>
-          <LanguageText
-            :text="waypoint.text"
-            :languages="supportedLanguages"
-            @update:text="(text) => handleUpdateWaypoint(index, { text })"
-          >
-            Text
-          </LanguageText>
-          <div class="form-group row">
-            <label for="tourTitle" class="col-sm-2">Location</label>
-            <div class="col-sm-10">
-              <MapboxLocationSelector
-                :location="waypoint.location"
-                :tourId="tourId"
-                @update:location="
-                  (location) => handleUpdateWaypoint(index, { location })
-                "
-              >
-              </MapboxLocationSelector>
-            </div>
-          </div>
+        </div>
 
-          <div class="form-group row">
-            <label for="altitude" class="col-sm-2 col-form-label"
-              >Altitude (optional)</label
+        <LanguageText
+          :text="waypoint.text"
+          :languages="supportedLanguages"
+          @update:text="(text) => handleUpdateWaypoint(index, { text })"
+        >
+          Text
+        </LanguageText>
+        <div class="row">
+          <label for="tourTitle" class="col-sm-2 col-form-label"
+            >Location</label
+          >
+          <div class="col-sm-10 my-2">
+            <MapboxLocationSelector
+              class="border rounded bg-white"
+              :location="waypoint.location"
+              :tourId="tourId"
+              @update:location="
+                (location) => handleUpdateWaypoint(index, { location })
+              "
             >
-            <div class="col-sm-6">
-              <input
-                id="altitude"
-                :value="waypoint.altitude"
-                type="text"
-                class="form-control"
-                aria-describedby="altitudeHelp"
-                @input="
-                  handleUpdateWaypoint(index, {
-                    altitude: Number.parseInt(
-                      ($event.target as HTMLInputElement).value
-                    ),
-                  })
-                "
-              />
-              <small id="altitudeHelp" class="form-text text-muted"
-                >In meters, relative to this stop's elevation.</small
-              >
-            </div>
+            </MapboxLocationSelector>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="altitude" class="col-sm-2 col-form-label"
+            >Altitude (optional)</label
+          >
+          <div class="col-sm-6">
+            <input
+              id="altitude"
+              :value="waypoint.altitude"
+              type="text"
+              class="form-control"
+              aria-describedby="altitudeHelp"
+              @input="
+                handleUpdateWaypoint(index, {
+                  altitude: Number.parseInt(
+                    ($event.target as HTMLInputElement).value
+                  ),
+                })
+              "
+            />
+            <small id="altitudeHelp" class="form-text text-muted"
+              >In meters, relative to this stop's elevation.</small
+            >
           </div>
         </div>
       </div>

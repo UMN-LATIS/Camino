@@ -1,18 +1,24 @@
 <template>
-  <div>
+  <div class="language-text">
     <template v-if="largetext">
-      <div class="row">
+      <div class="language-text__editor">
         <div
           v-for="(language, key) in languages"
           :key="key"
-          class="form-group col"
+          class="d-flex flex-column"
         >
-          <label :for="'field' + key + randomIdentifier" class="">
-            <slot /> ({{ language }})
+          <label
+            :for="'field' + key + randomIdentifier"
+            class="language-text__editor-label"
+          >
+            <span class="language-text__editor-label-slot"><slot /></span>
+            • {{ language }}
           </label>
-          <MarkdownEditor
+          <VEditor
             v-if="largetext"
             :modelValue="translate(text, language)"
+            :withImageUpload="false"
+            class="flex-grow-1"
             @update:modelValue="
               (payload) => handleTextUpdate(language, payload)
             "
@@ -22,7 +28,7 @@
     </template>
     <template v-if="!largetext">
       <div v-for="(language, key) in languages" :key="key">
-        <div class="form-group row">
+        <div class="form-group row my-1">
           <label
             :for="'field' + key + randomIdentifier"
             class="col-sm-2 col-form-label"
@@ -34,7 +40,12 @@
               type="text"
               class="form-control"
               :value="translate(text, language)"
-              @input="handleTextUpdate(language, ($event.target as HTMLInputElement).value)"
+              @input="
+                handleTextUpdate(
+                  language,
+                  ($event.target as HTMLInputElement).value
+                )
+              "
             />
           </div>
           <div class="col-sm-4">
@@ -46,9 +57,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import MarkdownEditor from "./MarkdownEditor.vue";
 import { Locale, LocalizedText, Maybe } from "@/types";
 import { translate } from "@/shared/i18n";
+import VEditor from "./VEditor/VEditor.vue";
 
 interface Props {
   languages: Locale[];
@@ -72,3 +83,19 @@ function handleTextUpdate(language: Locale, updatedText: string) {
   emit("update:text", updatedTextObj);
 }
 </script>
+<style scoped>
+.language-text__editor {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.language-text__editor-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #999;
+  display: block;
+  text-align: right;
+}
+</style>

@@ -11,25 +11,19 @@
           :key="index"
           class="border rounded mt-2 p-2"
         >
+          <button class="btn float-end" @click="handleRemoveWaypoint(index)">
+            <i class="fas fa-times"></i>
+            <span class="sr-only">Remove Waypoint</span>
+          </button>
           <LanguageText
             :text="waypoint.text"
             :languages="languages"
             @update:text="(text) => handleUpdateWaypoint(index, { text })"
           >
             Text
-            <template #languageaddon>
-              <button
-                class="btn btn-outline-danger float-end"
-                @click="handleRemoveWaypoint(index)"
-              >
-                <i class="fas fa-trash"></i> Remove Waypoint
-              </button>
-            </template>
           </LanguageText>
           <div class="form-group row">
-            <label for="tourTitle" class="col-sm-2 col-form-label"
-              >Location</label
-            >
+            <label for="tourTitle" class="col-sm-2">Location</label>
             <div class="col-sm-6">
               <div v-if="waypoint.location">
                 <b>Latitude:</b> {{ waypoint.location.lat }}, <b>Longitude:</b>

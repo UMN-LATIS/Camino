@@ -82,7 +82,8 @@ onMounted(async () => {
 .v-editor {
   background: #f3f3f3;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 1rem;
+  padding-top: 0.5rem;
 }
 </style>
 
@@ -95,12 +96,16 @@ onMounted(async () => {
 .v-editor .ql-container.ql-snow {
   font-size: 1rem;
   border: 0;
+  width: 100%;
+  max-width: 50rem;
 }
 .v-editor .ql-toolbar.ql-snow {
   border: 0;
   border-radius: 2rem;
   background: #fff;
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  max-width: 50rem;
+  width: 100%;
 }
 
 .v-editor .ql-toolbar.ql-snow button {

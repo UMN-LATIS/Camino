@@ -102,7 +102,7 @@ const currentValuedLocation = computed((): LngLat => {
   if (props.location) return props.location;
 
   const nextStartPoint: Maybe<LngLat> = props.tourId
-    ? store.getNextTourStopStartPoint(props.tourId, 0).value
+    ? store.findFirstValuedTargetPoint(props.tourId).value
     : null;
 
   if (nextStartPoint) return getOffsetPointFrom(nextStartPoint);

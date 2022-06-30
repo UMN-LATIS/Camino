@@ -84,6 +84,8 @@ export const useCreatorStore = defineStore("creator", () => {
       computed(() =>
         selectors.selectNextTourStopStartPoint(state, tourId, stopId)
       ),
+    findFirstValuedTargetPoint: (tourId: number) =>
+      computed(() => selectors.findFirstValuedTargetPoint(state, tourId)),
     findValuedTargetPoint: (
       tourId: number | null | undefined,
       stopId: number | null | undefined

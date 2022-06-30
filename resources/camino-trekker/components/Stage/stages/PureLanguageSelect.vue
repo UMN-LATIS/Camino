@@ -18,7 +18,7 @@
           :checked="selectedLocale === localeChoice"
           @change="handleChange(localeChoice)"
         />
-        {{ locale }}
+        {{ localeChoice }}
       </label>
       <Button class="save-button" type="submit" variant="primary">Save</Button>
     </form>

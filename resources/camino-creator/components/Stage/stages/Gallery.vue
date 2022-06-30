@@ -12,7 +12,7 @@
       />
       <button
         v-if="image.src"
-        class="btn btn-outline-danger float-right"
+        class="btn btn-outline-danger float-end"
         @click="handleRemoveImage(index)"
       >
         <i class="fas fa-trash"></i> Remove Image

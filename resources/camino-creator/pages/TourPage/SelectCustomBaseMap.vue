@@ -59,7 +59,7 @@
           />
           <button
             v-if="imageSrc"
-            class="btn btn-outline-danger float-right"
+            class="btn btn-outline-danger float-end"
             @click="$emit('update:imageSrc', null)"
           >
             <i class="fas fa-trash"></i> Remove basemap

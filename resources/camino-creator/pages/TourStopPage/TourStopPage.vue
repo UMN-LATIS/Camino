@@ -36,7 +36,7 @@
           />
           <button
             v-if="stop.stop_content.header_image"
-            class="btn btn-outline-danger float-right"
+            class="btn btn-outline-danger float-end"
             @click="removeHeaderImage"
           >
             <i class="fas fa-trash"></i> Remove Image

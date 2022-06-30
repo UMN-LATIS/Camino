@@ -19,7 +19,7 @@
             Text
             <template #languageaddon>
               <button
-                class="btn btn-outline-danger float-right"
+                class="btn btn-outline-danger float-end"
                 @click="handleRemoveWaypoint(index)"
               >
                 <i class="fas fa-trash"></i> Remove Waypoint

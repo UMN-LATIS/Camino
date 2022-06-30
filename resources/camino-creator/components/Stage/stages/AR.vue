@@ -17,27 +17,22 @@
           </button>
           <LanguageText
             :text="waypoint.text"
-            :languages="languages"
+            :languages="supportedLanguages"
             @update:text="(text) => handleUpdateWaypoint(index, { text })"
           >
             Text
           </LanguageText>
           <div class="form-group row">
             <label for="tourTitle" class="col-sm-2">Location</label>
-            <div class="col-sm-6">
-              <div v-if="waypoint.location">
-                <b>Latitude:</b> {{ waypoint.location.lat }}, <b>Longitude:</b>
-                {{ waypoint.location.lng }}
-              </div>
-              <LocationSelector
+            <div class="col-sm-10">
+              <MapboxLocationSelector
                 :location="waypoint.location"
-                :generalarea="currentLocation"
-                :basemap="tour.tour_content.custom_base_map"
+                :tourId="tourId"
                 @update:location="
                   (location) => handleUpdateWaypoint(index, { location })
                 "
               >
-              </LocationSelector>
+              </MapboxLocationSelector>
             </div>
           </div>
 
@@ -54,7 +49,9 @@
                 aria-describedby="altitudeHelp"
                 @input="
                   handleUpdateWaypoint(index, {
-                    altitude: Number.parseInt($event.target.value),
+                    altitude: Number.parseInt(
+                      ($event.target as HTMLInputElement).value
+                    ),
                   })
                 "
               />
@@ -69,76 +66,69 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
-import LocationSelector from "../../LocationSelector.vue";
+import MapboxLocationSelector from "@creator/components/MapboxLocationSelector.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
-export default {
-  components: {
-    LanguageText,
-    LocationSelector,
-  },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour", "stop"],
-  emits: ["update"],
-  computed: {
-    currentLocation() {
-      if (this.stop.id) {
-        const nav = this.stop.stop_content.stages.filter(
-          (s) => s.type == "navigation"
-        );
-        if (nav.length > 0 && nav[0].targetPoint) {
-          return nav[0].targetPoint;
-        }
-      } else {
-        return this.tour.start_location;
-      }
-      return {
-        lat: 0,
-        lng: 0,
-      };
-    },
-  },
-  methods: {
-    handleAddWaypoint() {
-      const updatedStage = {
-        ...this.stage,
-        waypoints: this.stage.waypoints.concat({
-          text: createEmptyLocalizedText(this.languages),
-          location: null,
-          altitude: null,
-        }),
-      };
-      this.$emit("update", updatedStage);
-    },
-    handleUpdateWaypoint(index, propChange) {
-      console.log("updateWaypoint", index, { propChange });
-      const currentWaypoint = this.stage.waypoints[index];
-      const updatedWaypoint = {
-        ...currentWaypoint,
-        ...propChange,
-      };
-      const updatedStage = {
-        ...this.stage,
-        waypoints: [
-          ...this.stage.waypoints.slice(0, index),
-          updatedWaypoint,
-          ...this.stage.waypoints.slice(index + 1),
-        ],
-      };
+import { ARStage, Waypoint } from "@/types";
+import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
-      this.$emit("update", updatedStage);
-    },
-    handleRemoveWaypoint(index) {
-      const updatesStage = {
-        ...this.stage,
-        waypoints: [
-          ...this.stage.waypoints.slice(0, index),
-          ...this.stage.waypoints.slice(index + 1),
-        ],
-      };
-      this.$emit("update", updatesStage);
-    },
-  },
-};
+const props = defineProps<{
+  stage: ARStage;
+  tourId: number;
+  stopId: number;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", updatedStage: ARStage);
+}>();
+
+const store = useCreatorStore();
+const supportedLanguages = store.getTourLanguages(props.tourId);
+const valuedTargetPoint = store.findValuedTargetPoint(
+  props.tourId,
+  props.stopId
+);
+
+function handleAddWaypoint() {
+  const newWaypoint = {
+    text: createEmptyLocalizedText(supportedLanguages.value),
+    location: valuedTargetPoint.value,
+    altitude: null,
+  };
+  const updatedStage = {
+    ...props.stage,
+    // add newest to top so that it's closer to the Add button
+    // and more apparent that something changed.
+    waypoints: [newWaypoint, ...props.stage.waypoints],
+  };
+  emit("update", updatedStage);
+}
+
+function handleRemoveWaypoint(index) {
+  const updatesStage = {
+    ...props.stage,
+    waypoints: [
+      ...props.stage.waypoints.slice(0, index),
+      ...props.stage.waypoints.slice(index + 1),
+    ],
+  };
+  emit("update", updatesStage);
+}
+
+function handleUpdateWaypoint(index: number, update: Partial<Waypoint>) {
+  const updatedWaypoint: Waypoint = {
+    ...props.stage.waypoints[index],
+    ...update,
+  };
+  const updatedStage = {
+    ...props.stage,
+    waypoints: [
+      ...props.stage.waypoints.slice(0, index),
+      updatedWaypoint,
+      ...props.stage.waypoints.slice(index + 1),
+    ],
+  };
+  emit("update", updatedStage);
+}
 </script>

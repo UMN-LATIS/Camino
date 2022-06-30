@@ -32,7 +32,6 @@
             <MapboxLocationSelector
               class="border rounded bg-white"
               :location="waypoint.location"
-              :tourId="tourId"
               @update:location="
                 (location) => handleUpdateWaypoint(index, { location })
               "

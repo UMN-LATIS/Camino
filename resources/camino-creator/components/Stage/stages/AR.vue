@@ -1,67 +1,67 @@
 <template>
-  <div>
-    <div class="form-group row">
-      <label class="col-sm-2 col-form-label">Waypoints</label>
-      <div class="col-sm-10">
-        <button class="btn btn-primary" @click="handleAddWaypoint">
-          <i class="fas fa-plus"></i> Add waypoint
-        </button>
-        <div
-          v-for="(waypoint, index) in stage.waypoints"
-          :key="index"
-          class="border rounded mt-2 p-2"
-        >
+  <div class="form-group row">
+    <label class="col-sm-2 col-form-label">Waypoints</label>
+    <div class="col-sm-10">
+      <button class="btn btn-primary" @click="handleAddWaypoint">
+        <i class="fas fa-plus"></i> Add waypoint
+      </button>
+      <div
+        v-for="(waypoint, index) in stage.waypoints"
+        :key="index"
+        class="border rounded mt-2 p-2 bg-light"
+      >
+        <div class="d-flex justify-content-end">
           <button class="btn float-end" @click="handleRemoveWaypoint(index)">
             <i class="fas fa-times"></i>
             <span class="sr-only">Remove Waypoint</span>
           </button>
-          <LanguageText
-            :text="waypoint.text"
-            :languages="languages"
-            @update:text="(text) => handleUpdateWaypoint(index, { text })"
-          >
-            Text
-          </LanguageText>
-          <div class="form-group row">
-            <label for="tourTitle" class="col-sm-2">Location</label>
-            <div class="col-sm-6">
-              <div v-if="waypoint.location">
-                <b>Latitude:</b> {{ waypoint.location.lat }}, <b>Longitude:</b>
-                {{ waypoint.location.lng }}
-              </div>
-              <LocationSelector
-                :location="waypoint.location"
-                :generalarea="currentLocation"
-                :basemap="tour.tour_content.custom_base_map"
-                @update:location="
-                  (location) => handleUpdateWaypoint(index, { location })
-                "
-              >
-              </LocationSelector>
-            </div>
-          </div>
+        </div>
 
-          <div class="form-group row">
-            <label for="altitude" class="col-sm-2 col-form-label"
-              >Altitude (optional)</label
+        <LanguageText
+          :text="waypoint.text"
+          :languages="supportedLanguages"
+          @update:text="(text) => handleUpdateWaypoint(index, { text })"
+        >
+          Text
+        </LanguageText>
+        <div class="row">
+          <label for="tourTitle" class="col-sm-2 col-form-label"
+            >Location</label
+          >
+          <div class="col-sm-10 my-2">
+            <MapboxLocationSelector
+              class="border rounded bg-white"
+              :location="waypoint.location"
+              @update:location="
+                (location) => handleUpdateWaypoint(index, { location })
+              "
             >
-            <div class="col-sm-6">
-              <input
-                id="altitude"
-                :value="waypoint.altitude"
-                type="text"
-                class="form-control"
-                aria-describedby="altitudeHelp"
-                @input="
-                  handleUpdateWaypoint(index, {
-                    altitude: Number.parseInt($event.target.value),
-                  })
-                "
-              />
-              <small id="altitudeHelp" class="form-text text-muted"
-                >In meters, relative to this stop's elevation.</small
-              >
-            </div>
+            </MapboxLocationSelector>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label for="altitude" class="col-sm-2 col-form-label"
+            >Altitude (optional)</label
+          >
+          <div class="col-sm-6">
+            <input
+              id="altitude"
+              :value="waypoint.altitude"
+              type="text"
+              class="form-control"
+              aria-describedby="altitudeHelp"
+              @input="
+                handleUpdateWaypoint(index, {
+                  altitude: Number.parseInt(
+                    ($event.target as HTMLInputElement).value
+                  ),
+                })
+              "
+            />
+            <small id="altitudeHelp" class="form-text text-muted"
+              >In meters, relative to this stop's elevation.</small
+            >
           </div>
         </div>
       </div>
@@ -69,76 +69,69 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
-import LocationSelector from "../../LocationSelector.vue";
+import MapboxLocationSelector from "@creator/components/MapboxLocationSelector.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
-export default {
-  components: {
-    LanguageText,
-    LocationSelector,
-  },
-  // eslint-disable-next-line vue/require-prop-types
-  props: ["stage", "languages", "tour", "stop"],
-  emits: ["update"],
-  computed: {
-    currentLocation() {
-      if (this.stop.id) {
-        const nav = this.stop.stop_content.stages.filter(
-          (s) => s.type == "navigation"
-        );
-        if (nav.length > 0 && nav[0].targetPoint) {
-          return nav[0].targetPoint;
-        }
-      } else {
-        return this.tour.start_location;
-      }
-      return {
-        lat: 0,
-        lng: 0,
-      };
-    },
-  },
-  methods: {
-    handleAddWaypoint() {
-      const updatedStage = {
-        ...this.stage,
-        waypoints: this.stage.waypoints.concat({
-          text: createEmptyLocalizedText(this.languages),
-          location: null,
-          altitude: null,
-        }),
-      };
-      this.$emit("update", updatedStage);
-    },
-    handleUpdateWaypoint(index, propChange) {
-      console.log("updateWaypoint", index, { propChange });
-      const currentWaypoint = this.stage.waypoints[index];
-      const updatedWaypoint = {
-        ...currentWaypoint,
-        ...propChange,
-      };
-      const updatedStage = {
-        ...this.stage,
-        waypoints: [
-          ...this.stage.waypoints.slice(0, index),
-          updatedWaypoint,
-          ...this.stage.waypoints.slice(index + 1),
-        ],
-      };
+import { ARStage, Waypoint } from "@/types";
+import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
-      this.$emit("update", updatedStage);
-    },
-    handleRemoveWaypoint(index) {
-      const updatesStage = {
-        ...this.stage,
-        waypoints: [
-          ...this.stage.waypoints.slice(0, index),
-          ...this.stage.waypoints.slice(index + 1),
-        ],
-      };
-      this.$emit("update", updatesStage);
-    },
-  },
-};
+const props = defineProps<{
+  stage: ARStage;
+  tourId: number;
+  stopId: number;
+}>();
+
+const emit = defineEmits<{
+  (eventName: "update", updatedStage: ARStage);
+}>();
+
+const store = useCreatorStore();
+const supportedLanguages = store.getTourLanguages(props.tourId);
+const valuedTargetPoint = store.findValuedTargetPoint(
+  props.tourId,
+  props.stopId
+);
+
+function handleAddWaypoint() {
+  const newWaypoint = {
+    text: createEmptyLocalizedText(supportedLanguages.value),
+    location: valuedTargetPoint.value,
+    altitude: null,
+  };
+  const updatedStage = {
+    ...props.stage,
+    // add newest to top so that it's closer to the Add button
+    // and more apparent that something changed.
+    waypoints: [newWaypoint, ...props.stage.waypoints],
+  };
+  emit("update", updatedStage);
+}
+
+function handleRemoveWaypoint(index) {
+  const updatesStage = {
+    ...props.stage,
+    waypoints: [
+      ...props.stage.waypoints.slice(0, index),
+      ...props.stage.waypoints.slice(index + 1),
+    ],
+  };
+  emit("update", updatesStage);
+}
+
+function handleUpdateWaypoint(index: number, update: Partial<Waypoint>) {
+  const updatedWaypoint: Waypoint = {
+    ...props.stage.waypoints[index],
+    ...update,
+  };
+  const updatedStage = {
+    ...props.stage,
+    waypoints: [
+      ...props.stage.waypoints.slice(0, index),
+      updatedWaypoint,
+      ...props.stage.waypoints.slice(index + 1),
+    ],
+  };
+  emit("update", updatedStage);
+}
 </script>

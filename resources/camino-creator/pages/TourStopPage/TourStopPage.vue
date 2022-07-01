@@ -271,7 +271,7 @@ function handleAddStage() {
   }
 
   const newStage = stageFactory.create(newStageType.value, {
-    languages: tourLanguages,
+    languages: tourLanguages.value,
   });
 
   stop.value.stop_content.stages.push(newStage);

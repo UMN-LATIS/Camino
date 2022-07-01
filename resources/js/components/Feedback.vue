@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-html="formattedText"></div>
+    <SanitizedHTML :html="formattedText" />
 
     <BButton v-b-toggle.collapse-feedback variant="primary">{{
       t("stage.feedback.button")
@@ -54,8 +54,10 @@
 
 <script>
 import { useI18n } from "vue-i18n";
+import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 
 export default {
+  components: { SanitizedHTML },
   props: ["stage", "tour"],
   setup() {
     const { t } = useI18n(); // use as global scope

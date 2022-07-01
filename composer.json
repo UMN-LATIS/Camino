@@ -40,7 +40,7 @@
     "barryvdh/laravel-ide-helper": "^2.12",
     "deployer/deployer": "^7.0",
     "fakerphp/faker": "^1.19",
-    "laracasts/cypress": "^2.2",
+    "laracasts/cypress": "^3.0",
     "laravel/sail": "^1.13",
     "mockery/mockery": "^1.0",
     "nunomaduro/collision": "^6.1",

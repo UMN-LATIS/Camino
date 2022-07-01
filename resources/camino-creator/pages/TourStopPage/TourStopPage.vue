@@ -62,6 +62,7 @@
 
         <Draggable
           v-model="stop.stop_content.stages"
+          data-cy="tour-stop-stages"
           itemKey="id"
           handle=".handle"
           ghostClass="ghost"
@@ -116,6 +117,7 @@
           <div class="row d-flex justify-content-end">
             <select
               v-model="newStageType"
+              data-cy="select-stage-type"
               class="form-select"
               aria-label="Select a Stage"
             >
@@ -271,7 +273,7 @@ function handleAddStage() {
   }
 
   const newStage = stageFactory.create(newStageType.value, {
-    languages: tourLanguages,
+    languages: tourLanguages.value,
   });
 
   stop.value.stop_content.stages.push(newStage);

@@ -1,12 +1,16 @@
 <template>
-  <div class="card mt-2">
+  <div class="card mt-2 tour-stop-stage">
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-center">
-        <h5 class="card-title">
+        <h5 class="card-title" data-cy="stage-title">
           <i class="fas fa-grip-vertical handle"></i> {{ stage.type }}
         </h5>
         <div class="controls">
-          <button class="stage__remove-button" @click="$emit('remove', stage)">
+          <button
+            class="stage__remove-button"
+            data-cy="remove-stage-button"
+            @click="$emit('remove', stage)"
+          >
             <i class="fas fa-times"></i>
             <span class="sr-only">Remove Stage</span>
           </button>

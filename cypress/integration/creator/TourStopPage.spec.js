@@ -43,7 +43,42 @@ describe("Tour Stop Page", () => {
   it("changes the stop image");
   it("removes a stop image");
   it("edits a separator stage title");
-  it("removes a stage");
-  it("adds a stage");
+  it("removes a stage", () => {
+    // check that guide stage is present
+    cy.get("[data-cy='stage-title']")
+      .contains("guide")
+      .should("exist")
+      // remove the guide stage
+      .parents(".tour-stop-stage")
+      .find('[data-cy="remove-stage-button"]')
+      .click();
+
+    // verify that the guide stage is gone
+    cy.get("[data-cy='stage-title']").contains("guide").should("not.exist");
+  });
+
+  it("adds a stage", () => {
+    // check that stages exists with default stages
+    cy.get('[data-cy="tour-stop-stages"]')
+      .should("contain.text", "Navigation")
+      .should("contain.text", "Guide");
+
+    // select a new stage
+    cy.get("[data-cy='select-stage-type']").select("AR");
+
+    // click add stage
+    cy.contains("Add a Stage").click();
+
+    // check that the stage is added to the stage list
+    cy.get(".tour-stop-stage:last-of-type .card-title").should(
+      "contain.text",
+      "ar"
+    );
+
+    // check that the stage content appears on the stop page
+    cy.contains("Save").click();
+    cy.contains("Preview").click();
+    cy.get(".ar-stage > .button").should("contain.text", "Look Around");
+  });
   it("adds a stop location via the navigation stage");
 });

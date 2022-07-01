@@ -1,6 +1,6 @@
 <template>
   <div v-if="$store.getters.deepdives.length > 0">
-    <div v-html="formattedText"></div>
+    <SanitizedHTML :html="formattedText" />
 
     <div class="form-inline">
       <label for="email" class="sr-only">E-mail address</label>
@@ -33,7 +33,7 @@
     >
       <div class="card-body">
         <h5 class="card-title">{{ deepdive.title[$i18n.locale] }}</h5>
-        <p class="card-text" v-html="deepdive.text[$i18n.locale]"></p>
+        <SanitizedHTML class="card-text" :html="deepdive.text[$i18n.locale]" />
       </div>
     </div>
   </div>
@@ -44,8 +44,10 @@
 
 <script>
 import { useI18n } from "vue-i18n";
+import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 
 export default {
+  components: { SanitizedHTML },
   // eslint-disable-next-line vue/require-prop-types
   props: ["stage", "tour"],
   setup() {

@@ -17,7 +17,14 @@
         Required
       </small>
     </div>
-    <input class="input-group__input" v-bind="$attrs" />
+    <input
+      class="input-group__input"
+      v-bind="$attrs"
+      :value="modelValue"
+      @input="
+        $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+      "
+    />
     <small v-if="hint">
       {{ hint }}
     </small>
@@ -26,13 +33,19 @@
 <script setup lang="ts">
 import { useAttrs, computed } from "vue";
 
-interface Props {
-  label: string;
-  labelHidden: boolean;
-  hint: string;
-}
+withDefaults(
+  defineProps<{
+    label: string;
+    labelHidden?: boolean;
+    hint?: string;
+    modelValue: string;
+  }>(),
+  { labelHidden: false, hint: "", modelValue: "" }
+);
 
-withDefaults(defineProps<Props>(), { labelHidden: false, hint: "" });
+defineEmits<{
+  (eventName: "update:modelValue", value: string);
+}>();
 
 const attrs = useAttrs();
 

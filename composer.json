@@ -37,6 +37,7 @@
   },
   "require-dev": {
     "appzcoder/crud-generator": "^3.2",
+    "barryvdh/laravel-debugbar": "^3.6",
     "barryvdh/laravel-ide-helper": "^2.12",
     "deployer/deployer": "^7.0",
     "fakerphp/faker": "^1.19",

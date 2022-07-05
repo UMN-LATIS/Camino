@@ -11,7 +11,11 @@
         rows="4"
         class="textarea-group__input"
         v-bind="$attrs"
-      ></textarea>
+        :value="modelValue"
+        @input="
+          $emit('update:modelValue', ($event.target as HTMLInputElement).value)
+        "
+      />
       <small v-if="hint">
         {{ hint }}
       </small>
@@ -23,14 +27,19 @@ import { useAttrs, computed } from "vue";
 
 withDefaults(
   defineProps<{
+    modelValue: string;
     label: string;
     hint?: string;
   }>(),
   {
     hint: "",
+    modelValue: "",
   }
 );
 
+defineEmits<{
+  (eventName: "update:modelValue", value: string);
+}>();
 const attrs = useAttrs();
 
 const isRequired = computed(() => attrs.required !== undefined);

@@ -37,11 +37,12 @@ function submitFeedback() {
       email: email.value,
       feedback: feedback.value,
     })
-    .then((response) => {
-      console.log({ response });
+    .then(() => {
       isSubmitting.value = false;
       isSuccessful.value = true;
-      email.value = "";
+
+      // reset comment, but keep name and email
+      feedback.value = "";
     })
     .catch((err) => {
       isSubmitting.value = false;

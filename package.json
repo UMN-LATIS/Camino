@@ -8,12 +8,7 @@
         "url": "https://github.com/UMN-LATIS/Camino.git"
     },
     "scripts": {
-        "dev": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production",
+        "dev": "vite",
         "docs:dev": "vuepress dev docs",
         "docs:build": "vuepress build docs",
         "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",
@@ -27,7 +22,8 @@
         "cypress:headless": "cypress run --browser chrome",
         "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
         "test:watch": "npm run jest -- --watch",
-        "test": "npm run jest & npm run cypress:headless"
+        "test": "npm run jest & npm run cypress:headless",
+        "build": "vite build"
     },
     "devDependencies": {
         "@rushstack/eslint-patch": "^1.1.3",

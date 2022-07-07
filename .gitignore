@@ -18,3 +18,5 @@ docs/.vuepress/dist
 mix-manifest.json
 /.cert
 /cypress/support/routes.json
+
+/public/build

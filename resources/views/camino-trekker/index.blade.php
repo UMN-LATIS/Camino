@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Camino | Educational Tours for Everybody</title>
-  <link rel="stylesheet" href="{{ mix('/css/camino-trekker.css') }}">
+  @vite('resources/css/camino-trekker.css')
 </head>
 
 <body>
@@ -21,7 +21,7 @@
       window.Permissions = [];
     @endauth
   </script>
-  <script src="{{ mix('/js/camino-trekker.js') }}"></script>
+  @vite('resources/js/camino-trekker.js')
 </body>
 
 </html>

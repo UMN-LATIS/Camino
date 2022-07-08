@@ -23,7 +23,7 @@ class ImageController extends Controller
             }
             $image = $request->file('image');
             \Image::configure(array('driver' => 'imagick'));
-            $image_resized = \Image::make($image);
+            $image_resized = \Image::make($image)->orientate();
             $image_resized->resize(2048, 2048, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();

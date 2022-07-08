@@ -299,5 +299,3 @@ export interface TourMapStop {
   /** immediately prior to active, so acts as a start point */
   preceedsActive: boolean;
 }
-
-export type MapMarkerLabelColors = "pink" | "orange" | "default";

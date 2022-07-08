@@ -1750,10 +1750,10 @@
   dependencies:
     "@types/geojson" "*"
 
-"@types/mapbox__mapbox-gl-draw@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@types/mapbox__mapbox-gl-draw/-/mapbox__mapbox-gl-draw-1.2.3.tgz#1c280afaa813aa0095193db82df117a6c450de0e"
-  integrity sha512-S4Pm3w19S8mduiPgoeSt1UQ4BoqrObJtQRQpkD21hGHb6VsRy3VrD7ZCoC7/r5zwnjsGXhbUqy3lg1mGcI6QzQ==
+"@types/mapbox__mapbox-gl-draw@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@types/mapbox__mapbox-gl-draw/-/mapbox__mapbox-gl-draw-1.2.4.tgz#55c010e2313740fed4aaa3392d8a04fb988554cd"
+  integrity sha512-/pDo3pq6wqC9lt3/4XwuBe4jasLFWQDFbQ7ruDr5/ulxZGIxu7xMTVIomgpUF1/uUMI2OsedLG5L5RhjHebNdw==
   dependencies:
     "@types/geojson" "*"
     "@types/mapbox-gl" "*"

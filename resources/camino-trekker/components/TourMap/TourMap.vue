@@ -17,8 +17,16 @@
         {{ capitalize(styleChoice) }}
       </Button>
     </div>
+
+    <!-- 
+      NOTE: the :key on the map is set so that the map
+      rerenders when the stopindex changes. without it
+      only some subcomponents might rerender and multiple
+      stops might look active
+    -->
     <MapboxGlMap
       v-if="canCreateMap"
+      :key="trekkerStore.stopIndex"
       class="map-sheet__map-container"
       :center="center"
       :zoom="type === 'tour' ? 16 : 10"
@@ -26,82 +34,94 @@
       :mapStyle="mapStyle"
       :accessToken="config.mapBox.accessToken"
     >
-      <!-- Start Point -->
-      <MapMarker
-        v-if="store.tour?.start_location"
-        :lng="store.tour?.start_location.lng"
-        :lat="store.tour?.start_location.lat"
-      >
-        <MapMarkerLabel
-          class="start-point-marker-label"
-          :color="store.stopIndex === 0 ? 'orange' : 'default'"
-        >
-          <span class="material-icons">star</span>
-        </MapMarkerLabel>
-      </MapMarker>
+      <!-- 
+        The Map is built up in layers so that the
+        active stuff appears on top:
+        1. Inactive stop routes
+        2. All stop markers except the current
+           stop and the previous stop
+        3. Active stop route
+        4. previous stop marker
+        5. current stop marker
+      -->
 
-      <div v-for="(stop, i) in mapStops" :key="i" class="map-stop">
-        <MapPolyline
-          :id="`route-${stop.id}`"
-          :key="i"
-          :positions="stop.route"
-          :variant="getPolylineVariant(stop.index)"
-        />
-        <MapMarker
-          :key="`marker-${stop.id}`"
-          :lng="stop.stopPoint.lng"
-          :lat="stop.stopPoint.lat"
-          :color="stop.color"
-          class="tour-map__marker"
-        >
-          <MapMarkerLabel
-            :color="getMapMarkerColor(stop.index)"
-            :pulse="stop.index === store.stopIndex"
-          >
-            {{ stop.index + 1 }}
-          </MapMarkerLabel>
-          <MapPopup>
-            <p class="map-popup__stop-number-container">
-              <span class="map-popup__stop-number">
-                {{ stop.number }}
-              </span>
-            </p>
-            <h2 class="map-popup__stop-title">
-              {{ stop.title }}
-            </h2>
-            <p class="map-popup__link-container">
-              <button
-                class="map-popup__link"
-                @click="handleGoToStopButtonClick(stop)"
-              >
-                <span class="material-icons">arrow_forward</span>
-                <span class="sr-only">Go to Stop</span>
-              </button>
-            </p>
-          </MapPopup>
-        </MapMarker>
-      </div>
+      <!-- all stop routes -->
+      <TourMapRoute
+        v-for="stop in mapStops"
+        :key="stop.id"
+        :mapStop="stop"
+        variant="gradient-inactive"
+      />
+
+      <!-- all markers except current and previous -->
+      <TourMapStop
+        v-for="stop in allButCurrentAndPrevStops"
+        :key="`marker-${stop.id}`"
+        :mapStop="stop"
+        @click="handleTourMapStopClick(stop)"
+      />
+
+      <!-- active stop route -->
+      <TourMapRoute
+        v-if="currentMapStop"
+        :key="currentMapStop.id"
+        :mapStop="currentMapStop"
+        variant="gradient-active"
+      />
+
+      <!-- 
+        mark the tour start location 
+        if there's no preceeding point,
+        then making this the it
+      -->
+      <TourMapStarMarker
+        v-if="startLocation"
+        :lng="startLocation.lng"
+        :lat="startLocation.lat"
+        :color="trekkerStore.stopIndex === 0 ? 'orange' : 'default'"
+      />
+
+      <!-- preceeding point -->
+      <TourMapStop
+        v-if="preceedingMapStop"
+        :key="`marker-${preceedingMapStop.id}`"
+        :mapStop="preceedingMapStop"
+        @click="handleTourMapStopClick(preceedingMapStop)"
+      />
+
+      <!-- current stop -->
+      <TourMapStop
+        v-if="currentMapStop"
+        :key="`marker-${currentMapStop.id}`"
+        :mapStop="currentMapStop"
+        @click="handleTourMapStopClick(currentMapStop)"
+      />
     </MapboxGlMap>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import MapboxGlMap from "../Map/Map.vue";
-import MapPolyline from "../MapPolyline/MapPolyline.vue";
-import MapMarker from "../MapMarker/MapMarker.vue";
-import MapPopup from "../MapPopup/MapPopup.vue";
+import TourMapRoute from "./TourMapRoute.vue";
 import Button from "../Button/Button.vue";
 import capitalize from "../../utils/capitalize";
 import getBoundingBox from "../../utils/getBoundingBox";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import config from "@trekker/config";
-import { BoundingBox, LngLat, MapboxMapStyle } from "@/types";
+import {
+  BoundingBox,
+  LngLat,
+  MapboxMapStyle,
+  Maybe,
+  type TourMapStop as TourMapStopType,
+} from "@/types";
 import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
+import TourMapStop from "./TourMapStop.vue";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
 import { useRouter } from "vue-router";
 import { findLastTargetPointByIndex } from "@/camino-trekker/utils/findLastTargetPointByIndex";
-import MapMarkerLabel from "../MapMarkerLabel/MapMarkerLabel.vue";
+import TourMapStarMarker from "./TourMapStarMarker.vue";
 
 interface Props {
   type: "tour" | "stop";
@@ -117,10 +137,13 @@ const props = withDefaults(defineProps<Props>(), {
 /**
  * COMPUTED
  */
-const store = useTrekkerStore();
+const trekkerStore = useTrekkerStore();
 const router = useRouter();
 const canCreateMap = computed(
-  () => store.tour && store.tour.stops && store.tour.start_location
+  () =>
+    trekkerStore.tour &&
+    trekkerStore.tour.stops &&
+    trekkerStore.tour.start_location
 );
 const mapStyleChoices = [
   MapboxMapStyle.dark,
@@ -128,23 +151,11 @@ const mapStyleChoices = [
   MapboxMapStyle.streets,
   MapboxMapStyle.light,
 ].sort();
+
 const mapStyle = ref(props.initialMapStyle);
 
-interface MapStop {
-  id: number;
-  index: number;
-  number: number;
-  title: string;
-  href: string;
-  startPoint: LngLat;
-  stopPoint: LngLat;
-  route: LngLat[];
-  isActive: boolean;
-  color: string;
-}
-
-const mapStops = computed((): MapStop[] => {
-  const tour = store.tour;
+const mapStops = computed((): TourMapStopType[] => {
+  const tour = trekkerStore.tour;
   if (!tour) return [];
   if (!tour.stops) return [];
 
@@ -152,17 +163,36 @@ const mapStops = computed((): MapStop[] => {
     id: stop.id,
     index,
     number: index + 1,
-    title: stop.stop_content.title?.[store.locale] ?? `Stop ${index}`,
-    href: `/tours/${store.tourId}/stops/${index}`,
+    title: stop.stop_content.title?.[trekkerStore.locale] ?? `Stop ${index}`,
+    href: `/tours/${trekkerStore.tourId}/stops/${index}`,
     startPoint: findLastTargetPointByIndex(tour, index - 1),
     stopPoint: findLastTargetPointByIndex(tour, index),
     route: getStopRouteByIndex(tour, index),
-    isActive: index === store.stopIndex,
+    isActive: index === trekkerStore.stopIndex,
+    preceedsActive: index === trekkerStore.stopIndex - 1,
     color: getStopColor(index),
   }));
 });
 
-const fullTourRoute = computed((): LngLat[] => getFullTourRoute(store.tour));
+const allButCurrentAndPrevStops = computed((): TourMapStopType[] =>
+  mapStops.value.filter((s) => !s.isActive && !s.preceedsActive)
+);
+
+const currentMapStop = computed(
+  (): Maybe<TourMapStopType> => mapStops.value.find((s) => s.isActive) ?? null
+);
+const preceedingMapStop = computed(
+  (): Maybe<TourMapStopType> =>
+    mapStops.value.find((s) => s.preceedsActive) ?? null
+);
+
+const startLocation = computed(
+  (): Maybe<LngLat> => trekkerStore.tour?.start_location ?? null
+);
+
+const fullTourRoute = computed((): LngLat[] =>
+  getFullTourRoute(trekkerStore.tour)
+);
 
 // BOUNDS
 const bounds = computed((): BoundingBox => {
@@ -171,7 +201,7 @@ const bounds = computed((): BoundingBox => {
   }
 
   // get a bounding box for the current stop
-  const stop = mapStops.value[store.stopIndex];
+  const stop = mapStops.value[trekkerStore.stopIndex];
   return getBoundingBox([stop.startPoint, ...stop.route, stop.stopPoint]);
 });
 
@@ -187,25 +217,18 @@ function setMapStyle(updatedStyle: MapboxMapStyle) {
 }
 
 function getStopColor(index) {
-  if (index > store.stopIndex) return "#333";
-  if (index === store.stopIndex) return "#0A84FF";
+  if (index > trekkerStore.stopIndex) return "#333";
+  if (index === trekkerStore.stopIndex) return "#0A84FF";
   return "#999";
 }
 
-function getPolylineVariant(index) {
-  if (index === store.stopIndex) return "gradient-active";
-  return "gradient-inactive";
-}
+function handleTourMapStopClick(stop: Maybe<TourMapStopType>) {
+  if (!stop) {
+    throw new Error("handleStopError: no stop");
+  }
 
-function getMapMarkerColor(index): "pink" | "orange" | "default" {
-  if (index === store.stopIndex) return "pink";
-  if (index === store.stopIndex - 1) return "orange";
-  return "default";
-}
-
-function handleGoToStopButtonClick(stop: MapStop) {
   // close map sheet and then go to the stop
-  store.closeActiveSheet();
+  trekkerStore.closeActiveSheet();
   router.push(stop.href);
 }
 </script>

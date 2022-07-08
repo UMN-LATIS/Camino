@@ -13,9 +13,12 @@
   </div>
 </template>
 <script setup lang="ts">
+// import { MapMarkerLabelColors } from "@/types";
+export type MapMarkerLabelColors = "pink" | "orange" | "default";
+
 withDefaults(
   defineProps<{
-    color?: "pink" | "orange" | "default";
+    color?: MapMarkerLabelColors;
     pulse?: boolean;
   }>(),
   {

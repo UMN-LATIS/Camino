@@ -281,3 +281,23 @@ export enum TourStyle {
   NEXT_STOP = "next_stop",
   ENTIRE_TOUR = "entire_tour",
 }
+
+/**
+ * for drawing a tour stop and routes
+ */
+export interface TourMapStop {
+  id: number;
+  index: number;
+  number: number;
+  title: string;
+  href: string;
+  startPoint: LngLat;
+  stopPoint: LngLat;
+  route: LngLat[];
+  color: string;
+  isActive: boolean;
+  /** immediately prior to active, so acts as a start point */
+  preceedsActive: boolean;
+}
+
+export type MapMarkerLabelColors = "pink" | "orange" | "default";

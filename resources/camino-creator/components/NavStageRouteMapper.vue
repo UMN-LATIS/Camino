@@ -8,17 +8,6 @@
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
     >
-      <!-- Tour Start Location -->
-      <MapMarker
-        v-if="tour.start_location"
-        :lng="tour.start_location.lng"
-        :lat="tour.start_location.lat"
-      >
-        <MapMarkerLabel>
-          <i class="fas fa-star"></i>
-        </MapMarkerLabel>
-      </MapMarker>
-
       <div v-for="stop in otherStops" :key="stop.id">
         <MapPolyline
           :id="`otherStopRoute-${stop.id}`"
@@ -34,13 +23,38 @@
           :lng="stop.targetPoint.lng"
           :lat="stop.targetPoint.lat"
         >
-          <MapMarkerLabel
-            :pulse="currentStop ? currentStop.index - 1 === stop.index : false"
-          >
+          <MapMarkerLabel>
             {{ stop.index + 1 }}
           </MapMarkerLabel>
         </MapMarker>
       </div>
+
+      <!-- Tour Start Location -->
+      <MapMarker
+        v-if="tour.start_location"
+        :lng="tour.start_location.lng"
+        :lat="tour.start_location.lat"
+      >
+        <!-- 
+          If no previousStop exists, then the start point is the
+          previous stop so color it orange 
+        -->
+        <MapMarkerLabel :color="!previousStop ? 'orange' : 'default'">
+          <i class="fas fa-star"></i>
+        </MapMarkerLabel>
+      </MapMarker>
+
+      <!-- Previous Stop Target-->
+      <MapMarker
+        v-if="previousStop && previousStop.targetPoint"
+        :lng="previousStop.targetPoint.lng"
+        :lat="previousStop.targetPoint.lat"
+        @drag="handleMapMarkerDrag"
+      >
+        <MapMarkerLabel color="orange">
+          {{ previousStop.index + 1 }}
+        </MapMarkerLabel>
+      </MapMarker>
 
       <!-- Current Stop Target (Editable)-->
       <MapMarker
@@ -55,7 +69,10 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- Dotted line between current stop target and next route -->
+      <!-- 
+        Draw a dotted line between current stop target and next route 
+        to indicate the change
+      -->
       <MapPolyline
         v-if="routeToNextRoute"
         id="route-to-next-route"
@@ -162,6 +179,14 @@ const currentStop = computed(
   (): Maybe<MappedStop> =>
     mappedStops.value.find((s) => s.id === props.stopId) ?? null
 );
+
+const previousStop = computed((): Maybe<MappedStop> => {
+  const currentStopIndex = currentStop.value?.index;
+  if (!currentStopIndex) return null;
+  return (
+    mappedStops.value.find((s) => s.index === currentStopIndex - 1) ?? null
+  );
+});
 
 const otherStops = computed((): MappedStop[] =>
   mappedStops.value.filter((stop) => stop.id !== props.stopId)

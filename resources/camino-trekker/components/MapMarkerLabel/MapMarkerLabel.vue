@@ -13,11 +13,9 @@
   </div>
 </template>
 <script setup lang="ts">
-export type MapMarkerLabelColors = "pink" | "orange" | "default";
-
 withDefaults(
   defineProps<{
-    color?: MapMarkerLabelColors;
+    color?: "pink" | "orange" | "default";
     pulse?: boolean;
   }>(),
   {

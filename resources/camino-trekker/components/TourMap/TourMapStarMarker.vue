@@ -7,14 +7,13 @@
 </template>
 <script setup lang="ts">
 import MapMarkerLabel from "../MapMarkerLabel/MapMarkerLabel.vue";
-import type { MapMarkerLabelColors } from "@/types";
 import MapMarker from "../MapMarker/MapMarker.vue";
 
 withDefaults(
   defineProps<{
     lng: number;
     lat: number;
-    color?: MapMarkerLabelColors;
+    color?: "pink" | "orange" | "default";
     pulse?: boolean;
     draggable?: boolean;
   }>(),

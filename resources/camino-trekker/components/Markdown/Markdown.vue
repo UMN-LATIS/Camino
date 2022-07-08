@@ -1,6 +1,8 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <SanitizedHTML class="markdown" :html="marked.parse(content ?? '')" />
+  <div class="markdown">
+    <SanitizedHTML :html="marked.parse(content ?? '')" />
+  </div>
 </template>
 
 <script setup lang="ts">

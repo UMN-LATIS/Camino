@@ -2,6 +2,7 @@ describe("Tour Page", () => {
   beforeEach(() => {
     cy.refreshDatabase();
     cy.seed();
+    cy.mockGeolocation();
     cy.login({ unique_id: "admin" });
     cy.visit("/creator");
     cy.contains("New Tour").click();

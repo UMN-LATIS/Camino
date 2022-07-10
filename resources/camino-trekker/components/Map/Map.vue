@@ -126,7 +126,7 @@ onMounted(() => {
 provide(MapInjectionKey, mapRef);
 </script>
 
-<style scoped>
+<style>
 .mapbox-map,
 .map-container {
   width: 100%;

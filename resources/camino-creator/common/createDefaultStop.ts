@@ -11,14 +11,14 @@ export default (): Partial<TourStop> => ({
     header_image: null,
     stages: [
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "Navigation",
         },
         type: StageType.Separator,
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "",
         },
@@ -27,14 +27,14 @@ export default (): Partial<TourStop> => ({
         route: [],
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "Guide",
         },
         type: StageType.Separator,
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "",
         },

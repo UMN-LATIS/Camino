@@ -39,7 +39,7 @@ withDefaults(
     title?: string;
   }>(),
   {
-    id: global.crypto.randomUUID(),
+    id: crypto.randomUUID(),
     title: "Modal Title",
   }
 );

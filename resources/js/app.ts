@@ -9,6 +9,9 @@ import { createApp } from "vue";
 import FindTourPage from "./FindTourPage.vue";
 import ARembed from "./components/ARembed.vue";
 
+import "bootstrap/scss/bootstrap.scss";
+import "../sass/app.scss";
+
 declare global {
   interface Window {
     axios: typeof axiosClient;

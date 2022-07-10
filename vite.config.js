@@ -21,7 +21,4 @@ export default defineConfig({
       "@creator": "/resources/camino-creator",
     },
   },
-  server: {
-    https: true,
-  },
 });

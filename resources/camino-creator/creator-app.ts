@@ -7,11 +7,10 @@ import "leaflet-draw/dist/leaflet.draw.js";
 import "leaflet-draw/dist/leaflet.draw.css";
 import "leaflet/dist/leaflet.css";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.css";
-import "bootstrap/scss/bootstrap.scss";
-
-import "./main.scss";
 import router from "./router";
 import App from "./App.vue";
+import "./main.css";
+
 declare global {
   interface Window {
     axios: typeof axiosClient;

@@ -1,5 +1,4 @@
 <template>
-  <!-- eslint-disable vue/no-v-html -->
   <div class="markdown">
     <SanitizedHTML :html="marked.parse(content ?? '')" />
   </div>

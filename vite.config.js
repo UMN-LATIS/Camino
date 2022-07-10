@@ -5,7 +5,11 @@ import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [
-    laravel(["resources/js/app.ts", "resources/camino-creator/creator-app.ts"]),
+    laravel([
+      "resources/js/app.ts",
+      "resources/camino-creator/creator-app.ts",
+      "resources/camino-trekker/trekker-app.ts",
+    ]),
     vue({
       template: {
         transformAssetUrls: {
@@ -17,6 +21,9 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
+      // use a vue dist that supports in-template compilation
+      // e.g. including vue components in HTML within blade files
+      vue: "vue/dist/vue.esm-bundler.js",
       "@": "/resources",
       "@trekker": "/resources/camino-trekker",
       "@creator": "/resources/camino-creator",

@@ -13,6 +13,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  @vite(['resources/js/app.ts'])
 </head>
 
 <body>
@@ -41,8 +42,8 @@
               <li><a class="nav-link" href="{{ url('/register') }}">Register</a></li>
             @else
               <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ Auth::user()->name }} <span class="caret"></span>
                 </a>
 
@@ -66,7 +67,8 @@
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault();
+                          <a class="dropdown-item" href="{{ url('/logout') }}"
+                            onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                             Logout
                           </a>
@@ -86,9 +88,6 @@
       @yield('content')
     </main>
   </div>
-
-  <!-- Scripts -->
-  <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

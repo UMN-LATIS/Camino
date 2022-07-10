@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-  <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css">
+  @vite(['resources/js/app.ts'])
   @yield('header')
 </head>
 
@@ -162,14 +162,12 @@
     <!-- Optional last updated link-->
   </footer>
   <!-- END UofM FOOTER -->
+  @yield('footer')
+  <script>
+    window.pusherKey = '{{ env('PUSHER_APP_KEY') }}'
+    window.mapbox = "{{ config('services.mapbox') }}";
+  </script>
+
 </body>
-
-<script>
-  window.pusherKey = '{{ env('PUSHER_APP_KEY') }}'
-  window.mapbox = "{{ config('services.mapbox') }}";
-</script>
-<script src="{{ mix('js/app.js') }}"></script>
-
-@yield('footer')
 
 </html>

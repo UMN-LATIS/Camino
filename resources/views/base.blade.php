@@ -15,10 +15,10 @@
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
   @vite(['resources/js/app.ts'])
-  @yield('header')
 </head>
 
 <body>
+  @yield('header')
   <!-- BEGIN HEADER -->
   <header class="umnhf" id="umnhf-h" role="banner">
     <!-- Skip Links: Give your nav and content elements the appropriate ID attributes -->

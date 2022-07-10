@@ -8,12 +8,8 @@
     "url": "https://github.com/UMN-LATIS/Camino.git"
   },
   "scripts": {
-    "dev": "mix",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production",
+    "dev": "vite",
+    "build": "vite build",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",

@@ -16,6 +16,11 @@ export default defineConfig({
           base: null,
           includeAbsolute: false,
         },
+        compilerOptions: {
+          isCustomElement: (tag) =>
+            ["a-text", "a-scene", "a-camera"].includes(tag),
+          whitespace: "preserve",
+        },
       },
     }),
   ],

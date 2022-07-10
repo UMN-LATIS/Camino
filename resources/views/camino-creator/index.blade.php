@@ -7,13 +7,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Camino: My Tours</title>
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-  <link rel="stylesheet" href="{{ mix('css/camino-creator.css') }}">
-  <!-- Styles -->
-
+  @vite(['resources/camino-creator/creator-app.ts'])
 </head>
 
 <body>
@@ -43,16 +39,14 @@
 
     </div>
   </footer>
-
+  <script>
+    @auth
+    window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
+    @else
+      window.Permissions = [];
+    @endauth
+    window.mapbox = "{{ config('services.mapbox') }}";
+  </script>
 </body>
-<script>
-  @auth
-  window.Permissions = {!! json_encode(Auth::user()->allPermissions, true) !!};
-  @else
-    window.Permissions = [];
-  @endauth
-  window.mapbox = "{{ config('services.mapbox') }}";
-</script>
-<script src="{{ mix('js/camino-creator.js') }}"></script>
 
 </html>

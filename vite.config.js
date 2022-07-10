@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue";
@@ -19,6 +20,12 @@ export default defineConfig({
       "@": "/resources",
       "@trekker": "/resources/camino-trekker",
       "@creator": "/resources/camino-creator",
+    },
+  },
+  server: {
+    https: {
+      key: readFileSync("./.cert/key.pem"),
+      cert: readFileSync("./.cert/cert.pem"),
     },
   },
 });

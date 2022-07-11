@@ -40,7 +40,7 @@
     "@types/mapbox__mapbox-gl-draw": "^1.2.4",
     "@types/marked": "^4.0.3",
     "@types/quill": "^2.0.9",
-    "@types/ramda": "^0.28.14",
+    "@types/ramda": "^0.28.15",
     "@types/webpack-env": "^1.17.0",
     "@vue/compiler-sfc": "^3.2.37",
     "@vue/eslint-config-typescript": "https://github.com/vuejs/eslint-config-typescript.git",

@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
-import axios from "@/camino-creator/common/axios";
+import axios from "@/shared/axios";
 import config from "@/camino-trekker/config";
 
 export const useFeedbackStore = defineStore("feedback", {

@@ -3,7 +3,7 @@ import { mergeDeepRight, insert, move } from "ramda";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
-import { axiosClient as axios } from "@creator/common/axios";
+import { axiosClient as axios } from "@/shared/axios";
 import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
 import * as selectors from "./creatorStoreSelectors";
 import normalizeTour from "@/shared/normalizeTour";

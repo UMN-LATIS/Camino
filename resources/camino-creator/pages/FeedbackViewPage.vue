@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { axiosClient as axios } from "@creator/common/axios";
+import { axiosClient as axios } from "@/shared/axios";
 import type { FeedbackResponse } from "@/types";
 
 interface Props {

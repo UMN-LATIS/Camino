@@ -35,7 +35,7 @@ class DeepDiveDigest extends Mailable
      */
     public function build()
     {
-        $deepdives = $this->tour->findDeepDives($this->deepdiveIds);
+        $deepdives = $this->tour->getDeepDives($this->deepdiveIds);
 
         $localizedDeepDives = $deepdives
             ->map(fn ($deepdive) => [

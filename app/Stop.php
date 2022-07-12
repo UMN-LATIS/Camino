@@ -35,19 +35,19 @@ class Stop extends Model
         });
     }
 
-    public function findStages()
+    public function getStages()
     {
         return collect($this->stop_content['stages']);
     }
 
-    public function findStagesWhereTypeIs(string $stageType)
+    public function getStagesWhereTypeIs(string $stageType)
     {
-        return $this->findStages()->filter(fn ($stage) => $stage['type'] === $stageType);
+        return $this->getStages()->filter(fn ($stage) => $stage['type'] === $stageType);
     }
 
-    public function findDeepDives()
+    public function getDeepDives()
     {
-        $deepDiveStages = $this->findStagesWhereTypeIs('deepdives');
+        $deepDiveStages = $this->getStagesWhereTypeIs('deepdives');
         if ($deepDiveStages->isEmpty()) return [];
 
         return $deepDiveStages->flatMap(fn ($stage) => $stage['deepdives']);

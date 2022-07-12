@@ -72,14 +72,14 @@ class Tour extends Model
         return $this->hasMany(Feedback::class);
     }
 
-    public function findAllDeepDives()
+    public function getAllDeepDives()
     {
-        return $this->stops->flatMap(fn (Stop $stop) => $stop->findDeepDives());
+        return $this->stops->flatMap(fn (Stop $stop) => $stop->getDeepDives());
     }
 
-    public function findDeepDives(array $listOfDeepDiveIds)
+    public function getDeepDives(array $listOfDeepDiveIds)
     {
-        $allDeepdives = $this->findAllDeepDives();
+        $allDeepdives = $this->getAllDeepDives();
         $selectedDeepDives = $allDeepdives->filter(
             function ($deepdive) use ($listOfDeepDiveIds) {
                 $id = $deepdive['id'];

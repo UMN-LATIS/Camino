@@ -47,7 +47,10 @@ class Stop extends Model
 
     public function findDeepDives()
     {
-        return $this->findStagesWhereTypeIs('deepdives');
+        $deepDiveStages = $this->findStagesWhereTypeIs('deepdives');
+        if ($deepDiveStages->isEmpty()) return [];
+
+        return $deepDiveStages->flatMap(fn ($stage) => $stage['deepdives']);
     }
 
     public function addMissingStageIds()

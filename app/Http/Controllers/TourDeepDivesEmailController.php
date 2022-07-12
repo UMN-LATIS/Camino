@@ -19,6 +19,7 @@ class TourDeepDivesEmailController extends Controller
     public function __invoke(Tour $tour, TourDeepDiveEmailRequest $request)
     {
 
+        $a = 1 + 1;
         $digest = new DeepDiveDigest($tour, $request);
 
         Mail::to($request['email'])->send($digest);

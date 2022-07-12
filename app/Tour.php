@@ -40,6 +40,23 @@ class Tour extends Model
         'start_location' => Point::class,
     ];
 
+    // possible tour language keys
+    public const LOCALE_EN = 'English';
+    public const LOCALE_ES = "Español";
+    public const LOCALE_FR = "Français";
+
+    /**
+     * a list of possible tour locales
+     */
+    public static function possibleLocales()
+    {
+        return [
+            static::LOCALE_EN,
+            static::LOCALE_ES,
+            static::LOCALE_FR
+        ];
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);

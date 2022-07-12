@@ -8,43 +8,23 @@ use App\Tour;
 use App\Stop;
 use App\Mail\DeepDiveDigest;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\TourDeepDiveEmailRequest;
 
 class TourDeepDivesEmailController extends Controller
 {
 
     /**
-     * Available Tour Languages - probably should go elsewhere
-     */
-
-
-    /**
      * email selected tour deep dives
      */
-    public function __invoke(Request $request, Tour $tour)
+    public function __invoke(Tour $tour, TourDeepDiveEmailRequest $request)
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email'],
-            'deepdiveIds' => ['required', 'array'],
-            'deepdiveIds.*' => 'uuid',
-            'locale' => [
-                'required',
-                Rule::in(Tour::possibleLocales())
-            ],
+
+        $digest = new DeepDiveDigest($tour, $request);
+
+        Mail::to($request['email'])->send($digest);
+
+        return response()->json([
+            'success' => true,
         ]);
-
-        $deepDiveStages = $tour->stops
-            // all tour stages
-            ->flatMap(fn (Stop $stop) => $stop->stop_content['stages'])
-            // deepdive stages
-            ->filter(fn ($stage) => $stage['type'] === 'deepdives');
-
-        $tourDeepDives = $deepDiveStages->flatMap(fn ($deepDiveStage) => $deepDiveStage['deepdives']);
-
-        $selectedDeepDives = $tourDeepDives->filter(fn ($deepdive) => collect($validated['deepdiveIds'])->contains($deepdive['id']));
-
-
-        $digest = new DeepDiveDigest($selectedDeepDives, $validated['locale']);
-
-        Mail::to($validated['email'])->send($digest);
     }
 }

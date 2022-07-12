@@ -2,10 +2,12 @@
 
 namespace App\Mail;
 
+use App\Http\Requests\TourDeepDiveEmailRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+
 use App\Tour;
 
 class DeepDiveDigest extends Mailable
@@ -18,11 +20,13 @@ class DeepDiveDigest extends Mailable
      *
      * @return void
      */
-    public function __construct($deepdives, $locale = Tour::LOCALE_EN)
+    public function __construct(Tour $tour, TourDeepDiveEmailRequest $request)
     {
-        $this->deepdives = $deepdives;
-        $this->locale = $locale;
+        $this->tour = $tour;
+        $this->deepdiveIds = $request['deepdiveIds'];
+        $this->locale = $request['locale'];
     }
+
 
     /**
      * Build the message.
@@ -31,19 +35,17 @@ class DeepDiveDigest extends Mailable
      */
     public function build()
     {
+        $deepdives = $this->tour->findDeepDives($this->deepdiveIds);
 
-        $localizedDeepDives = collect($this->deepdives)
-            ->map(function ($deepdive) {
-                return [
-                    'title' => $deepdive->title[$this->locale],
-                    'text' => $deepdive->text[$this->locale]
-                ];
-            });
+        $localizedDeepDives = $deepdives
+            ->map(fn ($deepdive) => [
+                'title' => $deepdive['title'][$this->locale],
+                'text' => $deepdive['text'][$this->locale]
+            ]);
 
         return $this
             ->from('latistecharch@umn.edu')
-            ->view('emails.deepdives')->with([
-                'deepdives' => $localizedDeepDives
-            ]);
+            ->view('emails.deepdives')
+            ->with('localizedDeepDives', $localizedDeepDives);
     }
 }

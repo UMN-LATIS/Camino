@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class Stop extends Model
 {
-    Use SoftDeletes;
+    use SoftDeletes;
 
     public $fillable = ["tour_id", "stop_content", "sort_order"];
     protected $casts = [
@@ -17,7 +17,8 @@ class Stop extends Model
     ];
 
 
-    public function tour() {
+    public function tour()
+    {
         return $this->belongsTo(Tour::class);
     }
 
@@ -30,49 +31,67 @@ class Stop extends Model
 
         // add missing uuids to stages when stop is updated
         static::saving(function ($stop) {
-          $stop->addMissingStageIds();
+            $stop->addMissingStageIds();
         });
     }
 
-    public function addMissingStageIds() {
-      $stages = $this->stop_content['stages'];
+    public function findStages()
+    {
+        return collect($this->stop_content['stages']);
+    }
 
-      // add uuid to each stage if it doesn't exist
-      $stages_with_uuid = collect($stages)->map(function ($stage) {
-        return [
-          ...$stage,
-          'id' => $stage['id'] ?? Str::uuid(),
+    public function findStagesWhereTypeIs(string $stageType)
+    {
+        return $this->findStages()->filter(fn ($stage) => $stage['type'] === $stageType);
+    }
+
+    public function findDeepDives()
+    {
+        return $this->findStagesWhereTypeIs('deepdives');
+    }
+
+    public function addMissingStageIds()
+    {
+        $stages = $this->stop_content['stages'];
+
+        // add uuid to each stage if it doesn't exist
+        $stages_with_uuid = collect($stages)->map(function ($stage) {
+            return [
+                ...$stage,
+                'id' => $stage['id'] ?? Str::uuid(),
+            ];
+        })->toArray();
+
+        // update this stops's stop_content
+        $this->stop_content = [
+            ...$this->stop_content,
+            'stages' => $stages_with_uuid,
         ];
-      })->toArray();
-
-      // update this stops's stop_content
-      $this->stop_content = [
-        ...$this->stop_content,
-        'stages' => $stages_with_uuid,
-      ];    
     }
 
     /**
      * returns stages in `stop_content` with new uuids
      * @return Stage[] hash array of stages
      */
-    public function cloneStages() {
+    public function cloneStages()
+    {
         return collect($this->stop_content['stages'])
-        ->map(function ($stage) {
-          return [
-          ...$stage,
-          'id' => Str::uuid(),
-          ];
-        })
-        ->toArray();
+            ->map(function ($stage) {
+                return [
+                    ...$stage,
+                    'id' => Str::uuid(),
+                ];
+            })
+            ->toArray();
     }
 
-    public function clone() {
-      $cloned = new self();
-      $cloned->stop_content = [
-        ...$this->stop_content,
-        'stages' => $this->cloneStages(),
-      ];
-      return $cloned;
+    public function clone()
+    {
+        $cloned = new self();
+        $cloned->stop_content = [
+            ...$this->stop_content,
+            'stages' => $this->cloneStages(),
+        ];
+        return $cloned;
     }
 }

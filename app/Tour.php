@@ -4,7 +4,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MatanYadaev\EloquentSpatial\SpatialBuilder;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -70,6 +70,21 @@ class Tour extends Model
     public function feedback()
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function findAllDeepDives()
+    {
+        return $this->stops->flatMap(fn (Stop $stop) => $stop->findDeepDives());
+    }
+
+    public function findDeepDives(array $listOfDeepDiveIds)
+    {
+        return $this
+            ->findAllDeepDives()
+            ->filter(
+                fn ($deepdive) =>
+                collect($listOfDeepDiveIds)->contains($deepdive['id'])
+            );
     }
 
     public function newEloquentBuilder($query): SpatialBuilder

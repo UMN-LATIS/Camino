@@ -118,10 +118,12 @@ function toggleSelectAll(selectAll: boolean) {
 
 function sendEmail() {
   isSendingEmail.value = true;
+  const deepdiveIds = checkedDeepDives.value.map((deepdive) => deepdive.id);
   axios
-    .post(`${config.appUrl}/emailDeepDives`, {
+    .post(`${config.appUrl}/api/tour/${store.tourId}/deepdivesEmail`, {
       email: email.value,
-      deepDives: checkedDeepDives.value,
+      deepdiveIds,
+      locale: store.locale,
     })
     .then((response) => {
       console.log({ response });

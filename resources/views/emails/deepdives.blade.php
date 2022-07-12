@@ -1,6 +1,10 @@
-@foreach ($hotwords as $word => $content)
+@php var_dump($deepdives) @endphp
 
-<h1>{{ $word }}</h2>
-<p>{!! $content !!}</p>
+@foreach ($deepdives as $deepdive)
+  <h1>Tour DeepDives</h1>
 
+  <h2>{{ $deepdive->title }}</h2>
+  <div>
+    {{ $deepdive->text }}
+  </div>
 @endforeach

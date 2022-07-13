@@ -29,15 +29,15 @@
     <div>
       <Teleport to="#modals">
         <MenuSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Menu).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Menu)"
           @close="store.closeActiveSheet()"
         />
         <StopListSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Stoplist).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Stoplist)"
           @close="store.closeActiveSheet()"
         />
         <MapSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Map).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Map)"
           @close="store.closeActiveSheet()"
         />
       </Teleport>

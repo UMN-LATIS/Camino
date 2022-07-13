@@ -7,14 +7,15 @@ import { useTrekkerStore } from "./useTrekkerStore";
 export const useFeedbackStore = defineStore("feedback", {
   state: () => {
     const { tourId } = useTrekkerStore();
-    return useStorage(`camino.trekker.tour-${tourId}.feedbackStore`, {
-      name: "",
-      email: "",
-      feedback: "",
+    const storageKey = `camino.trekker.tour-${tourId}.feedbackStore`;
+    return {
+      name: useStorage<string>(`${storageKey}.name`, ""),
+      email: useStorage<string>(`${storageKey}.email`, ""),
+      feedback: useStorage<string>(`${storageKey}.feedback`, ""),
       isSubmitting: false,
       isNewSubmission: true,
       error: "",
-    });
+    };
   },
   actions: {
     softReset() {

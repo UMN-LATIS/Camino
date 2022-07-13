@@ -1,16 +1,21 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import axios from "@/shared/axios";
 import config from "@/camino-trekker/config";
+import { useStorage } from "@vueuse/core";
+import { useTrekkerStore } from "./useTrekkerStore";
 
 export const useFeedbackStore = defineStore("feedback", {
-  state: () => ({
-    name: "",
-    email: "",
-    feedback: "",
-    isSubmitting: false,
-    isNewSubmission: true,
-    error: "",
-  }),
+  state: () => {
+    const { tourId } = useTrekkerStore();
+    return useStorage(`camino.trekker.tour-${tourId}.feedbackStore`, {
+      name: "",
+      email: "",
+      feedback: "",
+      isSubmitting: false,
+      isNewSubmission: true,
+      error: "",
+    });
+  },
   actions: {
     softReset() {
       /** keep name and email  */

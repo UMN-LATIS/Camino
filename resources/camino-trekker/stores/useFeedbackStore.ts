@@ -12,17 +12,8 @@ export const useFeedbackStore = defineStore("feedback", {
     error: "",
   }),
   actions: {
-    updateName(updatedName: string) {
-      this.name = updatedName;
-    },
-    updateEmail(updatedEmail: string) {
-      this.email = updatedEmail;
-    },
-    updateFeedback(updatedFeedback: string) {
-      this.feedback = updatedFeedback;
-    },
-    /** keep name and email  */
     softReset() {
+      /** keep name and email  */
       this.feedback = "";
       this.isNewSubmission = true;
     },

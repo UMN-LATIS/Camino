@@ -13,12 +13,10 @@
             class="form-check-input"
             type="checkbox"
             :value="deepdive"
-            :checked="isChecked(deepdive)"
-            @change="
-              setChecked(($event.target as HTMLInputElement).checked, deepdive)
-            "
+            :checked="deepDivesStore.isSelected(deepdive.id)"
+            @change="deepDivesStore.toggle(deepdive.id)"
           />
-          {{ deepdive.title[store.locale] }}
+          {{ deepdive.title[trekkerStore.locale] }}
         </label>
       </li>
     </ul>
@@ -26,8 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import { useDeepDivesStore } from "@/camino-trekker/stores/useDeepDivesStore";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
-import type { DeepDiveItem, DeepDiveStage } from "@/types";
+import type { DeepDiveStage } from "@/types";
 
 interface Props {
   stage: DeepDiveStage;
@@ -35,14 +34,8 @@ interface Props {
 
 defineProps<Props>();
 
-const store = useTrekkerStore();
-function setChecked(checked: boolean, deepdive: DeepDiveItem): void {
-  checked ? store.addDeepDive(deepdive) : store.removeDeepDive(deepdive);
-}
-
-function isChecked(deepdive): boolean {
-  return store.deepDives.indexOf(deepdive) >= 0;
-}
+const trekkerStore = useTrekkerStore();
+const deepDivesStore = useDeepDivesStore();
 </script>
 
 <style scoped>

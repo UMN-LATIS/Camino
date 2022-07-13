@@ -44,7 +44,7 @@ class DeepDiveDigest extends Mailable
 
 
         return $this
-            ->from('latistecharch@umn.edu')
+            ->from(config('mail.from.address'), config('mail.from.name'))
             ->markdown('emails.deepdives', [
                 'localizedDeepDives' => $localizedDeepDives,
                 'tour' => $this->tour,

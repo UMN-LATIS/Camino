@@ -11,16 +11,15 @@ export const useTrekkerStore = defineStore("trekker", {
   state: () => {
     const route = useRoute();
 
-    return useStorage(
-      `camino.trekker.tour-${route.params.tourId}.trekkerStore`,
-      {
-        tour: null as Maybe<Tour>,
-        isLoading: true,
-        locale: Locale.en as Locale,
-        errors: [] as string[],
-        activeSheet: null as Maybe<BottomNavSheet>,
-      }
-    );
+    const storageKey = `camino.trekker.tour-${route.params.tourId}.trekkerStore`;
+
+    return {
+      tour: useStorage(`${storageKey}.tour`, null as Maybe<Tour>),
+      isLoading: true,
+      locale: useStorage(`${storageKey}.locale`, Locale.en as Locale),
+      errors: [] as string[],
+      activeSheet: null as Maybe<BottomNavSheet>,
+    };
   },
   getters: {
     allStops: (state) => state.tour?.stops ?? [],

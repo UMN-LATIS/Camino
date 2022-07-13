@@ -1,10 +1,18 @@
-<h1>Tour DeepDives</h1>
+@component('mail::message')
+# [{{ $tour->title }} Deep Dives]({{ $tour_url }})
 
-@php echo $localizedDeepDives @endphp
+You're receiving this email because someone (probably you) asked to share more information about this tour.
+
+---
 
 @foreach ($localizedDeepDives as $deepdive)
-  <h2>{{ $deepdive['title'] }}</h2>
-  <div>
-    {!! $deepdive['text'] !!}
-  </div>
+
+## {{ $deepdive['title'] }}
+
+{!! $deepdive['text'] !!}
+
 @endforeach
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent

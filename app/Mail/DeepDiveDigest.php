@@ -43,9 +43,13 @@ class DeepDiveDigest extends Mailable
                 'text' => $deepdive['text'][$this->locale]
             ]);
 
+
         return $this
             ->from('latistecharch@umn.edu')
-            ->view('emails.deepdives')
-            ->with('localizedDeepDives', $localizedDeepDives);
+            ->markdown('emails.deepdives', [
+                'localizedDeepDives' => $localizedDeepDives,
+                'tour' => $this->tour,
+                'tour_url' => config('app.url') . "/trekker/tours/{$this->tour->id}"
+            ]);
     }
 }

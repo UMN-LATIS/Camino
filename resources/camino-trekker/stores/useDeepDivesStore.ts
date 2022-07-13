@@ -22,12 +22,16 @@ function selectAllDeepDivesFromTour(tour) {
 export const useDeepDivesStore = defineStore("deepdives", {
   state: () => {
     const { tourId } = useTrekkerStore();
-    return useStorage(`camino.trekker.tour-${tourId}.deepDivesStore`, {
-      selectedDeepDiveIds: [] as Array<string>,
-      email: "",
+    const storageKey = `camino.trekker.tour-${tourId}.deepDivesStore`;
+    return {
+      selectedDeepDiveIds: useStorage<string[]>(
+        `${storageKey}.selectedDeepDiveIds`,
+        []
+      ),
+      email: useStorage<string>(`${storageKey}.email`, ""),
       sendStatus: "idle" as SendStatus,
       error: "",
-    });
+    };
   },
   getters: {
     allDeepDives(): DeepDiveItemWithSelectState[] {

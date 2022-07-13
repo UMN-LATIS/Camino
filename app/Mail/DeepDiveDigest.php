@@ -2,13 +2,12 @@
 
 namespace App\Mail;
 
+use App\Tour;
 use App\Http\Requests\TourDeepDiveEmailRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-
-use App\Tour;
 
 class DeepDiveDigest extends Mailable
 {

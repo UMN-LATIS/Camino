@@ -44,7 +44,7 @@
           type="submit"
           :disabled="isSendDisabled"
         >
-          Send Me a Copy
+          Send
         </Button>
       </div>
     </form>
@@ -146,6 +146,10 @@ function sendEmail() {
 <style scoped>
 .stage-deepdive-summary {
   margin: 2rem 0;
+}
+
+.deepdivesummary-form {
+  max-width: 30rem;
 }
 
 .deepdive-select {

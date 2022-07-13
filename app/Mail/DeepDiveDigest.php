@@ -2,6 +2,8 @@
 
 namespace App\Mail;
 
+use App\Tour;
+use App\Http\Requests\TourDeepDiveEmailRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,10 +19,13 @@ class DeepDiveDigest extends Mailable
      *
      * @return void
      */
-    public function __construct($deepdives)
+    public function __construct(Tour $tour, TourDeepDiveEmailRequest $request)
     {
-        $this->deepdives = $deepdives;
+        $this->tour = $tour;
+        $this->deepdiveIds = $request['deepdiveIds'];
+        $this->locale = $request['locale'];
     }
+
 
     /**
      * Build the message.
@@ -29,6 +34,21 @@ class DeepDiveDigest extends Mailable
      */
     public function build()
     {
-        return $this->from('mcfa0086@umn.edu')->view('emails.deepdives');
+        $deepdives = $this->tour->getDeepDives($this->deepdiveIds);
+
+        $localizedDeepDives = $deepdives
+            ->map(fn ($deepdive) => [
+                'title' => $deepdive['title'][$this->locale],
+                'text' => $deepdive['text'][$this->locale]
+            ]);
+
+
+        return $this
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->markdown('emails.deepdives', [
+                'localizedDeepDives' => $localizedDeepDives,
+                'tour' => $this->tour,
+                'tour_url' => config('app.url') . "/trekker/tours/{$this->tour->id}"
+            ]);
     }
 }

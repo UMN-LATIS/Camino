@@ -105,6 +105,7 @@ export interface Stage extends Record<string, any> {
 }
 
 export interface DeepDiveItem {
+  id: string; // uuid
   title: LocalizedText;
   text: LocalizedText;
 }
@@ -117,7 +118,6 @@ export interface DeepDiveStage extends Stage {
   deepdives: DeepDiveItem[];
 }
 export interface DeepDiveSummaryStage extends Stage {
-  request_email: boolean;
   text: LocalizedText;
 }
 

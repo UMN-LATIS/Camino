@@ -40,6 +40,23 @@ class Tour extends Model
         'start_location' => Point::class,
     ];
 
+    // possible tour language keys
+    public const LOCALE_EN = 'English';
+    public const LOCALE_ES = "Español";
+    public const LOCALE_FR = "Français";
+
+    /**
+     * a list of possible tour locales
+     */
+    public static function possibleLocales()
+    {
+        return [
+            static::LOCALE_EN,
+            static::LOCALE_ES,
+            static::LOCALE_FR
+        ];
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
@@ -53,6 +70,23 @@ class Tour extends Model
     public function feedback()
     {
         return $this->hasMany(Feedback::class);
+    }
+
+    public function getAllDeepDives()
+    {
+        return $this->stops->flatMap(fn (Stop $stop) => $stop->getDeepDives());
+    }
+
+    public function getDeepDives(array $listOfDeepDiveIds)
+    {
+        $allDeepdives = $this->getAllDeepDives();
+        $selectedDeepDives = $allDeepdives->filter(
+            function ($deepdive) use ($listOfDeepDiveIds) {
+                $id = $deepdive['id'];
+                return collect($listOfDeepDiveIds)->contains($deepdive['id']);
+            }
+        );
+        return $selectedDeepDives;
     }
 
     public function newEloquentBuilder($query): SpatialBuilder

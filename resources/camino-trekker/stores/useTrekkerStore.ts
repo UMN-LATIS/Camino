@@ -1,14 +1,7 @@
 import { computed, ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
-import {
-  Maybe,
-  Tour,
-  TourStop,
-  Locale,
-  DeepDiveItem,
-  BottomNavSheet,
-} from "@/types";
+import { Maybe, Tour, TourStop, Locale, BottomNavSheet } from "@/types";
 import { useRoute } from "vue-router";
 import normalizeTour from "@/shared/normalizeTour";
 
@@ -23,7 +16,6 @@ export const useTrekkerStore = defineStore("trekker", () => {
     isLoading: ref<boolean>(true),
     locale: ref<Locale>(Locale.en),
     errors: ref<string[]>([]),
-    deepDives: ref<DeepDiveItem[]>([]),
     activeSheet: ref<Maybe<BottomNavSheet>>(null),
   };
 
@@ -84,16 +76,6 @@ export const useTrekkerStore = defineStore("trekker", () => {
     },
     closeActiveSheet() {
       actions.setActiveSheet(null);
-    },
-    addDeepDive(deepdive) {
-      const hasDeepDive = state.deepDives.value.indexOf(deepdive) > -1;
-      if (hasDeepDive) return;
-      state.deepDives.value.push(deepdive);
-    },
-    removeDeepDive(deepdive) {
-      state.deepDives.value = state.deepDives.value.filter(
-        (d) => d !== deepdive
-      );
     },
   };
 

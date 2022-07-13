@@ -1,4 +1,4 @@
-import axios from "@/camino-creator/common/axios";
+import axios from "@/shared/axios";
 
 export default (file) => {
   const imageUploadUrl = "/creator/image/store";

@@ -1,4 +1,4 @@
-import { axiosClient } from "@creator/common/axios";
+import { axiosClient } from "@/shared/axios";
 import "leaflet.locatecontrol/dist/L.Control.Locate.min.js";
 import "leaflet-polylinedecorator/dist/leaflet.polylineDecorator.js";
 import "leaflet-draw/dist/leaflet.draw.js";

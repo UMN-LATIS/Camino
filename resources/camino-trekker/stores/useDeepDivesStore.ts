@@ -3,6 +3,7 @@ import axios from "@/shared/axios";
 import { useTrekkerStore } from "./useTrekkerStore";
 import { DeepDiveItem, DeepDiveStage } from "@/types";
 import getStagesFromTourWhere from "@trekker/utils/getStagesFromTourWhere";
+import { useStorage } from "@vueuse/core";
 
 type SendStatus = "idle" | "pending" | "success" | "failure";
 
@@ -19,56 +20,62 @@ function selectAllDeepDivesFromTour(tour) {
 }
 
 export const useDeepDivesStore = defineStore("deepdives", {
-  state: () => ({
-    selectedDeepDiveIds: new Set() as Set<string>,
-    email: "",
-    sendStatus: "idle" as SendStatus,
-    error: "",
-  }),
+  state: () => {
+    const { tourId } = useTrekkerStore();
+    return useStorage(`camino.trekker.tour-${tourId}.deepDivesStore`, {
+      selectedDeepDiveIds: [] as Array<string>,
+      email: "",
+      sendStatus: "idle" as SendStatus,
+      error: "",
+    });
+  },
   getters: {
     allDeepDives(): DeepDiveItemWithSelectState[] {
       const trekkerStore = useTrekkerStore();
       return selectAllDeepDivesFromTour(trekkerStore.tour).map((deepdive) => ({
         ...deepdive,
-        isSelected: this.selectedDeepDiveIds.has(deepdive.id),
+        isSelected: this.selectedDeepDiveIds.includes(deepdive.id),
       }));
     },
     isSelected() {
-      return (id: string): boolean => this.selectedDeepDiveIds.has(id);
+      return (id: string): boolean => this.selectedDeepDiveIds.includes(id);
     },
     areAllSelected(): boolean {
-      return this.allDeepDives.length === this.selectedDeepDiveIds.size;
+      return this.allDeepDives.length === this.selectedDeepDiveIds.length;
     },
     canSendEmail(): boolean {
       return (
         this.sendStatus !== "pending" &&
-        this.selectedDeepDiveIds.size >= 1 &&
+        this.selectedDeepDiveIds.length >= 1 &&
         this.email.length >= 3
       );
     },
   },
   actions: {
-    addDeepDive(deepdive: DeepDiveItem) {
-      this.selectedDeepDiveIds.add(deepdive.id);
+    addDeepDive(deepdiveId: string) {
+      if (this.selectedDeepDiveIds.includes(deepdiveId)) return;
+      this.selectedDeepDiveIds.push(deepdiveId);
+    },
+    removeDeepDive(deepdiveId: string) {
+      this.selectedDeepDiveIds = this.selectedDeepDiveIds.filter(
+        (id) => id !== deepdiveId
+      );
     },
     selectAll() {
-      this.allDeepDives.forEach((deepdive) =>
-        this.selectedDeepDiveIds.add(deepdive.id)
+      this.selectedDeepDiveIds = this.allDeepDives.map(
+        (deepdive) => deepdive.id
       );
     },
     deselectAll() {
-      this.selectedDeepDiveIds.clear();
+      this.selectedDeepDiveIds = [];
     },
     toggle(id) {
-      this.selectedDeepDiveIds.has(id)
-        ? this.selectedDeepDiveIds.delete(id)
-        : this.selectedDeepDiveIds.add(id);
+      this.selectedDeepDiveIds.includes(id)
+        ? this.removeDeepDive(id)
+        : this.addDeepDive(id);
     },
     toggleAll() {
       this.areAllSelected ? this.deselectAll() : this.selectAll();
-    },
-    removeDeepDive(deepdive: DeepDiveItem) {
-      this.selectedDeepDiveIds.delete(deepdive.id);
     },
     softReset() {
       // keep selected deepdives, but clear email
@@ -82,7 +89,7 @@ export const useDeepDivesStore = defineStore("deepdives", {
       axios
         .post(`/api/tour/${tourId}/deepdivesEmail`, {
           email: this.email,
-          deepdiveIds: [...this.selectedDeepDiveIds],
+          deepdiveIds: this.selectedDeepDiveIds,
           locale: locale,
         })
         .then(() => {

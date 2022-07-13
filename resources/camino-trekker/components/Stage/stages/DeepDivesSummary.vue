@@ -2,37 +2,33 @@
   <div class="stage-deepdive-summary">
     <h3>Deep Dives</h3>
 
-    <Markdown :content="deepDiveSummaryText" />
-    <div v-if="stage.request_email" class="deepdive-select">
-      <input
-        id="select-all"
-        type="checkbox"
-        :checked="allSelected"
-        @change="toggleSelectAll(!allSelected)"
-      />
-      <label for="select-all"> Select All </label>
-    </div>
-    <ul class="deepdive-list">
-      <li
-        v-for="(deepdive, key) in allDeepDives"
-        :key="key"
-        class="deepdive-item"
-      >
-        <DeepDivesSummaryItem
-          :id="`deepdive-${key}`"
-          :title="translate(deepdive.title, store.locale)"
-          :content="translate(deepdive.text, store.locale)"
-          :checked="isDeepDiveChecked(deepdive)"
-          :checkboxHidden="!stage.request_email"
-          @toggleChecked="(isChecked) => setChecked(deepdive, isChecked)"
+    <SanitizedHTML :html="deepDiveSummaryText" />
+    <form class="deepdivesummary-form" @submit.prevent="sendEmail">
+      <div class="deepdive-select">
+        <input
+          id="select-all"
+          type="checkbox"
+          :checked="allSelected"
+          @change="toggleSelectAll(!allSelected)"
         />
-      </li>
-    </ul>
-    <form
-      v-if="stage.request_email"
-      class="deepdivesummary-form"
-      @submit.prevent="sendEmail"
-    >
+        <label for="select-all"> Select All </label>
+      </div>
+      <ul class="deepdive-list">
+        <li
+          v-for="(deepdive, key) in allDeepDives"
+          :key="key"
+          class="deepdive-item"
+        >
+          <DeepDivesSummaryItem
+            :id="`deepdive-${key}`"
+            :title="translate(deepdive.title, store.locale)"
+            :content="translate(deepdive.text, store.locale)"
+            :checked="isDeepDiveChecked(deepdive)"
+            :checkboxHidden="!stage.request_email"
+            @toggleChecked="(isChecked) => setChecked(deepdive, isChecked)"
+          />
+        </li>
+      </ul>
       <Input
         v-model="email"
         class="deepdivesummary-form__input"
@@ -43,7 +39,11 @@
       />
       <Error v-if="error"> {{ error }} </Error>
       <div class="form-actions">
-        <Button class="deepdivesummary-form__button" type="submit">
+        <Button
+          class="deepdivesummary-form__button"
+          type="submit"
+          :disabled="isSendDisabled"
+        >
           Send Me a Copy
         </Button>
       </div>
@@ -54,7 +54,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import axios from "axios";
-import Markdown from "../../Markdown/Markdown.vue";
 import Error from "../../Error/Error.vue";
 import getStagesFromTourWhere from "../../../utils/getStagesFromTourWhere";
 import DeepDivesSummaryItem from "./DeepDivesSummaryItem.vue";
@@ -68,6 +67,7 @@ import type {
   DeepDiveSummaryStage,
   DeepDiveStage,
 } from "@/types";
+import SanitizedHTML from "../../SanitizedHTML/SanitizedHTML.vue";
 
 interface Props {
   stage: DeepDiveSummaryStage;
@@ -98,6 +98,10 @@ const allDeepDives = computed(() => {
 
 const allSelected = computed(
   () => allDeepDives.value.length === checkedDeepDives.value.length
+);
+
+const isSendDisabled = computed(
+  () => !checkedDeepDives.value.length || !email.value.length
 );
 
 function isDeepDiveChecked(deepDive) {
@@ -141,7 +145,6 @@ function sendEmail() {
 
 <style scoped>
 .stage-deepdive-summary {
-  max-width: 30rem;
   margin: 2rem 0;
 }
 
@@ -179,5 +182,8 @@ function sendEmail() {
   justify-content: flex-end;
   text-align: center;
   gap: 0.5rem;
+}
+.deepdivesummary-form__button:disabled {
+  opacity: 0.25;
 }
 </style>

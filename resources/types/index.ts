@@ -118,7 +118,6 @@ export interface DeepDiveStage extends Stage {
   deepdives: DeepDiveItem[];
 }
 export interface DeepDiveSummaryStage extends Stage {
-  request_email: boolean;
   text: LocalizedText;
 }
 

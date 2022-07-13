@@ -1,20 +1,5 @@
 <template>
   <div>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          :checked="stage.request_email"
-          @change="
-            handleUpdate({
-              request_email: ($event.target as HTMLInputElement).checked,
-            })
-          "
-        />
-        Request Email Addresses
-      </label>
-    </div>
     <LanguageText
       :text="stage.text"
       :languages="languages"

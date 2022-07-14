@@ -21,6 +21,7 @@
       </label>
       <button
         class="deepdivesummary-item__show-more-toggle"
+        type="button"
         @click="toggleShowDetails"
       >
         <span class="sr-only">Show More</span>

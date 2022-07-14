@@ -106,10 +106,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, computed, nextTick, unref } from "vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
-import { LngLat, Maybe, TourStopRoute } from "@/types";
+import { LngLat, Maybe, TourStop, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
@@ -136,7 +136,6 @@ const emit = defineEmits<{
 const store = useCreatorStore();
 const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
-const tour = store.getTour(props.tourId);
 const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
 /**
@@ -164,32 +163,34 @@ interface MappedStop {
   currentValuedTargetPoint?: LngLat;
 }
 
-const toMappedStop = (stop, index) => ({
+const toMappedStop = (stop: TourStop, index: number): MappedStop => ({
   id: stop.id,
   index,
   targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
   route: store.getTourStopRoute(props.tourId, stop.id).value,
 });
 
-const mappedStops = computed((): MappedStop[] =>
-  tour.value.stops.map(toMappedStop)
-);
+// to avoid triggering unnecessary rerenders, avoid
+// using `computed`, and just get the mappedStops
+// at setup time
+// similarly, no need to get a ref to the tour
+// a plain object with suffives since it's only used by mappedStops
+const tour = unref(store.getTour(props.tourId));
+const mappedStops = tour.stops.map(toMappedStop);
 
 const currentStop = computed(
   (): Maybe<MappedStop> =>
-    mappedStops.value.find((s) => s.id === props.stopId) ?? null
+    mappedStops.find((s) => s.id === props.stopId) ?? null
 );
 
 const previousStop = computed((): Maybe<MappedStop> => {
   const currentStopIndex = currentStop.value?.index;
   if (!currentStopIndex) return null;
-  return (
-    mappedStops.value.find((s) => s.index === currentStopIndex - 1) ?? null
-  );
+  return mappedStops.find((s) => s.index === currentStopIndex - 1) ?? null;
 });
 
 const otherStops = computed((): MappedStop[] => {
-  return mappedStops.value.filter((stop) => stop.id !== props.stopId);
+  return mappedStops.filter((stop) => stop.id !== props.stopId);
 });
 
 const routeToNextRoute = computed((): Maybe<TourStopRoute> => {

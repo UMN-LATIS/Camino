@@ -188,9 +188,7 @@ const previousStop = computed((): Maybe<MappedStop> => {
   );
 });
 
-// calculate this once on mount
 const otherStops = computed((): MappedStop[] => {
-  if (otherStops.value?.length) return otherStops.value;
   return mappedStops.value.filter((stop) => stop.id !== props.stopId);
 });
 

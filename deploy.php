@@ -33,29 +33,20 @@ host('stage')
     ->set('hostname', 'cla-camino-tst.oit.umn.edu')
     ->set('remote_user', 'swadm')
     ->set('labels', ['stage' => 'stage'])
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
     ->set('deploy_path', '/swadm/var/www/html/');
 
 host('prod')
     ->set('hostname', 'cla-camino-prd.oit.umn.edu')
     ->set('remote_user', 'swadm')
     ->set('labels', ['stage' => 'production'])
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
     ->set('deploy_path', '/swadm/var/www/html/');
 
 task('assets:generate', function () {
     cd('{{release_path}}');
     run('yarn production');
 })->desc('Assets generation');
-
-task('fix_storage_perms', function () {
-    cd('{{release_path}}');
-    run('touch storage/logs/laravel.log');
-    run('sudo chown apache storage/logs/laravel.log');
-    run('sudo chgrp apache storage/logs/laravel.log');
-})->desc("Fix Apache Logs");
-after('artisan:migrate', 'fix_storage_perms');
-
 
 after('deploy:failed', 'deploy:unlock');
 

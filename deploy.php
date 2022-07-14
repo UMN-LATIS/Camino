@@ -48,15 +48,6 @@ task('assets:generate', function () {
     run('yarn production');
 })->desc('Assets generation');
 
-task('fix_storage_perms', function () {
-    cd('{{release_path}}');
-    run('touch storage/logs/laravel.log');
-    run('sudo chown apache storage/logs/laravel.log');
-    run('sudo chgrp apache storage/logs/laravel.log');
-})->desc("Fix Apache Logs");
-after('artisan:migrate', 'fix_storage_perms');
-
-
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.

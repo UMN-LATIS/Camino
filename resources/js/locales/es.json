@@ -1,19 +1,19 @@
 {
-    "modalClose": "CLOSE",
-    "nav": {
-        "next": "blarg",
-        "prev": "blarg",
-        "home": "blarg"
+  "modalClose": "CLOSE",
+  "nav": {
+    "next": "blarg",
+    "prev": "blarg",
+    "home": "blarg"
+  },
+  "stage": {
+    "navigation": {
+      "header": "NAV",
+      "title": "NAV",
+      "showmap": "MAP"
     },
-    "stage": {
-        "navigation": {
-            "header": "NAV",
-            "title": "NAV",
-            "showmap": "MAP"
-        },
-        "ar": {
-            "showar": "BLARG",
-            "warning": "BLARG"
-        }
+    "ar": {
+      "showar": "BLARG",
+      "warning": "BLARG"
     }
+  }
 }

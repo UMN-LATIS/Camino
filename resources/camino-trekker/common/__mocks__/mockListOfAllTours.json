@@ -1,0 +1,1452 @@
+[
+  {
+    "id": 2,
+    "active": 1,
+    "public": 1,
+    "title": "Chroma Zone Mural Tour",
+    "tour_content": {
+      "hotWords": [],
+      "languages": ["English"],
+      "use_template": true,
+      "custom_base_map": {
+        "image": null,
+        "coords": {
+          "upperleft": { "lat": null, "lng": null },
+          "lowerright": { "lat": null, "lng": null }
+        },
+        "use_basemap": false
+      }
+    },
+    "geocoded": null,
+    "walking": 1,
+    "driving": 0,
+    "biking": 1,
+    "start_location": {
+      "lat": 44.9623100000000022191670723259449005126953125,
+      "lng": -93.1915699999999986857801559381186962127685546875
+    },
+    "style": "entire_tour",
+    "stops": [
+      {
+        "id": 3,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Start", "placeholder": null },
+          "stages": [
+            { "type": "language" },
+            {
+              "text": {
+                "English": "Welcome to this tour of St. Paul's Chroma Zone mural art. You'll be visiting 12 pieces of art created in the fall of 2019, painted by artists from around the world. This tour will take about an hour and covers just under 4 miles. You'll start out at Budget Sign Shop (2474 W Territorial Rd), just across the street from South St. Anthony Park. \u00a0You'll send just across University Avenue.\n\nUse the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material.\n\nAs you move through your tour, you might come across \"hotwords\". These are underlined words that you can tap to mark. At the end of your tour, we'll give you a list of the words you marked, with additional information so you can dive deeper.\n\nIf you'd like a sneak peak of the murals and the process behind them, check out the 1 minute video below.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "url": null,
+              "type": "embed-frame",
+              "source": "https://www.youtube.com/embed/-lpew3SAFAo",
+              "buttonTitle": { "English": "Show Video" }
+            },
+            {
+              "text": { "placeholder": null },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9665600000000011959855328314006328582763671875,
+                  "lng": -93.20013000000000147338141687214374542236328125
+                }
+              ],
+              "buttonTitle": { "English": "Tour Preview" },
+              "targetPoint": {
+                "lat": 44.9665600000000011959855328314006328582763671875,
+                "lng": -93.20013000000000147338141687214374542236328125
+              }
+            }
+          ]
+        },
+        "sort_order": 0,
+        "deleted_at": null,
+        "created_at": "2020-05-18T19:45:47.000000Z",
+        "updated_at": "2021-03-09T15:01:23.000000Z"
+      },
+      {
+        "id": 5,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Priscila De Carvalho", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "This first piece is on the west side of Budget Sign Shop, just across the street from South St. Anthony Park.\n\nYou might be familiar with the neighborhood of St. Anthony Park, just to the north. South St. Anthony Park was originally built as housing for the railroad workers, who served the bustling nearby rail hubs.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9665600000000011959855328314006328582763671875,
+                "lng": -93.200140000000004647517926059663295745849609375
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Priscila De Carvalho is a Brazilian-American contemporary artist who is known for paintings, sculptures, murals, site-specific installations, and permanent public art.\n\nShe is a recipient of The Pollock-Krasner Foundation Fellowship Award and served as an artist in residence at Sculpture Space, Aljira Emerge 10 Fellowship, Lower East Side Printshop, The Bronx Museum of the Arts and Jamaica Center for the Arts and Learning Workspace Program. She made her first solo debut with Passageways in the Jersey City Museum, opening March 19, 2009.\n\nPriscila\u2019s work has been exhibited by the Brooklyn Bridge Park (New York, USA), The Bronx Museum of the Arts (New York, USA), Socrates Sculpture Park (New York, USA), the Basque Museum-Center of Contemporary Art (Vitoria-Gasteiz, Spain), Deutsche Bank (New York, USA), the Grand Palais (Paris, France), the Nepal Art Council in (Kathmandu, Nepal), The Museum of Contemporary African Diasporan Arts (New York, USA), The Jersey City Museum (Jersey City, USA). She was also a celebrated participant in El Museo\u2019 Sixth Biennial in New York City, The First AIM Biennial at The Bronx Museum of the Arts, and The Kathmandu International Triennial in Nepal where she represented her home nation of Brazil. \n\nShe has been commissioned for large-scale permanent public art projects by the MTA Arts & Design and the Department of Education in NY in collaboration with School Construction Authority, she is currently creating permanent public artwork for the SBS Woodhaven median stations commissioned by New York City\u2019s Department of Cultural Affairs\u2019 Percent for Arts Program as well as her largest and most ambitious sculptural work to date for the Valley Metro Rail System in Phoenix, Arizona. Priscila lives and works in Long Island City, NY.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "hE1h1B1DsmREtUHhHMWVLHEi1nsPvvdaJYPsw5ow.jpg",
+                  "text": {
+                    "English": "Priscila De Carvalho",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 1,
+        "deleted_at": null,
+        "created_at": "2020-05-18T19:52:57.000000Z",
+        "updated_at": "2020-05-28T16:12:10.000000Z"
+      },
+      {
+        "id": 6,
+        "tour_id": 2,
+        "stop_content": {
+          "title": {
+            "English": "\u201cLove\u201d by Cey Adams",
+            "placeholder": null
+          },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Head across the street to the park. Take the trail to the right of the tennis courts, which cuts across the park and exits at Bayless Street. Turn right at St. Cecilias Church and stay right at the fork (Bayless Place) until it runs into Raymond. The next mural is on the north side of Hampden Park Co-op (just across the street). It's about 1/4 of a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9665600000000011959855328314006328582763671875,
+                  "lng": -93.200140000000004647517926059663295745849609375
+                },
+                {
+                  "lat": 44.9681834576101238098999601788818836212158203125,
+                  "lng": -93.200690746307373046875
+                },
+                {
+                  "lat": 44.96856298857121458922847523353993892669677734375,
+                  "lng": -93.2000255584716938983547152020037174224853515625
+                },
+                {
+                  "lat": 44.96880588706839176893481635488569736480712890625,
+                  "lng": -93.199489116668729593584430404007434844970703125
+                },
+                {
+                  "lat": 44.96865407562819427766953594982624053955078125,
+                  "lng": -93.198544979095487406084430404007434844970703125
+                },
+                {
+                  "lat": 44.96921999999999997044142219237983226776123046875,
+                  "lng": -93.197640000000006921254680491983890533447265625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96921999999999997044142219237983226776123046875,
+                "lng": -93.197640000000006921254680491983890533447265625
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "[Cey Adams](https://www.instagram.com/ceyadams/?hl=en \"Cey Adams\"), a New York City native, emerged from the downtown graffiti movement to exhibit alongside fellow artists Jean-Michel Basquiat and Keith Haring. Today his art practice consists of working with mixed media materials to create large collage paintings, works on paper and bright colorful murals. Recent collaboration partners include the Smithsonian, Temple University, IDEO, Apple, Levi\u2019s, Converse, Pabst Blue Ribbon, Foot Locker, YouTube, and Google.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "2czEW9pmY6HuO9zPv6OvOh5e0X0Sbsa8hGT6Narr.jpg",
+                  "text": { "English": "Cey Adams", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 2,
+        "deleted_at": null,
+        "created_at": "2020-05-18T21:04:00.000000Z",
+        "updated_at": "2020-05-21T19:18:42.000000Z"
+      },
+      {
+        "id": 8,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Claudia Valentino", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Head east on Hampden and then take a left on Bradford. Continue across Wycliff. The piece is on the side of the Precision Coatings building. This is about 1/5 mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96921999999999997044142219237983226776123046875,
+                  "lng": -93.197640000000006921254680491983890533447265625
+                },
+                {
+                  "lat": 44.9681834576101238098999601788818836212158203125,
+                  "lng": -93.195626735687284281084430404007434844970703125
+                },
+                {
+                  "lat": 44.96849999999999880628820392303168773651123046875,
+                  "lng": -93.1953500000000047975845518521964550018310546875
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96849999999999880628820392303168773651123046875,
+                "lng": -93.1953500000000047975845518521964550018310546875
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Claudia Valentino (Clau) came from Argentina to Minneapolis in 2009 and started working with Greta McLain in 2011. In Argentina, she spent three years studying expression. corporal, a contemporary dance technique that expresses emotions through body movements, at the National University Institute of Art (IUNA) in Buenos Aires, and documentary photography at the Association of Argentine Graphic Reporters (ARGRA). She learned the craft of painting and mosaics with Greta and started working as a project leader in 2014 at Goodspace murals company. There she learned many techniques focused more than anything on over and under painting. She also found the beautiful challenge of working with the community and that is one of the things she likes most about her profession. She developed as a muralist for 7-8 years together with several community projects.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "GqIbIpabdxglZcmIeJP92zIDxHFReAVg9HNwBU60.jpg",
+                  "text": {
+                    "English": "Claudia Valentino (right) and Daniela Bianchini",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 3,
+        "deleted_at": null,
+        "created_at": "2020-05-18T21:12:38.000000Z",
+        "updated_at": "2020-05-21T19:18:54.000000Z"
+      },
+      {
+        "id": 7,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Mariela Ajras", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Head back to Wycliff and turn right. Continue for a few hundred feet until you see the piece on your right. If you pass the big Wycliff sign, you've gone too far - keep your eyes peeled, it'll be over your right shoulder!",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96849999999999880628820392303168773651123046875,
+                  "lng": -93.1953500000000047975845518521964550018310546875
+                },
+                {
+                  "lat": 44.969048784536965968072763644158840179443359375,
+                  "lng": -93.19483280181884765625
+                },
+                {
+                  "lat": 44.96974999999999766941982670687139034271240234375,
+                  "lng": -93.1956100000000020600054995156824588775634765625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96974999999999766941982670687139034271240234375,
+                "lng": -93.1956100000000020600054995156824588775634765625
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Mariela Ajras (Buenos Aires, 1984) is an internationally-acclaimed muralist from Buenos Aires, Argentina. Her work mainly focuses on the images of women and questions of femininity and collective memory. A psychologist as well as an artist, this background greatly influences her work in terms of subject matter and also in the teaching of community-oriented workshop that uses muralism as a social tool. She is a founding member of AMMURA (Association of Female Muralists of Argentina), a platform that showcases female muralists work and calls out gender inequality in the public art scene in Argentina. Her work can be found in different cities such as Los Angeles, CA, Oakland, Lynn, MA, Salem, MA. Barcelona, Valencia, Tarragona, Salamanca in Spain. Mexico City, Guadalajara, Morelia, Ciudad Juarez in Mexico. Napoli in Italy, Buenos Aires in Argentina, Louvain in Belgium among others.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 4,
+        "deleted_at": null,
+        "created_at": "2020-05-18T21:11:35.000000Z",
+        "updated_at": "2020-05-21T19:19:20.000000Z"
+      },
+      {
+        "id": 9,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Fadlabi", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Continue along Wycliff. The next piece is on the north side of the same building. Turn into the parking lot and go past the big green garage doors.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96974999999999766941982670687139034271240234375,
+                  "lng": -93.1956100000000020600054995156824588775634765625
+                },
+                {
+                  "lat": 44.96979265163572136998482164926826953887939453125,
+                  "lng": -93.1959271430969380389797152020037174224853515625
+                },
+                {
+                  "lat": 44.9702025334656099175845156423747539520263671875,
+                  "lng": -93.19612026214599609375
+                },
+                {
+                  "lat": 44.970539999999999736246536485850811004638671875,
+                  "lng": -93.1954999999999955662133288569748401641845703125
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.970539999999999736246536485850811004638671875,
+                "lng": -93.1954999999999955662133288569748401641845703125
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Fadlabi (b. 1975 in Omdurman) lives and works in Oslo. He was educated at the Art Academy in Oslo (KHiO), Al-Neelain University in Khartoum, and Sudan University. He works with painting, text, and performance. In 2008 he founded \u201cOne Night Only\u201d an artist-run platform in Oslo that shows a new artist every Monday. Possibly, Norway's most busy gallery. Between 2010- 2014 he worked with artist Lars Cuzner on European Attraction Limited, a contemporary rendition of a human zoo named The Congo Village and was part of the 1914 World Fair in Oslo. They re-enacted the village and opened it to the public in May 2014. His recent shows includes Sharjah Biennial 11 (Sharjah), Bergen Assembly (Bergen)The Museum of Contemporary Art (Oslo), Kunsthall (Oslo), UKS (Oslo), Munchmuseet i bevegelse (Oslo), NY Art-book fair (NY),Performa 15 NY (NY), Temporary Gallery (Cologne), Nile Sunset Annex (Cairo), Al Riwaq (Manamah), the Saudi Arts Council (Jeddah), Darat Al Funun (Amman) and Townhouse (Cairo).",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "eI2gwx0eOkNHhOlZkfI7Xhek0YiHAQqtd6IFsWTE.jpg",
+                  "text": { "English": "Fadlabi", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 5,
+        "deleted_at": null,
+        "created_at": "2020-05-19T18:40:54.000000Z",
+        "updated_at": "2020-05-21T19:19:40.000000Z"
+      },
+      {
+        "id": 10,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Chuck U", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Retrace your steps along Wycliff and continue across Bradford. keep going along Wycliff. The next piece is on your right, at the Spot Weld building. It's about 1/3 of a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.970539999999999736246536485850811004638671875,
+                  "lng": -93.1954999999999955662133288569748401641845703125
+                },
+                {
+                  "lat": 44.97012662964403517662503872998058795928955078125,
+                  "lng": -93.1960558891296244610202847979962825775146484375
+                },
+                {
+                  "lat": 44.9695497573172957572751329280436038970947265625,
+                  "lng": -93.1957340240478657733547152020037174224853515625
+                },
+                {
+                  "lat": 44.96829000000000320369508699513971805572509765625,
+                  "lng": -93.1934600000000017416823538951575756072998046875
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96829000000000320369508699513971805572509765625,
+                "lng": -93.1934600000000017416823538951575756072998046875
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Chuck U is an Artist and Illustrator living and working in Minneapolis. He mostly prefers working in pen and ink and doing smaller scale print work, but has recently been branching out into larger paintings and murals. You can see his work on Indeed brew cans, the sides of buildings, album covers, the walls of print collectors all over the world and once even a lottery ticket.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 6,
+        "deleted_at": null,
+        "created_at": "2020-05-19T18:49:02.000000Z",
+        "updated_at": "2020-05-21T19:20:03.000000Z"
+      },
+      {
+        "id": 11,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Biafra, Inc", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Continue along Wycliff until the intersection, then take a right. The next piece is about a block down - it's hard to miss! it's about 1/5 of a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96829000000000320369508699513971805572509765625,
+                  "lng": -93.1934600000000017416823538951575756072998046875
+                },
+                {
+                  "lat": 44.967895012400191490087308920919895172119140625,
+                  "lng": -93.1924724578857563983547152020037174224853515625
+                },
+                {
+                  "lat": 44.9667299999999983128873282112181186676025390625,
+                  "lng": -93.1921899999999965302777127362787723541259765625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9667299999999983128873282112181186676025390625,
+                "lng": -93.1921899999999965302777127362787723541259765625
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Biafra hadn't planned on being an artist. He thought he was going to be a teacher. He started cutting stencils as a way to decorate his skateboard in 2003. Cutting stencils quickly turned into an obsession, suddenly the stencils were on stickers and walls and that transitioned into an interest in graffiti and screen printing. He switched my major from education to art and received a B.F.A. with an emphasis in printmaking from the University of Minnesota Twin Cities. He has been lucky enough to take what he has learned and obsessed about for all these years and turn that into a job. His work is text heavy and hard lines. He uses comic book characters because he thinks they are instantly relatable to every generation and represent an idealistic time. The text surrounding the characters gives clues as to what the character represents. The bold lines and bright colors associated graffiti and street art still stick with him. He uses his murals as an extension of his fine art. He can do a print and a mural of the same character and each application allows me to explore the character and themes in a different way. The scale of a mural can deliver a feeling that the intimacy of a print can't and he loves exploring that experience.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "Otd4QdKOKCohWRMOsOC24va8T8JPl7dCfI3ooaNg.jpg",
+                  "text": { "English": "Biafra, Inc", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 7,
+        "deleted_at": null,
+        "created_at": "2020-05-19T18:51:13.000000Z",
+        "updated_at": "2020-05-21T19:20:16.000000Z"
+      },
+      {
+        "id": 12,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Ewok", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Continue south down the same steet. Take your first left on Territorial, and then your first left onto Vandalia. Continue past Ellis. The next piece is on your right, just past the Tech Dump. It's just over half a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9667299999999983128873282112181186676025390625,
+                  "lng": -93.1921899999999965302777127362787723541259765625
+                },
+                {
+                  "lat": 44.9645398326107397224404849112033843994140625,
+                  "lng": -93.1924080848693705547702847979962825775146484375
+                },
+                {
+                  "lat": 44.96384144472197164077442721463739871978759765625,
+                  "lng": -93.1890821456909037578952847979962825775146484375
+                },
+                {
+                  "lat": 44.966027674109540157587616704404354095458984375,
+                  "lng": -93.189017772674560546875
+                },
+                {
+                  "lat": 44.96643999999999863348421058617532253265380859375,
+                  "lng": -93.1887799999999941746864351443946361541748046875
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96643999999999863348421058617532253265380859375,
+                "lng": -93.1887799999999941746864351443946361541748046875
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Ewok is an Orange County based artist who began writing graffiti in Minneapolis in the early 90\u2019s. Since then, he has solidified his status as an internationally known Graffiti artist, traveling extensively and painting in several countries, including exhibiting artwork and mural projects with the Seventh Letter artist collective, in Los Angeles, Tokyo, Taiwan, Barcelona, and Seoul. More recently Ewok was one of several artists who completed Guinness Book of World Records\u2019 longest continuous graffiti scroll in Dubai that was part of their UAE day celebration. His fine art has been exhibited at LA\u2019s Known gallery, and his solo exhibitions \u2018Revisionist History' and \u2018Pageantry\u2019 have been featured on Hypebeast and in Juxtapoz magazine.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "EUTprB3KS0uBkUldn7Z0Xb5tMv4cQV3EsuPW48lO.jpg",
+                  "text": { "English": "Ewok", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 8,
+        "deleted_at": null,
+        "created_at": "2020-05-19T19:13:39.000000Z",
+        "updated_at": "2020-05-21T19:20:34.000000Z"
+      },
+      {
+        "id": 13,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Eric Garcia", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "This next piece isn't easy to get to on foot. If you're walking or would rather not bike on busier streets, you can skip to the next step and instead head south on Vandalia to Charles Ave. \n\nIf you're on a bike, head back the way you came and take a left on Ellis.  When you get to Transfer road, cross the street and then turn left and follow the bike lane.  Transfer road will curve around and intersect Prior. Turn right on Prior and continue a few hundred feet to find the next piece. It's just over half a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96643999999999863348421058617532253265380859375,
+                  "lng": -93.1887799999999941746864351443946361541748046875
+                },
+                {
+                  "lat": 44.966042855966776414788910187780857086181640625,
+                  "lng": -93.1889319419860697735202847979962825775146484375
+                },
+                {
+                  "lat": 44.96610358335546919761327444575726985931396484375,
+                  "lng": -93.185756206512451171875
+                },
+                {
+                  "lat": 44.96731811762877129012849763967096805572509765625,
+                  "lng": -93.1857347488403178203952847979962825775146484375
+                },
+                {
+                  "lat": 44.9678342869080012178528704680502414703369140625,
+                  "lng": -93.18521976470947265625
+                },
+                {
+                  "lat": 44.9687451625405429922466282732784748077392578125,
+                  "lng": -93.183503150939969827959430404007434844970703125
+                },
+                {
+                  "lat": 44.96876034367852525974740274250507354736328125,
+                  "lng": -93.18230152130126953125
+                },
+                {
+                  "lat": 44.96775999999999839928932487964630126953125,
+                  "lng": -93.1824299999999965393726597540080547332763671875
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96775999999999839928932487964630126953125,
+                "lng": -93.1824299999999965393726597540080547332763671875
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Known for mixing history with contemporary politics, Eric J. Garcia always tries to create art that is much more than just aesthetics.  Garcia has been creating murals for over a decade, from Albuquerque to Chicago. His murals have been commissioned by such institutions as The National Museum of Mexican Art, the Urban Institute Contemporary Art and DePaul Art Museum.  Garcia received his BFA with a minor in Chicano studies from the University of New Mexico, and went on to completed his MFA from the School of the Art Institute of Chicago. A versatile artist working not only with murals but in an assortment of media, from hand-printed posters, to sculptural installations, to his controversial political cartoon series El Machete Illustrated, they all have a common goal of educating and challenging.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "RkCdW8iq82gsxI1hYg3GrKtrd0HP3Z99658j5Wjv.jpg",
+                  "text": { "English": "Eric J. Garcia", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 9,
+        "deleted_at": null,
+        "created_at": "2020-05-19T19:16:58.000000Z",
+        "updated_at": "2020-05-21T19:20:58.000000Z"
+      },
+      {
+        "id": 14,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Martzia Thometz", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Continue along Prior all the way to University Avenue. Along the way, you'll pass Can Can Wonderland, home to the fanciest mini golf course you've ever seen!\n\nAt University Avenue, turn right (stick to the sidewalk) and continue two (long) blocks to Vandalia, then turn right - the piece is immediately on your right. There's a second piece just a little further down. This ride is about a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96775999999999839928932487964630126953125,
+                  "lng": -93.1824299999999965393726597540080547332763671875
+                },
+                {
+                  "lat": 44.957889620382985640389961190521717071533203125,
+                  "lng": -93.182151317596463968584430404007434844970703125
+                },
+                {
+                  "lat": 44.9608504265032848934424691833555698394775390625,
+                  "lng": -93.1896185874938822735202847979962825775146484375
+                },
+                {
+                  "lat": 44.9615500000000025693225325085222721099853515625,
+                  "lng": -93.188950000000005502442945726215839385986328125
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9615500000000025693225325085222721099853515625,
+                "lng": -93.188950000000005502442945726215839385986328125
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Martzia began painting the streets in 2008. With a foundation in graffiti she learned to paint fast and efficiently, often traveling around to new and foreign environments. Self-taught she is continuously pushing herself to learn and grow as an artist. Over the years she\u2019s developed a distinct recognizable style, built around imagery of strong women often ready for the everyday battle of being feminine in a male dominated society. Her goal is to make accessible art to empower young (and old) angry women to see the strength and beauty within themselves.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 10,
+        "deleted_at": null,
+        "created_at": "2020-05-19T19:26:43.000000Z",
+        "updated_at": "2020-05-21T19:21:19.000000Z"
+      },
+      {
+        "id": 15,
+        "tour_id": 2,
+        "stop_content": {
+          "title": {
+            "English": "Christina Vang + Teeko Yang + Oskar Ly",
+            "placeholder": null
+          },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Continue on Vandalia and turn left on Charles. Continue for three blocks, crossing Carleton. The next piece is in the first alley on the left. It's about 1/5 of a mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9615500000000025693225325085222721099853515625,
+                  "lng": -93.188950000000005502442945726215839385986328125
+                },
+                {
+                  "lat": 44.9618069619799740621601813472807407379150390625,
+                  "lng": -93.1890821456909037578952847979962825775146484375
+                },
+                {
+                  "lat": 44.96426655140594874637827160768210887908935546875,
+                  "lng": -93.1953477859497212421047152020037174224853515625
+                },
+                {
+                  "lat": 44.96435999999999921783455647528171539306640625,
+                  "lng": -93.1958599999999961482899379916489124298095703125
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96435999999999921783455647528171539306640625,
+                "lng": -93.1958599999999961482899379916489124298095703125
+              }
+            },
+            { "text": { "English": "About the Artists" }, "type": "separator" },
+            {
+              "text": {
+                "English": "ArtCrop is a collective of Hmong artists whose work explores and reconnects to their cultural roots. Located in the Creative Enterprise Zone, ArtCrop is pleased to join the roster of artists featured in Chroma Zone. ArtCrop has created murals from downtown Saint Paul to rural farm landscapes leaving evidence to spark the next generation\u2019s own love stories of culture and identity. Their work pushes Hmong aesthetics and cultural innovation influenced by their people across a global diaspora. The ArtCrop artists include Christina Vang, Oskar Ly and Teeko Yang.  Christina Vang is a multi-faceted designer and artist whose work focuses on community narratives. Through her work she captures the vibrancy, curiosity, and energy of cultural communities. Oskar Ly is a queer Hmong French American artist. Her work focuses on creating new possibilities that reclaim identity through fashion art along with organizing community productions that uplift cultural preservation/re-appropriation. Teeko Yang is a project manager by day and a creative by night. She is a purpose-driven photographer interested in capturing the truth of her subjects.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "4IzuPipTFC5JRbzGQtbu2VZpJIqUUITmcnNPrg5v.jpg",
+                  "text": { "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 11,
+        "deleted_at": null,
+        "created_at": "2020-05-19T19:29:25.000000Z",
+        "updated_at": "2020-05-21T19:21:46.000000Z"
+      },
+      {
+        "id": 16,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Mr. Kiji", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Follow the alley to University Avenue. Turn right on University, and then left at Raymond and follow Raymond. This piece is at the first intersection (Myrtle), above the Dual Citizen patio. It's about 1/4 mile.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.96435999999999921783455647528171539306640625,
+                  "lng": -93.1958599999999961482899379916489124298095703125
+                },
+                {
+                  "lat": 44.96356816019025615105420001782476902008056640625,
+                  "lng": -93.1964850425720356952297152020037174224853515625
+                },
+                {
+                  "lat": 44.9640388160741366618822212330996990203857421875,
+                  "lng": -93.197515010833768656084430404007434844970703125
+                },
+                {
+                  "lat": 44.96303676987407271781194140203297138214111328125,
+                  "lng": -93.1975579261779927264797152020037174224853515625
+                },
+                {
+                  "lat": 44.96305000000000262616595136933028697967529296875,
+                  "lng": -93.1979000000000041836756281554698944091796875
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.96305000000000262616595136933028697967529296875,
+                "lng": -93.1979000000000041836756281554698944091796875
+              }
+            },
+            { "text": { "English": "About the Artist" }, "type": "separator" },
+            {
+              "text": {
+                "English": "A Japanese-born, New York City-based artist whose work encompasses animations, murals of scale, product and packaging design. He's recognized for playful and bold graphic and pattern work with a strong emphasis on color.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "4PP0EtMxyg5rUv5FN8Y31186BHRM3AqgBSRHQx4o.jpg",
+                  "text": { "English": "Mr. Kiji", "placeholder": null }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 12,
+        "deleted_at": null,
+        "created_at": "2020-05-19T19:31:39.000000Z",
+        "updated_at": "2020-05-21T19:22:00.000000Z"
+      },
+      {
+        "id": 4,
+        "tour_id": 2,
+        "stop_content": {
+          "title": { "English": "Finish", "placeholder": null },
+          "stages": [
+            {
+              "text": {
+                "English": "You've made it to the end of the tour. We hope you enjoyed this experience. Please leave us some feedback. Chroma Zone will continue to grow and expand.  Take a look at the [Chroma Zone website](https://www.chromazone.net/ \"Chroma Zone website\") for more information.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            { "text": { "placeholder": null }, "type": "feedback" },
+            { "text": { "English": "Hotwords" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Enter your email below to have a copy of this content emailed to you.",
+                "placeholder": null
+              },
+              "type": "hotwords-summary",
+              "request_email": true
+            }
+          ]
+        },
+        "sort_order": 13,
+        "deleted_at": null,
+        "created_at": "2020-05-18T19:45:47.000000Z",
+        "updated_at": "2020-05-19T19:32:16.000000Z"
+      }
+    ],
+    "users": [
+      {
+        "id": 1,
+        "name": null,
+        "email": "mcfa0086@umn.edu",
+        "provider": "shibboleth",
+        "unique_id": "3dci3yxub",
+        "password": null,
+        "remember_token": null,
+        "created_at": "2020-05-08T19:15:48.000000Z",
+        "updated_at": "2020-05-08T19:15:48.000000Z",
+        "pivot": { "tour_id": 2, "user_id": 1 }
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "active": 1,
+    "public": 1,
+    "title": "Stone Arch Bridge",
+    "tour_content": {
+      "hotWords": [],
+      "languages": ["English"],
+      "use_template": true,
+      "custom_base_map": {
+        "image": null,
+        "coords": {
+          "upperleft": { "lat": null, "lng": null },
+          "lowerright": { "lat": null, "lng": null }
+        },
+        "use_basemap": false
+      }
+    },
+    "geocoded": {
+      "city": "Minneapolis",
+      "state": "Minnesota",
+      "country": "United States",
+      "locality": "Minneapolis",
+      "postalCode": "55414",
+      "neighborhood": "Marcy Holmes"
+    },
+    "walking": 1,
+    "driving": 0,
+    "biking": 0,
+    "start_location": {
+      "lat": 44.9807899999999989404386724345386028289794921875,
+      "lng": -93.253240000000005238689482212066650390625
+    },
+    "style": "entire_tour",
+    "stops": [
+      {
+        "id": 27,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Start", "placeholder": null },
+          "stages": [
+            { "type": "language" },
+            {
+              "text": {
+                "English": "This tour of the Stone Arch Bridge and St. Anthony Main will take you on a trip through Minnesota history, from its geological origins through the modern day.\n\nYou'll start the tour in the middle of the Stone Arch Bridge, then continue on a loop of St. Anthony Main, the Hennepin Avenue Bridge, and West River Parkway. You can park on either side of the river - there's a lot just north of the bridge on the downtown side of the bridge, and plenty of street parking on the St. Anthony Main side.\n\nUse the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material.\n\nAs you move through your tour, you might come across \"hotwords\". These are underlined words that you can tap to mark. At the end of your tour, we'll give you a list of the words you marked, with additional information so you can dive deeper.\n\nAlong the way, you'll see some interpretive signage from the St. Anthony Falls Heritage Trail. These have some great photos and additional details, so be sure to check them out.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 0,
+        "deleted_at": null,
+        "created_at": "2020-06-01T16:07:32.000000Z",
+        "updated_at": "2020-06-23T02:06:30.000000Z"
+      },
+      {
+        "id": 29,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Stone Arch Bridge", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Head to the middle of the bridge. Stop somewhere with a good view of the falls.\n\nOn a beautiful summer weekend, the bridge can be very busy, so be sure to stay out of the bike lanes!",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9808000000000021145751816220581531524658203125,
+                  "lng": -93.2532000000000067529981606639921665191650390625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9808000000000021145751816220581531524658203125,
+                "lng": -93.2532000000000067529981606639921665191650390625
+              }
+            },
+            { "text": { "English": "Get your bearings" }, "type": "separator" },
+            {
+              "text": {
+                "English": "The Stone Arch Bridge was built in 1883 by railroad tycoon <hotword>James J. Hill</hotword>. The bridge was built to link the flour milling operations of Minneapolis with the agricultural field of the Dakotas and the river shipping terminals of St. Paul. The bridge closed to trains in 1978 and became a pedestrian bridge in 1994.\n\nBefore we dive into our tour, take some time to orient yourself. Facing the waterfall, downtown Minneapolis is to your left. To your right, the commercial district along the river is called St. Anthony Main. St. Anthony was originally a separate city, and was annexed in 1872 creating a neighborhood called \"northeast\".\u00a0\n\nIf you turn around, you'll be looking southeast, where the river flows under the <hotword>35W bridge</hotword> and past the University of Minnesota, before continuing into St. Paul on its way to the Gulf of Mexico.\n\nUse the \"Look Around\" button below for an Augmented Reality view of the area.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "text": { "placeholder": null },
+              "type": "ar",
+              "waypoints": [
+                {
+                  "text": {
+                    "English": "St. Anthony Falls",
+                    "placeholder": null
+                  },
+                  "altitude": null,
+                  "location": {
+                    "lat": 44.9814199999999999590727384202182292938232421875,
+                    "lng": -93.2552699999999958890839479863643646240234375
+                  }
+                },
+                {
+                  "text": {
+                    "English": "St. Anthony Main",
+                    "placeholder": null
+                  },
+                  "altitude": null,
+                  "location": {
+                    "lat": 44.98293000000000319005266646854579448699951171875,
+                    "lng": -93.2517600000000044246917241252958774566650390625
+                  }
+                },
+                {
+                  "text": { "English": "Guthrie Theater", "placeholder": null },
+                  "altitude": null,
+                  "location": {
+                    "lat": 44.97820999999999713736542616970837116241455078125,
+                    "lng": -93.2555200000000041882231016643345355987548828125
+                  }
+                },
+                {
+                  "text": { "English": "35W Bridge", "placeholder": null },
+                  "altitude": null,
+                  "location": {
+                    "lat": 44.97894999999999754436430521309375762939453125,
+                    "lng": -93.2451899999999938017936074174940586090087890625
+                  }
+                },
+                {
+                  "text": {
+                    "English": "University of Minnesota",
+                    "placeholder": null
+                  },
+                  "altitude": "500",
+                  "location": {
+                    "lat": 44.97655999999999920646587270312011241912841796875,
+                    "lng": -93.2350699999999932288119453005492687225341796875
+                  }
+                }
+              ],
+              "buttonTitle": { "English": "Look Around" }
+            },
+            {
+              "text": {
+                "English": "About St. Anthony Falls",
+                "placeholder": null
+              },
+              "type": "separator"
+            },
+            {
+              "text": {
+                "English": "The waterfall in front of you is, with little exaggeration, the reason that Minneapolis exists. The 50 foot drop the river makes at this spot provided the power to run lumber mills, flour mills, and later, hydroelectric power plants.\n\nSt. Anthony Falls hasn't always looked the way it does today, and it hasn't always been where it is today. When Europeans first arrived in the area in the late 17th century, the falls were hundreds of feet downriver (well behind you as you face the falls). Made of <hotword>hard limestone on stop of soft sandstone</hotword>, the falls were rapidly eroding their way upriver.\n\nBeginning in the 19th century, industrialists identified the need to prevent the falls from continuing their natural erosion. The dam you see today was built in 1963\\. Check out the photos below for a view of the falls before they were tamed.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "AHCI0pe9aT58PAxKDOULreUaXgBjsBU6UaBMr5a2.jpg",
+                  "text": {
+                    "English": "1863 View - Hennepin County Library",
+                    "placeholder": null
+                  }
+                },
+                {
+                  "src": "3FsWPZoWT54VZkTNqKJcYfIxEIUlfmuFW9LR4CcS.jpg",
+                  "text": {
+                    "English": "1865 View, including a lumber mill. Hennepin County Library",
+                    "placeholder": null
+                  }
+                },
+                {
+                  "src": "qBxqO1trAOoOUwjfYbllN3DPemHghqz1YZSaLF1j.jpg",
+                  "text": {
+                    "English": "1870s, after the construction of the first apron to protect the falls. Hennepin County Library",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 1,
+        "deleted_at": null,
+        "created_at": "2020-06-01T16:19:45.000000Z",
+        "updated_at": "2020-07-01T14:14:02.000000Z"
+      },
+      {
+        "id": 41,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Lock and Dam", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Facing the falls, turn left and head towards downtown Minneapolis. Stop when the walkway widens a little bit, and the railing separating the bike lanes from the walkway begins.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9808000000000021145751816220581531524658203125,
+                  "lng": -93.2532000000000067529981606639921665191650390625
+                },
+                {
+                  "lat": 44.98049999999999926103555480949580669403076171875,
+                  "lng": -93.25538000000000238287611864507198333740234375
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.98049999999999926103555480949580669403076171875,
+                "lng": -93.25538000000000238287611864507198333740234375
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Notice how this section of the bridge is a little different? This \"arch\" of the Stone Arch Bridge was removed to make way for boat traffic using the lock and dam system that's in front of you now. The lock and dam were completed in 1963, allowing commercial traffic to continue upriver for the first time, allowing for the creation of the <hotword>Upper Harbor Terminal</hotword>.\u00a0\n\nThe lock was closed in 2015 to prevent the spread of the invasive Asian carp.\u00a0\n\nThe lock has a visitor center with exhibits about how locks work, and offers tours. It's currently closed due to covid-19, but is well worth a visit in the future.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 2,
+        "deleted_at": null,
+        "created_at": "2020-06-23T02:27:02.000000Z",
+        "updated_at": "2020-06-25T02:06:50.000000Z"
+      },
+      {
+        "id": 42,
+        "tour_id": 6,
+        "stop_content": {
+          "title": {
+            "English": "First Street and Mill Ruins",
+            "placeholder": null
+          },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Step carefully across the bike lane to the other side of the bridge, and then continue until you've got a good look at the ruins down below.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.98049999999999926103555480949580669403076171875,
+                  "lng": -93.25538000000000238287611864507198333740234375
+                },
+                {
+                  "lat": 44.9803195543323539595803595148026943206787109375,
+                  "lng": -93.2563412189483500469577847979962825775146484375
+                },
+                {
+                  "lat": 44.98038999999999987267074175179004669189453125,
+                  "lng": -93.2573400000000134468791657127439975738525390625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.98038999999999987267074175179004669189453125,
+                "lng": -93.2573400000000134468791657127439975738525390625
+              }
+            },
+            { "text": { "English": "Water Power" }, "type": "separator" },
+            {
+              "text": {
+                "English": "We've talked a lot about the falls and the mills that they powered. But how did that actually work? After all, mills were built at this spot long before electricity.\u00a0\n\nTo power a mill from a waterfall, you begin by digging a canal above the falls. Water flows along this canal, and then enters a mill, where it drops down a long shaft. At the bottom of that shaft is a <hotword>turbine</hotword>, which spins as the water flows through it. A shaft leads up from the turbine into the mill, and from there belts and gears drive the machinery of the mill. Finally, the water leaves the mill through a tailrace, having dropped back to the new level of the river.\u00a0\n\nWhat you see before you are the ruins of a number of mills and the tailrace leading back to the river. We'll see the start of the canal a bit later on. This part of the river was once lined with a number of small mills. The twisted iron once supported a railway trestle to allow the mills to easily load and unload.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "4DIXfYGabhMNwKv781owhpoVXRN1VwUpfYWyozFe.jpg",
+                  "text": {
+                    "English": "View of the milling district, showing the railway trestle and small mills. Minnesota Historical Society.",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 3,
+        "deleted_at": null,
+        "created_at": "2020-06-25T02:16:39.000000Z",
+        "updated_at": "2020-06-25T02:32:17.000000Z"
+      },
+      {
+        "id": 43,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Mill Ruins Park", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "\u00a0Continue until the end of the bridge, then turn left cross over to the sign that says Mill Ruins Park.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.98038999999999987267074175179004669189453125,
+                  "lng": -93.2573400000000134468791657127439975738525390625
+                },
+                {
+                  "lat": 44.98056626431381488373517640866339206695556640625,
+                  "lng": -93.2580471038818501483547152020037174224853515625
+                },
+                {
+                  "lat": 44.98079772114858343456944567151367664337158203125,
+                  "lng": -93.25873911380767822265625
+                },
+                {
+                  "lat": 44.98058999999999940655470709316432476043701171875,
+                  "lng": -93.2588700000000017098500393331050872802734375
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.98058999999999940655470709316432476043701171875,
+                "lng": -93.2588700000000017098500393331050872802734375
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            {
+              "text": {
+                "English": "If you've got some extra time, you can take the walking path immediately to the left of the bride to continue down to Mill Ruins Park, where you can explore the ruins and the tailraces. This is also the path to get to the lock visitor center. The large stone donut near the sign for the park is a milling stone, used to grind wheat into flour.\n\nLook to the south - it's hard to miss the Washburn A Flour Mill, with the Gold Medal Flour sign. Once the biggest flour mill in the world, today it is home to the fantastic Mill City Museum. The museum offers an in-depth look at the history of flour milling, as well as tours and a great view.\n\nYou might also spot the wood plans that make up the pedestrian path. The canal that powered the mills on this side of the river ran directly underneath what is now West River Parkway. It was covered with thick planks, allowing truck and rail traffic to reach the mills.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "vEaQUdBWiUDLAgRR9HYASgPmcOyyaUmjjp5LrQWV.jpg",
+                  "text": {
+                    "English": "Mill District including Washburn A Mill, 1933. Hennepin County Library",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 4,
+        "deleted_at": null,
+        "created_at": "2020-06-25T02:42:34.000000Z",
+        "updated_at": "2020-07-01T00:16:53.000000Z"
+      },
+      {
+        "id": 44,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Headrace", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Head upriver, across the parking lot at the end of the Stone Arch Bridge. At the northern edge of the parking lot, you can see the headrace.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.98058999999999940655470709316432476043701171875,
+                  "lng": -93.2588700000000017098500393331050872802734375
+                },
+                {
+                  "lat": 44.9811600000000026966517907567322254180908203125,
+                  "lng": -93.25947999999999638021108694374561309814453125
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9811600000000026966517907567322254180908203125,
+                "lng": -93.25947999999999638021108694374561309814453125
+              }
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "A8s7sUObe3pmKA599Bbk1BOQw0c1Ha2MUWs1XwXx.jpg",
+                  "text": {
+                    "English": "The headrace as it exists today",
+                    "placeholder": null
+                  }
+                }
+              ]
+            },
+            { "text": { "English": "Headrace History" }, "type": "separator" },
+            {
+              "text": {
+                "English": "We've already seen the tailraces, where water re-entered the river after providing power to the mills. You're now standing at the headrace, where water entered the canal that fed all the mills. Notice that you're standing above the falls now, so the water entering the canal here is much higher than where it exits.\u00a0\n\nUnderneath the parking lot, more history lies waiting for the future. The gatehouse, a building that managed the flow of the water in the canal, was demolished during the construction of the lock and dam in the 1960s. But much of it remains, buried under the modern parking lot. Historians hope to one day excavate and restore the structure.",
+                "placeholder": null
+              },
+              "type": "guide"
+            }
+          ]
+        },
+        "sort_order": 5,
+        "deleted_at": null,
+        "created_at": "2020-07-01T00:20:05.000000Z",
+        "updated_at": "2020-07-01T00:31:03.000000Z"
+      },
+      {
+        "id": 45,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Hennepin Avenue Bridge", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": {
+                "English": "This is the longest hike of the tour. Keep walking upriver towards the Hennepin Avenue Bridge. Along the way, you'll pass the main Minneapolis Post Office on your left. It's hard to miss - it's one of the biggest buildings in the Twin Cities. There's no truth to the rumor that bi-planes landed on the roof for airmail deliveries though.\n\nWhen you get to the bridge, look for the large iron anchors underneath. They're tough to miss.",
+                "placeholder": null
+              },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9811600000000026966517907567322254180908203125,
+                  "lng": -93.25947999999999638021108694374561309814453125
+                },
+                {
+                  "lat": 44.9818981371929993429148453287780284881591796875,
+                  "lng": -93.2608687877655171405422152020037174224853515625
+                },
+                {
+                  "lat": 44.9828239795041184834190062247216701507568359375,
+                  "lng": -93.2622206211089945782077847979962825775146484375
+                },
+                {
+                  "lat": 44.98476000000000141199052450247108936309814453125,
+                  "lng": -93.2647300000000001318767317570745944976806640625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.98476000000000141199052450247108936309814453125,
+                "lng": -93.2647300000000001318767317570745944976806640625
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            {
+              "text": {
+                "English": "This believed to be the site of the first permanent crossing anywhere on the \u00a0Mississippi. The first bridge here was built in 1855\\. Later bridges were built in 1876, 1891, and the current bridge in 1990\\. This is a major thoroughfare, connecting downtown Minneapolis with what was then the Village of St. Anthony, and today is northeast Minneapolis.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            {
+              "type": "gallery",
+              "images": [
+                {
+                  "src": "0b3ZxSKrXCs8b5aoO9xP7kt2PZ6IsNa4e7u8HzSh.jpg",
+                  "text": {
+                    "English": "First bridge, circa 1865. Minnesota Historical Society",
+                    "placeholder": null
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "sort_order": 6,
+        "deleted_at": null,
+        "created_at": "2020-07-01T00:37:16.000000Z",
+        "updated_at": "2020-07-01T00:40:01.000000Z"
+      },
+      {
+        "id": 46,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Nicollete Island", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": { "placeholder": null },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.98476000000000141199052450247108936309814453125,
+                  "lng": -93.2647300000000001318767317570745944976806640625
+                },
+                {
+                  "lat": 44.985715022867196921652066521346569061279296875,
+                  "lng": -93.2626390457153462421047152020037174224853515625
+                },
+                {
+                  "lat": 44.98518411548251805243126000277698040008544921875,
+                  "lng": -93.2618236541747904766452847979962825775146484375
+                },
+                {
+                  "lat": 44.9856300000000004501998773775994777679443359375,
+                  "lng": -93.2604500000000058435034588910639286041259765625
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.9856300000000004501998773775994777679443359375,
+                "lng": -93.2604500000000058435034588910639286041259765625
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            { "text": { "placeholder": null }, "type": "guide" }
+          ]
+        },
+        "sort_order": 7,
+        "deleted_at": null,
+        "created_at": "2020-07-01T00:40:30.000000Z",
+        "updated_at": "2020-07-01T00:41:50.000000Z"
+      },
+      {
+        "id": 47,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Pillsbury A Mill", "placeholder": null },
+          "stages": [
+            { "text": { "English": "Navigation" }, "type": "separator" },
+            {
+              "text": { "placeholder": null },
+              "type": "navigation",
+              "route": [
+                {
+                  "lat": 44.9856300000000004501998773775994777679443359375,
+                  "lng": -93.2604500000000058435034588910639286041259765625
+                },
+                {
+                  "lat": 44.98612451735603912084116018377244472503662109375,
+                  "lng": -93.2586050033569478046047152020037174224853515625
+                },
+                {
+                  "lat": 44.9853659631113487193943001329898834228515625,
+                  "lng": -93.2576394081115580547702847979962825775146484375
+                },
+                {
+                  "lat": 44.98360000000000269437805400229990482330322265625,
+                  "lng": -93.2532800000000037243808037601411342620849609375
+                }
+              ],
+              "buttonTitle": { "English": "Show Map" },
+              "targetPoint": {
+                "lat": 44.98360000000000269437805400229990482330322265625,
+                "lng": -93.2532800000000037243808037601411342620849609375
+              }
+            },
+            { "text": { "English": "Guide" }, "type": "separator" },
+            { "text": { "placeholder": null }, "type": "guide" }
+          ]
+        },
+        "sort_order": 8,
+        "deleted_at": null,
+        "created_at": "2020-07-01T00:42:32.000000Z",
+        "updated_at": "2020-07-01T00:42:32.000000Z"
+      },
+      {
+        "id": 28,
+        "tour_id": 6,
+        "stop_content": {
+          "title": { "English": "Finish", "placeholder": null },
+          "stages": [
+            {
+              "text": {
+                "English": "You've made it to the end of the tour. We hope you enjoyed this experience. Please leave us feedback on your experience.",
+                "placeholder": null
+              },
+              "type": "guide"
+            },
+            { "text": { "placeholder": null }, "type": "feedback" },
+            { "text": { "English": "Hotwords" }, "type": "separator" },
+            {
+              "text": {
+                "English": "Enter your email below to have a copy of this content emailed to you.",
+                "placeholder": null
+              },
+              "type": "hotwords-summary",
+              "request_email": true
+            }
+          ]
+        },
+        "sort_order": 9,
+        "deleted_at": null,
+        "created_at": "2020-06-01T16:07:32.000000Z",
+        "updated_at": "2020-07-01T00:42:32.000000Z"
+      }
+    ],
+    "users": [
+      {
+        "id": 1,
+        "name": null,
+        "email": "mcfa0086@umn.edu",
+        "provider": "shibboleth",
+        "unique_id": "3dci3yxub",
+        "password": null,
+        "remember_token": null,
+        "created_at": "2020-05-08T19:15:48.000000Z",
+        "updated_at": "2020-05-08T19:15:48.000000Z",
+        "pivot": { "tour_id": 6, "user_id": 1 }
+      }
+    ]
+  }
+]

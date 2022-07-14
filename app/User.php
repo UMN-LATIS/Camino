@@ -7,18 +7,20 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Spatie\Permission\Models\Permission;
 use Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
     use \Lab404\Impersonate\Models\Impersonate;
+    use HasFactory;
 
     protected static function boot()
     {
         parent::boot();
 
-        static::created(function($user) {
+        static::created(function ($user) {
             $user->assignRole("user");
         });
     }
@@ -32,11 +34,13 @@ class User extends Authenticatable
         'name', 'email', 'unique_id', "provider"
     ];
 
-    public function tours() {
+    public function tours()
+    {
         return $this->belongsToMany(Tour::class);
     }
 
-    public function getAllPermissionsAttribute() {
+    public function getAllPermissionsAttribute()
+    {
         $permissions = [];
         foreach (Permission::all() as $permission) {
             if ($this->can($permission->name)) {
@@ -45,5 +49,4 @@ class User extends Authenticatable
         }
         return $permissions;
     }
-
 }

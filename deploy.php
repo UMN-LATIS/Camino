@@ -1,13 +1,15 @@
 <?php
+
 namespace Deployer;
+
 require 'recipe/laravel.php';
-require 'recipe/npm.php';
+require 'contrib/yarn.php';
 
 // Configuration
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
 
-set('repository', 'git@github.com:cmcfadden/Ollantaytambo.git');
+set('repository', 'https://github.com/UMN-LATIS/Camino.git');
 
 set('writable_use_sudo', true);
 add('shared_files', []);
@@ -15,46 +17,40 @@ add('shared_dirs', []);
 
 add('writable_dirs', []);
 
+// ignore specific platform requirements like php 7.4 or php 8.1
+set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs');
+
 // Servers
 
 host('dev')
-    ->hostname("cla-camino-dev.oit.umn.edu")
-    ->user('mcfa0086')
-    ->stage('development')
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-	->set('deploy_path', '/swadm/var/www/html/');
+    ->set('hostname', 'cla-camino-dev.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'development'])
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
+    ->set('deploy_path', '/swadm/var/www/html/');
 
 host('stage')
-    ->hostname("cla-camino-tst.oit.umn.edu")
-    ->user('mcfa0086')
-    ->stage('stage')
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
+    ->set('hostname', 'cla-camino-tst.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'stage'])
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
     ->set('deploy_path', '/swadm/var/www/html/');
 
 host('prod')
-    ->hostname("cla-camino-prd.oit.umn.edu")
-    ->user('mcfa0086')
-    ->stage('production')
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-	->set('deploy_path', '/swadm/var/www/html/');
+    ->set('hostname', 'cla-camino-prd.oit.umn.edu')
+    ->set('remote_user', 'swadm')
+    ->set('labels', ['stage' => 'production'])
+    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
+    ->set('deploy_path', '/swadm/var/www/html/');
 
-task('assets:generate', function() {
-  cd('{{release_path}}');
-  run('npm run production');
+task('assets:generate', function () {
+    cd('{{release_path}}');
+    run('yarn production');
 })->desc('Assets generation');
-
-task('fix_storage_perms', '
-    touch storage/logs/laravel.log
-    sudo chown apache storage/logs/laravel.log
-    sudo chgrp apache storage/logs/laravel.log
-')->desc("Fix Apache Logs");
-after('artisan:migrate', 'fix_storage_perms');
-
 
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'artisan:migrate');
-after('deploy:update_code', 'npm:install');
-after('npm:install', 'assets:generate');
-
+after('deploy:update_code', 'yarn:install');
+after('deploy:shared', 'assets:generate');

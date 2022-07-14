@@ -8,9 +8,9 @@ use App\Tour;
 use App\Feedback;
 
 
-use App\Http\Resources\Tour as TourResource;
+use App\Http\Resources\TourResource;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\HotwordDigest;
+use App\Mail\DeepDiveDigest;
 
 
 class HomeController extends Controller
@@ -74,8 +74,8 @@ class HomeController extends Controller
         return redirect("/");
     }
     
-    public function emailHotwords(Request $request) {
-        Mail::to($request->input("email"))->send(new HotwordDigest($request->input("hotwords")));
+    public function emailDeepDives(Request $request) {
+        Mail::to($request->input("email"))->send(new DeepDiveDigest($request->input("deepDives")));
     }
 
     public function storeFeedback(Tour $tour, Request $request) {

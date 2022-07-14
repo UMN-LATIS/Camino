@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+/public
+/storage
+/docs
+dist
+.cache
+.temp
+/cypress/**/examples
+/cypress/**/routes.json

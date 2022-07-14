@@ -1,0 +1,32 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css?family=Nunito");
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+html,
+body {
+  height: 100%;
+  font-family: "Nunito", sans-serif;
+  font-weight: 400;
+  background: #f3f4f6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--bs-gray-900);
+  text-decoration: none;
+}
+
+a:hover:not(.btn) {
+  text-decoration: underline;
+}
+
+/* Move Handle */
+.handle {
+  cursor: move;
+}

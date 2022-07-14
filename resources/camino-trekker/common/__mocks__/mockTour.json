@@ -1,0 +1,628 @@
+{
+  "id": 6,
+  "active": 1,
+  "public": 1,
+  "title": "Stone Arch Bridge",
+  "author": {
+    "name": "Colin McFadden",
+    "title": "Adjunct, Political Science",
+    "institution": "University of Minnesota",
+    "email": "mcfa0086@umn.edu"
+  },
+  "tour_content": {
+    "hotWords": [],
+    "languages": ["en"],
+    "use_template": true,
+    "custom_base_map": {
+      "image": null,
+      "coords": {
+        "upperleft": { "lat": null, "lng": null },
+        "lowerright": { "lat": null, "lng": null }
+      },
+      "use_basemap": false
+    }
+  },
+  "geocoded": {
+    "city": "Minneapolis",
+    "state": "Minnesota",
+    "country": "United States",
+    "locality": "Minneapolis",
+    "postalCode": "55414",
+    "neighborhood": "Marcy Holmes"
+  },
+  "walking": 1,
+  "driving": 0,
+  "biking": 0,
+  "start_location": {
+    "lat": 44.9807899999999989404386724345386028289794921875,
+    "lng": -93.253240000000005238689482212066650390625
+  },
+  "style": "entire_tour",
+  "stops": [
+    {
+      "id": 27,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Start", "placeholder": null },
+        "image": {
+          "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Minneapolis-MN-stone-arch-bridge.jpg/2560px-Minneapolis-MN-stone-arch-bridge.jpg",
+          "alt": {
+            "en": "Stone Arch Bridge"
+          }
+        },
+        "stages": [
+          { "type": "language" },
+          {
+            "text": {
+              "en": "This tour of the Stone Arch Bridge and St. Anthony Main will take you on a trip through Minnesota history, from its geological origins through the modern day.\n\nYou'll start the tour in the middle of the Stone Arch Bridge, then continue on a loop of St. Anthony Main, the Hennepin Avenue Bridge, and West River Parkway. You can park on either side of the river - there's a lot just north of the bridge on the downtown side of the bridge, and plenty of street parking on the St. Anthony Main side.\n\nUse the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material.\n\nAs you move through your tour, you might come across \"hotwords\". These are underlined words that you can tap to mark. At the end of your tour, we'll give you a list of the words you marked, with additional information so you can dive deeper.\n\nAlong the way, you'll see some interpretive signage from the St. Anthony Falls Heritage Trail. These have some great photos and additional details, so be sure to check them out.",
+              "placeholder": null
+            },
+            "type": "guide"
+          }
+        ]
+      },
+      "sort_order": 0,
+      "deleted_at": null,
+      "created_at": "2020-06-01T16:07:32.000000Z",
+      "updated_at": "2020-06-23T02:06:30.000000Z"
+    },
+    {
+      "id": 29,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Stone Arch Bridge", "placeholder": null },
+        "subtitle": { "en": "5 min walk" },
+        "image": {
+          "src": "https://chorus.stimg.co/21618912/1CURIOUS110419.jpg?w=1400&h=600&format=auto%2Ccompress&cs=tinysrgb&auto=compress&crop=faces&dpr=2",
+          "alt": {
+            "en": "Great Northern Railway's first Empire Builder is pictured on the Stone Arch Bridge crossing the Mississippi River, likely in the 1920s or 1930s."
+          }
+        },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Head to the middle of the bridge. Stop somewhere with a good view of the falls.\n\nOn a beautiful summer weekend, the bridge can be very busy, so be sure to stay out of the bike lanes!",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.9808000000000021145751816220581531524658203125,
+                "lng": -93.2532000000000067529981606639921665191650390625
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.9808000000000021145751816220581531524658203125,
+              "lng": -93.2532000000000067529981606639921665191650390625
+            }
+          },
+          { "text": { "en": "Get your bearings" }, "type": "separator" },
+          {
+            "text": {
+              "en": "The Stone Arch Bridge was built in 1883 by railroad tycoon <hotword>James J. Hill</hotword>. The bridge was built to link the flour milling operations of Minneapolis with the agricultural field of the Dakotas and the river shipping terminals of St. Paul. The bridge closed to trains in 1978 and became a pedestrian bridge in 1994.\n\nBefore we dive into our tour, take some time to orient yourself. Facing the waterfall, downtown Minneapolis is to your left. To your right, the commercial district along the river is called St. Anthony Main. St. Anthony was originally a separate city, and was annexed in 1872 creating a neighborhood called \"northeast\".\u00a0\n\nIf you turn around, you'll be looking southeast, where the river flows under the <hotword>35W bridge</hotword> and past the University of Minnesota, before continuing into St. Paul on its way to the Gulf of Mexico.\n\nUse the \"Look Around\" button below for an Augmented Reality view of the area.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          {
+            "text": { "placeholder": null },
+            "type": "ar",
+            "waypoints": [
+              {
+                "text": { "en": "St. Anthony Falls", "placeholder": null },
+                "altitude": null,
+                "location": {
+                  "lat": 44.9814199999999999590727384202182292938232421875,
+                  "lng": -93.2552699999999958890839479863643646240234375
+                }
+              },
+              {
+                "text": { "en": "St. Anthony Main", "placeholder": null },
+                "altitude": null,
+                "location": {
+                  "lat": 44.98293000000000319005266646854579448699951171875,
+                  "lng": -93.2517600000000044246917241252958774566650390625
+                }
+              },
+              {
+                "text": { "en": "Guthrie Theater", "placeholder": null },
+                "altitude": null,
+                "location": {
+                  "lat": 44.97820999999999713736542616970837116241455078125,
+                  "lng": -93.2555200000000041882231016643345355987548828125
+                }
+              },
+              {
+                "text": { "en": "35W Bridge", "placeholder": null },
+                "altitude": null,
+                "location": {
+                  "lat": 44.97894999999999754436430521309375762939453125,
+                  "lng": -93.2451899999999938017936074174940586090087890625
+                }
+              },
+              {
+                "text": {
+                  "en": "University of Minnesota",
+                  "placeholder": null
+                },
+                "altitude": "500",
+                "location": {
+                  "lat": 44.97655999999999920646587270312011241912841796875,
+                  "lng": -93.2350699999999932288119453005492687225341796875
+                }
+              }
+            ],
+            "buttonTitle": { "en": "Look Around" }
+          },
+          {
+            "text": {
+              "en": "About St. Anthony Falls",
+              "placeholder": null
+            },
+            "type": "separator"
+          },
+          {
+            "text": {
+              "en": "The waterfall in front of you is, with little exaggeration, the reason that Minneapolis exists. The 50 foot drop the river makes at this spot provided the power to run lumber mills, flour mills, and later, hydroelectric power plants.\n\nSt. Anthony Falls hasn't always looked the way it does today, and it hasn't always been where it is today. When Europeans first arrived in the area in the late 17th century, the falls were hundreds of feet downriver (well behind you as you face the falls). Made of <hotword>hard limestone on stop of soft sandstone</hotword>, the falls were rapidly eroding their way upriver.\n\nBeginning in the 19th century, industrialists identified the need to prevent the falls from continuing their natural erosion. The dam you see today was built in 1963\\. Check out the photos below for a view of the falls before they were tamed.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "src": "AHCI0pe9aT58PAxKDOULreUaXgBjsBU6UaBMr5a2.jpg",
+                "text": {
+                  "en": "1863 View - Hennepin County Library",
+                  "placeholder": null
+                }
+              },
+              {
+                "src": "3FsWPZoWT54VZkTNqKJcYfIxEIUlfmuFW9LR4CcS.jpg",
+                "text": {
+                  "en": "1865 View, including a lumber mill. Hennepin County Library",
+                  "placeholder": null
+                }
+              },
+              {
+                "src": "qBxqO1trAOoOUwjfYbllN3DPemHghqz1YZSaLF1j.jpg",
+                "text": {
+                  "en": "1870s, after the construction of the first apron to protect the falls. Hennepin County Library",
+                  "placeholder": null
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sort_order": 1,
+      "deleted_at": null,
+      "created_at": "2020-06-01T16:19:45.000000Z",
+      "updated_at": "2020-07-01T14:14:02.000000Z"
+    },
+    {
+      "id": 41,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Lock and Dam", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Facing the falls, turn left and head towards downtown Minneapolis. Stop when the walkway widens a little bit, and the railing separating the bike lanes from the walkway begins.",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.9808000000000021145751816220581531524658203125,
+                "lng": -93.2532000000000067529981606639921665191650390625
+              },
+              {
+                "lat": 44.98049999999999926103555480949580669403076171875,
+                "lng": -93.25538000000000238287611864507198333740234375
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.98049999999999926103555480949580669403076171875,
+              "lng": -93.25538000000000238287611864507198333740234375
+            }
+          },
+          { "text": { "en": "Guide" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Notice how this section of the bridge is a little different? This \"arch\" of the Stone Arch Bridge was removed to make way for boat traffic using the lock and dam system that's in front of you now. The lock and dam were completed in 1963, allowing commercial traffic to continue upriver for the first time, allowing for the creation of the <hotword>Upper Harbor Terminal</hotword>.\u00a0\n\nThe lock was closed in 2015 to prevent the spread of the invasive Asian carp.\u00a0\n\nThe lock has a visitor center with exhibits about how locks work, and offers tours. It's currently closed due to covid-19, but is well worth a visit in the future.",
+              "placeholder": null
+            },
+            "type": "guide"
+          }
+        ]
+      },
+      "sort_order": 2,
+      "deleted_at": null,
+      "created_at": "2020-06-23T02:27:02.000000Z",
+      "updated_at": "2020-06-25T02:06:50.000000Z"
+    },
+    {
+      "id": 42,
+      "tour_id": 6,
+      "stop_content": {
+        "title": {
+          "en": "First Street and Mill Ruins",
+          "placeholder": null
+        },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Step carefully across the bike lane to the other side of the bridge, and then continue until you've got a good look at the ruins down below.",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.98049999999999926103555480949580669403076171875,
+                "lng": -93.25538000000000238287611864507198333740234375
+              },
+              {
+                "lat": 44.9803195543323539595803595148026943206787109375,
+                "lng": -93.2563412189483500469577847979962825775146484375
+              },
+              {
+                "lat": 44.98038999999999987267074175179004669189453125,
+                "lng": -93.2573400000000134468791657127439975738525390625
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.98038999999999987267074175179004669189453125,
+              "lng": -93.2573400000000134468791657127439975738525390625
+            }
+          },
+          { "text": { "en": "Water Power" }, "type": "separator" },
+          {
+            "text": {
+              "en": "We've talked a lot about the falls and the mills that they powered. But how did that actually work? After all, mills were built at this spot long before electricity.\u00a0\n\nTo power a mill from a waterfall, you begin by digging a canal above the falls. Water flows along this canal, and then enters a mill, where it drops down a long shaft. At the bottom of that shaft is a <hotword>turbine</hotword>, which spins as the water flows through it. A shaft leads up from the turbine into the mill, and from there belts and gears drive the machinery of the mill. Finally, the water leaves the mill through a tailrace, having dropped back to the new level of the river.\u00a0\n\nWhat you see before you are the ruins of a number of mills and the tailrace leading back to the river. We'll see the start of the canal a bit later on. This part of the river was once lined with a number of small mills. The twisted iron once supported a railway trestle to allow the mills to easily load and unload.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "src": "4DIXfYGabhMNwKv781owhpoVXRN1VwUpfYWyozFe.jpg",
+                "text": {
+                  "en": "View of the milling district, showing the railway trestle and small mills. Minnesota Historical Society.",
+                  "placeholder": null
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sort_order": 3,
+      "deleted_at": null,
+      "created_at": "2020-06-25T02:16:39.000000Z",
+      "updated_at": "2020-06-25T02:32:17.000000Z"
+    },
+    {
+      "id": 43,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Mill Ruins Park", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "\u00a0Continue until the end of the bridge, then turn left cross over to the sign that says Mill Ruins Park.",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.98038999999999987267074175179004669189453125,
+                "lng": -93.2573400000000134468791657127439975738525390625
+              },
+              {
+                "lat": 44.98056626431381488373517640866339206695556640625,
+                "lng": -93.2580471038818501483547152020037174224853515625
+              },
+              {
+                "lat": 44.98079772114858343456944567151367664337158203125,
+                "lng": -93.25873911380767822265625
+              },
+              {
+                "lat": 44.98058999999999940655470709316432476043701171875,
+                "lng": -93.2588700000000017098500393331050872802734375
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.98058999999999940655470709316432476043701171875,
+              "lng": -93.2588700000000017098500393331050872802734375
+            }
+          },
+          { "text": { "en": "Guide" }, "type": "separator" },
+          {
+            "text": {
+              "en": "If you've got some extra time, you can take the walking path immediately to the left of the bride to continue down to Mill Ruins Park, where you can explore the ruins and the tailraces. This is also the path to get to the lock visitor center. The large stone donut near the sign for the park is a milling stone, used to grind wheat into flour.\n\nLook to the south - it's hard to miss the Washburn A Flour Mill, with the Gold Medal Flour sign. Once the biggest flour mill in the world, today it is home to the fantastic Mill City Museum. The museum offers an in-depth look at the history of flour milling, as well as tours and a great view.\n\nYou might also spot the wood plans that make up the pedestrian path. The canal that powered the mills on this side of the river ran directly underneath what is now West River Parkway. It was covered with thick planks, allowing truck and rail traffic to reach the mills.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "src": "vEaQUdBWiUDLAgRR9HYASgPmcOyyaUmjjp5LrQWV.jpg",
+                "text": {
+                  "en": "Mill District including Washburn A Mill, 1933. Hennepin County Library",
+                  "placeholder": null
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sort_order": 4,
+      "deleted_at": null,
+      "created_at": "2020-06-25T02:42:34.000000Z",
+      "updated_at": "2020-07-01T00:16:53.000000Z"
+    },
+    {
+      "id": 44,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Headrace", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Head upriver, across the parking lot at the end of the Stone Arch Bridge. At the northern edge of the parking lot, you can see the headrace.",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.98058999999999940655470709316432476043701171875,
+                "lng": -93.2588700000000017098500393331050872802734375
+              },
+              {
+                "lat": 44.9811600000000026966517907567322254180908203125,
+                "lng": -93.25947999999999638021108694374561309814453125
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.9811600000000026966517907567322254180908203125,
+              "lng": -93.25947999999999638021108694374561309814453125
+            }
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "src": "A8s7sUObe3pmKA599Bbk1BOQw0c1Ha2MUWs1XwXx.jpg",
+                "text": {
+                  "en": "The headrace as it exists today",
+                  "placeholder": null
+                }
+              }
+            ]
+          },
+          { "text": { "en": "Headrace History" }, "type": "separator" },
+          {
+            "text": {
+              "en": "We've already seen the tailraces, where water re-entered the river after providing power to the mills. You're now standing at the headrace, where water entered the canal that fed all the mills. Notice that you're standing above the falls now, so the water entering the canal here is much higher than where it exits.\u00a0\n\nUnderneath the parking lot, more history lies waiting for the future. The gatehouse, a building that managed the flow of the water in the canal, was demolished during the construction of the lock and dam in the 1960s. But much of it remains, buried under the modern parking lot. Historians hope to one day excavate and restore the structure.",
+              "placeholder": null
+            },
+            "type": "guide"
+          }
+        ]
+      },
+      "sort_order": 5,
+      "deleted_at": null,
+      "created_at": "2020-07-01T00:20:05.000000Z",
+      "updated_at": "2020-07-01T00:31:03.000000Z"
+    },
+    {
+      "id": 45,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Hennepin Avenue Bridge", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": {
+              "en": "This is the longest hike of the tour. Keep walking upriver towards the Hennepin Avenue Bridge. Along the way, you'll pass the main Minneapolis Post Office on your left. It's hard to miss - it's one of the biggest buildings in the Twin Cities. There's no truth to the rumor that bi-planes landed on the roof for airmail deliveries though.\n\nWhen you get to the bridge, look for the large iron anchors underneath. They're tough to miss.",
+              "placeholder": null
+            },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.9811600000000026966517907567322254180908203125,
+                "lng": -93.25947999999999638021108694374561309814453125
+              },
+              {
+                "lat": 44.9818981371929993429148453287780284881591796875,
+                "lng": -93.2608687877655171405422152020037174224853515625
+              },
+              {
+                "lat": 44.9828239795041184834190062247216701507568359375,
+                "lng": -93.2622206211089945782077847979962825775146484375
+              },
+              {
+                "lat": 44.98476000000000141199052450247108936309814453125,
+                "lng": -93.2647300000000001318767317570745944976806640625
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.98476000000000141199052450247108936309814453125,
+              "lng": -93.2647300000000001318767317570745944976806640625
+            }
+          },
+          { "text": { "en": "Guide" }, "type": "separator" },
+          {
+            "text": {
+              "en": "This believed to be the site of the first permanent crossing anywhere on the \u00a0Mississippi. The first bridge here was built in 1855\\. Later bridges were built in 1876, 1891, and the current bridge in 1990\\. This is a major thoroughfare, connecting downtown Minneapolis with what was then the Village of St. Anthony, and today is northeast Minneapolis.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          {
+            "type": "gallery",
+            "images": [
+              {
+                "src": "0b3ZxSKrXCs8b5aoO9xP7kt2PZ6IsNa4e7u8HzSh.jpg",
+                "text": {
+                  "en": "First bridge, circa 1865. Minnesota Historical Society",
+                  "placeholder": null
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "sort_order": 6,
+      "deleted_at": null,
+      "created_at": "2020-07-01T00:37:16.000000Z",
+      "updated_at": "2020-07-01T00:40:01.000000Z"
+    },
+    {
+      "id": 46,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Nicollete Island", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": { "placeholder": null },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.98476000000000141199052450247108936309814453125,
+                "lng": -93.2647300000000001318767317570745944976806640625
+              },
+              {
+                "lat": 44.985715022867196921652066521346569061279296875,
+                "lng": -93.2626390457153462421047152020037174224853515625
+              },
+              {
+                "lat": 44.98518411548251805243126000277698040008544921875,
+                "lng": -93.2618236541747904766452847979962825775146484375
+              },
+              {
+                "lat": 44.9856300000000004501998773775994777679443359375,
+                "lng": -93.2604500000000058435034588910639286041259765625
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.9856300000000004501998773775994777679443359375,
+              "lng": -93.2604500000000058435034588910639286041259765625
+            }
+          },
+          { "text": { "en": "Guide" }, "type": "separator" },
+          { "text": { "placeholder": null }, "type": "guide" }
+        ]
+      },
+      "sort_order": 7,
+      "deleted_at": null,
+      "created_at": "2020-07-01T00:40:30.000000Z",
+      "updated_at": "2020-07-01T00:41:50.000000Z"
+    },
+    {
+      "id": 47,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Pillsbury A Mill", "placeholder": null },
+        "stages": [
+          { "text": { "en": "Navigation" }, "type": "separator" },
+          {
+            "text": { "placeholder": null },
+            "type": "navigation",
+            "route": [
+              {
+                "lat": 44.9856300000000004501998773775994777679443359375,
+                "lng": -93.2604500000000058435034588910639286041259765625
+              },
+              {
+                "lat": 44.98612451735603912084116018377244472503662109375,
+                "lng": -93.2586050033569478046047152020037174224853515625
+              },
+              {
+                "lat": 44.9853659631113487193943001329898834228515625,
+                "lng": -93.2576394081115580547702847979962825775146484375
+              },
+              {
+                "lat": 44.98360000000000269437805400229990482330322265625,
+                "lng": -93.2532800000000037243808037601411342620849609375
+              }
+            ],
+            "buttonTitle": { "en": "Show Map" },
+            "targetPoint": {
+              "lat": 44.98360000000000269437805400229990482330322265625,
+              "lng": -93.2532800000000037243808037601411342620849609375
+            }
+          },
+          { "text": { "en": "Guide" }, "type": "separator" },
+          { "text": { "placeholder": null }, "type": "guide" }
+        ]
+      },
+      "sort_order": 8,
+      "deleted_at": null,
+      "created_at": "2020-07-01T00:42:32.000000Z",
+      "updated_at": "2020-07-01T00:42:32.000000Z"
+    },
+    {
+      "id": 28,
+      "tour_id": 6,
+      "stop_content": {
+        "title": { "en": "Finish", "placeholder": null },
+        "stages": [
+          {
+            "text": {
+              "en": "You've made it to the end of the tour. We hope you enjoyed this experience. Please leave us feedback on your experience.",
+              "placeholder": null
+            },
+            "type": "guide"
+          },
+          { "text": { "placeholder": null }, "type": "feedback" },
+          { "text": { "en": "Hotwords" }, "type": "separator" },
+          {
+            "text": {
+              "en": "Enter your email below to have a copy of this content emailed to you.",
+              "placeholder": null
+            },
+            "type": "hotwords-summary",
+            "request_email": true
+          }
+        ]
+      },
+      "sort_order": 9,
+      "deleted_at": null,
+      "created_at": "2020-06-01T16:07:32.000000Z",
+      "updated_at": "2020-07-01T00:42:32.000000Z"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": null,
+      "email": "mcfa0086@umn.edu",
+      "provider": "shibboleth",
+      "unique_id": "3dci3yxub",
+      "password": null,
+      "remember_token": null,
+      "created_at": "2020-05-08T19:15:48.000000Z",
+      "updated_at": "2020-05-08T19:15:48.000000Z",
+      "pivot": { "tour_id": 6, "user_id": 1 }
+    }
+  ]
+}

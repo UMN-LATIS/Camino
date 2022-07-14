@@ -19,9 +19,6 @@
       <component
         :is="componentName"
         :stage="stage"
-        :languages="tour.tour_content.languages"
-        :tour="tour"
-        :stop="stop"
         :tourId="tourId"
         :stopId="stopId"
         @update="(updatedStage) => $emit('update', updatedStage)"
@@ -44,12 +41,10 @@ import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
 import Quiz from "./stages/Quiz.vue";
-import { Stage, StageType, Tour, TourStop } from "@/types";
+import { Stage, StageType } from "@/types";
 
 interface Props {
   stage: Stage;
-  tour: Tour;
-  stop: TourStop;
   tourId: number;
   stopId: number;
 }

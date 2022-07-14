@@ -12,14 +12,17 @@
 </template>
 
 <script setup lang="ts">
-import { DeepDiveSummaryStage, Locale, Tour } from "@/types";
+import { DeepDiveSummaryStage } from "@/types";
 import LanguageText from "../../LanguageText.vue";
+import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
 const props = defineProps<{
   stage: DeepDiveSummaryStage;
-  languages: Locale[];
-  tour: Tour;
+  tourId: number;
 }>();
+
+const creatorStore = useCreatorStore();
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits<{
   (eventName: "update", updatedStage: DeepDiveSummaryStage);

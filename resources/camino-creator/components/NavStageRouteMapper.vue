@@ -8,7 +8,7 @@
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
     >
-      <div v-for="stop in otherStops" :key="stop.id">
+      <div v-for="stop in otherStops" v-once :key="stop.id">
         <MapPolyline
           :id="`otherStopRoute-${stop.id}`"
           :positions="stop.route || []"
@@ -188,9 +188,11 @@ const previousStop = computed((): Maybe<MappedStop> => {
   );
 });
 
-const otherStops = computed((): MappedStop[] =>
-  mappedStops.value.filter((stop) => stop.id !== props.stopId)
-);
+// calculate this once on mount
+const otherStops = computed((): MappedStop[] => {
+  if (otherStops.value?.length) return otherStops.value;
+  return mappedStops.value.filter((stop) => stop.id !== props.stopId);
+});
 
 const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   if (!props.targetPoint) return null;

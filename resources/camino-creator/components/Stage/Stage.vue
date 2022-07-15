@@ -41,10 +41,10 @@ import LanguageSelector from "./stages/LanguageSelector.vue";
 import Navigation from "./stages/Navigation.vue";
 import Separator from "./stages/Separator.vue";
 import Quiz from "./stages/Quiz.vue";
-import { Stage, StageType } from "@/types";
+import { CoreStage, StageType } from "@/types";
 
 interface Props {
-  stage: Stage;
+  stage: CoreStage;
   tourId: number;
   stopId: number;
 }
@@ -52,8 +52,8 @@ interface Props {
 const props = defineProps<Props>();
 
 defineEmits<{
-  (eventName: "remove", stage: Stage);
-  (eventName: "update", stage: Stage);
+  (eventName: "remove", stage: CoreStage);
+  (eventName: "update", stage: CoreStage);
 }>();
 
 const componentLookup = {

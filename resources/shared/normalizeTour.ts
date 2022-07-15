@@ -3,7 +3,7 @@ import {
   Tour,
   NavigationStage,
   LngLat,
-  Stage,
+  CoreStage,
   TourStop,
 } from "@/types";
 import getStagesFromStopWhere from "./getStagesFromStopWhere";
@@ -90,7 +90,7 @@ export default function normalizeTour(tour: Tour): Tour {
 
     // create a list of updated stages. Use the updated Nav if it
     // exists, otherwise, just use the original stage
-    const updatedStages: Stage[] = stop.stop_content.stages.map(
+    const updatedStages: CoreStage[] = stop.stop_content.stages.map(
       (stage) => updatedNavStageLookup[stage.id] ?? stage
     );
 

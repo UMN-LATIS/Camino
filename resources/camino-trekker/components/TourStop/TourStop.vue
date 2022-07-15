@@ -66,7 +66,7 @@ const subtitle = computed(
 /** checks that all quizzes are completed */
 function canProceedToNextStop(): boolean {
   return quizStore.currentStopQuizzes.every(
-    (quiz) => quiz.status === "complete"
+    (quiz) => quizStore.getQuizStatus(quiz.id) === "complete"
   );
 }
 
@@ -77,8 +77,8 @@ function goToNextStop() {
 function launchQuiz() {
   // mark all inactive quiz questions at this stop as active
   quizStore.currentStopQuizzes.forEach((quiz) => {
-    if (quiz.status === "complete") return;
-    quizStore.setQuizStatus(quiz.id, "active");
+    if (quizStore.getQuizStatus(quiz.id) === "complete") return;
+    quizStore.startQuiz(quiz.id);
   });
 }
 

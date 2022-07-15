@@ -1660,16 +1660,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v9.19.0",
+            "version": "v9.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "bbce25bd823133f6a5a724f2d62680b711f1d0df"
+                "reference": "c99868f1c9bf2f5d250993121838db905591864f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/bbce25bd823133f6a5a724f2d62680b711f1d0df",
-                "reference": "bbce25bd823133f6a5a724f2d62680b711f1d0df",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c99868f1c9bf2f5d250993121838db905591864f",
+                "reference": "c99868f1c9bf2f5d250993121838db905591864f",
                 "shasum": ""
             },
             "require": {
@@ -1835,7 +1835,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-06-28T14:33:19+00:00"
+            "time": "2022-07-13T13:26:22+00:00"
         },
         {
             "name": "laravel/helpers",
@@ -3197,16 +3197,16 @@
         },
         {
             "name": "owen-it/laravel-auditing",
-            "version": "v13.0.3",
+            "version": "v13.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/owen-it/laravel-auditing.git",
-                "reference": "332d136a7d67a2c06ee85aa17efeafb3ba25c972"
+                "reference": "f7ba701f32ac881e689aa04fca1204d2893702d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/332d136a7d67a2c06ee85aa17efeafb3ba25c972",
-                "reference": "332d136a7d67a2c06ee85aa17efeafb3ba25c972",
+                "url": "https://api.github.com/repos/owen-it/laravel-auditing/zipball/f7ba701f32ac881e689aa04fca1204d2893702d4",
+                "reference": "f7ba701f32ac881e689aa04fca1204d2893702d4",
                 "shasum": ""
             },
             "require": {
@@ -3281,7 +3281,7 @@
                 "issues": "https://github.com/owen-it/laravel-auditing/issues",
                 "source": "https://github.com/owen-it/laravel-auditing"
             },
-            "time": "2022-04-20T14:28:57+00:00"
+            "time": "2022-07-14T20:18:40+00:00"
         },
         {
             "name": "phayes/geophp",

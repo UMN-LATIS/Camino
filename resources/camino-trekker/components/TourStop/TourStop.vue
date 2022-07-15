@@ -23,9 +23,7 @@
           icon="arrow_forward"
           iconPosition="after"
           variant="primary"
-          @click="
-            $router.push(`/tours/${store.tourId}/stops/${store.stopIndex + 1}`)
-          "
+          @click="handleNextStopClick"
         >
           Continue
         </Button>
@@ -41,8 +39,12 @@ import Stage from "../Stage/Stage.vue";
 import { computed } from "vue";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { Maybe, Image } from "@/types";
+import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
+import { useRouter } from "vue-router";
 
 const store = useTrekkerStore();
+const router = useRouter();
+const quizStore = useQuizStore();
 
 const stages = computed(() => store.currentStop.stop_content.stages) || [];
 
@@ -60,6 +62,29 @@ const title = computed((): string => {
 const subtitle = computed(
   (): string => store.currentStop.stop_content.subtitle?.[store.locale] ?? ""
 );
+
+/** checks that all quizzes are completed */
+function canProceedToNextStop(): boolean {
+  return quizStore.currentStopQuizzes.every(
+    (quiz) => quiz.status === "complete"
+  );
+}
+
+function goToNextStop() {
+  return router.push(`/tours/${store.tourId}/stops/${store.stopIndex + 1}`);
+}
+
+function launchQuiz() {
+  // mark all inactive quiz questions at this stop as active
+  quizStore.currentStopQuizzes.forEach((quiz) => {
+    if (quiz.status === "complete") return;
+    quizStore.setQuizStatus(quiz.id, "active");
+  });
+}
+
+function handleNextStopClick() {
+  canProceedToNextStop() ? goToNextStop() : launchQuiz();
+}
 </script>
 <style scoped>
 .tour-stop {

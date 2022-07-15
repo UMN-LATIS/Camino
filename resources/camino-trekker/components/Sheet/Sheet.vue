@@ -3,10 +3,11 @@
     <div class="sheet__inner">
       <header class="sheet__header">
         <h2 class="sheet__title">{{ title }}</h2>
-        <button class="sheet__close-button" @click="$emit('close')">
+        <XButton class="sheet__close-button" @click="$emit('close')" />
+        <!-- <button class="sheet__close-button" @click="$emit('close')">
           <span class="material-icons">close</span>
           <span class="sr-only">Close</span>
-        </button>
+        </button> -->
       </header>
       <div class="sheet__body">
         <slot>Sheet Contents</slot>
@@ -15,6 +16,7 @@
   </aside>
 </template>
 <script setup lang="ts">
+import XButton from "../XButton/XButton.vue";
 interface Props {
   title?: string;
   isOpen?: boolean;
@@ -117,25 +119,9 @@ defineEmits<Emits>();
 }
 
 .sheet__close-button {
-  grid-column: -2 / -1;
-  grid-row: 1;
-  z-index: 10;
-  background: transparent;
-  color: var(--);
-  border: 0;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all ease 0.2s;
-}
-
-.sheet__close-button:hover {
-  background: var(--white);
-  color: var(--system-red);
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 }
 
 .sheet__body {

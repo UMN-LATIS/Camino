@@ -101,20 +101,13 @@ defineProps<Props>();
   z-index: 1;
 }
 
-/* .stop-header__number {
-  line-height: 1;
-  font-size: 1.5rem;
-  font-weight: 400;
-  border: 2px solid var(--white);
-  display: inline-flex;
-  border-radius: 0.5rem;
-  margin: 0;
-  margin-bottom: 1rem;
-  width: 3rem;
-  height: 3rem;
-  justify-content: center;
-  align-items: center;
-} */
+.stop-header__number {
+  --stop-number-color: var(--white);
+}
+
+.stop-header--no-img .stop-header__number {
+  --stop-number-color: var(--black);
+}
 .stop-header--no-img .stop-header__number {
   border: 2px solid var(--black);
 }

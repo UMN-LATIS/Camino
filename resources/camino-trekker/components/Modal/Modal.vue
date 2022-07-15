@@ -2,9 +2,7 @@
   <Teleport to="body">
     <div ref="modal" class="modal" :class="{ 'modal--is-open': isOpen }">
       <div class="modal__contents">
-        <button class="modal__close-button" @click="$emit('close')">
-          Close
-        </button>
+        <XButton class="modal__close-button" @click="$emit('close')" />
         <slot />
       </div>
     </div>
@@ -12,6 +10,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import XButton from "../XButton/XButton.vue";
 
 defineProps<{
   isOpen: boolean;
@@ -49,5 +48,10 @@ const modal = ref<HTMLDivElement>();
   overflow: auto;
   padding: 2rem;
   border-radius: 1rem;
+}
+.modal__close-button {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
 }
 </style>

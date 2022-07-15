@@ -21,9 +21,7 @@ defineProps<{
 }>();
 
 const activeQuizzes = computed(() =>
-  quizStore.currentStopQuizzes.filter(
-    (quiz: QuizStage) => quizStore.getQuizStatus(quiz.id) === "active"
-  )
+  quizStore.currentStopQuizzesByStatus("active")
 );
 
 function handleModalClose() {

@@ -65,25 +65,15 @@ const subtitle = computed(
 
 /** checks that all quizzes are completed */
 function canProceedToNextStop(): boolean {
-  return quizStore.currentStopQuizzes.every(
-    (quiz) => quizStore.getQuizStatus(quiz.id) === "complete"
-  );
+  return quizStore.allCurrentStopQuizzesComplete;
 }
 
 function goToNextStop() {
   return router.push(`/tours/${store.tourId}/stops/${store.stopIndex + 1}`);
 }
 
-function launchQuiz() {
-  // mark all inactive quiz questions at this stop as active
-  quizStore.currentStopQuizzes.forEach((quiz) => {
-    if (quizStore.getQuizStatus(quiz.id) === "complete") return;
-    quizStore.startQuiz(quiz.id);
-  });
-}
-
 function handleNextStopClick() {
-  canProceedToNextStop() ? goToNextStop() : launchQuiz();
+  canProceedToNextStop() ? goToNextStop() : quizStore.startCurrentStopQuizzes();
 }
 </script>
 <style scoped>

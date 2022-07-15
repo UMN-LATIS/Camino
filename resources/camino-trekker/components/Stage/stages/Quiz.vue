@@ -1,6 +1,6 @@
 <template>
   <div class="quiz-stage">
-    <Modal>
+    <Modal :isOpen="!!activeQuizzes.length" @close="handleModalClose">
       <h1>PopQuiz</h1>
       <div v-for="quiz in activeQuizzes" :key="quiz.id">
         {{ quiz }}
@@ -18,12 +18,18 @@ const quizStore = useQuizStore();
 
 defineProps<{
   stage: QuizStage;
-  tourId: number;
-  stopId: number;
 }>();
 
 const activeQuizzes = computed(() =>
-  quizStore.currentStopQuizzes.filter((quiz) => quiz.status === "complete")
+  quizStore.currentStopQuizzes.filter(
+    (quiz: QuizStage) => quizStore.getQuizStatus(quiz.id) === "active"
+  )
 );
+
+function handleModalClose() {
+  activeQuizzes.value.forEach((quiz) => {
+    quizStore.setQuizStatus(quiz.id, "inactive");
+  });
+}
 </script>
 <style scoped></style>

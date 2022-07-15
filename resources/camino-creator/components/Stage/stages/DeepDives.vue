@@ -34,11 +34,11 @@
 <script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
-import type { DeepDiveStage, DeepDiveItem, Stage } from "@/types";
+import type { DeepDiveStage, DeepDiveItem } from "@/types";
 import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
 const props = defineProps<{
-  stage: Stage;
+  stage: DeepDiveStage;
   tourId: number;
 }>();
 

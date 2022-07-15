@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
-import { SeparatorStage } from "@/types";
+import { LocalizedText, SeparatorStage } from "@/types";
 
 const props = defineProps<{
   tourId: number;
@@ -27,7 +27,7 @@ const emit = defineEmits<{
 const creatorStore = useCreatorStore();
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 
-function handleStageUpdate(updatedLocalizedText) {
+function handleStageUpdate(updatedLocalizedText: LocalizedText) {
   emit("update", {
     ...props.stage,
     text: updatedLocalizedText,

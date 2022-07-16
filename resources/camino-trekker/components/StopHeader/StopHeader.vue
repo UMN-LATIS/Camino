@@ -103,6 +103,7 @@ defineProps<Props>();
 
 .stop-header__number {
   --stop-number-color: var(--white);
+  margin-bottom: 1rem;
 }
 
 .stop-header--no-img .stop-header__number {

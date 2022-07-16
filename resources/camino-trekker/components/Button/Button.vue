@@ -1,5 +1,15 @@
 <template>
-  <button class="button" :class="`button--${variant}`">
+  <button
+    class="button"
+    :class="{
+      'button--primary': variant === 'primary',
+      'button--secondary': variant === 'secondary',
+      'button--inverse': variant === 'inverse',
+      'button--link': variant === 'link',
+      'button--icon-only': variant === 'icon-only',
+      'button--icon-position-after': iconPosition === 'after',
+    }"
+  >
     <span v-if="!!icon" class="material-icons">{{ icon }}</span>
     <span class="button__text" :class="{ 'sr-only': variant === 'icon-only' }">
       <slot>Button Text</slot>
@@ -37,6 +47,10 @@ withDefaults(defineProps<Props>(), {
   background-color: transparent;
   transition: all ease 0.1s;
 }
+.button:disabled {
+  opacity: 0.25;
+}
+
 .button--icon-only {
   padding: 0.5rem;
   background: var(--black);
@@ -49,7 +63,7 @@ withDefaults(defineProps<Props>(), {
   border-color: var(--white);
 }
 
-.button--icon-position-end {
+.button--icon-position-after {
   flex-direction: row-reverse;
 }
 

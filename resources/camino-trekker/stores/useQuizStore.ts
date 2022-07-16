@@ -2,22 +2,21 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useTrekkerStore } from "./useTrekkerStore";
 // import { useStorage } from "@vueuse/core";
 import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
-import { QuizStage, QuizChoice } from "@/types";
+import { QuizStage, QuizChoice, UserQuiz, QuizStatus } from "@/types";
 import getStagesFromTourWhere from "../utils/getStagesFromTourWhere";
-
-type QuizStatus = "inactive" | "active" | "complete";
-
-interface UserQuiz extends QuizStage {
-  status: QuizStatus;
-  submittedResponses: QuizChoice[];
-  showHint: boolean;
-}
 
 interface QuizStoreState {
   /**
    * A collection of user quizzes, their status, and responses
    */
   quizzes: Record<string, UserQuiz>;
+
+  /**
+   * when a user has completed all quizzes on a given stop
+   * and hits the continue button, the index will be added
+   * allowing the user to proceed to the next stop
+   */
+  completedStopIndices: number[];
 }
 
 export const useQuizStore = defineStore("quizzes", {
@@ -44,6 +43,7 @@ export const useQuizStore = defineStore("quizzes", {
         }),
         {}
       ),
+      completedStopIndices: [],
     };
   },
   getters: {
@@ -66,6 +66,10 @@ export const useQuizStore = defineStore("quizzes", {
       return this.currentStopQuizzes.every(
         (quiz) => quiz.status === "complete"
       );
+    },
+    isCurrentStopDone(): boolean {
+      const trekkerStore = useTrekkerStore();
+      return this.completedStopIndices.includes(trekkerStore.stopIndex);
     },
   },
   actions: {
@@ -90,6 +94,19 @@ export const useQuizStore = defineStore("quizzes", {
     },
     showHint(quizStageId: string) {
       this.quizzes[quizStageId].showHint = true;
+    },
+    addCurrentStopToDoneList() {
+      const trekkerStore = useTrekkerStore();
+      if (this.completedStopIndices.includes(trekkerStore.stopIndex)) {
+        return;
+      }
+      this.completedStopIndices.push(trekkerStore.stopIndex);
+    },
+    removeCurrentStopFromDoneList() {
+      const trekkerStore = useTrekkerStore();
+      this.completedStopIndices = this.completedStopIndices.filter(
+        (stopIndex) => stopIndex !== trekkerStore.stopIndex
+      );
     },
   },
 });

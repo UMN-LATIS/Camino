@@ -314,3 +314,14 @@ export interface TourMapStop {
   /** immediately prior to active, so acts as a start point */
   preceedsActive: boolean;
 }
+
+export type QuizStatus = "inactive" | "active" | "complete";
+
+/**
+ * Quiz with submitted responses and status
+ */
+export interface UserQuiz extends QuizStage {
+  status: QuizStatus;
+  submittedResponses: QuizChoice[];
+  showHint: boolean;
+}

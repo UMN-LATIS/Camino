@@ -315,13 +315,11 @@ export interface TourMapStop {
   preceedsActive: boolean;
 }
 
-export type QuizStatus = "inactive" | "active" | "complete";
-
 /**
  * Quiz with submitted responses and status
  */
 export interface UserQuiz extends QuizStage {
-  status: QuizStatus;
+  isComplete: boolean;
   submittedResponses: QuizChoice[];
   showHint: boolean;
 }

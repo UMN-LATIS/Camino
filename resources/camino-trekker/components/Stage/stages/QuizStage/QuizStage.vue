@@ -1,25 +1,32 @@
 <template>
-  <div class="quiz-stage">
+  <div
+    class="quiz-stage"
+    :class="{
+      'quiz-stage--complete': quizStore.allCurrentStopQuizzesComplete,
+    }"
+  >
     <Button
-      v-if="quizStore.isCurrentStopDone"
-      @click="quizStore.removeCurrentStopFromDoneList()"
-      >Show Quiz Again</Button
+      class="open-quiz-button"
+      icon="quiz"
+      @click="quizStore.openQuizModal()"
     >
+      Quiz Yourself
+    </Button>
 
     <Modal
-      :isOpen="!!activeOrCompleteQuizzes.length && !quizStore.isCurrentStopDone"
+      :isOpen="quizStore.isQuizModalOpen"
       class="quiz-stage__modal"
       :class="{
         'quiz-stage__modal--complete': quizStore.allCurrentStopQuizzesComplete,
       }"
-      @close="handleModalClose"
+      @close="quizStore.closeQuizModal()"
     >
       <div class="quiz-stage__modal-contents">
         <QuizHeader :stopNumber="trekkerStore.stopIndex + 1">
           Pop Quiz
         </QuizHeader>
         <div
-          v-for="quiz in activeOrCompleteQuizzes"
+          v-for="quiz in quizStore.currentStopQuizzes"
           :key="quiz.id"
           class="quiz-question"
         >
@@ -65,12 +72,11 @@
 
           <Button
             v-if="!quizStore.allCurrentStopQuizzesComplete"
-            variant="primary"
-            icon="lock"
-            iconPosition="after"
-            disabled
-            >Continue</Button
+            variant="secondary"
+            @click="quizStore.closeQuizModal()"
           >
+            Done
+          </Button>
 
           <Button
             v-if="quizStore.allCurrentStopQuizzesComplete"
@@ -78,24 +84,24 @@
             icon="arrow_forward"
             iconPosition="after"
             @click="handleContinueClick"
-            >Continue</Button
           >
+            Continue
+          </Button>
         </footer>
       </div>
     </Modal>
   </div>
 </template>
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 import { QuizStage } from "@/types";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
+import { useRouter } from "vue-router";
 import Modal from "@/camino-trekker/components/Modal/Modal.vue";
 import { translate as t } from "@/shared/i18n";
 import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 import Button from "@/camino-trekker/components/Button/Button.vue";
-import { useRouter } from "vue-router";
-import { nextTick } from "process";
 import QuizChoiceButton from "./QuizChoiceButton.vue";
 import QuizHeader from "./QuizHeader.vue";
 import QuizPrompt from "./QuizPrompt.vue";
@@ -106,18 +112,9 @@ const props = defineProps<{
 
 const trekkerStore = useTrekkerStore();
 const quizStore = useQuizStore();
-const router = useRouter();
-
-const activeOrCompleteQuizzes = computed(() =>
-  quizStore
-    .currentStopQuizzesByStatus("active")
-    .concat(quizStore.currentStopQuizzesByStatus("complete"))
-);
 
 const quizMessage = computed(() =>
-  quizStore.allCurrentStopQuizzesComplete
-    ? getSuccessMessage()
-    : "The next stop is locked"
+  quizStore.allCurrentStopQuizzesComplete ? getSuccessMessage() : ""
 );
 
 function getSuccessMessage() {
@@ -134,22 +131,16 @@ function getSuccessMessage() {
   return messages[randomIndex];
 }
 
-function handleContinueClick() {
-  // unlock next stop
-  quizStore.addCurrentStopToDoneList();
-
-  // then go
-  nextTick(() => {
-    return router.push(
-      `/tours/${trekkerStore.tourId}/stops/${trekkerStore.stopIndex + 1}`
-    );
-  });
+const router = useRouter();
+function goToNextStop() {
+  return router.push(
+    `/tours/${trekkerStore.tourId}/stops/${trekkerStore.stopIndex + 1}`
+  );
 }
 
-function handleModalClose() {
-  activeOrCompleteQuizzes.value.forEach((quiz) => {
-    quizStore.setQuizStatus(quiz.id, "inactive");
-  });
+function handleContinueClick() {
+  quizStore.closeQuizModal();
+  nextTick(goToNextStop);
 }
 </script>
 <style scoped>
@@ -193,6 +184,10 @@ function handleModalClose() {
   gap: 1rem;
   justify-content: center;
   align-items: center;
+}
+
+.open-quiz-button {
+  margin: 1rem 0;
 }
 </style>
 <style>

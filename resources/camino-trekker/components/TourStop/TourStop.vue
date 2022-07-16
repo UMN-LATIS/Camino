@@ -63,9 +63,12 @@ const subtitle = computed(
   (): string => store.currentStop.stop_content.subtitle?.[store.locale] ?? ""
 );
 
-/** checks that all quizzes are completed */
 function canProceedToNextStop(): boolean {
-  return quizStore.allCurrentStopQuizzesComplete;
+  // if there's no quizzes or if we've completed all the quizzes at this stop stop
+  return (
+    quizStore.currentStopQuizIds.length === 0 ||
+    quizStore.completedStopIndices.includes(store.stopIndex)
+  );
 }
 
 function goToNextStop() {

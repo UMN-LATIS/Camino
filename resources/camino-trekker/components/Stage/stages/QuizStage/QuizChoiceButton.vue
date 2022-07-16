@@ -27,7 +27,7 @@ defineEmits<{
 function showResponseAsCorrect(quiz: UserQuiz, response: QuizChoice): boolean {
   return (
     response.correct &&
-    (quiz.submittedResponses.includes(response) || quiz.status === "complete")
+    (quiz.submittedResponses.includes(response) || quiz.isComplete)
   );
 }
 
@@ -37,7 +37,7 @@ function showResponseAsIncorrect(
 ): boolean {
   return (
     !response.correct &&
-    (quiz.submittedResponses.includes(response) || quiz.status === "complete")
+    (quiz.submittedResponses.includes(response) || quiz.isComplete)
   );
 }
 

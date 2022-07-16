@@ -2,21 +2,18 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import { useTrekkerStore } from "./useTrekkerStore";
 // import { useStorage } from "@vueuse/core";
 import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
-import { QuizStage, QuizChoice, UserQuiz, QuizStatus } from "@/types";
-import getStagesFromTourWhere from "../utils/getStagesFromTourWhere";
+import { QuizStage, QuizChoice, UserQuiz } from "@/types";
+
+type StopIndex = number;
+type QuizStageId = string;
 
 interface QuizStoreState {
   /**
    * A collection of user quizzes, their status, and responses
    */
+  isQuizModalOpen: boolean;
   quizzes: Record<string, UserQuiz>;
-
-  /**
-   * when a user has completed all quizzes on a given stop
-   * and hits the continue button, the index will be added
-   * allowing the user to proceed to the next stop
-   */
-  completedStopIndices: number[];
+  quizIdsByStopIndex: Record<StopIndex, QuizStageId[]>;
 }
 
 export const useQuizStore = defineStore("quizzes", {
@@ -25,62 +22,62 @@ export const useQuizStore = defineStore("quizzes", {
     if (!trekkerStore.tour) {
       throw new Error("cannot initialize quiz store before tour is loaded.");
     }
-    const allQuizStages = getStagesFromTourWhere<QuizStage>(
-      "type",
-      "quiz",
-      trekkerStore.tour
-    );
+
+    const quizzes: Record<QuizStageId, UserQuiz> = {};
+    const quizIdsByStopIndex: Record<StopIndex, QuizStageId[]> = {};
+
+    trekkerStore.tour.stops.forEach((stop, index) => {
+      const stopQuizStages = getStagesFromStopWhere<QuizStage>(
+        "type",
+        "quiz",
+        stop
+      );
+
+      // if no quizzes at this stop,
+      // just add an empty array to our index of quizzes
+      // and carry on
+      if (!stopQuizStages.length) {
+        quizIdsByStopIndex[index] = [];
+        return;
+      }
+
+      // otherwise add these stages to our list
+      // with a few extra bits to make them a UserQuiz
+      stopQuizStages.forEach((stage) => {
+        quizzes[stage.id] = {
+          ...stage,
+          isComplete: false,
+          submittedResponses: [],
+          showHint: false,
+        };
+      });
+
+      // and add a list of all quizzes within this stop
+      // for stop lookup later
+      quizIdsByStopIndex[index] = stopQuizStages.map((s) => s.id);
+    });
+
     return {
-      quizzes: allQuizStages.reduce(
-        (acc, quiz) => ({
-          ...acc,
-          [quiz.id]: {
-            ...quiz,
-            status: "inactive",
-            submittedResponses: [],
-            showHint: false,
-          },
-        }),
-        {}
-      ),
-      completedStopIndices: [],
+      isQuizModalOpen: false,
+      quizzes,
+      quizIdsByStopIndex,
     };
   },
   getters: {
-    currentStopQuizIds(): string[] {
+    currentStopQuizIds(state): string[] {
       const trekkerStore = useTrekkerStore();
-      return getStagesFromStopWhere<QuizStage>(
-        "type",
-        "quiz",
-        trekkerStore.currentStop
-      ).map((quiz) => quiz.id);
+      return state.quizIdsByStopIndex[trekkerStore.stopIndex];
     },
     currentStopQuizzes(state): UserQuiz[] {
       return this.currentStopQuizIds.map((quizId) => state.quizzes[quizId]);
     },
-    currentStopQuizzesByStatus() {
-      return (quizStatus: QuizStatus) =>
-        this.currentStopQuizzes.filter((quiz) => quiz.status === quizStatus);
-    },
     allCurrentStopQuizzesComplete(): boolean {
-      return this.currentStopQuizzes.every(
-        (quiz) => quiz.status === "complete"
-      );
-    },
-    isCurrentStopDone(): boolean {
-      const trekkerStore = useTrekkerStore();
-      return this.completedStopIndices.includes(trekkerStore.stopIndex);
+      return this.currentStopQuizzes.every((quiz) => quiz.isComplete);
     },
   },
   actions: {
-    setQuizStatus(quizStageId: string, status: QuizStatus) {
-      this.quizzes[quizStageId].status = status;
-    },
-    startQuiz(quizStageId: string) {
-      this.setQuizStatus(quizStageId, "active");
-    },
-    startCurrentStopQuizzes() {
-      this.currentStopQuizIds.forEach((quizId) => this.startQuiz(quizId));
+    markQuizComplete(quizStageId: string) {
+      this.quizzes[quizStageId].isComplete = true;
     },
     submitQuizResponse(quizStageId: string, response: QuizChoice) {
       // for now, we just check the response object itself it's correct
@@ -88,25 +85,18 @@ export const useQuizStore = defineStore("quizzes", {
       // if things becomes higher stakes (aka gradebook integration)
       // then we should do an api call
       if (response.correct) {
-        this.setQuizStatus(quizStageId, "complete");
+        this.markQuizComplete(quizStageId);
       }
       this.quizzes[quizStageId].submittedResponses.push(response);
     },
     showHint(quizStageId: string) {
       this.quizzes[quizStageId].showHint = true;
     },
-    addCurrentStopToDoneList() {
-      const trekkerStore = useTrekkerStore();
-      if (this.completedStopIndices.includes(trekkerStore.stopIndex)) {
-        return;
-      }
-      this.completedStopIndices.push(trekkerStore.stopIndex);
+    openQuizModal() {
+      this.isQuizModalOpen = true;
     },
-    removeCurrentStopFromDoneList() {
-      const trekkerStore = useTrekkerStore();
-      this.completedStopIndices = this.completedStopIndices.filter(
-        (stopIndex) => stopIndex !== trekkerStore.stopIndex
-      );
+    closeQuizModal() {
+      this.isQuizModalOpen = false;
     },
   },
 });

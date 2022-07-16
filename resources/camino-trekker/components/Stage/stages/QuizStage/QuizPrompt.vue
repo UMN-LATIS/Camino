@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { LocalizedText, Locale } from "@/types";
 import { translate as t } from "@/shared/i18n";
+import SanitizedHTML from "@trekker/components/SanitizedHTML/SanitizedHTML.vue";
 
 defineProps<{
   content: LocalizedText;

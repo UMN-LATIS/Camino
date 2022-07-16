@@ -19,7 +19,7 @@ import Feedback from "./stages/Feedback.vue";
 import DeepDivesSummary from "./stages/DeepDivesSummary.vue";
 import { StageType } from "@/types";
 import type { Component } from "vue";
-import Quiz from "./stages/Quiz.vue";
+import QuizStage from "./stages/QuizStage/QuizStage.vue";
 
 const componentLookup: Partial<{ [stageKey in StageType]: Component }> = {
   [StageType.AR]: AR,
@@ -32,7 +32,7 @@ const componentLookup: Partial<{ [stageKey in StageType]: Component }> = {
   [StageType.LanguageSelector]: LanguageSelect,
   [StageType.Navigation]: Navigation,
   [StageType.Separator]: Separator,
-  [StageType.Quiz]: Quiz,
+  [StageType.Quiz]: QuizStage,
 };
 
 const props = defineProps({

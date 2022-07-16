@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div ref="modal" class="modal" :class="{ 'modal--is-open': isOpen }">
-      <div class="modal__contents">
+      <div class="modal__contents" v-bind="$attrs">
         <XButton class="modal__close-button" @click="$emit('close')" />
         <slot />
       </div>

@@ -23,9 +23,10 @@
           :key="quiz.id"
           class="quiz-question"
         >
-          <div class="quiz-question__prompt">
-            <SanitizedHTML :html="t(quiz.questionText, trekkerStore.locale)" />
-          </div>
+          <QuizPrompt
+            :content="quiz.questionText"
+            :locale="trekkerStore.locale"
+          />
 
           <div class="quiz-question__response-list">
             <QuizChoiceButton
@@ -97,6 +98,7 @@ import { useRouter } from "vue-router";
 import { nextTick } from "process";
 import QuizChoiceButton from "./QuizChoiceButton.vue";
 import QuizHeader from "./QuizHeader.vue";
+import QuizPrompt from "./QuizPrompt.vue";
 
 const props = defineProps<{
   stage: QuizStage;
@@ -151,14 +153,6 @@ function handleModalClose() {
 }
 </script>
 <style scoped>
-.quiz-question__prompt {
-  font-weight: 500;
-  font-size: 1.25rem;
-  margin: 2rem 1rem;
-  color: var(--black);
-  text-align: center;
-}
-
 .quiz-question__response-list {
   display: grid;
   grid-template-columns: 1fr;

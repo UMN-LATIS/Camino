@@ -16,10 +16,10 @@
   display: inline-flex;
   border-radius: 0.5rem;
   margin: 0;
-  margin-bottom: 1rem;
   justify-content: center;
   align-items: center;
-  padding: 1rem;
+  width: 3rem;
+  height: 3rem;
   line-height: 1ch;
 }
 </style>

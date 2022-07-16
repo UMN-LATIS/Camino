@@ -323,3 +323,8 @@ export interface UserQuiz extends QuizStage {
   submittedResponses: QuizChoice[];
   showHint: boolean;
 }
+
+export type StopIndex = number;
+export type QuizStageId = string;
+export type UserQuizLookup = Record<string, UserQuiz>;
+export type UserQuizByStopLookup = Record<StopIndex, QuizStageId[]>;

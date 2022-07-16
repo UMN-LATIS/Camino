@@ -19,6 +19,7 @@ export const useTrekkerStore = defineStore("trekker", {
       locale: useStorage<Locale>(`${storageKey}.locale`, Locale.en),
       errors: [] as string[],
       activeSheet: null as Maybe<BottomNavSheet>,
+      lockedStopIndices: [] as number[],
     };
   },
   getters: {
@@ -59,6 +60,10 @@ export const useTrekkerStore = defineStore("trekker", {
       (state) =>
       (sheetKey: Maybe<BottomNavSheet>): boolean =>
         state.activeSheet === sheetKey,
+    isStopIndexLocked(state) {
+      return (stopIndex): boolean =>
+        state.lockedStopIndices.includes(stopIndex);
+    },
   },
   actions: {
     fetchTour(tourId) {
@@ -83,6 +88,15 @@ export const useTrekkerStore = defineStore("trekker", {
     },
     closeActiveSheet() {
       this.setActiveSheet(null);
+    },
+    lockStopIndex(stopIndex: number) {
+      if (this.lockedStopIndices.includes(stopIndex)) return;
+      this.lockedStopIndices.push(stopIndex);
+    },
+    unlockStopIndex(stopIndex: number) {
+      this.lockedStopIndices = this.lockedStopIndices.filter(
+        (i) => i !== stopIndex
+      );
     },
   },
 });

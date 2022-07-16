@@ -103,10 +103,10 @@ import { QuizChoice, QuizStage, UserQuiz } from "@/types";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
 import Modal from "@/camino-trekker/components/Modal/Modal.vue";
-import StopNumber from "../../StopNumber/StopNumber.vue";
+import StopNumber from "@/camino-trekker/components/StopNumber/StopNumber.vue";
 import { translate as t } from "@/shared/i18n";
-import SanitizedHTML from "../../SanitizedHTML/SanitizedHTML.vue";
-import Button from "../../Button/Button.vue";
+import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
+import Button from "@/camino-trekker/components/Button/Button.vue";
 import { useRouter } from "vue-router";
 import { nextTick } from "process";
 

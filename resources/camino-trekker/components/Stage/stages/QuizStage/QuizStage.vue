@@ -31,25 +31,16 @@
           </div>
 
           <div class="quiz-question__response-list">
-            <button
+            <QuizChoiceButton
               v-for="(response, index) in quiz.responses"
               :key="index"
-              class="quiz-choice-button"
-              :class="{
-                'quiz-choice-button--correct': showResponseAsCorrect(
-                  quiz,
-                  response
-                ),
-                'quiz-choice-button--incorrect': showResponseAsIncorrect(
-                  quiz,
-                  response
-                ),
-              }"
+              :index="index"
+              :quiz="quiz"
+              :response="response"
               @click="quizStore.submitQuizResponse(quiz.id, response)"
             >
-              <span class="response-item-letter">{{ toChar(index) }}</span>
               {{ t(response.text, trekkerStore.locale) }}
-            </button>
+            </QuizChoiceButton>
           </div>
 
           <div class="quiz-hint">
@@ -66,7 +57,6 @@
               <SanitizedHTML :html="t(quiz.hintText, trekkerStore.locale)" />
             </div>
           </div>
-          <!-- {{ quiz }} -->
         </div>
         <!-- end quiz -->
 
@@ -99,7 +89,7 @@
 </template>
 <script setup lang="ts">
 import { computed } from "vue";
-import { QuizChoice, QuizStage, UserQuiz } from "@/types";
+import { QuizStage } from "@/types";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
 import Modal from "@/camino-trekker/components/Modal/Modal.vue";
@@ -109,6 +99,7 @@ import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHT
 import Button from "@/camino-trekker/components/Button/Button.vue";
 import { useRouter } from "vue-router";
 import { nextTick } from "process";
+import QuizChoiceButton from "./QuizChoiceButton.vue";
 
 const props = defineProps<{
   stage: QuizStage;
@@ -144,27 +135,6 @@ function getSuccessMessage() {
   return messages[randomIndex];
 }
 
-function toChar(n: number) {
-  return String.fromCharCode("a".charCodeAt(0) + n);
-}
-
-function showResponseAsCorrect(quiz: UserQuiz, response: QuizChoice): boolean {
-  return (
-    response.correct &&
-    (quiz.submittedResponses.includes(response) || quiz.status === "complete")
-  );
-}
-
-function showResponseAsIncorrect(
-  quiz: UserQuiz,
-  response: QuizChoice
-): boolean {
-  return (
-    !response.correct &&
-    (quiz.submittedResponses.includes(response) || quiz.status === "complete")
-  );
-}
-
 function handleContinueClick() {
   // unlock next stop
   quizStore.addCurrentStopToDoneList();
@@ -184,9 +154,6 @@ function handleModalClose() {
 }
 </script>
 <style scoped>
-/* .quiz-stage__modal-contents {
-  padding-top: 2rem;
-} */
 .quiz-header {
   text-align: center;
   text-transform: uppercase;
@@ -220,48 +187,6 @@ function handleModalClose() {
   grid-template-columns: 1fr;
   grid-auto-rows: 1fr;
   gap: 0.5rem;
-}
-
-.quiz-choice-button {
-  background: var(--white);
-  padding: 0.75rem 1rem;
-  display: flex;
-  gap: 1rem;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: left;
-  border: none;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-}
-
-.quiz-choice-button--incorrect {
-  opacity: 0.5;
-  text-decoration: line-through;
-}
-
-.quiz-choice-button--correct {
-  background: var(--black);
-  color: var(--white);
-}
-.quiz-choice-button--correct .response-item-letter {
-  background: var(--white);
-  color: var(--black);
-}
-
-.response-item-letter {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  background: var(--black);
-  color: var(--white);
-  display: inline-flex;
-  width: 1.5rem;
-  height: 1.5rem;
-  justify-content: center;
-  align-items: center;
-  line-height: 1;
-  border-radius: 50%;
 }
 
 .quiz-hint__show-button {

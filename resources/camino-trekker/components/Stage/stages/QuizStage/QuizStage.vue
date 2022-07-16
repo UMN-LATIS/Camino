@@ -15,12 +15,9 @@
       @close="handleModalClose"
     >
       <div class="quiz-stage__modal-contents">
-        <header class="quiz-header">
-          <StopNumber class="quiz-stage__stop-number">{{
-            trekkerStore.stopIndex + 1
-          }}</StopNumber>
-          <h1>Pop Quiz</h1>
-        </header>
+        <QuizHeader :stopNumber="trekkerStore.stopIndex + 1">
+          Pop Quiz
+        </QuizHeader>
         <div
           v-for="quiz in activeOrCompleteQuizzes"
           :key="quiz.id"
@@ -93,13 +90,13 @@ import { QuizStage } from "@/types";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
 import Modal from "@/camino-trekker/components/Modal/Modal.vue";
-import StopNumber from "@/camino-trekker/components/StopNumber/StopNumber.vue";
 import { translate as t } from "@/shared/i18n";
 import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 import Button from "@/camino-trekker/components/Button/Button.vue";
 import { useRouter } from "vue-router";
 import { nextTick } from "process";
 import QuizChoiceButton from "./QuizChoiceButton.vue";
+import QuizHeader from "./QuizHeader.vue";
 
 const props = defineProps<{
   stage: QuizStage;
@@ -154,26 +151,6 @@ function handleModalClose() {
 }
 </script>
 <style scoped>
-.quiz-header {
-  text-align: center;
-  text-transform: uppercase;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-}
-.quiz-stage__stop-number {
-  font-size: 1rem;
-  width: 2rem;
-  height: 2rem;
-  font-weight: bold;
-}
-.quiz-header h1 {
-  margin: 0;
-  /* font-weight: 500; */
-  font-size: 1.25rem;
-}
 .quiz-question__prompt {
   font-weight: 500;
   font-size: 1.25rem;

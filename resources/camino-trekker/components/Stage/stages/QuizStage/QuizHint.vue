@@ -1,5 +1,5 @@
 <template>
-  <div v-if="quiz.hintText" class="quiz-hint">
+  <div v-if="hintText" class="quiz-hint">
     <button
       v-if="!quiz.showHint"
       class="quiz-hint__show-button"
@@ -10,16 +10,16 @@
     </button>
     <div v-if="quiz.showHint" class="quiz-hint__text">
       <h2 class="quiz-hint__title">Hint</h2>
-      <SanitizedHTML :html="t(quiz.hintText, locale)" />
+      {{ hintText }}
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { computed } from "vue";
 import { Locale, UserQuiz } from "@/types";
 import { translate as t } from "@/shared/i18n";
-import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 
-defineProps<{
+const props = defineProps<{
   quiz: UserQuiz;
   locale: Locale;
 }>();
@@ -27,6 +27,8 @@ defineProps<{
 defineEmits<{
   (eventName: "click");
 }>();
+
+const hintText = computed(() => t(props.quiz.hintText, props.locale));
 </script>
 <style scoped>
 .quiz-hint__show-button {

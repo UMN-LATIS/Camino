@@ -49,7 +49,6 @@
     <LanguageText
       :text="stage.hintText"
       :languages="languages"
-      :largetext="true"
       @update:text="(hintText) => handleUpdateStage({ hintText })"
     >
       Hint

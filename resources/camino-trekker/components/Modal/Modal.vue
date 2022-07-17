@@ -14,18 +14,30 @@
   </Teleport>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import XButton from "../XButton/XButton.vue";
 
-defineProps<{
+const props = defineProps<{
   isOpen: boolean;
 }>();
 
-defineEmits<{
+const emit = defineEmits<{
   (eventName: "close"): void;
 }>();
 
 const modal = ref<HTMLDivElement>();
+
+function closeIfEsc(event) {
+  if (props.isOpen && event.keyCode === 27) {
+    emit("close");
+  }
+}
+
+onMounted(() => {
+  document.addEventListener("keydown", closeIfEsc);
+});
+
+onUnmounted(() => document.removeEventListener("keydown", closeIfEsc));
 </script>
 <style scoped>
 .modal {

@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-hint">
+  <div v-if="quiz.hintText" class="quiz-hint">
     <button
       v-if="!quiz.showHint"
       class="quiz-hint__show-button"

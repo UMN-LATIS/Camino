@@ -48,6 +48,11 @@ const menuItems = [
     icon: "arrow_forward",
   },
   {
+    text: "Settings",
+    href: "/trekker/settings",
+    icon: "settings",
+  },
+  {
     text: "Help",
     href: "https://umn-latis.github.io/Camino/",
     icon: "help_outline",

@@ -1,6 +1,11 @@
 <template>
   <Teleport to="body">
-    <div ref="modal" class="modal" :class="{ 'modal--is-open': isOpen }">
+    <div
+      ref="modal"
+      class="modal"
+      :class="{ 'modal--is-open': isOpen }"
+      @click.self="$emit('close')"
+    >
       <div class="modal__contents" v-bind="$attrs">
         <XButton class="modal__close-button" @click="$emit('close')" />
         <slot />

@@ -41,10 +41,9 @@ const modal = ref<HTMLDivElement>();
   background: #f3f3f3;
   border: 1px solid transparent;
   position: absolute;
-  max-height: 90vh;
+  max-height: 80vh;
   width: 90vw;
   max-width: 40rem;
-
   overflow: auto;
   padding: 2rem;
   border-radius: 1rem;

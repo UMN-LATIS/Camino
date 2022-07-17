@@ -18,6 +18,10 @@
         >
           <Stage :stage="stage" />
         </section>
+        <AllStopQuizzes
+          :isOpen="showAllStopQuizzes"
+          @close="showAllStopQuizzes = false"
+        />
         <Button
           v-if="!trekkerStore.isLastStop"
           icon="arrow_forward"
@@ -36,11 +40,12 @@ import Button from "../Button/Button.vue";
 import StopHeader from "../StopHeader/StopHeader.vue";
 // import TourAuthor from "../TourAuthor/TourAuthor.vue";
 import Stage from "../Stage/Stage.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { Maybe, Image } from "@/types";
 import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
 import { useRouter } from "vue-router";
+import AllStopQuizzes from "../Stage/stages/QuizStage/AllStopQuizzes.vue";
 
 const trekkerStore = useTrekkerStore();
 const router = useRouter();
@@ -71,12 +76,13 @@ function goToNextStop() {
   );
 }
 
-const isNextStopLocked = computed(
-  () => !quizStore.allCurrentStopQuizzesComplete
-);
-
+const showAllStopQuizzes = ref(false);
 function handleNextStopClick() {
-  isNextStopLocked.value ? quizStore.openQuizModal() : goToNextStop();
+  if (!quizStore.allCurrentStopQuizzesComplete) {
+    showAllStopQuizzes.value = true;
+    return;
+  }
+  goToNextStop();
 }
 </script>
 <style scoped>

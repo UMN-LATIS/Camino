@@ -16,7 +16,6 @@ export const useQuizStore = defineStore("quizzes", {
     );
 
     return {
-      isQuizModalOpen: false,
       quizzes: useStorage("camino.trekker.quizStore.quizzes", quizzes),
       quizIdsByStopIndex: useStorage(
         "camino.trekker.quizStore.quizIdsByStopIndex",
@@ -48,12 +47,6 @@ export const useQuizStore = defineStore("quizzes", {
     },
     showHint(quizStageId: string) {
       this.quizzes[quizStageId].showHint = true;
-    },
-    openQuizModal() {
-      this.isQuizModalOpen = true;
-    },
-    closeQuizModal() {
-      this.isQuizModalOpen = false;
     },
   },
 });

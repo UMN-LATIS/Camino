@@ -6,18 +6,32 @@
 
     <h2>Reset Local Storage</h2>
     <p>Reset all tours and quizzes stored within your browser.</p>
-    <Button icon="refresh" @click="handleStorageReset">Reset</Button>
+    <Button
+      v-if="!isLocalStorageEmpty"
+      icon="refresh"
+      @click="handleStorageReset"
+      >Reset</Button
+    >
+    <p v-if="isLocalStorageEmpty">Local storage is empty.</p>
   </div>
 </template>
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
 import Button from "../components/Button/Button.vue";
 import XButton from "../components/XButton/XButton.vue";
 
+const isLocalStorageEmpty = ref(false);
+
 function handleStorageReset() {
   if (confirm("Reset Tour and Quizzes?")) {
-    window.localStorage.clear();
+    localStorage.clear();
+    isLocalStorageEmpty.value = true;
   }
 }
+
+onMounted(() => {
+  isLocalStorageEmpty.value = localStorage.length === 0;
+});
 </script>
 <style scoped>
 .settings-page {

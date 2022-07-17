@@ -48,20 +48,11 @@
             </QuizChoiceButton>
           </div>
 
-          <div class="quiz-hint">
-            <button
-              v-if="!quiz.showHint"
-              class="quiz-hint__show-button"
-              @click="quizStore.showHint(quiz.id)"
-            >
-              <span class="material-icons"> help </span>
-              <span class="quiz-hint__show-button-text">Give me a hint</span>
-            </button>
-            <div v-if="quiz.showHint" class="quiz-hint__text">
-              <h2 class="quiz-hint__title">Hint</h2>
-              <SanitizedHTML :html="t(quiz.hintText, trekkerStore.locale)" />
-            </div>
-          </div>
+          <QuizHint
+            :quiz="quiz"
+            :locale="trekkerStore.locale"
+            @click="quizStore.showHint(quiz.id)"
+          />
         </div>
         <!-- end quiz -->
 
@@ -100,11 +91,11 @@ import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
 import { useRouter } from "vue-router";
 import Modal from "@/camino-trekker/components/Modal/Modal.vue";
 import { translate as t } from "@/shared/i18n";
-import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 import Button from "@/camino-trekker/components/Button/Button.vue";
 import QuizChoiceButton from "./QuizChoiceButton.vue";
 import QuizHeader from "./QuizHeader.vue";
 import QuizPrompt from "./QuizPrompt.vue";
+import QuizHint from "./QuizHint.vue";
 
 const props = defineProps<{
   stage: QuizStage;

@@ -58,6 +58,7 @@ function toChar(n: number) {
   border: none;
   border-radius: 0.5rem;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  color: var(--black);
 }
 
 .quiz-choice-button--incorrect {

@@ -36,6 +36,7 @@ defineEmits<{
   align-items: center;
   padding: 1rem;
   gap: 1rem;
+  color: var(--black);
 }
 .quiz-hint__show-button-text {
   display: inline-block;

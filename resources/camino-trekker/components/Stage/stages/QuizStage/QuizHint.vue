@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { Locale, UserQuiz } from "@/types";
 import { translate as t } from "@/shared/i18n";
+import SanitizedHTML from "@/camino-trekker/components/SanitizedHTML/SanitizedHTML.vue";
 
 defineProps<{
   quiz: UserQuiz;
@@ -40,7 +41,6 @@ defineEmits<{
 }
 .quiz-hint__show-button-text {
   display: inline-block;
-  border-bottom: 1px solid var(--black);
 }
 
 .quiz-hint__text {

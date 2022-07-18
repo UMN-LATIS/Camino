@@ -49,7 +49,7 @@ const hintText = computed(() => t(props.quiz.hintText, props.locale));
   margin-top: 1rem;
   border: 1px solid transparent;
   border-radius: 0.5rem;
-  padding: 0 1rem;
+  padding: 0 1rem 1rem;
   background: rgba(0, 0, 0, 0.05);
 }
 .quiz-hint__title {

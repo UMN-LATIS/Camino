@@ -4,10 +4,6 @@
       <header class="sheet__header">
         <h2 class="sheet__title">{{ title }}</h2>
         <XButton class="sheet__close-button" @click="$emit('close')" />
-        <!-- <button class="sheet__close-button" @click="$emit('close')">
-          <span class="material-icons">close</span>
-          <span class="sr-only">Close</span>
-        </button> -->
       </header>
       <div class="sheet__body">
         <slot>Sheet Contents</slot>

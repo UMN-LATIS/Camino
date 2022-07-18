@@ -1,5 +1,6 @@
 <template>
   <button
+    data-cy="quiz-choice-button"
     class="quiz-choice-button"
     :class="{
       'quiz-choice-button--correct': showResponseAsCorrect(quiz, response),

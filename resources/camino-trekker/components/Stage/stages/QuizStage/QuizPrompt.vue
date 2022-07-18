@@ -1,5 +1,5 @@
 <template>
-  <div class="quiz-question__prompt">
+  <div class="quiz-question__prompt" data-cy="quiz-prompt">
     <SanitizedHTML :html="t(content, locale)" />
   </div>
 </template>

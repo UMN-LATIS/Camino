@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="quiz-stage">
     <LanguageText
+      data-cy="quiz-prompt-editor"
       :text="stage.questionText"
       :languages="languages"
       :largetext="true"
@@ -13,6 +14,7 @@
       v-for="(response, index) in stage.responses"
       :key="index"
       class="bg-light p-3 my-3 position-relative"
+      data-cy="quiz-response"
     >
       <button
         class="btn btn-link-dark d-inline-block position-absolute top-0 end-0"
@@ -22,6 +24,7 @@
       </button>
       <label>
         <input
+          data-cy="quiz-response-correct-checkbox"
           :checked="response.correct"
           type="checkbox"
           @change="
@@ -33,6 +36,7 @@
         Correct
       </label>
       <LanguageText
+        data-cy="quiz-response-editor"
         :text="response.text"
         :languages="languages"
         class="flex-1"

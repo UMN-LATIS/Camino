@@ -198,7 +198,7 @@ class TourEditController extends Controller
         if (sha1(Auth::user()->email . $tour->id) == $tourCode) {
             $tour->users()->attach(Auth::user());
             $tour->save();
-            return redirect("/creator/" . $tour->id);
+            return redirect("/creator/tours/" . $tour->id);
         } else {
             abort(403, 'Access denied');
         }

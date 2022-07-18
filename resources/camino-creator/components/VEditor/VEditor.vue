@@ -85,8 +85,7 @@ onMounted(async () => {
 .v-editor {
   background: #f3f3f3;
   border-radius: 0.5rem;
-  padding: 1rem;
-  padding-top: 0.5rem;
+  padding: 0.5rem;
 }
 </style>
 

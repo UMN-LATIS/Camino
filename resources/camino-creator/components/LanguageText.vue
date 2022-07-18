@@ -96,6 +96,5 @@ function handleTextUpdate(language: Locale, updatedText: string) {
   font-weight: bold;
   color: #999;
   display: block;
-  text-align: right;
 }
 </style>

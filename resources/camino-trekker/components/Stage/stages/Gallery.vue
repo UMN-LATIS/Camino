@@ -96,6 +96,7 @@ figure {
   overflow: hidden;
   max-height: 20rem;
   max-width: 20rem;
+  cursor: pointer;
 }
 .gallery__figure img {
   transition: all ease 0.5s;

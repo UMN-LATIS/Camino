@@ -14,13 +14,13 @@
       :key="index"
       class="bg-light p-3 my-3 position-relative"
     >
+      <button
+        class="btn btn-link-dark d-inline-block position-absolute top-0 end-0"
+        @click="handleRemoveResponse(index)"
+      >
+        <i class="fas fa-times"></i>
+      </button>
       <label>
-        <button
-          class="btn btn-link-dark d-inline-block position-absolute top-0 end-0"
-          @click="handleRemoveResponse(index)"
-        >
-          <i class="fas fa-times"></i>
-        </button>
         <input
           :checked="response.correct"
           type="checkbox"

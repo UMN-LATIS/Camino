@@ -75,10 +75,4 @@ describe("Tour Stop Page", () => {
     cy.contains("Done").click();
     cy.get(".modal--is-open").should("not.exist");
   });
-
-  // check that the stage content appears on the stop page
-  //   cy.contains("Save").click();
-  //   cy.contains("Preview").click();
-  //   cy.get(".ar-stage > .button").should("contain.text", "Look Around");
-  // });
 });

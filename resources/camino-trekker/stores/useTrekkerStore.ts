@@ -14,7 +14,7 @@ export const useTrekkerStore = defineStore("trekker", {
     const storageKey = `camino.trekker.tour-${route.params.tourId}.trekkerStore`;
 
     return {
-      tour: useStorage<Maybe<Tour>>(`${storageKey}.tour`, null),
+      tour: null as Maybe<Tour>,
       isLoading: true,
       locale: useStorage<Locale>(`${storageKey}.locale`, Locale.en),
       errors: [] as string[],

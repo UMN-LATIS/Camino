@@ -28,7 +28,7 @@ export const useDeepDivesStore = defineStore("deepdives", {
         `${storageKey}.selectedDeepDiveIds`,
         []
       ),
-      email: useStorage<string>(`${storageKey}.email`, ""),
+      email: "",
       sendStatus: "idle" as SendStatus,
       error: "",
     };

@@ -21,7 +21,12 @@
       <Error v-if="feedbackStore.error"> {{ feedbackStore.error }} </Error>
       <div class="feedback-stage__actions">
         <Button variant="link" type="reset">Cancel</Button>
-        <Button type="submit" iconPosition="after">Submit</Button>
+        <Button
+          type="submit"
+          iconPosition="after"
+          :disabled="!feedbackStore.canSubmit"
+          >Submit</Button
+        >
       </div>
     </form>
     <Spinner v-if="feedbackStore.isSubmitting" />

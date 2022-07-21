@@ -13,6 +13,11 @@ export const useFeedbackStore = defineStore("feedback", {
       error: "",
     };
   },
+  getters: {
+    canSubmit(state) {
+      return state.name && state.email && state.feedback;
+    },
+  },
   actions: {
     softReset() {
       /** keep name and email  */

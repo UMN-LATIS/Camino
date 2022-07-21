@@ -1,7 +1,6 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { useTrekkerStore } from "./useTrekkerStore";
 import { QuizChoice, UserQuiz } from "@/types";
-import { useStorage } from "@vueuse/core";
 import getQuizzesFromTour from "../utils/getQuizzesFromTour";
 
 export const useQuizStore = defineStore("quizzes", {
@@ -16,11 +15,8 @@ export const useQuizStore = defineStore("quizzes", {
     );
 
     return {
-      quizzes: useStorage("camino.trekker.quizStore.quizzes", quizzes),
-      quizIdsByStopIndex: useStorage(
-        "camino.trekker.quizStore.quizIdsByStopIndex",
-        quizIdsByStopIndex
-      ),
+      quizzes,
+      quizIdsByStopIndex,
     };
   },
   getters: {

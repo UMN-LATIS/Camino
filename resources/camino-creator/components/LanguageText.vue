@@ -28,7 +28,7 @@
     </template>
     <template v-if="!largetext">
       <div v-for="(language, key) in languages" :key="key">
-        <div class="form-group row my-1">
+        <div class="form-group row my-1 language-text__input-group">
           <label
             :for="'field' + key + randomIdentifier"
             class="col-sm-2 col-form-label"
@@ -38,7 +38,8 @@
             <input
               :id="'field' + key + randomIdentifier"
               type="text"
-              class="form-control"
+              data-cy="language-text-input"
+              class="form-control language-text__input"
               :value="translate(text, language)"
               @input="
                 handleTextUpdate(
@@ -96,6 +97,5 @@ function handleTextUpdate(language: Locale, updatedText: string) {
   font-weight: bold;
   color: #999;
   display: block;
-  text-align: right;
 }
 </style>

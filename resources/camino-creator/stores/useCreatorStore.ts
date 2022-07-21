@@ -4,7 +4,13 @@ import { defineStore, acceptHMRUpdate } from "pinia";
 import createDefaultStop from "../common/createDefaultStop";
 import createDefaultTour from "../common/createDefaultTour";
 import { axiosClient as axios } from "@/shared/axios";
-import type { Tour, TourStop, Stage, Image, RecursivePartial } from "@/types";
+import type {
+  Tour,
+  TourStop,
+  CoreStage,
+  Image,
+  RecursivePartial,
+} from "@/types";
 import * as selectors from "./creatorStoreSelectors";
 import normalizeTour from "@/shared/normalizeTour";
 
@@ -320,7 +326,7 @@ export const useCreatorStore = defineStore("creator", () => {
      * updates a tour stop's stage within the store
      * Note: does not change the server. Use updateTourStop for that.
      */
-    updateTourStopStage(tourId: number, stopId: number, stage: Stage) {
+    updateTourStopStage(tourId: number, stopId: number, stage: CoreStage) {
       const { tourIndex, stopIndex, stageIndex } = getters.getStageIndexById(
         tourId,
         stopId,

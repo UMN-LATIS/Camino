@@ -1,31 +1,33 @@
 <template>
-  <div v-if="store.tour" class="tour-stop">
+  <div v-if="trekkerStore.tour" class="tour-stop">
     <StopHeader
       class="tour-stop__header"
       :title="title"
       :subtitle="subtitle"
-      :stopNumber="store.stopIndex + 1"
+      :stopNumber="trekkerStore.stopIndex + 1"
       :headerImage="headerImage"
     >
       <!-- <TourAuthor v-if="isFirstStop && tour.author" :author="tour.author" /> -->
     </StopHeader>
     <div class="tour-stop__stages container">
       <div class="tour-stop__contents">
-        <h2 v-if="store.isFirstStop">Start</h2>
+        <h2 v-if="trekkerStore.isFirstStop">Start</h2>
         <section
           v-for="stage in stages"
-          :key="`${store.currentStop.id}-${stage.id}`"
+          :key="`${trekkerStore.currentStop.id}-${stage.id}`"
         >
           <Stage :stage="stage" />
         </section>
+        <AllStopQuizzes
+          :isOpen="showAllStopQuizzes"
+          @close="showAllStopQuizzes = false"
+        />
         <Button
-          v-if="!store.isLastStop"
+          v-if="!trekkerStore.isLastStop"
           icon="arrow_forward"
           iconPosition="after"
           variant="primary"
-          @click="
-            $router.push(`/tours/${store.tourId}/stops/${store.stopIndex + 1}`)
-          "
+          @click="handleNextStopClick"
         >
           Continue
         </Button>
@@ -38,28 +40,50 @@ import Button from "../Button/Button.vue";
 import StopHeader from "../StopHeader/StopHeader.vue";
 // import TourAuthor from "../TourAuthor/TourAuthor.vue";
 import Stage from "../Stage/Stage.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { Maybe, Image } from "@/types";
+import { useQuizStore } from "@/camino-trekker/stores/useQuizStore";
+import { useRouter } from "vue-router";
+import AllStopQuizzes from "../Stage/stages/QuizStage/AllStopQuizzes.vue";
 
-const store = useTrekkerStore();
+const trekkerStore = useTrekkerStore();
+const router = useRouter();
+const quizStore = useQuizStore();
 
-const stages = computed(() => store.currentStop.stop_content.stages) || [];
+const stages =
+  computed(() => trekkerStore.currentStop.stop_content.stages) || [];
 
 const headerImage = computed(
-  (): Maybe<Image> => store.currentStop.stop_content.header_image || null
+  (): Maybe<Image> => trekkerStore.currentStop.stop_content.header_image || null
 );
 
 const title = computed((): string => {
-  if (!store.tour) return "";
-  return store.isFirstStop
-    ? store.tour.title
-    : store.currentStop.stop_content.title?.[store.locale] ?? "";
+  if (!trekkerStore.tour) return "";
+  return trekkerStore.isFirstStop
+    ? trekkerStore.tour.title
+    : trekkerStore.currentStop.stop_content.title?.[trekkerStore.locale] ?? "";
 });
 
 const subtitle = computed(
-  (): string => store.currentStop.stop_content.subtitle?.[store.locale] ?? ""
+  (): string =>
+    trekkerStore.currentStop.stop_content.subtitle?.[trekkerStore.locale] ?? ""
 );
+
+function goToNextStop() {
+  return router.push(
+    `/tours/${trekkerStore.tourId}/stops/${trekkerStore.stopIndex + 1}`
+  );
+}
+
+const showAllStopQuizzes = ref(false);
+function handleNextStopClick() {
+  if (!quizStore.allCurrentStopQuizzesComplete) {
+    showAllStopQuizzes.value = true;
+    return;
+  }
+  goToNextStop();
+}
 </script>
 <style scoped>
 .tour-stop {

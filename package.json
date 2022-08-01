@@ -102,7 +102,7 @@
     "vue-i18n": "^9.1.10",
     "vue-qrcode-component": "^2.1.1",
     "vue-router": "^4.1.2",
-    "vue-types": "^4.1.1",
+    "vue-types": "^4.2.1",
     "vuedraggable": "^4.1.0"
   },
   "browserslist": [

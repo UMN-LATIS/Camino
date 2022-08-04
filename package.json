@@ -14,8 +14,6 @@
     "hot": "mix watch --hot",
     "prod": "npm run production",
     "production": "mix --production",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",
     "lint": "eslint",
     "prettier:check": "prettier --check .",

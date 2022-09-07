@@ -23,7 +23,7 @@
     "laravel/helpers": "^1.2",
     "laravel/socialite": "^5.5",
     "laravel/tinker": "^2.0",
-    "matanyadaev/laravel-eloquent-spatial": "^1.0",
+    "matanyadaev/laravel-eloquent-spatial": "^2.3",
     "owen-it/laravel-auditing": "^13.0",
     "razorbacks/laravel-shibboleth": "dev-umn",
     "sentry/sentry-laravel": "^2.4",

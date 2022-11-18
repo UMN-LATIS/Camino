@@ -58,7 +58,7 @@ jobs:
         run: yarn jest
 
       - name: Run E2E tests with Cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v4
         with:
           wait-on: "https://localhost"
           browser: chrome

@@ -8697,10 +8697,10 @@ vue-style-loader@^4.1.3:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-types@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/vue-types/-/vue-types-4.1.1.tgz#7d7a4e4a01249a51b6da3faa301248c2ea5f5b97"
-  integrity sha512-Jq2GZ/w6rExJbLA/h7nHBFLciu+YNekgox0DB64wN1snZ4IIJMq+qnqp1/vE4fc7vEjZcP5KGhLzkkSjIHLRzw==
+vue-types@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/vue-types/-/vue-types-5.0.2.tgz#d04966bd416510db878f23030014f424a2e6378e"
+  integrity sha512-+/5hnQ65XOYqPs+tEUF8GGTJX95UFVH0wPQo71IJJYh5TKMfik2tGKTLkZ42JqAczANA9hGu5FrZmPgxn20nnA==
   dependencies:
     is-plain-object "5.0.0"
 

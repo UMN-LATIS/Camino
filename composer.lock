@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "cfe8e92d4826efaed2357c458206e8f2",
+  "content-hash": "dd0682e2be899e089a5f6c3fc57448db",
   "packages": [
     {
       "name": "brick/math",
@@ -7919,19 +7919,19 @@
     },
     {
       "name": "deployer/deployer",
-      "version": "v7.0.0-rc.8",
+      "version": "v7.4.0",
       "source": {
         "type": "git",
         "url": "https://github.com/deployphp/deployer.git",
-        "reference": "629973ee3d0ce78953b18500cba0695feec28c2b"
+        "reference": "b438dc22545ab2ecc67d79c80c7a79c156de3599"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/deployphp/deployer/zipball/629973ee3d0ce78953b18500cba0695feec28c2b",
-        "reference": "629973ee3d0ce78953b18500cba0695feec28c2b",
+        "url": "https://api.github.com/repos/deployphp/deployer/zipball/b438dc22545ab2ecc67d79c80c7a79c156de3599",
+        "reference": "b438dc22545ab2ecc67d79c80c7a79c156de3599",
         "shasum": ""
       },
-      "bin": ["deployer.phar"],
+      "bin": ["dep"],
       "type": "library",
       "notification-url": "https://packagist.org/downloads/",
       "license": ["MIT"],
@@ -7954,7 +7954,7 @@
           "type": "github"
         }
       ],
-      "time": "2022-03-22T14:33:06+00:00"
+      "time": "2024-04-17T20:55:49+00:00"
     },
     {
       "name": "doctrine/cache",
@@ -10946,5 +10946,5 @@
     "php": "^8.1"
   },
   "platform-dev": [],
-  "plugin-api-version": "2.3.0"
+  "plugin-api-version": "2.6.0"
 }

@@ -6,12 +6,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use MatanYadaev\EloquentSpatial\SpatialBuilder;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class Tour extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasSpatial;
 
     protected $spatialFields = [
         'start_location'
@@ -87,10 +87,5 @@ class Tour extends Model
             }
         );
         return $selectedDeepDives;
-    }
-
-    public function newEloquentBuilder($query): SpatialBuilder
-    {
-        return new SpatialBuilder($query);
     }
 }

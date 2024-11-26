@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
+    "rootDir": ".",
     "target": "esnext",
     "module": "esnext",
     // this enables stricter inference for data properties on `this`
     "strict": true,
     "jsx": "preserve",
-    "esModuleInterop": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
     "noImplicitAny": false,
     "allowJs": true,
+    "esModuleInterop": true,
+    "outDir": "./public/build",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "baseUrl": "resources",
-    // this enables the use of `import` statements in TypeScript files
-    // like `import { Component } from '@/components';
-    // requires `tsconfig-paths-webpack-plugin` in order to work
-    // with webpack's `alias` feature
     "paths": {
-      "@/*": ["*"],
+      "@/*": ["js/*"],
       "@trekker/*": ["camino-trekker/*"],
       "@creator/*": ["camino-creator/*"]
     },
-    "sourceMap": true
+    "types": ["vite/client"]
   },
   "include": ["resources"],
-  "exclude": ["node_modules", "*.stories.*", "vendor"]
+  "exclude": ["vendor", "node_modules", "./public/build", "*.stories.*"]
 }

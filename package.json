@@ -8,12 +8,8 @@
     "url": "https://github.com/UMN-LATIS/Camino.git"
   },
   "scripts": {
-    "dev": "mix",
-    "watch": "mix watch",
-    "watch-poll": "mix watch -- --watch-options-poll=1000",
-    "hot": "mix watch --hot",
-    "prod": "npm run production",
-    "production": "mix --production",
+    "dev": "vite",
+    "build": "vite build",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'localhost' 127.0.0.1 `ipconfig getifaddr en0`",
     "lint": "eslint",
     "prettier:check": "prettier --check .",
@@ -34,11 +30,12 @@
     "@types/jest": "^28.1.6",
     "@types/leaflet": "^1.7.11",
     "@types/leaflet-draw": "^1.0.5",
-    "@types/mapbox-gl": "^2.7.3",
     "@types/mapbox__mapbox-gl-draw": "^1.2.5",
+    "@types/mapbox-gl": "^2.7.3",
     "@types/marked": "^4.0.3",
     "@types/ramda": "^0.28.15",
     "@types/webpack-env": "^1.17.0",
+    "@vitejs/plugin-vue": "^5.2.1",
     "@vue/compiler-sfc": "^3.2.37",
     "@vue/eslint-config-typescript": "https://github.com/vuejs/eslint-config-typescript.git",
     "cross-env": "^7.0.3",
@@ -50,6 +47,7 @@
     "husky": "^8.0.1",
     "jest": "^28.1.3",
     "laravel-mix": "^6.0",
+    "laravel-vite-plugin": "^1.0.6",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
     "pretty-quick": "^3.1.3",
@@ -62,6 +60,7 @@
     "tsconfig-paths-webpack-plugin": "^3.5.2",
     "type-fest": "^2.16.0",
     "typescript": "^4.7.4",
+    "vite": "^6.0.0",
     "vue-loader": "^17.0.0",
     "webpack": "^5.73.0"
   },
@@ -115,5 +114,6 @@
   "resolutions": {
     "autoprefixer": "10.4.5"
   },
-  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  "packageManager": "yarn@1.22.19+sha1.4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447",
+  "type": "module"
 }

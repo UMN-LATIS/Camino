@@ -23,7 +23,7 @@ module.exports = {
   plugins: ["vue"],
   rules: {
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": "warn",
     "vue/multi-word-component-names": "off",
     // prevents vars used in `<script setup>` from being reported as unused
     // can be removed once https://github.com/vuejs/eslint-config-typescript/pull/42 is merged into eslint-config-typescript

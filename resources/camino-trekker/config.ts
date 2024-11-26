@@ -11,13 +11,13 @@ interface TrekkerConfig {
   };
 }
 
-const config = {
-  appUrl: process.env.MIX_APP_URL,
+const config: TrekkerConfig = {
+  appUrl: import.meta.env.VITE_APP_URL,
   imageStorageBase: `${process.env.MIX_APP_URL}/storage`,
-  baseDir: process.env.MIX_TREKKER_BASE_DIR,
+  baseDir: import.meta.env.VITE_TREKKER_BASE_DIR,
   mapBox: {
     accessToken:
-      process.env.MIX_MAPBOX_ACCESS_TOKEN ?? "PLEASE_SET_MAPBOX_ACCESS_TOKEN",
+      process.env.VITE_MAPBOX_ACCESS_TOKEN ?? "PLEASE_SET_MAPBOX_ACCESS_TOKEN",
   },
 };
 

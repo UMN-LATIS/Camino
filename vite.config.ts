@@ -10,11 +10,12 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       laravel({
-        input: [
-          "resources/js/app.ts",
-          "resources/camino-trekker/app.ts",
-          "resources/camino-creator/app.ts",
-        ],
+        input: {
+          homeStyles: "resources/sass/app.scss",
+          home: "resources/js/app.ts",
+          trekker: "resources/camino-trekker/app.ts",
+          creator: "resources/camino-creator/app.ts",
+        },
         refresh: true,
       }),
       vue({
@@ -43,13 +44,16 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        "@": fileURLToPath(new URL("./resources/js", import.meta.url)),
-        "@/trekker": fileURLToPath(
+        "@": fileURLToPath(new URL("./resources", import.meta.url)),
+        "@trekker": fileURLToPath(
           new URL("./resources/camino-trekker", import.meta.url)
         ),
-        "@/creator": fileURLToPath(
+        "@creator": fileURLToPath(
           new URL("./resources/camino-creator", import.meta.url)
         ),
+
+        // needed for home and tour pages
+        vue: "vue/dist/vue.esm-bundler.js",
       },
     },
     server: {

@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "baseUrl": "resources",
     "paths": {
-      "@/*": ["js/*"],
+      "@/*": ["./*"],
       "@trekker/*": ["camino-trekker/*"],
       "@creator/*": ["camino-creator/*"]
     },

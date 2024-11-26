@@ -24,7 +24,7 @@
     "laravel/tinker": "^2.0",
     "matanyadaev/laravel-eloquent-spatial": "^4.4",
     "owen-it/laravel-auditing": "^13.0",
-    "razorbacks/laravel-shibboleth": "dev-umn#c30e9e9afbd7a67c909188408e2bd511c0f741cf",
+    "razorbacks/laravel-shibboleth": "dev-umn",
     "sentry/sentry-laravel": "^4.2",
     "socialiteproviders/facebook": "^4.1",
     "socialiteproviders/google": "^4.1",
@@ -53,6 +53,9 @@
     "sort-packages": true,
     "allow-plugins": {
       "php-http/discovery": true
+    },
+    "platform": {
+      "php": "8.1"
     }
   },
   "extra": {

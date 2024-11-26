@@ -30,6 +30,7 @@ return array(
      */
 
     'emulate_idp'       => env('SHIB_EMULATE', false),
+    'emulate_idp_login_view'   => env('SHIB_EMULATE_LOGIN_VIEW', 'vendor.shibalike.IdpLogin'),
     'emulate_idp_users' => array(
         'admin' => array(
             'umnDID'         => 'admin',

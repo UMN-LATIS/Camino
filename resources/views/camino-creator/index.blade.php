@@ -4,15 +4,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Camino: My Tours</title>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
-  <link rel="stylesheet" href="{{ mix('css/camino-creator.css') }}">
   <!-- Styles -->
+  @vite(['resources/camino-creator/app.ts'])
 
 </head>
 
@@ -53,6 +53,5 @@
   @endauth
   window.mapbox = "{{ config('services.mapbox') }}";
 </script>
-<script src="{{ mix('js/camino-creator.js') }}"></script>
 
 </html>

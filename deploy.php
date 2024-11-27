@@ -45,7 +45,7 @@ host('prod')
 
 task('assets:generate', function () {
     cd('{{release_path}}');
-    run('yarn production');
+    run('yarn build');
 })->desc('Assets generation');
 
 after('deploy:failed', 'deploy:unlock');

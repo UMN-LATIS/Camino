@@ -10,7 +10,7 @@ set('ssh_multiplexing', true);
 
 set('repository', 'https://github.com/UMN-LATIS/Camino.git');
 
-set('writable_use_sudo', true);
+// set('writable_use_sudo', true);
 add('shared_files', []);
 add('shared_dirs', []);
 

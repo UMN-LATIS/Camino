@@ -84,7 +84,7 @@
       <button class="btn btn-primary" data-cy="save-button" @click="save">
         <i class="fas fa-save"></i> Save
       </button>
-      <SaveAlert v-model:show-alert="showAlert" />
+      <SaveAlert v-model:showAlert="showAlert" />
     </div>
   </div>
 </template>

@@ -108,7 +108,7 @@
             <i class="fas fa-save"></i>
             <span class="d-none d-sm-inline">Save!</span>
           </button>
-          <SaveAlert v-model:show-alert="showSaveSuccessful" />
+          <SaveAlert v-model:showAlert="showSaveSuccessful" />
         </span>
 
         <div class="col-6">

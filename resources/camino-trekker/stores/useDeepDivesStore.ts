@@ -106,10 +106,3 @@ export const useDeepDivesStore = defineStore("deepdives", {
     },
   },
 });
-
-// see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept(
-    acceptHMRUpdate(useDeepDivesStore, import.meta.webpackHot)
-  );
-}

@@ -28,24 +28,24 @@ $prodHost = 'cla-camino-r9-prd.oit.umn.edu';
 
 
 host('dev')
-  ->set('hostname', $devHost)
-  ->set('remote_user', 'latis_deploy')
-  ->set('labels', ['stage' => 'development'])
-  // ->identityFile()
-  ->set('deploy_path', '/var/www/camino/');
+    ->set('hostname', $devHost)
+    ->set('remote_user', 'latis_deploy')
+    ->set('labels', ['stage' => 'development'])
+    // ->identityFile()
+    ->set('deploy_path', '/var/www/camino/');
 
-  host('stage')
-  ->set('hostname', $stageHost)
-  ->set('remote_user', 'latis_deploy')
-  ->set('labels', ['stage' => 'stage'])
-  ->set('deploy_path', '/var/www/camino/');
+host('stage')
+    ->set('hostname', $stageHost)
+    ->set('remote_user', 'latis_deploy')
+    ->set('labels', ['stage' => 'stage'])
+    ->set('deploy_path', '/var/www/camino/');
 
 
 host('prod')
-  ->set('hostname', $prodHost)
-  ->set('remote_user', 'latis_deploy')
-  ->set('labels', ['stage' => 'production'])
-  ->set('deploy_path', '/var/www/camino/');
+    ->set('hostname', $prodHost)
+    ->set('remote_user', 'latis_deploy')
+    ->set('labels', ['stage' => 'production'])
+    ->set('deploy_path', '/var/www/camino/');
 
 task('assets:generate', function () {
     cd('{{release_path}}');

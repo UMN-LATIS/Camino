@@ -1,6 +1,6 @@
 // vite uses import.meta.env for env variables
 // must be prefixed with MIX to be included in client side app build
-// const env = import.meta.env;
+const env = import.meta.env;
 
 interface TrekkerConfig {
   appUrl: string;
@@ -11,13 +11,13 @@ interface TrekkerConfig {
   };
 }
 
-const config = {
-  appUrl: process.env.MIX_APP_URL,
-  imageStorageBase: `${process.env.MIX_APP_URL}/storage`,
-  baseDir: process.env.MIX_TREKKER_BASE_DIR,
+const config: TrekkerConfig = {
+  appUrl: env.VITE_APP_URL,
+  imageStorageBase: `${env.VITE_APP_URL}/storage`,
+  baseDir: env.VITE_TREKKER_BASE_DIR,
   mapBox: {
     accessToken:
-      process.env.MIX_MAPBOX_ACCESS_TOKEN ?? "PLEASE_SET_MAPBOX_ACCESS_TOKEN",
+      env.VITE_MAPBOX_ACCESS_TOKEN ?? "PLEASE_SET_MAPBOX_ACCESS_TOKEN",
   },
 };
 

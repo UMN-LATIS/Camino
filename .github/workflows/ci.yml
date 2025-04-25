@@ -40,7 +40,7 @@ jobs:
         run: docker compose ps --all
 
       - name: Install JS dependencies
-        run: yarn && yarn prod
+        run: yarn && yarn build
 
       - name: Laravel Setup
         run: |

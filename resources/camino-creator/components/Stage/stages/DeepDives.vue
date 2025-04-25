@@ -54,7 +54,7 @@ function addDeepDive(): void {
   const updatedStage = {
     ...props.stage,
     deepdives: props.stage.deepdives.concat({
-      id: global.crypto.randomUUID(),
+      id: crypto.randomUUID(),
       title: createEmptyLocalizedText(languages.value),
       text: createEmptyLocalizedText(languages.value),
     }),

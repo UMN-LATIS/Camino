@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - run: cp .env.example .env
 
       - name: Setup PHP 8.1 to match server
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.1"
+          php-version: "8.4"
 
       - name: Install PHP dependencies
         run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
@@ -58,7 +58,7 @@ jobs:
         run: yarn jest
 
       - name: Run E2E tests with Cypress
-        uses: cypress-io/github-action@v2
+        uses: cypress-io/github-action@v6
         with:
           wait-on: "https://localhost"
           browser: chrome
@@ -93,7 +93,7 @@ jobs:
 
       - name: Upload logs to GitHub
         if: failure()
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         with:
           name: logs.tgz
           path: ./logs.tgz

@@ -49,7 +49,7 @@ host('prod')
 
 task('assets:generate', function () {
     cd('{{release_path}}');
-    run('npm run production');
+    run('npm run build');
 })->desc('Assets generation');
 
 after('deploy:failed', 'deploy:unlock');

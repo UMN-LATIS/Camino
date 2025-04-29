@@ -29,15 +29,15 @@
     <div>
       <Teleport to="#modals">
         <MenuSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Menu).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Menu)"
           @close="store.closeActiveSheet()"
         />
         <StopListSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Stoplist).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Stoplist)"
           @close="store.closeActiveSheet()"
         />
         <MapSheet
-          :isOpen="store.isActiveSheet(BottomNavSheet.Map).value"
+          :isOpen="store.isActiveSheet(BottomNavSheet.Map)"
           @close="store.closeActiveSheet()"
         />
       </Teleport>
@@ -67,7 +67,7 @@ const store = useTrekkerStore();
   left: 0;
   right: 0;
   padding: 0.5rem 1.25rem;
-  z-index: 100;
+  z-index: 30;
 }
 
 .bottom-nav__navbar {

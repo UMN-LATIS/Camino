@@ -48,7 +48,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { Image, Maybe } from "@/types";
-import { axiosClient as axios } from "@creator/common/axios";
+import { axiosClient as axios } from "@/shared/axios";
 
 interface Props {
   imageSrc: Maybe<string>;

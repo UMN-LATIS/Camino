@@ -1,107 +1,90 @@
-import { computed, ref } from "vue";
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
-import {
-  Maybe,
-  Tour,
-  TourStop,
-  Locale,
-  DeepDiveItem,
-  BottomNavSheet,
-} from "@/types";
+import { Maybe, Tour, TourStop, Locale, BottomNavSheet } from "@/types";
 import { useRoute } from "vue-router";
 import normalizeTour from "@/shared/normalizeTour";
+import { useStorage } from "@vueuse/core";
 
 const toInt = (str) => Number.parseInt(str, 10);
 
-export const useTrekkerStore = defineStore("trekker", () => {
-  const route = useRoute();
+export const useTrekkerStore = defineStore("trekker", {
+  state: () => {
+    const route = useRoute();
 
-  // STATE
-  const state = {
-    tour: ref<Maybe<Tour>>(null),
-    isLoading: ref<boolean>(true),
-    locale: ref<Locale>(Locale.en),
-    errors: ref<string[]>([]),
-    deepDives: ref<DeepDiveItem[]>([]),
-    activeSheet: ref<Maybe<BottomNavSheet>>(null),
-  };
+    const storageKey = `camino.trekker.tour-${route.params.tourId}.trekkerStore`;
 
-  // GETTERS (computed)
-  const getters = {
-    allStops: computed(() => state.tour.value?.stops ?? []),
-    totalStops: computed(() => state.tour.value?.stops.length ?? 0),
-    stopIndex: computed((): number => {
+    return {
+      tour: null as Maybe<Tour>,
+      isLoading: true,
+      locale: useStorage<Locale>(`${storageKey}.locale`, Locale.en),
+      errors: [] as string[],
+      activeSheet: null as Maybe<BottomNavSheet>,
+    };
+  },
+  getters: {
+    allStops: (state) => state.tour?.stops ?? [],
+    totalStops: (state) => state.tour?.stops.length ?? 0,
+    stopIndex(): number {
+      const route = useRoute();
       const stopIndex = Array.isArray(route.params.stopIndex)
         ? route.params.stopIndex[0]
         : route.params.stopIndex;
       return Number.parseInt(stopIndex) ?? 0;
-    }),
-    tourId: computed(() => toInt(route.params.tourId)),
-    isFirstStop: computed((): boolean => getters.stopIndex.value === 0),
-    isLastStop: computed(
-      (): boolean => getters.stopIndex.value === getters.totalStops.value - 1
-    ),
-    currentStop: computed(
-      (): TourStop => getters.allStops.value[getters.stopIndex.value]
-    ),
-    nextStop: computed((): Maybe<TourStop> => {
-      if (getters.isLastStop.value) return null;
-      return getters.allStops.value[getters.stopIndex.value + 1];
-    }),
-    previousStop: computed((): Maybe<TourStop> => {
-      if (getters.isFirstStop.value) return null;
-      return getters.allStops.value[getters.stopIndex.value - 1];
-    }),
-    supportedLocales: computed((): Locale[] => {
-      return state.tour.value?.tour_content?.languages ?? [];
-    }),
-    isActiveSheet: (sheetKey: Maybe<BottomNavSheet>) =>
-      computed((): boolean => state.activeSheet.value === sheetKey),
-  };
-
-  // ACTIONS
-  const actions = {
+    },
+    tourId(): number {
+      const route = useRoute();
+      return toInt(route.params.tourId);
+    },
+    isFirstStop(): boolean {
+      return this.stopIndex === 0;
+    },
+    isLastStop(): boolean {
+      return this.stopIndex === this.totalStops - 1;
+    },
+    currentStop(): TourStop {
+      return this.allStops[this.stopIndex];
+    },
+    nextStop(): Maybe<TourStop> {
+      if (this.isLastStop) return null;
+      return this.allStops[this.stopIndex + 1];
+    },
+    previousStop(): Maybe<TourStop> {
+      if (this.isFirstStop) return null;
+      return this.allStops[this.stopIndex - 1];
+    },
+    supportedLocales(state): Locale[] {
+      return state.tour?.tour_content?.languages ?? [];
+    },
+    isActiveSheet:
+      (state) =>
+      (sheetKey: Maybe<BottomNavSheet>): boolean =>
+        state.activeSheet === sheetKey,
+  },
+  actions: {
     fetchTour(tourId) {
-      state.isLoading.value = true;
+      this.isLoading = true;
       toursService
         .get(tourId)
         .then((tour) => {
-          state.isLoading.value = false;
-          state.tour.value = normalizeTour(tour);
+          this.isLoading = false;
+          this.tour = normalizeTour(tour);
         })
         .catch((err) => {
           console.error(err);
-          state.isLoading.value = false;
-          state.errors.value.push(err);
+          this.isLoading = false;
+          this.errors.push(err);
         });
     },
     setLocale(locale: Locale) {
-      state.locale.value = locale;
+      this.locale = locale;
     },
     setActiveSheet(sheetKey: Maybe<BottomNavSheet>) {
-      state.activeSheet.value = sheetKey;
+      this.activeSheet = sheetKey;
     },
     closeActiveSheet() {
-      actions.setActiveSheet(null);
+      this.setActiveSheet(null);
     },
-    addDeepDive(deepdive) {
-      const hasDeepDive = state.deepDives.value.indexOf(deepdive) > -1;
-      if (hasDeepDive) return;
-      state.deepDives.value.push(deepdive);
-    },
-    removeDeepDive(deepdive) {
-      state.deepDives.value = state.deepDives.value.filter(
-        (d) => d !== deepdive
-      );
-    },
-  };
-
-  return {
-    ...state,
-    ...getters,
-    ...actions,
-  };
+  },
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html

@@ -1,20 +1,5 @@
 <template>
   <div>
-    <div class="form-check">
-      <label class="form-check-label">
-        <input
-          type="checkbox"
-          class="form-check-input"
-          :checked="stage.request_email"
-          @change="
-            handleUpdate({
-              request_email: ($event.target as HTMLInputElement).checked,
-            })
-          "
-        />
-        Request Email Addresses
-      </label>
-    </div>
     <LanguageText
       :text="stage.text"
       :languages="languages"
@@ -27,14 +12,17 @@
 </template>
 
 <script setup lang="ts">
-import { DeepDiveSummaryStage, Locale, Tour } from "@/types";
+import { DeepDiveSummaryStage } from "@/types";
 import LanguageText from "../../LanguageText.vue";
+import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
 const props = defineProps<{
   stage: DeepDiveSummaryStage;
-  languages: Locale[];
-  tour: Tour;
+  tourId: number;
 }>();
+
+const creatorStore = useCreatorStore();
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 const emit = defineEmits<{
   (eventName: "update", updatedStage: DeepDiveSummaryStage);

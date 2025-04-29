@@ -70,8 +70,6 @@
           <template #item="{ element }">
             <Stage
               :stage="element"
-              :tour="tour"
-              :stop="stop"
               :tourId="tourId"
               :stopId="stopId"
               @update="
@@ -110,7 +108,7 @@
             <i class="fas fa-save"></i>
             <span class="d-none d-sm-inline">Save!</span>
           </button>
-          <SaveAlert v-model:show-alert="showSaveSuccessful" />
+          <SaveAlert v-model:showAlert="showSaveSuccessful" />
         </span>
 
         <div class="col-6">
@@ -174,7 +172,6 @@ const showSaveSuccessful = ref(false);
 const errors = ref<string[]>([]);
 const error = ref(null);
 const router = useRouter();
-const tour = creatorStore.getTour(props.tourId);
 const tourTitle = creatorStore.getTourTitle(props.tourId);
 const tourLanguages = creatorStore.getTourLanguages(props.tourId);
 const defaultTourLanguage = creatorStore.getDefaultTourLanguage(props.tourId);

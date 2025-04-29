@@ -11,6 +11,7 @@ import { deepmerge } from "deepmerge-ts";
 import handleUploadImage from "./handleUploadImage";
 import QuillImageUploader from "quill-image-uploader";
 import "quill/dist/quill.snow.css";
+import { useThrottleFn } from "@vueuse/shared";
 
 const props = withDefaults(
   defineProps<{
@@ -70,9 +71,11 @@ onMounted(async () => {
 
   quill.value = new Quill(editorContainerRef.value, quillOptions);
 
-  quill.value.on("text-change", () => {
+  const throttledUpdateModelValue = useThrottleFn(() => {
     emit("update:modelValue", quill.value?.root.innerHTML);
-  });
+  }, 250);
+
+  quill.value.on("text-change", throttledUpdateModelValue);
 
   // set initial editor
   setEditorHTML(props.modelValue);
@@ -82,8 +85,7 @@ onMounted(async () => {
 .v-editor {
   background: #f3f3f3;
   border-radius: 0.5rem;
-  padding: 1rem;
-  padding-top: 0.5rem;
+  padding: 0.5rem;
 }
 </style>
 

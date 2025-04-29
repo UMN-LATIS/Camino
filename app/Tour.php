@@ -6,12 +6,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use MatanYadaev\EloquentSpatial\SpatialBuilder;
 use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
 class Tour extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasSpatial;
 
     protected $spatialFields = [
         'start_location'
@@ -40,6 +40,23 @@ class Tour extends Model
         'start_location' => Point::class,
     ];
 
+    // possible tour language keys
+    public const LOCALE_EN = 'English';
+    public const LOCALE_ES = "Español";
+    public const LOCALE_FR = "Français";
+
+    /**
+     * a list of possible tour locales
+     */
+    public static function possibleLocales()
+    {
+        return [
+            static::LOCALE_EN,
+            static::LOCALE_ES,
+            static::LOCALE_FR
+        ];
+    }
+
     public function users()
     {
         return $this->belongsToMany(User::class);
@@ -55,8 +72,20 @@ class Tour extends Model
         return $this->hasMany(Feedback::class);
     }
 
-    public function newEloquentBuilder($query): SpatialBuilder
+    public function getAllDeepDives()
     {
-        return new SpatialBuilder($query);
+        return $this->stops->flatMap(fn (Stop $stop) => $stop->getDeepDives());
+    }
+
+    public function getDeepDives(array $listOfDeepDiveIds)
+    {
+        $allDeepdives = $this->getAllDeepDives();
+        $selectedDeepDives = $allDeepdives->filter(
+            function ($deepdive) use ($listOfDeepDiveIds) {
+                $id = $deepdive['id'];
+                return collect($listOfDeepDiveIds)->contains($deepdive['id']);
+            }
+        );
+        return $selectedDeepDives;
     }
 }

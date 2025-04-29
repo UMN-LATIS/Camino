@@ -8,18 +8,7 @@
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
     >
-      <!-- Tour Start Location -->
-      <MapMarker
-        v-if="tour.start_location"
-        :lng="tour.start_location.lng"
-        :lat="tour.start_location.lat"
-      >
-        <MapMarkerLabel>
-          <i class="fas fa-star"></i>
-        </MapMarkerLabel>
-      </MapMarker>
-
-      <div v-for="stop in otherStops" :key="stop.id">
+      <div v-for="stop in otherStops" v-once :key="stop.id">
         <MapPolyline
           :id="`otherStopRoute-${stop.id}`"
           :positions="stop.route || []"
@@ -34,13 +23,38 @@
           :lng="stop.targetPoint.lng"
           :lat="stop.targetPoint.lat"
         >
-          <MapMarkerLabel
-            :pulse="currentStop ? currentStop.index - 1 === stop.index : false"
-          >
+          <MapMarkerLabel>
             {{ stop.index + 1 }}
           </MapMarkerLabel>
         </MapMarker>
       </div>
+
+      <!-- Tour Start Location -->
+      <MapMarker
+        v-if="tour.start_location"
+        :lng="tour.start_location.lng"
+        :lat="tour.start_location.lat"
+      >
+        <!-- 
+          If no previousStop exists, then the start point is the
+          previous stop so color it orange 
+        -->
+        <MapMarkerLabel :color="!previousStop ? 'orange' : 'default'">
+          <i class="fas fa-star"></i>
+        </MapMarkerLabel>
+      </MapMarker>
+
+      <!-- Previous Stop Target-->
+      <MapMarker
+        v-if="previousStop && previousStop.targetPoint"
+        :lng="previousStop.targetPoint.lng"
+        :lat="previousStop.targetPoint.lat"
+        @drag="handleMapMarkerDrag"
+      >
+        <MapMarkerLabel color="orange">
+          {{ previousStop.index + 1 }}
+        </MapMarkerLabel>
+      </MapMarker>
 
       <!-- Current Stop Target (Editable)-->
       <MapMarker
@@ -55,7 +69,10 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- Dotted line between current stop target and next route -->
+      <!-- 
+        Draw a dotted line between current stop target and next route 
+        to indicate the change
+      -->
       <MapPolyline
         v-if="routeToNextRoute"
         id="route-to-next-route"
@@ -89,10 +106,10 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, computed, nextTick } from "vue";
+import { ref, computed, nextTick, unref } from "vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
-import { LngLat, Maybe, TourStopRoute } from "@/types";
+import { LngLat, Maybe, TourStop, TourStopRoute } from "@/types";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
@@ -119,7 +136,6 @@ const emit = defineEmits<{
 const store = useCreatorStore();
 const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
-const tour = store.getTour(props.tourId);
 const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
 /**
@@ -147,25 +163,35 @@ interface MappedStop {
   currentValuedTargetPoint?: LngLat;
 }
 
-const toMappedStop = (stop, index) => ({
+const toMappedStop = (stop: TourStop, index: number): MappedStop => ({
   id: stop.id,
   index,
   targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
   route: store.getTourStopRoute(props.tourId, stop.id).value,
 });
 
-const mappedStops = computed((): MappedStop[] =>
-  tour.value.stops.map(toMappedStop)
-);
+// to avoid triggering unnecessary rerenders, avoid
+// using `computed`, and just get the mappedStops
+// at setup time
+// similarly, no need to get a ref to the tour
+// a plain object with suffives since it's only used by mappedStops
+const tour = unref(store.getTour(props.tourId));
+const mappedStops = tour.stops.map(toMappedStop);
 
 const currentStop = computed(
   (): Maybe<MappedStop> =>
-    mappedStops.value.find((s) => s.id === props.stopId) ?? null
+    mappedStops.find((s) => s.id === props.stopId) ?? null
 );
 
-const otherStops = computed((): MappedStop[] =>
-  mappedStops.value.filter((stop) => stop.id !== props.stopId)
-);
+const previousStop = computed((): Maybe<MappedStop> => {
+  const currentStopIndex = currentStop.value?.index;
+  if (!currentStopIndex) return null;
+  return mappedStops.find((s) => s.index === currentStopIndex - 1) ?? null;
+});
+
+const otherStops = computed((): MappedStop[] => {
+  return mappedStops.filter((stop) => stop.id !== props.stopId);
+});
 
 const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   if (!props.targetPoint) return null;

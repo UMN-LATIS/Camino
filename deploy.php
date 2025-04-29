@@ -3,15 +3,14 @@
 namespace Deployer;
 
 require 'recipe/laravel.php';
-require 'contrib/yarn.php';
-
+require 'contrib/npm.php';
 // Configuration
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
 
 set('repository', 'https://github.com/UMN-LATIS/Camino.git');
 
-set('writable_use_sudo', true);
+// set('writable_use_sudo', true);
 add('shared_files', []);
 add('shared_dirs', []);
 
@@ -22,44 +21,40 @@ set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction 
 
 // Servers
 
+// Servers
+$devHost = 'cla-camino-r9-dev.oit.umn.edu';
+$stageHost = 'cla-camino-r9-tst.oit.umn.edu';
+$prodHost = 'cla-camino-r9-prd.oit.umn.edu';
+
+
 host('dev')
-    ->set('hostname', 'cla-camino-dev.oit.umn.edu')
-    ->set('remote_user', 'swadm')
+    ->set('hostname', $devHost)
+    ->set('remote_user', 'latis_deploy')
     ->set('labels', ['stage' => 'development'])
-    ->set('bin/php', '/opt/remi/php81/root/usr/bin/php')
-    ->set('deploy_path', '/swadm/var/www/html/');
+    // ->identityFile()
+    ->set('deploy_path', '/var/www/camino/');
 
 host('stage')
-    ->set('hostname', 'cla-camino-tst.oit.umn.edu')
-    ->set('remote_user', 'swadm')
+    ->set('hostname', $stageHost)
+    ->set('remote_user', 'latis_deploy')
     ->set('labels', ['stage' => 'stage'])
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-    ->set('deploy_path', '/swadm/var/www/html/');
+    ->set('deploy_path', '/var/www/camino/');
+
 
 host('prod')
-    ->set('hostname', 'cla-camino-prd.oit.umn.edu')
-    ->set('remote_user', 'swadm')
+    ->set('hostname', $prodHost)
+    ->set('remote_user', 'latis_deploy')
     ->set('labels', ['stage' => 'production'])
-    ->set('bin/php', '/opt/rh/rh-php73/root/usr/bin/php')
-    ->set('deploy_path', '/swadm/var/www/html/');
+    ->set('deploy_path', '/var/www/camino/');
 
 task('assets:generate', function () {
     cd('{{release_path}}');
-    run('yarn production');
+    run('npm run build');
 })->desc('Assets generation');
-
-task('fix_storage_perms', function () {
-    cd('{{release_path}}');
-    run('touch storage/logs/laravel.log');
-    run('sudo chown apache storage/logs/laravel.log');
-    run('sudo chgrp apache storage/logs/laravel.log');
-})->desc("Fix Apache Logs");
-after('artisan:migrate', 'fix_storage_perms');
-
 
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 before('deploy:symlink', 'artisan:migrate');
-after('deploy:update_code', 'yarn:install');
+after('deploy:update_code', 'npm:install');
 after('deploy:shared', 'assets:generate');

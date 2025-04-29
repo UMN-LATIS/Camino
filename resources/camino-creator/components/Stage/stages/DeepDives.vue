@@ -25,10 +25,7 @@
         <i class="fas fa-trash"></i> Remove Deep Dive
       </button>
     </div>
-    <!-- FIXME: This is mutating the stage prop! Ignoring for now. -->
-    <!-- eslint-disable -->
-    <button @click="addDeepDive" class="btn btn-outline-primary">
-      <!-- eslint-enable -->
+    <button class="btn btn-outline-primary" @click="addDeepDive">
       <i class="fas fa-image"></i> Add Deep Dive
     </button>
   </div>
@@ -37,15 +34,16 @@
 <script setup lang="ts">
 import LanguageText from "../../LanguageText.vue";
 import { createEmptyLocalizedText } from "@/shared/i18n";
-import type { DeepDiveStage, DeepDiveItem, Locale, Stage, Tour } from "@/types";
+import type { DeepDiveStage, DeepDiveItem } from "@/types";
+import { useCreatorStore } from "@/camino-creator/stores/useCreatorStore";
 
-interface Props {
-  stage: Stage;
-  languages: Locale[];
-  tour: Tour;
-}
+const props = defineProps<{
+  stage: DeepDiveStage;
+  tourId: number;
+}>();
 
-const props = defineProps<Props>();
+const creatorStore = useCreatorStore();
+const languages = creatorStore.getTourLanguages(props.tourId);
 
 interface Emits {
   (eventName: "update", payload: DeepDiveStage): void;
@@ -56,9 +54,9 @@ function addDeepDive(): void {
   const updatedStage = {
     ...props.stage,
     deepdives: props.stage.deepdives.concat({
-      id: global.crypto.randomUUID(),
-      title: createEmptyLocalizedText(props.languages),
-      text: createEmptyLocalizedText(props.languages),
+      id: crypto.randomUUID(),
+      title: createEmptyLocalizedText(languages.value),
+      text: createEmptyLocalizedText(languages.value),
     }),
   };
   emit("update", updatedStage);

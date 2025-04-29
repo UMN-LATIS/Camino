@@ -99,33 +99,46 @@ export interface Waypoint {
   location: LngLat;
 }
 
-export interface Stage extends Record<string, any> {
+export type Stage =
+  | CoreStage
+  | ARStage
+  | DeepDiveStage
+  | EmbedStage
+  | FeedbackStage
+  | GalleryStage
+  | GuideStage
+  | LanguageSelectorStage
+  | NavigationStage
+  | QuizStage
+  | SeparatorStage;
+
+export interface CoreStage {
   id: string; // uuid
   type: StageType;
 }
 
 export interface DeepDiveItem {
+  id: string; // uuid
   title: LocalizedText;
   text: LocalizedText;
 }
 
-export interface ARStage extends Stage {
+export interface ARStage extends CoreStage {
   text: LocalizedText;
   waypoints: Waypoint[];
 }
-export interface DeepDiveStage extends Stage {
+export interface DeepDiveStage extends CoreStage {
   deepdives: DeepDiveItem[];
 }
-export interface DeepDiveSummaryStage extends Stage {
-  request_email: boolean;
+export interface DeepDiveSummaryStage extends CoreStage {
   text: LocalizedText;
 }
 
-export interface EmbedStage extends Stage {
+export interface EmbedStage extends CoreStage {
   source: string;
 }
 
-export interface FeedbackStage extends Stage {
+export interface FeedbackStage extends CoreStage {
   text: LocalizedText;
 }
 
@@ -133,17 +146,17 @@ export interface GalleryImage {
   src: string;
   text: LocalizedText;
 }
-export interface GalleryStage extends Stage {
+export interface GalleryStage extends CoreStage {
   images: GalleryImage[];
 }
 
-export interface GuideStage extends Stage {
+export interface GuideStage extends CoreStage {
   text: LocalizedText;
 }
-export type LanguageSelectorStage = Stage;
+export type LanguageSelectorStage = CoreStage;
 
 export type TourStopRoute = LngLat[];
-export interface NavigationStage extends Stage {
+export interface NavigationStage extends CoreStage {
   text: LocalizedText;
   route: Maybe<TourStopRoute>;
   targetPoint: Maybe<LngLat>;
@@ -157,13 +170,15 @@ export interface QuizChoice {
   text: LocalizedText;
   correct: boolean;
 }
-export interface QuizStage extends Stage {
+export interface QuizStage extends CoreStage {
   quizType: QuizType;
   questionText: LocalizedText;
   hintText: LocalizedText;
   responses: QuizChoice[];
 }
-export type SeparatorStage = Stage;
+export interface SeparatorStage extends CoreStage {
+  text: LocalizedText;
+}
 
 export interface Image {
   src: string;
@@ -281,3 +296,35 @@ export enum TourStyle {
   NEXT_STOP = "next_stop",
   ENTIRE_TOUR = "entire_tour",
 }
+
+/**
+ * for drawing a tour stop and routes
+ */
+export interface TourMapStop {
+  id: number;
+  index: number;
+  number: number;
+  title: string;
+  href: string;
+  startPoint: LngLat;
+  stopPoint: LngLat;
+  route: LngLat[];
+  color: string;
+  isActive: boolean;
+  /** immediately prior to active, so acts as a start point */
+  preceedsActive: boolean;
+}
+
+/**
+ * Quiz with submitted responses and status
+ */
+export interface UserQuiz extends QuizStage {
+  isComplete: boolean;
+  submittedResponses: QuizChoice[];
+  showHint: boolean;
+}
+
+export type StopIndex = number;
+export type QuizStageId = string;
+export type UserQuizLookup = Record<string, UserQuiz>;
+export type UserQuizByStopLookup = Record<StopIndex, QuizStageId[]>;

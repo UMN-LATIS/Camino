@@ -1,4 +1,5 @@
 import { StageType, TourStop } from "@/types";
+import { Locale } from "@/types";
 
 export default (): Partial<TourStop> => ({
   stop_content: {
@@ -11,30 +12,30 @@ export default (): Partial<TourStop> => ({
     header_image: null,
     stages: [
       {
-        id: global.crypto.randomUUID(),
-        text: {
-          English: "Navigation",
-        },
         type: StageType.Separator,
+        id: crypto.randomUUID(),
+        text: {
+          [Locale.en]: "Navigation",
+        },
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
-          English: "",
+          [Locale.en]: "",
         },
         type: StageType.Navigation,
         targetPoint: null,
         route: [],
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "Guide",
         },
         type: StageType.Separator,
       },
       {
-        id: global.crypto.randomUUID(),
+        id: crypto.randomUUID(),
         text: {
           English: "",
         },

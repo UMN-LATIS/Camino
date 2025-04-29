@@ -1,7 +1,7 @@
-import { Stage, Tour } from "@/types";
+import { CoreStage, Tour } from "@/types";
 import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
 
-export default <T extends Stage>(
+export default <T extends CoreStage>(
   stageKey: string,
   stageValue: T[keyof T],
   tour: Tour

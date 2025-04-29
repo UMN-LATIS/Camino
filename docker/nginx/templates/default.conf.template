@@ -11,7 +11,7 @@ server {
     ssl_certificate_key /etc/nginx/certs/key.pem;
 
   location / {
-    proxy_pass	http://camino-laravel.test-1;
+    proxy_pass	http://camino-app-1;
     proxy_http_version  1.1;
     proxy_cache_bypass  $http_upgrade;
 

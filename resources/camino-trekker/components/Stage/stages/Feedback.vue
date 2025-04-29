@@ -1,55 +1,52 @@
 <template>
-  <form class="feedback-stage" @submit.prevent="submitFeedback">
+  <div class="feedback-stage">
     <h3>Feedback</h3>
-    <Input v-model="name" label="Name" type="text" required />
-    <Input v-model="email" label="Email" type="email" required />
-    <TextArea v-model="feedback" label="Comment" required></TextArea>
-    <Error v-if="error"> {{ error }} </Error>
-    <div class="feedback-stage__actions">
-      <Button variant="link" type="reset">Cancel</Button>
-      <Button type="submit" iconPosition="after">Submit</Button>
+    <form
+      v-if="feedbackStore.isNewSubmission && !feedbackStore.isSubmitting"
+      class="feedback-stage__form"
+      @submit.prevent="feedbackStore.submitFeedbackForTour(trekkerStore.tourId)"
+    >
+      <Input v-model="feedbackStore.name" label="Name" type="text" required />
+      <Input
+        v-model="feedbackStore.email"
+        label="Email"
+        type="email"
+        required
+      />
+      <TextArea
+        v-model="feedbackStore.feedback"
+        label="Comment"
+        required
+      ></TextArea>
+      <Error v-if="feedbackStore.error"> {{ feedbackStore.error }} </Error>
+      <div class="feedback-stage__actions">
+        <Button variant="link" type="reset">Cancel</Button>
+        <Button
+          type="submit"
+          iconPosition="after"
+          :disabled="!feedbackStore.canSubmit"
+          >Submit</Button
+        >
+      </div>
+    </form>
+    <Spinner v-if="feedbackStore.isSubmitting" />
+    <div v-if="!feedbackStore.isNewSubmission" class="feedback-stage__success">
+      <p>Thank you for your feedback.</p>
+      <Button @click="feedbackStore.softReset()">Share More</Button>
     </div>
-  </form>
+  </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import axios from "axios";
 import Input from "../../Input/Input.vue";
 import TextArea from "../../TextArea/TextArea.vue";
 import Button from "../../Button/Button.vue";
 import Error from "../../Error/Error.vue";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
-import config from "../../../config";
+import Spinner from "@/camino-creator/components/Spinner.vue";
+import { useFeedbackStore } from "@/camino-trekker/stores/useFeedbackStore";
 
-const store = useTrekkerStore();
-const name = ref("");
-const email = ref("");
-const feedback = ref("");
-const isSubmitting = ref(false);
-const isSuccessful = ref(false);
-const error = ref("");
-
-function submitFeedback() {
-  isSubmitting.value = true;
-  axios
-    .post(`${config.appUrl}/feedback/${store.tourId}`, {
-      name: name.value,
-      email: email.value,
-      feedback: feedback.value,
-    })
-    .then(() => {
-      isSubmitting.value = false;
-      isSuccessful.value = true;
-
-      // reset comment, but keep name and email
-      feedback.value = "";
-    })
-    .catch((err) => {
-      isSubmitting.value = false;
-      isSuccessful.value = false;
-      error.value = err.message;
-    });
-}
+const trekkerStore = useTrekkerStore();
+const feedbackStore = useFeedbackStore();
 </script>
 <style scoped>
 .feedback-stage {

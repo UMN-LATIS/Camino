@@ -1,6 +1,6 @@
-import type { TourStop, Stage } from "@/types";
+import type { TourStop, CoreStage } from "@/types";
 
-export default <T extends Stage>(
+export default <T extends CoreStage>(
   stageKey: string,
   stageValue: T[keyof T],
   stop: TourStop

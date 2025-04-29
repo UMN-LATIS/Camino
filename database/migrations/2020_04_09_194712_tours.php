@@ -23,7 +23,7 @@ class Tours extends Migration
             $table->boolean("public");
             $table->string("title");
             $table->json("tour_content");
-            $table->point('start_location')->nullable();
+            $table->geometry('start_location', subtype: 'point')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

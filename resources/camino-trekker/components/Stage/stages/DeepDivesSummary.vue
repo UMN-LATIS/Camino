@@ -2,72 +2,80 @@
   <div class="stage-deepdive-summary">
     <h3>Deep Dives</h3>
 
-    <Markdown :content="deepDiveSummaryText" />
-    <div v-if="stage.request_email" class="deepdive-select">
-      <input
-        id="select-all"
-        type="checkbox"
-        :checked="allSelected"
-        @change="toggleSelectAll(!allSelected)"
-      />
-      <label for="select-all"> Select All </label>
-    </div>
-    <ul class="deepdive-list">
-      <li
-        v-for="(deepdive, key) in allDeepDives"
-        :key="key"
-        class="deepdive-item"
-      >
-        <DeepDivesSummaryItem
-          :id="`deepdive-${key}`"
-          :title="translate(deepdive.title, store.locale)"
-          :content="translate(deepdive.text, store.locale)"
-          :checked="isDeepDiveChecked(deepdive)"
-          :checkboxHidden="!stage.request_email"
-          @toggleChecked="(isChecked) => setChecked(deepdive, isChecked)"
-        />
-      </li>
-    </ul>
     <form
-      v-if="stage.request_email"
+      v-if="['idle', 'failure'].includes(deepDivesStore.sendStatus)"
       class="deepdivesummary-form"
-      @submit.prevent="sendEmail"
+      @submit.prevent="deepDivesStore.emailDeepDives"
     >
+      <SanitizedHTML :html="deepDiveSummaryText" />
+
+      <div class="deepdive-select">
+        <input
+          id="select-all"
+          type="checkbox"
+          :checked="deepDivesStore.areAllSelected"
+          @change="deepDivesStore.toggleAll()"
+        />
+        <label for="select-all"> Select All </label>
+      </div>
+      <ul class="deepdive-list">
+        <li
+          v-for="(deepdive, key) in deepDivesStore.allDeepDives"
+          :key="key"
+          class="deepdive-item"
+        >
+          <DeepDivesSummaryItem
+            :id="`deepdive-${key}`"
+            :title="translate(deepdive.title, trekkerStore.locale)"
+            :content="translate(deepdive.text, trekkerStore.locale)"
+            :checked="deepdive.isSelected"
+            @toggleChecked="deepDivesStore.toggle(deepdive.id)"
+          />
+        </li>
+      </ul>
       <Input
-        v-model="email"
+        v-model="deepDivesStore.email"
         class="deepdivesummary-form__input"
         type="email"
         placeholder="you@email.com"
         label="Email"
         required
       />
-      <Error v-if="error"> {{ error }} </Error>
+      <Error v-if="deepDivesStore.error"> {{ deepDivesStore.error }} </Error>
       <div class="form-actions">
-        <Button class="deepdivesummary-form__button" type="submit">
-          Send Me a Copy
+        <Button
+          class="deepdivesummary-form__button"
+          type="submit"
+          :disabled="!deepDivesStore.canSendEmail"
+        >
+          Send
         </Button>
       </div>
     </form>
+    <Spinner v-if="deepDivesStore.sendStatus === 'pending'" />
+    <Error v-if="deepDivesStore.error"> {{ deepDivesStore.error }} </Error>
+
+    <div v-if="deepDivesStore.sendStatus === 'success'" class="stage__success">
+      <p>Your deep dives were sent to {{ deepDivesStore.email }}.</p>
+      <div class="form-actions">
+        <Button @click="deepDivesStore.softReset()">Show Again</Button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import axios from "axios";
-import Markdown from "../../Markdown/Markdown.vue";
+import { computed } from "vue";
 import Error from "../../Error/Error.vue";
-import getStagesFromTourWhere from "../../../utils/getStagesFromTourWhere";
 import DeepDivesSummaryItem from "./DeepDivesSummaryItem.vue";
 import Button from "../../Button/Button.vue";
 import Input from "../../Input/Input.vue";
-import config from "../../../config";
 import { useTrekkerStore } from "@/camino-trekker/stores/useTrekkerStore";
 import { translate } from "@/shared/i18n";
-import type {
-  DeepDiveItem,
-  DeepDiveSummaryStage,
-  DeepDiveStage,
-} from "@/types";
+import type { DeepDiveSummaryStage } from "@/types";
+import SanitizedHTML from "../../SanitizedHTML/SanitizedHTML.vue";
+import { useDeepDivesStore } from "@/camino-trekker/stores/useDeepDivesStore";
+import Spinner from "@/camino-creator/components/Spinner.vue";
 
 interface Props {
   stage: DeepDiveSummaryStage;
@@ -75,72 +83,18 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const store = useTrekkerStore();
-const email = ref("");
-const isSendingEmail = ref(false);
-const isSent = ref(false);
-const error = ref("");
+const trekkerStore = useTrekkerStore();
+const deepDivesStore = useDeepDivesStore();
 
 const deepDiveSummaryText = computed(
-  () => props.stage.text[store.locale] || ""
+  () => props.stage.text[trekkerStore.locale] || ""
 );
-const checkedDeepDives = computed(() => store.deepDives);
-const allDeepDives = computed(() => {
-  if (!store.tour) return [];
-  const deepDiveStages = getStagesFromTourWhere<DeepDiveStage>(
-    "type",
-    "deepdives",
-    store.tour
-  );
-  const allDeepDives = deepDiveStages.flatMap((stage) => stage.deepdives);
-  return allDeepDives;
-});
-
-const allSelected = computed(
-  () => allDeepDives.value.length === checkedDeepDives.value.length
-);
-
-function isDeepDiveChecked(deepDive) {
-  return checkedDeepDives.value.indexOf(deepDive) !== -1;
-}
-
-const setChecked = (deepdive: DeepDiveItem, isChecked: boolean) => {
-  return isChecked
-    ? store.addDeepDive(deepdive)
-    : store.removeDeepDive(deepdive);
-};
-
-function toggleSelectAll(selectAll: boolean) {
-  allDeepDives.value.forEach((d) =>
-    selectAll ? store.addDeepDive(d) : store.removeDeepDive(d)
-  );
-}
-
-function sendEmail() {
-  isSendingEmail.value = true;
-  axios
-    .post(`${config.appUrl}/emailDeepDives`, {
-      email: email.value,
-      deepDives: checkedDeepDives.value,
-    })
-    .then((response) => {
-      console.log({ response });
-      isSendingEmail.value = false;
-      isSent.value = true;
-      email.value = "";
-    })
-    .catch((err) => {
-      isSendingEmail.value = false;
-      isSent.value = false;
-      error.value = err.message;
-    });
-}
 </script>
 
 <style scoped>
 .stage-deepdive-summary {
-  max-width: 30rem;
   margin: 2rem 0;
+  max-width: 30rem;
 }
 
 .deepdive-select {
@@ -177,5 +131,8 @@ function sendEmail() {
   justify-content: flex-end;
   text-align: center;
   gap: 0.5rem;
+}
+.deepdivesummary-form__button:disabled {
+  opacity: 0.25;
 }
 </style>

@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\CaminoTrekkerController;
+use App\Http\Controllers\TourDeepDivesEmailController;
 
 Route::impersonate();
 
@@ -30,7 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'permission:administ
 // API
 Route::get('/api/tour/{tour}', "HomeController@loadTour");
 Route::get('/api/tours/', "HomeController@loadTours");
-Route::post('/emailDeepDives', 'HomeController@emailDeepDives');
+Route::post('/api/tour/{tour}/deepdivesEmail', TourDeepDivesEmailController::class);
 Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
 // Camino Trekker App

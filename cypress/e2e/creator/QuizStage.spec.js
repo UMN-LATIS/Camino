@@ -33,6 +33,10 @@ describe("Tour Stop Page", () => {
     );
 
     cy.get('[data-cy="quiz-prompt-editor"]').type("What's the best color?");
+    cy.get('[data-cy="quiz-prompt-editor"]').should(
+      "contain.text",
+      "What's the best color?"
+    );
 
     cy.contains("Add response").click();
     cy.get(

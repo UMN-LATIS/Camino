@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from "pinia";
 import { toursService } from "../common/api.service";
 import { Maybe, Tour, TourStop, Locale, BottomNavSheet } from "@/types";
-import { useRoute } from "vue-router";
+import { useRoute, RouteLocationNormalizedLoaded } from "vue-router";
 import normalizeTour from "@/shared/normalizeTour";
 import { useStorage } from "@vueuse/core";
 
@@ -10,7 +10,6 @@ const toInt = (str) => Number.parseInt(str, 10);
 export const useTrekkerStore = defineStore("trekker", {
   state: () => {
     const route = useRoute();
-
     const storageKey = `camino.trekker.tour-${route.params.tourId}.trekkerStore`;
 
     return {
@@ -19,21 +18,20 @@ export const useTrekkerStore = defineStore("trekker", {
       locale: useStorage<Locale>(`${storageKey}.locale`, Locale.en),
       errors: [] as string[],
       activeSheet: null as Maybe<BottomNavSheet>,
+      route: route as RouteLocationNormalizedLoaded,
     };
   },
   getters: {
     allStops: (state) => state.tour?.stops ?? [],
     totalStops: (state) => state.tour?.stops.length ?? 0,
-    stopIndex(): number {
-      const route = useRoute();
-      const stopIndex = Array.isArray(route.params.stopIndex)
-        ? route.params.stopIndex[0]
-        : route.params.stopIndex;
+    stopIndex(state): number {
+      const stopIndex = Array.isArray(state.route.params.stopIndex)
+        ? state.route.params.stopIndex[0]
+        : state.route.params.stopIndex;
       return Number.parseInt(stopIndex) ?? 0;
     },
-    tourId(): number {
-      const route = useRoute();
-      return toInt(route.params.tourId);
+    tourId(state): number {
+      return toInt(state.route.params.tourId);
     },
     isFirstStop(): boolean {
       return this.stopIndex === 0;

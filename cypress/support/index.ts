@@ -13,6 +13,9 @@
 // https://on.cypress.io/configuration
 // ***********************************************************
 
+/// <reference types="./" />
+
+// import "cypress-real-events";
 import "./laravel-commands";
 import "./laravel-routes";
 import "./assertions";

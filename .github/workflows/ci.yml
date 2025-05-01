@@ -17,7 +17,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: password
-          MYSQL_DATABASE: smartycards
+          MYSQL_DATABASE: camino
           MYSQL_USER: sail
           MYSQL_PASSWORD: password
         ports:

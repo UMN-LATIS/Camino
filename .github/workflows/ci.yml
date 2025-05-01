@@ -40,7 +40,7 @@ jobs:
         run: docker compose ps --all
 
       - name: Install JS dependencies
-        run: yarn && yarn build
+        run: npm ci
 
       - name: Laravel Setup
         run: |
@@ -55,7 +55,7 @@ jobs:
       #   run: yarn lint
 
       - name: Run unit tests with Jest
-        run: yarn jest
+        run: npm run jest
 
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v6

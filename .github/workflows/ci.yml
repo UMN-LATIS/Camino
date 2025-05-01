@@ -1,99 +1,82 @@
 name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 env:
   WWWGROUP: 1000
   WWWUSER: 1000
   MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+  DB_HOST: 127.0.0.1
 
 jobs:
   tests:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: smartycards
+          MYSQL_USER: sail
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - run: cp .env.example .env
+      - run: |
+          cp .env.example .env
+          echo "APP_URL=http://localhost:8000" >> .env
 
-      - name: Setup PHP 8.1 to match server
+      - name: Setup PHP to match server
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.4"
 
-      - name: Install PHP dependencies
-        run: composer install --no-interaction --prefer-dist --ignore-platform-reqs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-      - name: make test certs
+      - name: Install Composer dependencies
         run: |
-          mkdir .cert
-          echo "${{ secrets.TEST_CERT_PEM_BASE64 }}" | base64 -d > .cert/cert.pem
-          echo "${{ secrets.TEST_KEY_PEM_BASE64 }}" | base64 -d > .cert/key.pem
+          php --version
+          composer install --no-interaction --prefer-dist
 
-      - name: Build
-        run: docker compose build
+      - name: Setup Laravel
+        run: |
+          php artisan key:generate
+          php artisan storage:link
+          chmod -R 777 storage bootstrap/cache
+          php artisan config:clear
 
-      - name: Start
-        run: docker compose up -d
-
-      - name: Check service status
-        run: docker compose ps --all
+      - name: DB Migrate and Seed
+        run: php artisan migrate:fresh --seed
 
       - name: Install JS dependencies
         run: npm ci
 
-      - name: Laravel Setup
-        run: |
-          docker compose exec -T ${{ env.APP_SERVICE || 'app'}} ./bin/ci.sh
-          docker compose exec -T app php artisan migrate:fresh --seed
+      - name: build client app
+        run: npm run build
 
-      - name: Set ownership
-        run: |
-          docker compose exec -T ${{ env.APP_SERVICE || 'app'}} chown -R $WWWUSER:$WWWGROUP storage
-
-      # - name: Lint code
-      #   run: yarn lint
-
-      - name: Run unit tests with Jest
-        run: npm run jest
+      - name: Start Laravel server
+        run: php artisan serve --host=0.0.0.0 --port=8000 &
 
       - name: Run E2E tests with Cypress
         uses: cypress-io/github-action@v6
         with:
-          wait-on: "https://localhost"
+          wait-on: "http://localhost:8000"
           browser: chrome
-          config: baseUrl=https://localhost
-        env:
-          NODE_TLS_REJECT_UNAUTHORIZED: 0
+          config: baseUrl=http://localhost:8000
 
-      ## Grab any useful artifacts before exiting
       - name: Upload test screenshots if any
         uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-
-      - name: Upload snapshots
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: cypress-snapshots
-          path: cypress/snapshots
-
-      - name: Collect docker logs on failure
-        if: failure()
-        uses: jwalton/gh-docker-logs@v2
-        with:
-          dest: "./storage/logs"
-
-      - name: Tar logs
-        if: failure()
-        run: tar cvzf ./logs.tgz ./storage/logs
-
-      - name: Upload logs to GitHub
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: logs.tgz
-          path: ./logs.tgz
+          name: cypress-artifacts
+          path: |
+            tests/cypress/screenshots
+            tests/cypress/snapshots
+            tests/cypress/videos

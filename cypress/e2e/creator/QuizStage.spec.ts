@@ -37,6 +37,8 @@ describe("Tour Stop Page", () => {
       { delay: 100 }
     );
 
+    cy.wait(500); // wait for typing to finish
+
     cy.get('[data-cy="quiz-prompt-editor"]').should(
       "contain.text",
       "What's the best color?"

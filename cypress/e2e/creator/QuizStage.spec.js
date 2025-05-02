@@ -32,7 +32,9 @@ describe("Tour Stop Page", () => {
       "quiz"
     );
 
-    cy.get('[data-cy="quiz-prompt-editor"]').type("What's the best color?");
+    cy.get('[data-cy="quiz-prompt-editor"] .ql-editor').type(
+      "What's the best color?"
+    );
     cy.get('[data-cy="quiz-prompt-editor"]').should(
       "contain.text",
       "What's the best color?"

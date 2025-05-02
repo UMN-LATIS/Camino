@@ -57,7 +57,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      host: new URL(env.VITE_APP_URL).host,
+      host: "127.0.0.1",
       https: {
         cert: "./.cert/cert.pem",
         key: "./.cert/key.pem",

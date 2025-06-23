@@ -4,6 +4,10 @@ namespace Deployer;
 
 require 'recipe/laravel.php';
 require 'contrib/npm.php';
+require 'contrib/cachetool.php';
+
+set('cachetool_args', '--tmp-dir=/var/www/chimein');
+
 // Configuration
 set('ssh_type', 'native');
 set('ssh_multiplexing', true);
@@ -58,3 +62,4 @@ after('deploy:failed', 'deploy:unlock');
 before('deploy:symlink', 'artisan:migrate');
 after('deploy:update_code', 'npm:install');
 after('deploy:shared', 'assets:generate');
+after('deploy:symlink', 'cachetool:clear:opcache');

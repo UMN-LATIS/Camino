@@ -71,11 +71,9 @@ onMounted(async () => {
 
   quill.value = new Quill(editorContainerRef.value, quillOptions);
 
-  const throttledUpdateModelValue = useThrottleFn(() => {
-    emit("update:modelValue", quill.value?.root.innerHTML);
-  }, 250);
-
-  quill.value.on("text-change", throttledUpdateModelValue);
+  quill.value.on("text-change", () =>
+    emit("update:modelValue", quill.value?.root.innerHTML)
+  );
 
   // set initial editor
   setEditorHTML(props.modelValue);

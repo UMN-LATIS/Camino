@@ -6,7 +6,7 @@ require 'recipe/laravel.php';
 require 'contrib/npm.php';
 require 'contrib/cachetool.php';
 
-set('cachetool_args', '--tmp-dir=/var/www/chimein');
+set('cachetool_args', '--tmp-dir=/var/www/camino');
 
 // Configuration
 set('ssh_type', 'native');

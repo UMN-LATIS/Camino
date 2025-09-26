@@ -22,7 +22,6 @@
   </div>
 
 </body>
-<script src="{{ mix('/js/app.js') }}"></script>
 <script>
   THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
 </script>

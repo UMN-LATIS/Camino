@@ -54,6 +54,7 @@ export default defineConfig(({ mode }) => {
         // needed for home and tour pages
         vue: "vue/dist/vue.esm-bundler.js",
       },
+      dedupe: ["three"],
     },
 
     server: {

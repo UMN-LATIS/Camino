@@ -13,18 +13,18 @@
       />
 
       <a-text
-        v-for="(waypoint, index) in arStage.waypoints"
-        :key="index"
-        :value="waypoint.text[locale]"
-        :locar-entity-place="formatLocation(waypoint.location)"
+        v-for="w in processedWaypoints"
+        :key="w.id"
+        :value="w.value"
+        :locar-entity-place="w.placeString"
         color="red"
         align="center"
-        :scale="formatScale(waypoint)"
-        :geometry="`primitive: plane; width: ${
-          0.1 * (waypoint.text[locale].length + 2)
-        }; height: 0.3;`"
-        material="color: #eee; opacity: 0.6; transparent: true"
-        look-at="[camera]"
+        :scale="w.scaleString"
+        side="double"
+        :geometry="w.geometryString"
+        material="color: #fff; opacity: 0.7"
+        :z-offset="w.zOffset"
+        look-at="#camera"
       />
     </a-scene>
   </div>
@@ -55,6 +55,7 @@ const props = defineProps<{
 // Distance calculation constants
 const METERS_PER_DEGREE = 111_139; // avg meters per degree of lat/lng
 const DEFAULT_DISTANCE_METERS = 2000; // fallback if no target point available
+const Z_FIGHTING_OFFSET = 0.001; // prevent flickering
 
 const tour = ref<Tour | null>(null);
 
@@ -104,14 +105,32 @@ function calcTextScale(distance: number): number {
     MAX_SCALE,
     1 / Math.log10(Math.max(distance, 0.001)) // Avoid log(0)
   );
+
+  // round to 2 decimal places for cleaner output
   return distance * scaleFactor;
 }
 
-function formatScale(waypoint: Waypoint): string {
-  const distance = calculateDistanceInMeters(waypoint);
-  const scale = calcTextScale(distance);
-  return `${scale} ${scale} ${scale}`;
-}
+// preprocess waypoints to memoize calculations
+const processedWaypoints = computed(() => {
+  if (!arStage.value) return [];
+  return arStage.value.waypoints.map((waypoint, index) => {
+    const distance = calculateDistanceInMeters(waypoint);
+    const scale = calcTextScale(distance);
+    const textLength = waypoint.text[props.locale]?.length || 0;
+    const width = 0.15 * (textLength + 2); // width based on text length
+    return {
+      ...waypoint,
+      id: index,
+      distance,
+      scale,
+      value: waypoint.text[props.locale],
+      placeString: formatLocation(waypoint.location),
+      scaleString: `${scale} ${scale} ${scale}`,
+      geometryString: `primitive: plane; width: ${width}; height: 0.4;`,
+      zOffset: Z_FIGHTING_OFFSET * scale, // prevent flicker
+    };
+  });
+});
 
 onMounted(async () => {
   try {

@@ -21,8 +21,7 @@ export default defineConfig(({ mode }) => {
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: (tag) =>
-              ["a-text", "a-scene", "a-camera"].includes(tag),
+            isCustomElement: (tag) => tag.startsWith("a-"),
             whitespace: "preserve",
           },
           transformAssetUrls: {
@@ -55,9 +54,11 @@ export default defineConfig(({ mode }) => {
         // needed for home and tour pages
         vue: "vue/dist/vue.esm-bundler.js",
       },
+      dedupe: ["three"],
     },
+
     server: {
-      host: "127.0.0.1",
+      host: "192.168.8.108", // permit external access
       https: {
         cert: "./.cert/cert.pem",
         key: "./.cert/key.pem",

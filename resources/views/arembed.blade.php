@@ -5,13 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  @vite(['resources/sass/app.scss', 'resources/js/app.ts'])
-
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
   <title>AR Embed | Camino</title>
+  @vite(['resources/sass/app.scss', 'resources/js/app.ts'])
 
 </head>
 
@@ -23,7 +18,19 @@
 
 </body>
 <script>
-  THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
+  // iOS compatibility: request camera permission early
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({
+        video: true
+      })
+      .then(function(stream) {
+        // Stop the stream immediately - we just need permission
+        stream.getTracks().forEach(track => track.stop());
+      })
+      .catch(function(err) {
+        console.warn('Camera permission denied:', err);
+      });
+  }
 </script>
 
 </html>

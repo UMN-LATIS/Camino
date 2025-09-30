@@ -2,7 +2,7 @@
   <!-- eslint-enable vue/multi-word-component-names -->
   <!-- eslint-disable vue/component-name-in-template-casing -->
   <!-- eslint-disable vue/attribute-hyphenation -->
-  <div class="w-full h-full border border-red-500">
+  <div class="ar-embed">
     <a-scene v-if="arStage" locar-webcam>
       <a-camera
         id="camera"
@@ -142,4 +142,9 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.ar-embed {
+  width: 100%;
+  height: 100%;
+}
+</style>

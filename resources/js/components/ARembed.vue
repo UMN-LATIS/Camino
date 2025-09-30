@@ -42,14 +42,15 @@ import type {
   Tour,
   NavigationStage,
   ARStage,
+  Locale,
 } from "@/types";
 import { clamp } from "ramda";
 
 const props = defineProps<{
-  stage: string;
-  simulateLocation: string;
-  locale: string;
-  tourId: string;
+  tourId: number;
+  stopIndex: number;
+  simulateLocation: boolean;
+  locale: Locale;
 }>();
 
 // Distance calculation constants
@@ -61,7 +62,7 @@ const tour = ref<Tour | null>(null);
 
 const currentStop = computed(() => {
   if (!tour.value) return null;
-  return tour.value.stops[parseInt(props.stage)]?.stop_content;
+  return tour.value.stops[props.stopIndex]?.stop_content;
 });
 
 const arStage = computed((): ARStage | null => {

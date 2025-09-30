@@ -57,6 +57,8 @@ const props = defineProps<{
 const METERS_PER_DEGREE = 111_139; // avg meters per degree of lat/lng
 const DEFAULT_DISTANCE_METERS = 2000; // fallback if no target point available
 const Z_FIGHTING_OFFSET = 0.001; // prevent flickering
+const MIN_TEXT_SCALE = 0.01;
+const MAX_TEXT_SCALE = 3;
 
 const tour = ref<Tour | null>(null);
 
@@ -99,11 +101,9 @@ function calculateDistanceInMeters(waypoint: Waypoint): number {
 // so we use a logarithmic scale to reduce the effect of distance
 // and clamp the scale to a reasonable range
 function calcTextScale(distance: number): number {
-  const MIN_SCALE = 0.1;
-  const MAX_SCALE = 3;
   const scaleFactor = clamp(
-    MIN_SCALE,
-    MAX_SCALE,
+    MIN_TEXT_SCALE,
+    MAX_TEXT_SCALE,
     1 / Math.log10(Math.max(distance, 0.001)) // Avoid log(0)
   );
 

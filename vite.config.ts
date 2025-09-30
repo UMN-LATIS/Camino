@@ -21,8 +21,7 @@ export default defineConfig(({ mode }) => {
       vue({
         template: {
           compilerOptions: {
-            isCustomElement: (tag) =>
-              ["a-text", "a-scene", "a-camera"].includes(tag),
+            isCustomElement: (tag) => tag.startsWith("a-"),
             whitespace: "preserve",
           },
           transformAssetUrls: {
@@ -55,9 +54,11 @@ export default defineConfig(({ mode }) => {
         // needed for home and tour pages
         vue: "vue/dist/vue.esm-bundler.js",
       },
+      dedupe: ["three"],
     },
+
     server: {
-      host: "127.0.0.1",
+      host: env.VITE_APP_URL ? new URL(env.VITE_APP_URL).host : "127.0.0.1",
       https: {
         cert: "./.cert/cert.pem",
         key: "./.cert/key.pem",

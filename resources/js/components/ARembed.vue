@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import axios from "axios";
 import "aframe";
 import "locar-aframe";
@@ -56,9 +56,10 @@ const props = defineProps<{
 // Distance calculation constants
 const METERS_PER_DEGREE = 111_139; // avg meters per degree of lat/lng
 const DEFAULT_DISTANCE_METERS = 2000; // fallback if no target point available
-const Z_FIGHTING_OFFSET = 0.001; // prevent flickering
-const MIN_TEXT_SCALE = 0.1;
+const Z_FIGHTING_OFFSET = 0.01; // prevent flickering
+const MIN_TEXT_SCALE = 0.03; // minimum visible scale for far distances
 const MAX_TEXT_SCALE = 3;
+const BASE_TEXT_SCALE = 1; // text scale at 1 meter
 
 const tour = ref<Tour | null>(null);
 
@@ -96,19 +97,16 @@ function calculateDistanceInMeters(waypoint: Waypoint): number {
   return Math.sqrt(latDiff ** 2 + lngDiff ** 2) * METERS_PER_DEGREE;
 }
 
-// scale <a-text> based on the distance to the camera
-// if scale = distance, then all text will appear the same size
-// so we use a logarithmic scale to reduce the effect of distance
-// and clamp the scale to a reasonable range
+// scale text size so it's readable (but smaller) at greater distances
 function calcTextScale(distance: number): number {
-  const scaleFactor = clamp(
-    MIN_TEXT_SCALE,
-    MAX_TEXT_SCALE,
-    1 / Math.log10(Math.max(distance, 0.001)) // Avoid log(0)
-  );
-
-  // round to 2 decimal places for cleaner output
-  return distance * scaleFactor;
+  // 1m away = BASE_SCALE,
+  // 10m away = BASE_SCALE * 0.5
+  // 100m away = BASE_SCALE * 0.25
+  // 1km away = BASE_SCALE * 0.125
+  // distance away = BASE_SCALE * (0.5 ^ log10(distance))
+  const minDistance = Math.max(distance, 1); // prevent log(0)
+  const scale = BASE_TEXT_SCALE * Math.pow(0.5, Math.log10(minDistance));
+  return clamp(MIN_TEXT_SCALE, MAX_TEXT_SCALE, scale) * distance;
 }
 
 // preprocess waypoints to memoize calculations
@@ -131,6 +129,10 @@ const processedWaypoints = computed(() => {
       zOffset: Z_FIGHTING_OFFSET * scale, // prevent flicker
     };
   });
+});
+
+watch(processedWaypoints, (newWaypoints) => {
+  console.log("Processed waypoints:", newWaypoints);
 });
 
 onMounted(async () => {

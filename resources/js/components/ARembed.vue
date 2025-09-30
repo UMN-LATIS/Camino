@@ -57,7 +57,7 @@ const props = defineProps<{
 const METERS_PER_DEGREE = 111_139; // avg meters per degree of lat/lng
 const DEFAULT_DISTANCE_METERS = 2000; // fallback if no target point available
 const Z_FIGHTING_OFFSET = 0.001; // prevent flickering
-const MIN_TEXT_SCALE = 0.01;
+const MIN_TEXT_SCALE = 0.1;
 const MAX_TEXT_SCALE = 3;
 
 const tour = ref<Tour | null>(null);

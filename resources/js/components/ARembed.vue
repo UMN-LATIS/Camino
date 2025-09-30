@@ -17,6 +17,7 @@
         :key="w.id"
         :value="w.value"
         :locar-entity-place="w.placeString"
+        :position="w.positionString"
         color="red"
         align="center"
         :scale="w.scaleString"
@@ -124,6 +125,7 @@ const processedWaypoints = computed(() => {
       scale,
       value: waypoint.text[props.locale],
       placeString: formatLocation(waypoint.location),
+      positionString: `0 ${waypoint.altitude ?? 0} 0`,
       scaleString: `${scale} ${scale} ${scale}`,
       geometryString: `primitive: plane; width: ${width}; height: 0.4;`,
       zOffset: Z_FIGHTING_OFFSET * scale, // prevent flicker

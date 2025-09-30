@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
 import axios from "axios";
 import "aframe";
 import "locar-aframe";
@@ -131,10 +131,6 @@ const processedWaypoints = computed(() => {
       zOffset: Z_FIGHTING_OFFSET * scale, // prevent flicker
     };
   });
-});
-
-watch(processedWaypoints, (newWaypoints) => {
-  console.log("Processed waypoints:", newWaypoints);
 });
 
 onMounted(async () => {

@@ -54,11 +54,10 @@ export default defineConfig(({ mode }) => {
         // needed for home and tour pages
         vue: "vue/dist/vue.esm-bundler.js",
       },
-      dedupe: ["three"],
     },
 
     server: {
-      host: "192.168.8.108", // permit external access
+      host: "127.0.0.1",
       https: {
         cert: "./.cert/cert.pem",
         key: "./.cert/key.pem",

@@ -17,20 +17,5 @@
   </div>
 
 </body>
-<script>
-  // iOS compatibility: request camera permission early
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({
-        video: true
-      })
-      .then(function(stream) {
-        // Stop the stream immediately - we just need permission
-        stream.getTracks().forEach(track => track.stop());
-      })
-      .catch(function(err) {
-        console.warn('Camera permission denied:', err);
-      });
-  }
-</script>
 
 </html>

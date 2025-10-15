@@ -308,6 +308,7 @@ export const useCreatorStore = defineStore("creator", () => {
       ).value;
 
       const tours = state.tours.value;
+      // Note: 'stop' is a reference to the actual stop object in the state array, not a copy.
       const stop = tours[tourIndex].stops[stopIndex];
       const image = stop.stop_content.header_image;
 

@@ -58,18 +58,19 @@ const routeOrMidpoint = computed((): LngLat[] =>
 function renderLine() {
   if (!isReady.value) return;
 
-  // if any line features exist, remove them
-  draw.deleteAll();
-
   const lineFeature = toGeoJsonLineString([
     props.startPoint,
     ...routeOrMidpoint.value,
     props.endPoint,
   ]);
-  const featureIds = draw.add(lineFeature);
 
+  // Remove any existing features and create new one
+  draw.deleteAll();
+  draw.add(lineFeature);
+
+  // Enter direct_select mode to show vertices and prevent moving the whole line
   draw.changeMode("direct_select", {
-    featureId: featureIds[0],
+    featureId: draw.getAll().features[0].id as string,
   });
 }
 
@@ -104,7 +105,7 @@ function initDrawOnMapLoad() {
   });
 }
 
-watch([isReady, () => props.endPoint, () => props.route], () => {
+watch(isReady, () => {
   renderLine();
 });
 

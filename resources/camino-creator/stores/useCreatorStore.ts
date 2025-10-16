@@ -306,20 +306,22 @@ export const useCreatorStore = defineStore("creator", () => {
         tourId,
         stopId
       ).value;
-      const image =
-        state.tours[tourIndex].stops[stopIndex].stop_content.header_image;
+
+      const tours = state.tours.value;
+      // Note: 'stop' is a reference to the actual stop object in the state array, not a copy.
+      const stop = tours[tourIndex].stops[stopIndex];
+      const image = stop.stop_content.header_image;
 
       // if no header image found, we're done!
       if (!image) return;
 
       // optimistic update
-      state.tours[tourIndex].stops[stopIndex].stop_content.header_image = null;
+      stop.stop_content.header_image = null;
 
       axios.delete(`/creator/image/${image.src}`).catch((err) => {
         console.error(`cannot delete image`, err);
         //rollback
-        state.tours[tourIndex].stops[stopIndex].stop_content.header_image =
-          image;
+        stop.stop_content.header_image = image;
       });
     },
     /**

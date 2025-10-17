@@ -5,27 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-
-  <title></title>
-
-  <!-- Fonts -->
-  <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-  <!-- Styles -->
+  <title>AR Embed | Camino</title>
+  @vite(['resources/sass/app.scss', 'resources/js/app.ts'])
 
 </head>
 
 <body>
   <div id="app" style="width:100%; height:100%">
-    <ar-embed stage="{{ $stage }}" simulate-location="{{ $simulateLocation }}" locale="{{ $locale }}"
-      tour-id="{{ $tour->id }}"></ar-embed>
+    <ar-embed
+      :tour-id="{{ $tour->id }}"
+      :stop-index="{{ $stopIndex }}"
+      :simulate-location="{{ $simulateLocation ? 'true' : 'false' }}"
+      locale="{{ $locale }}">
+    </ar-embed>
   </div>
 
 </body>
-<script src="{{ mix('/js/app.js') }}"></script>
-<script>
-  THREEx.ArToolkitContext.baseURL = 'https://raw.githack.com/jeromeetienne/ar.js/master/three.js/'
-</script>
+
 </html>

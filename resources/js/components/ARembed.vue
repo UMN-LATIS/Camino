@@ -2,140 +2,150 @@
   <!-- eslint-enable vue/multi-word-component-names -->
   <!-- eslint-disable vue/component-name-in-template-casing -->
   <!-- eslint-disable vue/attribute-hyphenation -->
-  <div style="width: 100%; height: 100%">
-    <a-scene
-      v-if="currentStopAR"
-      vr-mode-ui="enabled: false"
-      device-orientation-permission-ui="enabled: true"
-      arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false"
-    >
-      <a-text
-        v-for="(waypoint, index) in currentStopAR.waypoints"
-        :key="index"
-        :value="waypoint.text[locale]"
-        :gps-entity-place="
-          'latitude: ' +
-          waypoint.location.lat +
-          '; longitude: ' +
-          waypoint.location.lng +
-          ';'
-        "
-        :position="'0 ' + (waypoint.altitude ? waypoint.altitude : 0) + ' 0'"
-        rotation="0 0 0"
-        font="roboto"
-        color="#e43e31"
-        look-at="#camera"
-        side="double"
-        align="center"
-        :z-offset="getDistanceFromWaypoint(waypoint) * 0.1"
-        :geometry="
-          'primitive: plane; width: ' +
-          getTextWidth(waypoint) +
-          '; height: ' +
-          getTextHeight(waypoint)
-        "
-        material="color: #eee; opacity: 0.6; transparent: true"
-        :width="getSizeForPoint(waypoint)"
-      >
-      </a-text>
-
+  <div class="ar-embed">
+    <a-scene v-if="arStage" locar-webcam>
       <a-camera
         id="camera"
-        :gps-camera="cameraSettings"
+        look-controls
+        wasd-controls
+        locar-camera
         rotation-reader
-        maxDistance="10000"
-        far="90000"
-      >
-      </a-camera>
+      />
+
+      <a-text
+        v-for="w in processedWaypoints"
+        :key="w.id"
+        :value="w.value"
+        :locar-entity-place="w.placeString"
+        :position="w.positionString"
+        color="red"
+        align="center"
+        :scale="w.scaleString"
+        side="double"
+        :geometry="w.geometryString"
+        material="color: #fff; opacity: 0.7"
+        :z-offset="w.zOffset"
+        look-at="#camera"
+      />
     </a-scene>
   </div>
 </template>
 
-<script>
-export default {
-  props: ["stage", "simulateLocation", "locale", "tourId"],
-  data() {
+<script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
+import axios from "axios";
+import "aframe";
+import "locar-aframe";
+import "aframe-look-at-component";
+import type {
+  Waypoint,
+  LngLat as Location,
+  Tour,
+  NavigationStage,
+  ARStage,
+  Locale,
+} from "@/types";
+import { clamp } from "ramda";
+
+const props = defineProps<{
+  tourId: number;
+  stopIndex: number;
+  simulateLocation: boolean;
+  locale: Locale;
+}>();
+
+// Distance calculation constants
+const METERS_PER_DEGREE = 111_139; // avg meters per degree of lat/lng
+const DEFAULT_DISTANCE_METERS = 2000; // fallback if no target point available
+const Z_FIGHTING_OFFSET = 0.01; // prevent flickering
+const MIN_TEXT_SCALE = 0.03; // minimum visible scale for far distances
+const MAX_TEXT_SCALE = 3;
+const BASE_TEXT_SCALE = 1; // text scale at 1 meter
+
+const tour = ref<Tour | null>(null);
+
+const currentStop = computed(() => {
+  if (!tour.value) return null;
+  return tour.value.stops[props.stopIndex]?.stop_content;
+});
+
+const arStage = computed((): ARStage | null => {
+  if (!currentStop.value) return null;
+  return currentStop.value.stages.find(
+    (stage) => stage.type === "ar"
+  ) as ARStage;
+});
+
+const navigationStage = computed((): NavigationStage | null => {
+  if (!currentStop.value) return null;
+  return currentStop.value.stages.find(
+    (stage) => stage.type === "navigation"
+  ) as NavigationStage;
+});
+
+// Convert location to A-Frame locar-entity-place format
+function formatLocation(location: Location): string {
+  return `latitude: ${location.lat}; longitude: ${location.lng};`;
+}
+
+// Calculate straight-line distance in meters between waypoint and navigation target
+function calculateDistanceInMeters(waypoint: Waypoint): number {
+  const targetLocation = navigationStage.value?.targetPoint;
+  if (!targetLocation) return DEFAULT_DISTANCE_METERS;
+
+  const latDiff = waypoint.location.lat - targetLocation.lat;
+  const lngDiff = waypoint.location.lng - targetLocation.lng;
+  return Math.sqrt(latDiff ** 2 + lngDiff ** 2) * METERS_PER_DEGREE;
+}
+
+// scale text size so it's readable (but smaller) at greater distances
+function calcTextScale(distance: number): number {
+  // 1m away = BASE_SCALE,
+  // 10m away = BASE_SCALE * 0.5
+  // 100m away = BASE_SCALE * 0.25
+  // 1km away = BASE_SCALE * 0.125
+  // distance away = BASE_SCALE * (0.5 ^ log10(distance))
+  const minDistance = Math.max(distance, 1); // prevent log(0)
+  const scale = BASE_TEXT_SCALE * Math.pow(0.5, Math.log10(minDistance));
+  return clamp(MIN_TEXT_SCALE, MAX_TEXT_SCALE, scale) * distance;
+}
+
+// preprocess waypoints to memoize calculations
+const processedWaypoints = computed(() => {
+  if (!arStage.value) return [];
+  return arStage.value.waypoints.map((waypoint, index) => {
+    const distance = calculateDistanceInMeters(waypoint);
+    const scale = calcTextScale(distance);
+    const textLength = waypoint.text[props.locale]?.length || 0;
+    const width = 0.15 * (textLength + 2); // width based on text length
     return {
-      tour: null,
+      ...waypoint,
+      id: index,
+      distance,
+      scale,
+      value: waypoint.text[props.locale],
+      placeString: formatLocation(waypoint.location),
+      positionString: `0 ${waypoint.altitude ?? 0} 0`,
+      scaleString: `${scale} ${scale} ${scale}`,
+      geometryString: `primitive: plane; width: ${width}; height: 0.4;`,
+      zOffset: Z_FIGHTING_OFFSET * scale, // prevent flicker
     };
-  },
-  computed: {
-    currentStop: function () {
-      if (!this.tour) {
-        return false;
-      }
-      return this.tour.stops[this.stage].stop_content;
-    },
-    currentStopAR: function () {
-      if (!this.currentStop) {
-        return false;
-      }
-      return this.currentStop.stages.find((elem) => elem.type == "ar");
-    },
+  });
+});
 
-    cameraSettings: function () {
-      if (this.simulateLocation == "true" && this.tour) {
-        const currentStopLocation = this.currentStop.stages.find(
-          (elem) => elem.type == "navigation"
-        );
-        let startLocation = this.tour.start_location;
-        if (currentStopLocation) {
-          startLocation = currentStopLocation.targetPoint;
-        }
-
-        return (
-          "simulateLatitude: " +
-          startLocation.lat +
-          "; simulateLongitude: " +
-          startLocation.lng +
-          "; simulateAltitude: " +
-          0 +
-          ""
-        );
-      } else {
-        return "";
-      }
-    },
-  },
-  mounted() {
-    axios
-      .get("/api/tour/" + this.tourId)
-      .then((response) => {
-        this.tour = response.data;
-      })
-      .catch((error) => console.log(error));
-  },
-  methods: {
-    getTextWidth(waypoint) {
-      return this.getSizeForPoint(waypoint) / 1.5;
-    },
-    getTextHeight(waypoint) {
-      const distance = this.getDistanceFromWaypoint(waypoint);
-      return Math.pow(Math.log(distance), 2) * 1.5;
-    },
-    getDistanceFromWaypoint(waypoint) {
-      const nav = this.currentStop.stages.find(
-        (elem) => elem.type == "navigation"
-      );
-      if (!nav) {
-        return 2000;
-      }
-      const stageLocation = nav.targetPoint;
-
-      const a = waypoint.location.lat - stageLocation.lat;
-      const b = waypoint.location.lng - stageLocation.lng;
-      const distance = Math.sqrt(a * a + b * b) * 111139; //meters per degree
-      return distance;
-    },
-    getScaledDistanceFromWaypoint(waypoint) {
-      return Math.pow(Math.log(this.getDistanceFromWaypoint(waypoint)), 2);
-    },
-    getSizeForPoint(waypoint) {
-      const scaledDistance = this.getScaledDistanceFromWaypoint(waypoint);
-      return scaledDistance * waypoint.text[this.locale].length;
-    },
-  },
-};
+onMounted(async () => {
+  try {
+    const response = await axios.get<Tour>(`/api/tour/${props.tourId}`);
+    tour.value = response.data;
+  } catch (error) {
+    console.error("Failed to load tour data:", error);
+  }
+});
 </script>
 
-<style scoped></style>
+<style scoped>
+.ar-embed {
+  width: 100%;
+  height: 100%;
+}
+</style>

@@ -52,7 +52,7 @@ class DefaultTourSeeder extends Seeder
                 },
                 {
                     "text": {
-                        "English": "Use the \"next\" button in the upper right to move to the next stop. Each stop will include navigation instructions, as well as informational material. \n\nSome stops may provide \"deep dives\". Select topics you\'re especially interested in. At the end of your tour, we\'ll give you a list of the topics you marked, with additional information so you can dive deeper.",
+                        "English": "Use the \"continue\" button to move to the next stop. Each stop will include navigation instructions, as well as informational material. \n\nSome stops may provide \"deep dives\". Select topics you\'re especially interested in. At the end of your tour, we\'ll give you a list of the topics you marked, with additional information so you can dive deeper.",
                         "placeholder": null
                     },
                     "type": "guide"

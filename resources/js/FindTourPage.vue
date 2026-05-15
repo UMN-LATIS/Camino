@@ -1,6 +1,14 @@
 <template>
   <div class="find-tour-page">
-    <div id="map" style="height: 60vh; width: 100%"></div>
+    <Map
+      class="find-tour-map"
+      :center="null"
+      :zoom="10"
+      :bounds="tourBounds"
+      mapStyle="streets"
+      :accessToken="config.mapBox.accessToken"
+      @load="handleMapLoad"
+    />
 
     <div class="row mt-2">
       <div class="col d-flex justify-content-center" style="font-size: 1.4em">
@@ -39,8 +47,8 @@
             <div class="tour-item__image">
               <img
                 v-if="getTourImage(tour)"
-                :src="getTourImage(tour).src"
-                :alt="getTourImage(tour).alt"
+                :src="getTourImage(tour)?.src"
+                :alt="getTourImage(tour)?.alt"
               />
               <div v-else class="tour-item__image-fallback">
                 <i class="fas fa-map-marker-alt"></i>
@@ -60,160 +68,120 @@
   </div>
 </template>
 
-<script>
-import { locate } from "leaflet.locatecontrol";
+<script setup lang="ts">
+import { ref, computed, watch } from "vue";
+import { Map as MapboxMap, Marker, Popup } from "mapbox-gl";
+import useConfig from "@/shared/useConfig";
+import Map from "@trekker/components/Map/Map.vue";
+import { BoundingBox } from "@/types";
 
-let map;
-let lc;
-let markerGroup;
-export default {
-  data() {
-    return {
-      tours: [],
-      walk: true,
-      bike: true,
-      drive: true,
-    };
-  },
-  watch: {
-    walk: function () {
-      this.updateMarkers();
-    },
-    bike: function () {
-      this.updateMarkers();
-    },
-    drive: function () {
-      this.updateMarkers();
-    },
-  },
-  mounted: function () {
-    axios.get("/api/tours").then((res) => {
-      this.tours = res.data;
-      this.renderMap();
-    });
-  },
-  methods: {
-    getTourImage(tour) {
-      return tour.stops[0]?.stop_content?.header_image;
-    },
-    getTourSubtitle(tour) {
-      if (tour?.geocoded?.city && tour?.geocoded?.state) {
-        return `${tour.geocoded.city}, ${tour.geocoded.state}`;
-      }
-      return "";
-    },
-    updateMarkers: function () {
-      const markers = [];
-      let otherLocation = null;
-      this.tours
-        .filter((tour) => {
-          return (
-            (this.walk && tour.walking == 1) ||
-            (this.bike && tour.biking == 1) ||
-            (this.drive && tour.driving == 1)
-          );
-        })
-        .forEach((targetPoint) => {
-          const myIcon = L.icon({
-            // iconSize: [38, 95],
-            iconAnchor: [12, 40],
-            popupAnchor: [0, -30],
-            iconUrl: "/images/vendor/leaflet/dist/marker-icon.png",
-            shadowUrl: "/images/vendor/leaflet/dist/marker-shadow.png",
-            // shadowSize: [68, 95],
-            // shadowAnchor: [22, 94]
-          });
-          otherLocation = L.marker(
-            [targetPoint.start_location.lat, targetPoint.start_location.lng],
-            {
-              title: targetPoint.title,
-              icon: myIcon,
-            },
-          );
+interface Tour {
+  id: number;
+  title: string;
+  walking: boolean;
+  biking: boolean;
+  driving: boolean;
+  transport_type: 0 | 1 | 2;
+  start_location: { lat: number; lng: number };
+  stops: Array<{
+    stop_content?: { header_image?: { src: string; alt: string } };
+  }>;
+  geocoded?: { city?: string; state?: string };
+}
 
-          let iconAppend = "";
-          if (targetPoint.transport_type == 0) {
-            iconAppend = '<i class="fas fa-walking me-2"></i>';
-          } else if (targetPoint.transport_type == 1) {
-            iconAppend = '<i class="fas fa-biking me-2"></i>';
-          } else if (targetPoint.transport_type == 2) {
-            iconAppend = '<i class="fas fa-car me-2"></i>';
-          }
-          otherLocation.bindPopup(
-            "<p>" +
-              targetPoint.title +
-              "</p>" +
-              iconAppend +
-              '<a href="/trekker/tours/' +
-              targetPoint.id +
-              '">Start tour</a>',
-          );
-          // otherLocation.addTo(map);
+const config = useConfig();
+const mapRef = ref<MapboxMap | null>(null);
+const tours = ref<Tour[]>([]);
+const activeMarkers = ref<Marker[]>([]);
+const walk = ref(true);
+const bike = ref(true);
+const drive = ref(true);
 
-          markers.push(otherLocation);
-        });
+const filteredTours = computed(() =>
+  tours.value.filter(
+    (tour) =>
+      (walk.value && tour.walking) ||
+      (bike.value && tour.biking) ||
+      (drive.value && tour.driving),
+  ),
+);
 
-      if (markerGroup) {
-        markerGroup.clearLayers();
-      }
-      markerGroup = new L.featureGroup(markers);
-      markerGroup.addTo(map);
-    },
-    renderMap: function () {
-      if (map) {
-        lc.stop();
-        map.off("locationfound");
-        map.remove();
-      }
-      map = null;
+const tourBounds = computed((): BoundingBox | null => {
+  const locations = tours.value.map((t) => t.start_location).filter(Boolean);
 
-      map = L.map("map", {
-        tap: false,
-      });
+  if (locations.length === 0) return null;
 
-      const streets = L.tileLayer(
-        "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-        {
-          // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: "mapbox/streets-v11",
-          accessToken: window.mapbox,
-        },
-      ).addTo(map);
-      const satellite = L.tileLayer(
-        "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-        {
-          // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-          maxZoom: 18,
-          id: "mapbox/satellite-v9",
-          accessToken: window.mapbox,
-        },
-      );
-      const baseMaps = {
-        Streets: streets,
-        Satellite: satellite,
-      };
-      L.control.layers(baseMaps).addTo(map);
+  const lngs = locations.map((l) => l.lng);
+  const lats = locations.map((l) => l.lat);
 
-      this.updateMarkers();
-      map.fitBounds(markerGroup.getBounds());
-      lc = locate({
-        showCompass: true,
-        locateOptions: {
-          enableHighAccuracy: true,
-          maxZoom: 13,
-        },
-      }).addTo(map);
+  return [
+    [Math.min(...lngs), Math.min(...lats)],
+    [Math.max(...lngs), Math.max(...lats)],
+  ];
+});
 
-      lc.start();
-    },
-  },
-};
+function getTourImage(tour: Tour) {
+  return tour.stops[0]?.stop_content?.header_image ?? null;
+}
+
+function getTourSubtitle(tour: Tour) {
+  if (tour.geocoded?.city && tour.geocoded?.state) {
+    return `${tour.geocoded.city}, ${tour.geocoded.state}`;
+  }
+  return "";
+}
+
+function transportIcon(transportType: number): string {
+  if (transportType === 0) return '<i class="fas fa-walking me-2"></i>';
+  if (transportType === 1) return '<i class="fas fa-biking me-2"></i>';
+  if (transportType === 2) return '<i class="fas fa-car me-2"></i>';
+  return "";
+}
+
+function renderMarkers() {
+  const map = mapRef.value;
+  if (!map) return;
+
+  activeMarkers.value.forEach((m) => m.remove());
+  activeMarkers.value = [];
+
+  filteredTours.value.forEach((tour) => {
+    const popup = new Popup({ offset: 25 }).setHTML(
+      `<p><strong>${tour.title}</strong></p>` +
+        transportIcon(tour.transport_type) +
+        `<a href="/trekker/tours/${tour.id}">Start tour</a>`,
+    );
+
+    const marker = new Marker()
+      .setLngLat([tour.start_location.lng, tour.start_location.lat])
+      .setPopup(popup)
+      .addTo(map);
+
+    activeMarkers.value.push(marker);
+  });
+}
+
+function handleMapLoad(map: MapboxMap) {
+  mapRef.value = map;
+  renderMarkers();
+}
+
+watch(filteredTours, renderMarkers);
+
+window.axios.get("/api/tours").then((res) => {
+  tours.value = res.data;
+});
 </script>
+
 <style scoped>
 .find-tour-page {
   background: #f3f4f6;
   color: #111827;
+}
+
+.find-tour-map {
+  height: 60vh;
+  width: 100%;
 }
 
 .tourlist {

@@ -64,8 +64,8 @@ describe("Tour Page", () => {
 
   it("sets the starting location", () => {
     // check that map is loaded class is present
-    // before proceeding
-    cy.get(".map-container--is-loaded").should("exist");
+    // before proceeding — use a longer timeout since Mapbox can be slow in CI
+    cy.get(".map-container--is-loaded", { timeout: 30000 }).should("exist");
 
     // click on a location
     cy.get(".mapboxgl-canvas").click(100, 200);

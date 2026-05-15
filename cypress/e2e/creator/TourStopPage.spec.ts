@@ -39,7 +39,37 @@ describe("Tour Stop Page", () => {
 
   it("adds a stop subtitle");
 
-  it("adds a stop image");
+  it("adds a stop image", () => {
+    // upload an image via the ImageUpload component
+    cy.get("#image-upload-file").selectFile(
+      "tests/cypress/fixture/test-image.jpg",
+      { force: true },
+    );
+
+    // the upload should succeed (not 500) and the preview image should appear
+    // with a src pointing to the stored file
+    cy.get(".image-upload__preview", { timeout: 20000 })
+      .should("be.visible")
+      .should("have.attr", "src")
+      .and("match", /^\/storage\/.+\.jpg$/);
+
+    // verify the image is actually served by the app (not 404/500)
+    cy.get(".image-upload__preview")
+      .invoke("attr", "src")
+      .then((src) => {
+        cy.request(src as string)
+          .its("status")
+          .should("eq", 200);
+      });
+
+    // save the stop and confirm the image persists after reload
+    cy.contains("Save").click();
+    cy.reload();
+    cy.get(".image-upload__preview")
+      .should("be.visible")
+      .should("have.attr", "src")
+      .and("match", /^\/storage\/.+\.jpg$/);
+  });
   it("changes the stop image");
   it("removes a stop image");
   it("edits a separator stage title");
@@ -72,7 +102,7 @@ describe("Tour Stop Page", () => {
     // check that the stage is added to the stage list
     cy.get(".tour-stop-stage:last-of-type .card-title").should(
       "contain.text",
-      "ar"
+      "ar",
     );
 
     // check that the stage content appears on the stop page

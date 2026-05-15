@@ -55,20 +55,23 @@ watch(
     if (!mapRef.value) return;
     mapRef.value.setStyle(MAP_STYLES[props.mapStyle]);
     mapRef.value.setMaxZoom(getMaxZoomForStyle(props.mapStyle));
-  }
+  },
 );
 
-// watch map bounds changes
-watch([() => props.bounds, mapRef], () => {
-  if (!mapRef.value || !props.bounds) return;
-  mapRef.value.fitBounds(props.bounds, { padding: 64 });
-});
+// watch map bounds changes (only props, not mapRef — initial fit is handled in onMounted)
+watch(
+  () => props.bounds,
+  () => {
+    if (!mapRef.value || !props.bounds) return;
+    mapRef.value.fitBounds(props.bounds, { padding: 64 });
+  },
+);
 
 onMounted(() => {
   if (!mapContainerRef.value) {
     throw Error(
       "Cannot create Map: container not defined:",
-      mapContainerRef.value
+      mapContainerRef.value,
     );
   }
 
@@ -92,12 +95,12 @@ onMounted(() => {
         trackUserLocation: true,
         // Draw an arrow next to the location dot to indicate which direction the device is heading.
         showUserHeading: true,
-      })
+      }),
     )
     .addControl(new ScaleControl({ unit: "imperial" }));
 
   if (props.bounds) {
-    mapRef.value.fitBounds(props.bounds, { padding: 64 });
+    mapRef.value.fitBounds(props.bounds, { padding: 64, animate: false });
   }
 
   // add click handler

@@ -1,6 +1,7 @@
 <template>
   <div class="find-tour-page">
     <Map
+      v-if="tourBounds"
       class="find-tour-map"
       :center="null"
       :zoom="10"
@@ -9,6 +10,7 @@
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
     />
+    <div v-else class="find-tour-map find-tour-map--loading" />
 
     <div class="row mt-2">
       <div class="col d-flex justify-content-center" style="font-size: 1.4em">
@@ -152,7 +154,7 @@ function renderMarkers() {
         `<a href="/trekker/tours/${tour.id}">Start tour</a>`,
     );
 
-    const marker = new Marker()
+    const marker = new Marker({ color: "#1A1A1A", scale: 1.1 })
       .setLngLat([tour.start_location.lng, tour.start_location.lat])
       .setPopup(popup)
       .addTo(map);
@@ -182,6 +184,10 @@ window.axios.get("/api/tours").then((res) => {
 .find-tour-map {
   height: 60vh;
   width: 100%;
+}
+
+.find-tour-map--loading {
+  background: #e5e7eb;
 }
 
 .tourlist {

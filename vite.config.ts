@@ -1,7 +1,31 @@
 import { fileURLToPath, URL } from "node:url";
+import { readFileSync } from "node:fs";
 import { defineConfig, loadEnv } from "vite";
+import type { Plugin } from "vite";
 import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
+
+/**
+ * Strips the broken sourceMappingURL from leaflet.locatecontrol's minified CSS.
+ * The package references `dist/L.Control.Locate.min.css.map` from within `dist/`,
+ * producing a double-`dist` path that doesn't exist.
+ */
+function fixLeafletLocateSourcemap(): Plugin {
+  return {
+    name: "fix-leaflet-locate-sourcemap",
+    enforce: "pre",
+    load(id) {
+      if (!id.includes("leaflet.locatecontrol") || !id.endsWith(".css")) {
+        return null;
+      }
+      const code = readFileSync(id, "utf-8");
+      return {
+        code: code.replace(/\/\*#\s*sourceMappingURL=\S+\s*\*\//g, ""),
+        map: null,
+      };
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -9,6 +33,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [
+      fixLeafletLocateSourcemap(),
       laravel({
         input: {
           homeStyles: "resources/sass/app.scss",

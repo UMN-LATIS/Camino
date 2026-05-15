@@ -38,6 +38,7 @@
 
 <script>
 /* eslint-disable @typescript-eslint/no-this-alias */
+import { locate } from "leaflet.locatecontrol";
 import BButton from "./BButton.vue";
 import BModal from "./BModal.vue";
 import { useGeolocation } from "@vueuse/core";
@@ -222,7 +223,7 @@ export default {
             [targetPoint.targetPoint.lat, targetPoint.targetPoint.lng],
             {
               icon: otherLocationsCssIcon,
-            }
+            },
           );
           otherLocations.push(otherLocation);
         }
@@ -330,7 +331,7 @@ export default {
             maxZoom: 18,
             id: "mapbox/streets-v11",
             accessToken: window.mapbox,
-          }
+          },
         ).addTo(map);
         const satellite = L.tileLayer(
           "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -339,7 +340,7 @@ export default {
             maxZoom: 18,
             id: "mapbox/satellite-v9",
             accessToken: window.mapbox,
-          }
+          },
         );
         const baseMaps = {
           Streets: streets,
@@ -368,7 +369,7 @@ export default {
       } else if (this.generalarea) {
         map.setView(
           new L.LatLng(this.generalarea.lat, this.generalarea.lng),
-          16
+          16,
         );
       }
 
@@ -380,16 +381,14 @@ export default {
       this.drawMarker();
       this.drawOtherPoints();
 
-      lc = L.control
-        .locate({
-          showCompass: true,
-          icon: "fa fa-map-marker-alt",
-          locateOptions: {
-            enableHighAccuracy: true,
-            maxZoom: 18,
-          },
-        })
-        .addTo(map);
+      lc = locate({
+        showCompass: true,
+        icon: "fa fa-map-marker-alt",
+        locateOptions: {
+          enableHighAccuracy: true,
+          maxZoom: 18,
+        },
+      }).addTo(map);
     },
   },
 };

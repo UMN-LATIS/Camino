@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import { locate } from "leaflet.locatecontrol";
+
 let map;
 let lc;
 let markerGroup;
@@ -86,7 +88,7 @@ export default {
             {
               title: targetPoint.title,
               icon: myIcon,
-            }
+            },
           );
 
           let iconAppend = "";
@@ -104,7 +106,7 @@ export default {
               iconAppend +
               '<a href="/trekker/tours/' +
               targetPoint.id +
-              '">Start tour</a>'
+              '">Start tour</a>',
           );
           // otherLocation.addTo(map);
 
@@ -136,7 +138,7 @@ export default {
           maxZoom: 18,
           id: "mapbox/streets-v11",
           accessToken: window.mapbox,
-        }
+        },
       ).addTo(map);
       const satellite = L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -145,7 +147,7 @@ export default {
           maxZoom: 18,
           id: "mapbox/satellite-v9",
           accessToken: window.mapbox,
-        }
+        },
       );
       const baseMaps = {
         Streets: streets,
@@ -155,15 +157,13 @@ export default {
 
       this.updateMarkers();
       map.fitBounds(markerGroup.getBounds());
-      lc = L.control
-        .locate({
-          showCompass: true,
-          locateOptions: {
-            enableHighAccuracy: true,
-            maxZoom: 13,
-          },
-        })
-        .addTo(map);
+      lc = locate({
+        showCompass: true,
+        locateOptions: {
+          enableHighAccuracy: true,
+          maxZoom: 13,
+        },
+      }).addTo(map);
 
       lc.start();
     },

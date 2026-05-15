@@ -61,6 +61,8 @@
 </template>
 
 <script>
+import { locate } from "leaflet.locatecontrol";
+
 let map;
 let lc;
 let markerGroup;
@@ -126,7 +128,7 @@ export default {
             {
               title: targetPoint.title,
               icon: myIcon,
-            }
+            },
           );
 
           let iconAppend = "";
@@ -144,7 +146,7 @@ export default {
               iconAppend +
               '<a href="/trekker/tours/' +
               targetPoint.id +
-              '">Start tour</a>'
+              '">Start tour</a>',
           );
           // otherLocation.addTo(map);
 
@@ -176,7 +178,7 @@ export default {
           maxZoom: 18,
           id: "mapbox/streets-v11",
           accessToken: window.mapbox,
-        }
+        },
       ).addTo(map);
       const satellite = L.tileLayer(
         "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -185,7 +187,7 @@ export default {
           maxZoom: 18,
           id: "mapbox/satellite-v9",
           accessToken: window.mapbox,
-        }
+        },
       );
       const baseMaps = {
         Streets: streets,
@@ -195,15 +197,13 @@ export default {
 
       this.updateMarkers();
       map.fitBounds(markerGroup.getBounds());
-      lc = L.control
-        .locate({
-          showCompass: true,
-          locateOptions: {
-            enableHighAccuracy: true,
-            maxZoom: 13,
-          },
-        })
-        .addTo(map);
+      lc = locate({
+        showCompass: true,
+        locateOptions: {
+          enableHighAccuracy: true,
+          maxZoom: 13,
+        },
+      }).addTo(map);
 
       lc.start();
     },
@@ -236,7 +236,9 @@ export default {
   color: #111827;
   background: #fff;
   border-radius: 0.25rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
   transition: cubic-bezier(0, 0, 0.2, 1) 100ms;
   display: flex;
 }
@@ -249,7 +251,9 @@ export default {
   gap: 1rem;
 }
 .tour-item > a:hover {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .tour-item__image {

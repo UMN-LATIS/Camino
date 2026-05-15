@@ -41,20 +41,28 @@
   </div>
 
   <style>
-    .github {
-      background: #666666;
+    .btn.github {
+      --bs-btn-bg: #666666;
+      --bs-btn-hover-bg: #555555;
+      --bs-btn-active-bg: #4a4a4a;
     }
 
-    .google {
-      background: #c32f10
+    .btn.google {
+      --bs-btn-bg: #c32f10;
+      --bs-btn-hover-bg: #a8280e;
+      --bs-btn-active-bg: #93230c;
     }
 
-    .facebook {
-      background: #3b5998;
+    .btn.facebook {
+      --bs-btn-bg: #3b5998;
+      --bs-btn-hover-bg: #324c82;
+      --bs-btn-active-bg: #2d4373;
     }
 
-    .university {
-      background: #7a0019;
+    .btn.university {
+      --bs-btn-bg: #7a0019;
+      --bs-btn-hover-bg: #650015;
+      --bs-btn-active-bg: #570012;
     }
   </style>
 @endsection

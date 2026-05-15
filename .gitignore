@@ -23,3 +23,5 @@ tests/cypress
 boost.json
 .mcp.json
 auth.json
+
+_ide_helper_models.php

@@ -45,8 +45,6 @@ export const useFeedbackStore = defineStore("feedback", {
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept(
-    acceptHMRUpdate(useFeedbackStore, import.meta.webpackHot)
-  );
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useFeedbackStore, import.meta.hot));
 }

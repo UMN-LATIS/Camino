@@ -11,7 +11,7 @@ export const useQuizStore = defineStore("quizzes", {
     }
 
     const { quizzes, quizIdsByStopIndex } = getQuizzesFromTour(
-      trekkerStore.tour
+      trekkerStore.tour,
     );
 
     return {
@@ -48,8 +48,6 @@ export const useQuizStore = defineStore("quizzes", {
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept(
-    acceptHMRUpdate(useQuizStore, import.meta.webpackHot)
-  );
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useQuizStore, import.meta.hot));
 }

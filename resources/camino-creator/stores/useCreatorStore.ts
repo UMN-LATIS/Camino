@@ -42,7 +42,7 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getTourAndStopIndex: (
       tourId: number,
-      stopId: number
+      stopId: number,
     ): ComputedRef<{
       tourIndex: number;
       stopIndex: number;
@@ -63,7 +63,7 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getStageIndexById: (tourId: number, stopId: number, stageId: string) =>
       computed(() =>
-        selectors.selectStageIndexById(state, tourId, stopId, stageId)
+        selectors.selectStageIndexById(state, tourId, stopId, stageId),
       ),
 
     getTourStopRoute: (tourId: number, stopId: number) =>
@@ -71,7 +71,7 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getTourStopTargetPoint: (tourId: number, stopId: number) =>
       computed(() =>
-        selectors.selectTourStopTargetPoint(state, tourId, stopId)
+        selectors.selectTourStopTargetPoint(state, tourId, stopId),
       ),
 
     getNextTourStop: (tourId: number, stopId: number) =>
@@ -88,13 +88,13 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getNextTourStopStartPoint: (tourId: number, stopId: number) =>
       computed(() =>
-        selectors.selectNextTourStopStartPoint(state, tourId, stopId)
+        selectors.selectNextTourStopStartPoint(state, tourId, stopId),
       ),
     findFirstValuedTargetPoint: (tourId: number) =>
       computed(() => selectors.findFirstValuedTargetPoint(state, tourId)),
     findValuedTargetPoint: (
       tourId: number | null | undefined,
-      stopId: number | null | undefined
+      stopId: number | null | undefined,
     ) => computed(() => selectors.findValuedTargetPoint(state, tourId, stopId)),
   };
 
@@ -124,7 +124,7 @@ export const useCreatorStore = defineStore("creator", () => {
       try {
         const res = await axios.post<Tour>(
           "/creator/edit",
-          mergeDeepRight(createDefaultTour(), tour)
+          mergeDeepRight(createDefaultTour(), tour),
         );
         state.tours.value.push(res.data);
 
@@ -148,7 +148,7 @@ export const useCreatorStore = defineStore("creator", () => {
       try {
         await axios.put<Tour, { data: string }>(
           `/creator/edit/${updatedTour.id}`,
-          updatedTour
+          updatedTour,
         );
       } catch (err) {
         console.error(`Cannot update tour: ${updatedTour}`, err);
@@ -175,14 +175,14 @@ export const useCreatorStore = defineStore("creator", () => {
      */
     async createTourStop(
       tourId: number,
-      stop: RecursivePartial<TourStop>
+      stop: RecursivePartial<TourStop>,
     ): Promise<TourStop> {
       const newStop = mergeDeepRight(createDefaultStop(), stop);
 
       try {
         const res = await axios.post<TourStop>(
           `/creator/edit/${tourId}/stop/`,
-          newStop
+          newStop,
         );
         actions.fetchTours();
         return res.data;
@@ -202,7 +202,7 @@ export const useCreatorStore = defineStore("creator", () => {
 
       const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
         tourId,
-        stop.id
+        stop.id,
       ).value;
 
       // optimistic update
@@ -219,7 +219,7 @@ export const useCreatorStore = defineStore("creator", () => {
         .catch((err) => {
           console.error(
             `Cannot update tour stop. tourId: ${tourId}, stopId: ${stop.id}`,
-            err
+            err,
           );
 
           // rollback
@@ -234,7 +234,7 @@ export const useCreatorStore = defineStore("creator", () => {
     moveTourStopByIndex(
       tourId: number,
       oldStopIndex: number,
-      newStopIndex: number
+      newStopIndex: number,
     ): void {
       const tourIndex = getters.getTourIndex(tourId);
       const prevTourStops = state.tours.value[tourIndex.value].stops;
@@ -258,7 +258,7 @@ export const useCreatorStore = defineStore("creator", () => {
     async deleteTourStop(tourId, stopId): Promise<void> {
       const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
         tourId,
-        stopId
+        stopId,
       ).value;
 
       // cache old stop in case we need to rollback
@@ -272,14 +272,14 @@ export const useCreatorStore = defineStore("creator", () => {
         .catch((err) => {
           console.error(
             `cannot delete tour stop with tourId ${tourId}, stopId: ${stopId}`,
-            err
+            err,
           );
 
           // rollback
           state.tours.value[tourIndex].stops = insert(
             stopIndex,
             oldStop,
-            state.tours.value[tourIndex].stops
+            state.tours.value[tourIndex].stops,
           );
         })
         .finally(() => actions.fetchTours());
@@ -291,7 +291,7 @@ export const useCreatorStore = defineStore("creator", () => {
     addStopHeaderImage(tourId: number, stopId: number, image: Image) {
       const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
         tourId,
-        stopId
+        stopId,
       ).value;
       state.tours.value[tourIndex].stops[stopIndex].stop_content.header_image =
         image;
@@ -304,7 +304,7 @@ export const useCreatorStore = defineStore("creator", () => {
     deleteStopHeaderImage(tourId: number, stopId: number) {
       const { tourIndex, stopIndex } = getters.getTourAndStopIndex(
         tourId,
-        stopId
+        stopId,
       ).value;
 
       const tours = state.tours.value;
@@ -332,7 +332,7 @@ export const useCreatorStore = defineStore("creator", () => {
       const { tourIndex, stopIndex, stageIndex } = getters.getStageIndexById(
         tourId,
         stopId,
-        stage.id
+        stage.id,
       ).value;
       state.tours.value[tourIndex].stops[stopIndex].stop_content.stages[
         stageIndex
@@ -349,8 +349,6 @@ export const useCreatorStore = defineStore("creator", () => {
 });
 
 // see: https://pinia.vuejs.org/cookbook/hot-module-replacement.html
-if (import.meta.webpackHot) {
-  import.meta.webpackHot.accept(
-    acceptHMRUpdate(useCreatorStore, import.meta.webpackHot)
-  );
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useCreatorStore, import.meta.hot));
 }

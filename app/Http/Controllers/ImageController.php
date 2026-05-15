@@ -28,7 +28,7 @@ class ImageController extends Controller {
 
         try {
             $image_resized = Image::read($image)
-                ->orientate()
+                ->orient()
                 ->scaleDown(2048, 2048);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Image could not be read'], 400);

@@ -45,16 +45,30 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": fileURLToPath(new URL("./resources", import.meta.url)),
         "@trekker": fileURLToPath(
-          new URL("./resources/camino-trekker", import.meta.url)
+          new URL("./resources/camino-trekker", import.meta.url),
         ),
         "@creator": fileURLToPath(
-          new URL("./resources/camino-creator", import.meta.url)
+          new URL("./resources/camino-creator", import.meta.url),
         ),
 
         // needed for home and tour pages
         vue: "vue/dist/vue.esm-bundler.js",
       },
       dedupe: ["three"],
+    },
+
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // Bootstrap 5 uses deprecated Sass APIs; silence until Bootstrap upgrades
+          silenceDeprecations: [
+            "import",
+            "global-builtin",
+            "color-functions",
+            "if-function",
+          ],
+        },
+      },
     },
 
     server: {

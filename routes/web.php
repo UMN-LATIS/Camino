@@ -47,7 +47,7 @@ Route::group(['prefix' => 'creator', 'middleware' => ['auth']], function () {
   ]);
 
   Route::post('/image/store', 'ImageController@store');
-  Route::delete('/image/{filename}', 'ImageController@delete');
+  Route::delete('/image/{filename}', 'ImageController@destroy')->where('filename', '[A-Za-z0-9]+\.jpg');
   Route::post("/edit/{tour}/stop", "TourEditController@createStop");
   Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
   Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");

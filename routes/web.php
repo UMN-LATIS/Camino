@@ -25,6 +25,7 @@ Route::get('/findTours', 'HomeController@findTours');
 
 // Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'permission:administer site']], function () {
+  Route::redirect('/', '/admin/users');
   Route::resource('users', 'Admin\\UsersController');
 });
 
@@ -36,7 +37,7 @@ Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
 // Camino Trekker App
 Route::get('/trekker/{all?}', [CaminoTrekkerController::class, 'index'])->where(['all' => '.*']);
-Route::get('/ar/{tour}/{stopIndex}/{locale}/{simulateLocation?}', "HomeController@ar")->where([ 'stopIndex' => '[0-9]+']);
+Route::get('/ar/{tour}/{stopIndex}/{locale}/{simulateLocation?}', "HomeController@ar")->where(['stopIndex' => '[0-9]+']);
 
 // Camino Creator App
 Route::group(['prefix' => 'creator', 'middleware' => ['auth']], function () {

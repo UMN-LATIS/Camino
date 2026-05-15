@@ -18,19 +18,19 @@ cp .env.example .env
 
 # Set up local certs with `mkcert`
 # Run `mkcert -install` first if this is your first time using mkcert
-yarn cert
+npm run cert
 
 # Instal php deps
 docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
-    laravelsail/php81-composer:latest \
+    laravelsail/php84-composer:latest \
     composer install --ignore-platform-reqs
 
 # Build docker image
-# Assuming you have `sail` aliased to `./vendor/bin/sail`
-sail build --no-cache
+# Assuming `alias sail="./vendor/bin/sail"`
+sail build
 
 # Start Sail
 sail up
@@ -42,11 +42,13 @@ sail exec laravel.test ./bin/ci.sh
 sail artisan migrate:fresh --seed
 
 # Install node modules
-yarn
+npm ci
 
-# Start in watch or hot module replacement mode
-yarn hot
+# Start dev server
+npm run dev
 
+# (optional) add laravel boost helpers
+sail artisan boost:install
 ```
 
 ## Using the Application

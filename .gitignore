@@ -18,9 +18,11 @@ docs/.vuepress/dist
 mix-manifest.json
 /.cert
 /cypress/support/routes.json
+.vscode
 
 # Laravel Boost
 .github/skills
+.github/copilot-instructions.md
 boost.json
 .mcp.json
 auth.json

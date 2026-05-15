@@ -1,3 +1,4 @@
+import "bootstrap";
 import { axiosClient } from "@/shared/axios";
 import { createApp } from "vue";
 import FindTourPage from "./FindTourPage.vue";

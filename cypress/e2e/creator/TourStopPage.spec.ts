@@ -41,10 +41,9 @@ describe("Tour Stop Page", () => {
 
   it("adds a stop image", () => {
     // upload an image via the ImageUpload component
-    cy.get("#image-upload-file").selectFile(
-      "tests/cypress/fixture/test-image.jpg",
-      { force: true },
-    );
+    cy.get("#image-upload-file").selectFile("cypress/fixtures/test-image.jpg", {
+      force: true,
+    });
 
     // the upload should succeed (not 500) and the preview image should appear
     // with a src pointing to the stored file

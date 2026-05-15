@@ -71,8 +71,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import { Map as MapboxMap, Marker, Popup } from "mapbox-gl";
+import { ref, shallowRef, computed, watch } from "vue";
+import { Map as MapboxMap, Marker, Popup, GeoJSONSource } from "mapbox-gl";
 import useConfig from "@/shared/useConfig";
 import Map from "@trekker/components/Map/Map.vue";
 import { BoundingBox } from "@/types";
@@ -91,10 +91,15 @@ interface Tour {
   geocoded?: { city?: string; state?: string };
 }
 
+const TOURS_SOURCE = "tours-source";
+const CLUSTER_LAYER = "tour-clusters";
+const CLUSTER_COUNT_LAYER = "tour-cluster-count";
+const UNCLUSTERED_LAYER = "tour-unclustered";
+
 const config = useConfig();
-const mapRef = ref<MapboxMap | null>(null);
+const mapRef = shallowRef<MapboxMap | null>(null);
 const tours = ref<Tour[]>([]);
-const activeMarkers = ref<Marker[]>([]);
+const domMarkers = shallowRef<{ id: number; marker: Marker }[]>([]);
 const walk = ref(true);
 const bike = ref(true);
 const drive = ref(true);
@@ -122,6 +127,24 @@ const tourBounds = computed((): BoundingBox | null => {
   ];
 });
 
+const toursGeoJson = computed(() => ({
+  type: "FeatureCollection" as const,
+  features: filteredTours.value
+    .filter((t) => t.start_location)
+    .map((tour) => ({
+      type: "Feature" as const,
+      geometry: {
+        type: "Point" as const,
+        coordinates: [tour.start_location.lng, tour.start_location.lat],
+      },
+      properties: {
+        id: tour.id,
+        title: tour.title,
+        transport_type: tour.transport_type,
+      },
+    })),
+}));
+
 function getTourImage(tour: Tour) {
   return tour.stops[0]?.stop_content?.header_image ?? null;
 }
@@ -140,35 +163,155 @@ function transportIcon(transportType: number): string {
   return "";
 }
 
-function renderMarkers() {
+function setupClusterLayers(map: MapboxMap) {
+  map.addSource(TOURS_SOURCE, {
+    type: "geojson",
+    data: toursGeoJson.value,
+    cluster: true,
+    clusterMaxZoom: 14,
+    clusterRadius: 50,
+  });
+
+  // Cluster circles
+  map.addLayer({
+    id: CLUSTER_LAYER,
+    type: "circle",
+    source: TOURS_SOURCE,
+    filter: ["has", "point_count"],
+    paint: {
+      "circle-color": "#1a1a1a",
+      "circle-radius": ["step", ["get", "point_count"], 20, 10, 30, 100, 40],
+      "circle-stroke-width": 4,
+      "circle-stroke-color": "rgba(26, 26, 26, 0.25)",
+    },
+  });
+
+  // Cluster count labels
+  map.addLayer({
+    id: CLUSTER_COUNT_LAYER,
+    type: "symbol",
+    source: TOURS_SOURCE,
+    filter: ["has", "point_count"],
+    layout: {
+      "text-field": ["get", "point_count_abbreviated"],
+      "text-size": 13,
+    },
+    paint: {
+      "text-color": "#ffffff",
+    },
+  });
+
+  // Invisible unclustered layer for querying visibility
+  map.addLayer({
+    id: UNCLUSTERED_LAYER,
+    type: "circle",
+    source: TOURS_SOURCE,
+    filter: ["!", ["has", "point_count"]],
+    paint: {
+      "circle-color": "transparent",
+      "circle-radius": 1,
+    },
+  });
+
+  // Click cluster → zoom in
+  map.on("click", CLUSTER_LAYER, (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: [CLUSTER_LAYER],
+    });
+    if (!features.length) return;
+    const clusterId = features[0].properties?.cluster_id;
+    const source = map.getSource(TOURS_SOURCE);
+    if (!source || source.type !== "geojson") return;
+    (source as GeoJSONSource).getClusterExpansionZoom(
+      clusterId,
+      (err: Error | null, zoom: number) => {
+        if (err) return;
+        map.easeTo({
+          center: (features[0].geometry as GeoJSON.Point).coordinates as [
+            number,
+            number,
+          ],
+          zoom,
+        });
+      },
+    );
+  });
+
+  // Cursor on clusters
+  map.on("mouseenter", CLUSTER_LAYER, () => {
+    map.getCanvas().style.cursor = "pointer";
+  });
+  map.on("mouseleave", CLUSTER_LAYER, () => {
+    map.getCanvas().style.cursor = "";
+  });
+
+  // Sync DOM marker visibility after each render
+  map.on("idle", syncMarkerVisibility);
+}
+
+function rebuildDOMMarkers() {
   const map = mapRef.value;
   if (!map) return;
 
-  activeMarkers.value.forEach((m) => m.remove());
-  activeMarkers.value = [];
+  for (const { marker } of domMarkers.value) {
+    marker.remove();
+  }
+  domMarkers.value = [];
 
-  filteredTours.value.forEach((tour) => {
+  for (const tour of filteredTours.value) {
+    if (!tour.start_location) continue;
+
     const popup = new Popup({ offset: 25 }).setHTML(
       `<p><strong>${tour.title}</strong></p>` +
         transportIcon(tour.transport_type) +
         `<a href="/trekker/tours/${tour.id}">Start tour</a>`,
     );
 
-    const marker = new Marker({ color: "#1A1A1A", scale: 1.1 })
+    const marker = new Marker({ color: "#1a1a1a" })
       .setLngLat([tour.start_location.lng, tour.start_location.lat])
       .setPopup(popup)
       .addTo(map);
 
-    activeMarkers.value.push(marker);
+    // Start hidden; syncMarkerVisibility will show unclustered ones
+    marker.getElement().style.visibility = "hidden";
+    domMarkers.value.push({ id: tour.id, marker });
+  }
+
+  syncMarkerVisibility();
+}
+
+function syncMarkerVisibility() {
+  const map = mapRef.value;
+  if (!map || !map.getLayer(UNCLUSTERED_LAYER)) return;
+
+  const unclustered = map.queryRenderedFeatures(undefined, {
+    layers: [UNCLUSTERED_LAYER],
   });
+  const visibleIds = new Set(unclustered.map((f) => f.properties?.id));
+
+  for (const { id, marker } of domMarkers.value) {
+    marker.getElement().style.visibility = visibleIds.has(id)
+      ? "visible"
+      : "hidden";
+  }
+}
+
+function updateSourceData() {
+  const map = mapRef.value;
+  if (!map) return;
+  const source = map.getSource(TOURS_SOURCE);
+  if (!source || source.type !== "geojson") return;
+  (source as GeoJSONSource).setData(toursGeoJson.value);
+  rebuildDOMMarkers();
 }
 
 function handleMapLoad(map: MapboxMap) {
   mapRef.value = map;
-  renderMarkers();
+  setupClusterLayers(map);
+  rebuildDOMMarkers();
 }
 
-watch(filteredTours, renderMarkers);
+watch(filteredTours, updateSourceData);
 
 window.axios.get("/api/tours").then((res) => {
   tours.value = res.data;

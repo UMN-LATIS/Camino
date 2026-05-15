@@ -34,11 +34,11 @@ jobs:
       - name: Setup PHP to match server
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.5"
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install Composer dependencies
         run: |

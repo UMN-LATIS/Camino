@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Validator;
 use Illuminate\Support\Str;
 use Storage;
@@ -27,15 +28,21 @@ class ImageController extends Controller {
         }
 
         try {
-            $image_resized = Image::read($image)
-                ->orient()
-                ->scaleDown(2048, 2048);
-        } catch (\Exception $e) {
+            $image_resized = Image::decode($image)
+                ->scaleDown(2048, 2048)
+                ->toJpeg(70);
+        } catch (\Throwable $e) {
+            Log::warning('Image upload failed to decode', [
+                'mime' => $image->getMimeType(),
+                'client_name' => $image->getClientOriginalName(),
+                'size' => $image->getSize(),
+                'error' => $e->getMessage(),
+            ]);
             return response()->json(['error' => 'Image could not be read'], 400);
         }
 
         $path = 'public/' . Str::random(40) . '.jpg';
-        Storage::put($path, $image_resized->toJpeg(70));
+        Storage::put($path, (string) $image_resized);
         $imagePath = Storage::url($path);
 
         return response()->json(['success' => 'You have successfully uploaded an image', 'image' => basename($imagePath)], 200);

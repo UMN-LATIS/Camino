@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Support\Str;
 use Storage;
 use App\Tour;
+use Intervention\Image\Encoders\JpegEncoder;
 use Intervention\Image\Laravel\Facades\Image;
 
 class ImageController extends Controller {
@@ -29,8 +30,9 @@ class ImageController extends Controller {
 
         try {
             $image_resized = Image::decode($image)
+                ->orient()
                 ->scaleDown(2048, 2048)
-                ->toJpeg(70);
+                ->encode(new JpegEncoder(quality: 70));
         } catch (\Throwable $e) {
             Log::warning('Image upload failed to decode', [
                 'mime' => $image->getMimeType(),
@@ -42,7 +44,7 @@ class ImageController extends Controller {
         }
 
         $path = 'public/' . Str::random(40) . '.jpg';
-        Storage::put($path, (string) $image_resized);
+        Storage::put($path, $image_resized->toString());
         $imagePath = Storage::url($path);
 
         return response()->json(['success' => 'You have successfully uploaded an image', 'image' => basename($imagePath)], 200);

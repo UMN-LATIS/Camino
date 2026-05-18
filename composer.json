@@ -15,7 +15,7 @@
   "license": "MIT",
   "require": {
     "geocoder-php/mapbox-provider": "^1.0",
-    "intervention/image-laravel": "^1.0",
+    "intervention/image-laravel": "^4.0",
     "lab404/laravel-impersonate": "^1.7.7",
     "laravel/framework": "^13.0",
     "laravel/helpers": "^1.2",

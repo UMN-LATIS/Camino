@@ -18,13 +18,13 @@ import getStagesFromStopWhere from "./getStagesFromStopWhere";
  */
 export default function findValuedTargetPointFromTour(
   tour: Maybe<Tour>,
-  { stopId, stopIndex }: { stopId?: number; stopIndex?: number }
+  { stopId, stopIndex }: { stopId?: number; stopIndex?: number },
 ): LngLat {
   const DEFAULT_TARGET_POINT = UMN_LNGLAT;
 
   if (!tour) {
     console.error(
-      `findValuedTargetPointFromTour did not get a valid tour. Returning the default target point.`
+      `findValuedTargetPointFromTour did not get a valid tour. Returning the default target point.`,
     );
     return DEFAULT_TARGET_POINT;
   }
@@ -36,8 +36,12 @@ export default function findValuedTargetPointFromTour(
   // point, so just return the start location
   if (isNil(stopId) && isNil(stopIndex)) return startLocation;
 
-  // look up the stopIndex if we're passed the stopId
-  stopIndex = stopIndex || tour.stops.findIndex((stop) => stop.id === stopId);
+  // look up the stopIndex if we're passed the stopId. Use ?? not ||
+  // so stopIndex 0 (the first stop) doesn't collapse to the
+  // stop-id-lookup branch — 0 is a perfectly valid index, and
+  // treating it as falsy was returning tour.start_location for the
+  // second stop's start chain.
+  stopIndex = stopIndex ?? tour.stops.findIndex((stop) => stop.id === stopId);
 
   // if the stop index is -1, no valid stop was found
   if (stopIndex === -1) return startLocation;
@@ -47,7 +51,7 @@ export default function findValuedTargetPointFromTour(
   const navStages = getStagesFromStopWhere<NavigationStage>(
     "type",
     StageType.Navigation,
-    stop
+    stop,
   );
 
   // get all the non-null target points from the nav stages

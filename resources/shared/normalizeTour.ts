@@ -23,7 +23,7 @@ const getNavStagesFromStop = (stop: TourStop): NavigationStage[] =>
  */
 function toNormalizedNavStages(
   navStages: NavigationStage[],
-  stopStartPoint = UMN_LNGLAT
+  stopStartPoint = UMN_LNGLAT,
 ): NavigationStage[] {
   return navStages.map((stage, stageIndex) => {
     const navStageStartPoint =
@@ -42,13 +42,22 @@ function toNormalizedNavStages(
     const normaliedRoute = normalizeTourStopRoute(
       navStageStartPoint,
       stage.route || [],
-      valuedTargetPoint
+      valuedTargetPoint,
     );
+
+    // After normalizeTourStopRoute, the bookends are guaranteed
+    // present (navStageStartPoint and valuedTargetPoint are both
+    // non-null by construction above). The interior slice is the
+    // canonical `waypoints` shape; `route` keeps the legacy
+    // bookended form so existing consumers keep working until
+    // they're migrated.
+    const waypoints = normaliedRoute.slice(1, -1);
 
     return {
       ...stage,
       targetPoint: valuedTargetPoint,
       route: normaliedRoute,
+      waypoints,
     };
   });
 }
@@ -78,7 +87,7 @@ export default function normalizeTour(tour: Tour): Tour {
     if (!stopStartPoint) {
       // this shouldn't happen, but just in case...
       throw Error(
-        `normalizeTour could not get a start point for stop index ${index}`
+        `normalizeTour could not get a start point for stop index ${index}`,
       );
     }
 
@@ -91,7 +100,7 @@ export default function normalizeTour(tour: Tour): Tour {
     // create a list of updated stages. Use the updated Nav if it
     // exists, otherwise, just use the original stage
     const updatedStages: CoreStage[] = stop.stop_content.stages.map(
-      (stage) => updatedNavStageLookup[stage.id] ?? stage
+      (stage) => updatedNavStageLookup[stage.id] ?? stage,
     );
 
     // update this stop's stages

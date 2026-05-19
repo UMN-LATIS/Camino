@@ -5,11 +5,25 @@ const orange = "#FF9D25";
 const pink = "#ff295d";
 // const pinkLight = "rgba(255, 190, 206, 0.5)";
 
+// Hide the start/end anchor vertices and the phantom midpoints
+// immediately adjacent to them. The endpoints are derived from
+// prior stops — the user doesn't own them and shouldn't be able to
+// select them or create new waypoints clustered against them.
+//
+// The first anchor's coord_path is statically "0" so it lives in
+// the style filter. The last anchor's coord_path changes with
+// waypoint count, so MapPolylineEditable adds dynamic `coord_path
+// != "<last>"` clauses via `map.setFilter` after each render.
 export default [
   {
     id: "gl-draw-polygon-midpoint",
     type: "circle",
-    filter: ["all", ["==", "$type", "Point"], ["==", "meta", "midpoint"]],
+    filter: [
+      "all",
+      ["==", "$type", "Point"],
+      ["==", "meta", "midpoint"],
+      ["!=", "coord_path", "0"],
+    ],
     paint: {
       "circle-radius": 4,
       "circle-color": orange,
@@ -69,6 +83,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      ["!=", "coord_path", "0"],
     ],
     paint: {
       "circle-radius": 7,
@@ -83,6 +98,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      ["!=", "coord_path", "0"],
     ],
     paint: {
       "circle-radius": 5,

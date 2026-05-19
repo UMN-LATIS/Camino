@@ -70,7 +70,7 @@ const renderedInterior = computed((): LngLat[] =>
 );
 
 function renderLine() {
-  if (!isReady.value) return;
+  if (!isReady.value || !map?.value) return;
 
   const lineFeature = toGeoJsonLineString([
     props.startPoint,
@@ -86,6 +86,50 @@ function renderLine() {
   draw.changeMode("direct_select", {
     featureId: draw.getAll().features[0].id as string,
   });
+
+  hideEndAnchorAndAdjacentMidpoint();
+}
+
+/**
+ * Hides the END anchor vertex and the phantom midpoint between the
+ * last interior vertex and that anchor. The START anchor and its
+ * adjacent midpoint are filtered out statically in
+ * editablePolylineStyles (coord_path == "0"); the end-side
+ * coord_paths depend on waypoint count so we update the filters
+ * here after every render.
+ */
+function hideEndAnchorAndAdjacentMidpoint() {
+  if (!map?.value) return;
+  const mapboxMap = map.value;
+  const lastVertexIdx = String(renderedInterior.value.length + 1);
+  const lastMidpointIdx = String(renderedInterior.value.length);
+
+  const vertexLayers = [
+    "gl-draw-polygon-and-line-vertex-stroke-inactive",
+    "gl-draw-polygon-and-line-vertex-inactive",
+  ];
+  for (const layerId of vertexLayers) {
+    if (!mapboxMap.getLayer(layerId)) continue;
+    mapboxMap.setFilter(layerId, [
+      "all",
+      ["==", "meta", "vertex"],
+      ["==", "$type", "Point"],
+      ["!=", "mode", "static"],
+      ["!=", "coord_path", "0"],
+      ["!=", "coord_path", lastVertexIdx],
+    ]);
+  }
+
+  const midpointLayer = "gl-draw-polygon-midpoint";
+  if (mapboxMap.getLayer(midpointLayer)) {
+    mapboxMap.setFilter(midpointLayer, [
+      "all",
+      ["==", "$type", "Point"],
+      ["==", "meta", "midpoint"],
+      ["!=", "coord_path", "0"],
+      ["!=", "coord_path", lastMidpointIdx],
+    ]);
+  }
 }
 
 function toLngLats(geojson: Feature<LineString>): LngLat[] {

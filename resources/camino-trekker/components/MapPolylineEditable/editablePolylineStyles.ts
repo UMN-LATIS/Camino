@@ -75,6 +75,10 @@ export default [
       "line-width": 3,
     },
   },
+  // Vertex circles. Two stacked layers — a white halo and a pink
+  // inner — render every waypoint. When the user clicks a vertex
+  // it gets `active == "true"`; we grow both layers and add a dark
+  // ring around the inner so it reads as "selected, about to act on."
   {
     id: "gl-draw-polygon-and-line-vertex-stroke-inactive",
     type: "circle",
@@ -86,7 +90,7 @@ export default [
       ["!=", "coord_path", "0"],
     ],
     paint: {
-      "circle-radius": 7,
+      "circle-radius": ["case", ["==", ["get", "active"], "true"], 11, 7],
       "circle-color": "#fff",
     },
   },
@@ -101,8 +105,10 @@ export default [
       ["!=", "coord_path", "0"],
     ],
     paint: {
-      "circle-radius": 5,
+      "circle-radius": ["case", ["==", ["get", "active"], "true"], 8, 5],
       "circle-color": pink,
+      "circle-stroke-width": ["case", ["==", ["get", "active"], "true"], 2, 0],
+      "circle-stroke-color": "#111",
     },
   },
   {

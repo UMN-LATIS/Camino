@@ -47,7 +47,9 @@ defineEmits<{
 
 function getMapMarkerColor(stop: TourMapStop): "pink" | "orange" | "default" {
   if (stop.isActive) return "pink";
-  if (stop.preceedsActive) return "orange";
+  // Preceding stops used to render orange, drawing the eye toward
+  // an anchor the user has already passed. Render them gray so the
+  // only highlighted marker is the active stop they're headed to.
   return "default";
 }
 </script>

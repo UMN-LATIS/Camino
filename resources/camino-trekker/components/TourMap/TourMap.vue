@@ -69,16 +69,19 @@
         variant="gradient-active"
       />
 
-      <!-- 
-        mark the tour start location 
-        if there's no preceeding point,
-        then making this the it
+      <!--
+        Mark the tour's start location. Render in orange while the
+        user is reading the start stop or the first navigation stop
+        — in both contexts the tour-start point is where the user
+        is coming from and they need to be able to find it. After
+        that, the user has moved on and a gray reference marker is
+        plenty.
       -->
       <TourMapStarMarker
         v-if="startLocation"
         :lng="startLocation.lng"
         :lat="startLocation.lat"
-        :color="trekkerStore.stopIndex === 0 ? 'orange' : 'default'"
+        :color="trekkerStore.stopIndex <= 1 ? 'orange' : 'default'"
       />
 
       <!-- preceeding point -->

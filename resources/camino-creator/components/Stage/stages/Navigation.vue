@@ -13,10 +13,10 @@
       <NavStageRouteMapper
         :tourId="tourId"
         :stopId="stopId"
-        :route="stage.route"
+        :waypoints="stage.waypoints ?? []"
         :targetPoint="stage.targetPoint"
         @update:targetPoint="handleUpdateTargetPoint"
-        @update:route="handleUpdateRoute"
+        @update:waypoints="handleUpdateWaypoints"
       />
     </section>
   </div>
@@ -47,10 +47,10 @@ function handleUpdateTargetPoint(newTargetPoint: LngLat) {
   });
 }
 
-function handleUpdateRoute(route) {
+function handleUpdateWaypoints(waypoints: LngLat[]) {
   emit("update", {
     ...props.stage,
-    route,
+    waypoints,
   });
 }
 

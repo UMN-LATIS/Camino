@@ -39,18 +39,26 @@ function toNormalizedNavStages(
     const valuedTargetPoint =
       stage.targetPoint ?? getOffsetPointFrom(navStageStartPoint);
 
+    // Source of truth for interior geometry: `waypoints` if the
+    // editor has written it (post-migration), otherwise derive
+    // from the legacy bookended `route`. Lets the editor write
+    // only `waypoints` without losing data on the next normalize.
+    const interior =
+      stage.waypoints ??
+      normalizeTourStopRoute(
+        navStageStartPoint,
+        stage.route || [],
+        valuedTargetPoint,
+      ).slice(1, -1);
+
+    // Rebuild the bookended `route` from the canonical interior
+    // so back-compat consumers see consistent data. Both fields
+    // stay in sync.
     const normaliedRoute = normalizeTourStopRoute(
       navStageStartPoint,
-      stage.route || [],
+      interior,
       valuedTargetPoint,
     );
-
-    // After normalizeTourStopRoute, the bookends are guaranteed
-    // present (navStageStartPoint and valuedTargetPoint are both
-    // non-null by construction above). The interior slice is the
-    // canonical `waypoints` shape; `route` keeps the legacy
-    // bookended form so existing consumers keep working until
-    // they're migrated.
     const waypoints = normaliedRoute.slice(1, -1);
 
     return {

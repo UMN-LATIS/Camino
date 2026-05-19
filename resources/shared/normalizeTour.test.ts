@@ -137,6 +137,36 @@ describe("normalizeTour — populates `waypoints` on every nav stage", () => {
     expect(navStage(normalizeTour(tour), 2).waypoints).toEqual([P.waypointC]);
   });
 
+  it("prefers existing `waypoints` over the (possibly stale) legacy `route`", () => {
+    // Once the editor starts writing only `waypoints`, the stored
+    // `route` field can be stale relative to `waypoints`. On the
+    // next fetch+normalize, the fresh waypoints must win — both
+    // the resulting `waypoints` and the rebuilt `route` come from
+    // them.
+    const tour = buildTour({
+      startLocation: P.origin,
+      stops: [
+        buildStop({
+          id: 1,
+          stages: [
+            {
+              id: "nav-1",
+              type: StageType.Navigation,
+              text: { [Locale.en]: "" },
+              route: [P.origin, P.outlier, P.firstTarget],
+              waypoints: [P.waypointA],
+              targetPoint: P.firstTarget,
+            } satisfies NavigationStage,
+          ],
+        }),
+      ],
+    });
+
+    const stage = navStage(normalizeTour(tour), 1);
+    expect(stage.waypoints).toEqual([P.waypointA]);
+    expect(stage.route).toEqual([P.origin, P.waypointA, P.firstTarget]);
+  });
+
   it("keeps each stop's waypoints isolated from neighbors", () => {
     const tour = buildTour({
       startLocation: P.origin,

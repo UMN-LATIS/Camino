@@ -9,23 +9,33 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 
 import { watch, inject, onMounted, computed, ref } from "vue";
 import { MapInjectionKey } from "@/shared/constants";
-import type { LngLat, TourStopRoute } from "@/types";
+import type { LngLat } from "@/types";
 import { toGeoJsonLineString } from "@/camino-trekker/components/MapPolyline/toGeoJson";
 import * as MapboxDrawWaypoint from "mapbox-gl-draw-waypoint";
 import { Feature, LineString } from "geojson";
 import editablePolylineStyles from "./editablePolylineStyles";
-import normalizeTourStopRoute from "@/shared/normalizeTourStopRoute";
+import stripAnchors from "./stripAnchors";
 
+/**
+ * An editable polyline anchored between two derived endpoints
+ * (`startPoint` and `endPoint`). The user can add, drag, or remove
+ * interior `waypoints`; the endpoints themselves are locked by
+ * mapbox-gl-draw-waypoint.
+ *
+ * The contract is interior-only. `update:waypoints` emits the
+ * waypoints between the anchors — never the anchors themselves.
+ * Callers don't need to slice or bookend the emitted array.
+ */
 interface Props {
   startPoint: LngLat;
-  route: TourStopRoute;
+  waypoints: LngLat[];
   endPoint: LngLat;
   id: string;
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
 }>();
 
 const isReady = ref<boolean>(false);
@@ -44,15 +54,19 @@ const draw = new MapboxDraw({
   styles: editablePolylineStyles,
 });
 
+// When there are no waypoints, seed a single midpoint vertex so
+// the user has something draggable to start sketching with. This
+// seed is rendered but not stored — only the user's edits make it
+// into the emitted waypoint list.
 const midpoint = computed(
   (): LngLat => ({
     lng: (props.startPoint.lng + props.endPoint.lng) / 2,
     lat: (props.startPoint.lat + props.endPoint.lat) / 2,
-  })
+  }),
 );
 
-const routeOrMidpoint = computed((): LngLat[] =>
-  props.route.length ? props.route : [midpoint.value]
+const renderedInterior = computed((): LngLat[] =>
+  props.waypoints.length ? props.waypoints : [midpoint.value],
 );
 
 function renderLine() {
@@ -60,15 +74,15 @@ function renderLine() {
 
   const lineFeature = toGeoJsonLineString([
     props.startPoint,
-    ...routeOrMidpoint.value,
+    ...renderedInterior.value,
     props.endPoint,
   ]);
 
-  // Remove any existing features and create new one
   draw.deleteAll();
   draw.add(lineFeature);
 
-  // Enter direct_select mode to show vertices and prevent moving the whole line
+  // direct_select mode shows vertex handles and prevents dragging
+  // the whole line as a single object.
   draw.changeMode("direct_select", {
     featureId: draw.getAll().features[0].id as string,
   });
@@ -85,11 +99,10 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
   if (event.action !== "change_coordinates") return;
 
   const linestrings = event.features as Feature<LineString>[];
-  const route = toLngLats(linestrings[0]);
-
+  const drawnLine = toLngLats(linestrings[0]);
   emit(
-    "update:route",
-    normalizeTourStopRoute(props.startPoint, route, props.endPoint)
+    "update:waypoints",
+    stripAnchors(drawnLine, props.startPoint, props.endPoint),
   );
 }
 
@@ -100,14 +113,22 @@ function initDrawOnMapLoad() {
     map.value.on("draw.update", handleUpdate);
     isReady.value = true;
 
-    // remove this watch now that we're done
     unwatch();
   });
 }
 
-watch(isReady, () => {
-  renderLine();
-});
+watch(
+  [
+    () => props.startPoint,
+    () => props.endPoint,
+    () => props.waypoints,
+    isReady,
+  ],
+  () => {
+    renderLine();
+  },
+  { immediate: true, deep: true },
+);
 
 onMounted(() => {
   initDrawOnMapLoad();

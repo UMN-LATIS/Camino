@@ -83,19 +83,20 @@
 
       <!-- Current Stop Route (Editable) -->
       <MapPolylineEditable
-        v-if="route"
         id="current-stop-route"
         :startPoint="lastValuedTargetPoint"
-        :route="route"
+        :waypoints="waypoints ?? []"
         :endPoint="currentValuedTargetPoint"
-        @update:route="(route: LngLat[]) => $emit('update:route', route)"
+        @update:waypoints="
+          (waypoints: LngLat[]) => $emit('update:waypoints', waypoints)
+        "
       />
     </Map>
     <Alert v-if="geolocationError" class="my-2" variant="warning">
       {{ geolocationError.message }}
     </Alert>
     <div class="route-mapper__button-group d-flex justify-content-end p-3">
-      <BButton variant="tertiary" @click="$emit('update:route', [])"
+      <BButton variant="tertiary" @click="$emit('update:waypoints', [])"
         >Clear Route</BButton
       >
       <BButton variant="tertiary" @click="handleClearTargetPoint"
@@ -124,13 +125,13 @@ import getOffsetPointFrom from "@/shared/getOffsetPointFrom";
 const props = defineProps<{
   tourId: number;
   stopId: number;
-  route: Maybe<LngLat[]>;
+  waypoints: Maybe<LngLat[]>;
   targetPoint: Maybe<LngLat>;
 }>();
 
 const emit = defineEmits<{
   (eventName: "update:targetPoint", lnglat: LngLat);
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
 }>();
 
 const store = useCreatorStore();
@@ -147,7 +148,7 @@ const lastValuedTargetPoint = computed((): LngLat => {
 });
 
 const offsetPointFromLastTarget = computed(
-  (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value)
+  (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value),
 );
 
 const currentValuedTargetPoint = computed((): LngLat => {
@@ -180,7 +181,7 @@ const mappedStops = tour.stops.map(toMappedStop);
 
 const currentStop = computed(
   (): Maybe<MappedStop> =>
-    mappedStops.find((s) => s.id === props.stopId) ?? null
+    mappedStops.find((s) => s.id === props.stopId) ?? null,
 );
 
 const previousStop = computed((): Maybe<MappedStop> => {
@@ -200,14 +201,14 @@ const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
   const nextStop = store.selectNextTourStop(
     currentState,
     props.tourId,
-    props.stopId
+    props.stopId,
   );
 
   if (!nextStop) return null;
   const nextStopRoute = store.selectTourStopRoute(
     currentState,
     props.tourId,
-    nextStop.id
+    nextStop.id,
   );
 
   if (!nextStopRoute || !nextStopRoute.length) {

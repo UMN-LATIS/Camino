@@ -46,10 +46,10 @@
               v-if="startPoint"
               :id="`stop-${stop.id}-route`"
               :startPoint="startPoint"
-              :route="navStage.route ?? []"
+              :waypoints="navStage.waypoints ?? []"
               :endPoint="effectiveTargetPoint"
-              @update:route="
-                (updatedRoute) => $emit('update:route', updatedRoute)
+              @update:waypoints="
+                (waypoints) => $emit('update:waypoints', waypoints)
               "
             />
           </Map>
@@ -115,7 +115,7 @@ interface Props {
 const props = defineProps<Props>();
 
 defineEmits<{
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
   (eventName: "update:targetPoint", point: LngLat);
 }>();
 

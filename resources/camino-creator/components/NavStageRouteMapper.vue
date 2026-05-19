@@ -29,29 +29,33 @@
         </MapMarker>
       </div>
 
-      <!-- Tour Start Location -->
+      <!--
+        Tour Start Location — derived start for stop 0, or just a
+        reference marker for later stops. Either way it's not
+        editable from this view (InitialLocation owns it), so
+        always render in the default gray to make that obvious.
+      -->
       <MapMarker
         v-if="tour.start_location"
         :lng="tour.start_location.lng"
         :lat="tour.start_location.lat"
       >
-        <!-- 
-          If no previousStop exists, then the start point is the
-          previous stop so color it orange 
-        -->
-        <MapMarkerLabel :color="!previousStop ? 'orange' : 'default'">
+        <MapMarkerLabel color="default">
           <i class="fas fa-star"></i>
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- Previous Stop Target-->
+      <!--
+        Previous Stop Target — derived start for the current stop.
+        Not editable here (set on the previous stop's own editor),
+        so render in default gray.
+      -->
       <MapMarker
         v-if="previousStop && previousStop.targetPoint"
         :lng="previousStop.targetPoint.lng"
         :lat="previousStop.targetPoint.lat"
-        @drag="handleMapMarkerDrag"
       >
-        <MapMarkerLabel color="orange">
+        <MapMarkerLabel color="default">
           {{ previousStop.index + 1 }}
         </MapMarkerLabel>
       </MapMarker>

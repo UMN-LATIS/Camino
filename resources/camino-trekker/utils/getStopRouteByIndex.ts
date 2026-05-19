@@ -1,39 +1,19 @@
-import getStagesFromStopWhere from "@/shared/getStagesFromStopWhere";
-import {
-  Tour,
-  NavigationStage,
-  StageType,
-  TourStopRoute,
-  LngLat,
-  Maybe,
-} from "@/types";
-import { findLastTargetPointByIndex } from "./findLastTargetPointByIndex";
+import { Tour, TourStopRoute, Maybe } from "@/types";
+import { getStopPolyline } from "@/shared/tourGeometry";
 
+/**
+ * The polyline to render for a stop in the trekker map.
+ *
+ * Delegates to the canonical `getStopPolyline` derivation:
+ * `[derivedStart, ...waypoints, targetPoint]`. The endpoints come
+ * from neighboring stops, not from the stored `route` array — so
+ * we never duplicate bookends, and a mutation to a prior stop's
+ * `targetPoint` is reflected here on the next read.
+ */
 export function getStopRouteByIndex(
   tour: Maybe<Tour>,
-  index: number
+  index: number,
 ): TourStopRoute {
   if (!tour) return [];
-
-  const stopAtIndex = tour.stops[index];
-  const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
-    "type",
-    StageType.Navigation,
-    stopAtIndex
-  );
-
-  // for all the navStages at this stop
-  // combine any nav routes into a single list of points
-  // and remove any falsy values that might have crept in
-  const fullStopRoute = navStagesAtStop
-    .flatMap((stage) => stage.route ?? [])
-    .filter((x): x is LngLat => Boolean(x));
-
-  // make sure the previous stop target point begins the route
-  // and the current stop target point ends the route
-  return [
-    findLastTargetPointByIndex(tour, index - 1),
-    ...fullStopRoute,
-    findLastTargetPointByIndex(tour, index),
-  ];
+  return getStopPolyline(tour, index);
 }

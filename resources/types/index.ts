@@ -159,6 +159,14 @@ export type TourStopRoute = LngLat[];
 export interface NavigationStage extends CoreStage {
   text: LocalizedText;
   route: Maybe<TourStopRoute>;
+  /**
+   * Interior waypoints only — never the derived start or `targetPoint`.
+   * Populated by `fromLegacyNavStage` at the wire boundary. Optional
+   * during the wire-format migration; once every consumer reads
+   * `waypoints` and the legacy `route` field is removed, this becomes
+   * the canonical geometry field.
+   */
+  waypoints?: LngLat[];
   targetPoint: Maybe<LngLat>;
 }
 

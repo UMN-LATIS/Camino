@@ -216,14 +216,7 @@ describe("Tour routes debug page", () => {
     });
   });
 
-  // Forward-spec for the new geometry model. Today this fails because
-  // `getTourStopStartPoint` reads stop N+1's `route[0]`, which is
-  // frozen at fetch-time normalization and does not re-flow when
-  // stop N's targetPoint is mutated in the store. After the
-  // translator is wired in and selectors derive `start` from prior
-  // stops at read time, this should pass — at which point flip the
-  // `.skip` to `.only` while you verify, then drop the `.skip`.
-  it.skip("editing stop N's targetPoint cascades to stop N+1's displayed start", () => {
+  it("editing stop N's targetPoint cascades to stop N+1's displayed start", () => {
     withStore((store, tourId) => {
       const tour = store.getTour(tourId).value;
       const navBearingStops = tour.stops.filter((stop) =>

@@ -146,7 +146,7 @@ describe("Tour routes debug page", () => {
     });
   });
 
-  it("each card displays start, target, and route values", () => {
+  it("each card displays start, target, and waypoints values", () => {
     cy.get("[data-cy=stop-route-card]").each(($card) => {
       cy.wrap($card)
         .find("[data-cy=stop-route-card-start]")
@@ -156,7 +156,9 @@ describe("Tour routes debug page", () => {
 
       cy.wrap($card).find("[data-cy=stop-route-card-target]").should("exist");
 
-      cy.wrap($card).find("[data-cy=stop-route-card-route]").should("exist");
+      cy.wrap($card)
+        .find("[data-cy=stop-route-card-waypoints]")
+        .should("exist");
     });
   });
 

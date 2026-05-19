@@ -57,7 +57,7 @@
         <div class="col-md-5">
           <div class="stop-route-card__data">
             <dl class="small mb-0">
-              <dt>startPoint (route[0])</dt>
+              <dt>derived start</dt>
               <dd>
                 <pre class="mb-2" data-cy="stop-route-card-start">{{
                   formatLngLat(startPoint)
@@ -72,13 +72,15 @@
               </dd>
 
               <dt>
-                route ({{ navStage.route?.length ?? 0 }}
-                {{ (navStage.route?.length ?? 0) === 1 ? "point" : "points" }})
+                waypoints ({{ waypointCount }}
+                {{ waypointCount === 1 ? "point" : "points" }})
               </dt>
               <dd>
-                <pre class="route-pre mb-0" data-cy="stop-route-card-route">{{
-                  formatRoute(navStage.route)
-                }}</pre>
+                <pre
+                  class="route-pre mb-0"
+                  data-cy="stop-route-card-waypoints"
+                  >{{ formatPoints(navStage.waypoints) }}</pre
+                >
               </dd>
             </dl>
           </div>
@@ -102,7 +104,6 @@ import {
   type NavigationStage,
   type LngLat,
   type Maybe,
-  type TourStopRoute,
   Locale,
 } from "@/types";
 
@@ -146,14 +147,18 @@ const mapCenter = computed((): LngLat => {
   );
 });
 
+const waypointCount = computed(
+  (): number => props.navStage.waypoints?.length ?? 0,
+);
+
 function formatLngLat(point: Maybe<LngLat>): string {
   if (!point) return "null";
   return `{ lng: ${point.lng.toFixed(6)}, lat: ${point.lat.toFixed(6)} }`;
 }
 
-function formatRoute(route: Maybe<TourStopRoute>): string {
-  if (!route?.length) return "[]";
-  return route
+function formatPoints(points: LngLat[] | undefined): string {
+  if (!points?.length) return "[]";
+  return points
     .map(
       (point, i) =>
         `[${i}] { lng: ${point.lng.toFixed(6)}, lat: ${point.lat.toFixed(6)} }`,

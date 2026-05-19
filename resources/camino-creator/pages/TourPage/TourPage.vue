@@ -81,6 +81,12 @@
         class="btn btn-outline-success"
         ><i class="fas fa-eye"></i> Preview</a
       >
+      <RouterLink
+        v-if="tour.id"
+        :to="{ name: 'tourRoutesDebug', params: { tourId: tour.id } }"
+        class="btn btn-outline-info"
+        ><i class="fas fa-route"></i> Routes Debug</RouterLink
+      >
       <button class="btn btn-primary" data-cy="save-button" @click="save">
         <i class="fas fa-save"></i> Save
       </button>

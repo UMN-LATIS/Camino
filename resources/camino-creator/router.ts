@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import TourPage from "./pages/TourPage/TourPage.vue";
 import TourStopPage from "./pages/TourStopPage/TourStopPage.vue";
+import TourRoutesDebugPage from "./pages/TourRoutesDebugPage/TourRoutesDebugPage.vue";
 import FeedbackViewPage from "./pages/FeedbackViewPage.vue";
 import MyToursPage from "./pages/MyToursPage.vue";
 
@@ -38,6 +39,14 @@ const routes = [
     props: (route) => ({
       tourId: Number.parseInt(route.params.tourId, 10),
       stopId: Number.parseInt(route.params.stopId, 10),
+    }),
+  },
+  {
+    path: "/creator/tours/:tourId/routes-debug",
+    name: "tourRoutesDebug",
+    component: TourRoutesDebugPage,
+    props: (route) => ({
+      tourId: Number.parseInt(route.params.tourId, 10),
     }),
   },
   {

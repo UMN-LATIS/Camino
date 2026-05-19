@@ -53,4 +53,44 @@ describe("stripAnchors", () => {
     // away entirely — there's nothing left to be interior.
     expect(stripAnchors([P.origin], P.origin, P.firstTarget)).toEqual([]);
   });
+
+  it("dedupes consecutive duplicate waypoints", () => {
+    // Some Mapbox edit operations (especially dragging a vertex
+    // onto an adjacent one) leave behind interior duplicates.
+    // Clean them up at the boundary so the canonical waypoint
+    // list stays minimal.
+    expect(
+      stripAnchors(
+        [P.origin, P.waypointA, P.waypointA, P.waypointB, P.firstTarget],
+        P.origin,
+        P.firstTarget,
+      ),
+    ).toEqual([P.waypointA, P.waypointB]);
+  });
+
+  it("collapses duplicate bookends at both ends", () => {
+    // Defensive: if the drawn line somehow has the anchor
+    // duplicated against itself, strip both copies. Dedupe + strip
+    // composed once gives the right result.
+    expect(
+      stripAnchors(
+        [P.origin, P.origin, P.waypointA, P.firstTarget, P.firstTarget],
+        P.origin,
+        P.firstTarget,
+      ),
+    ).toEqual([P.waypointA]);
+  });
+
+  it("dedupes a waypoint that coincides with an adjacent anchor", () => {
+    // If a user drags an interior waypoint onto the start anchor,
+    // the drawn line has the start point twice in a row. After
+    // cleanup the extra interior copy is gone.
+    expect(
+      stripAnchors(
+        [P.origin, P.origin, P.waypointA, P.firstTarget],
+        P.origin,
+        P.firstTarget,
+      ),
+    ).toEqual([P.waypointA]);
+  });
 });

@@ -1,36 +1,35 @@
 import type { LngLat } from "@/types";
-import lngLatEquals from "@/shared/lngLatEquals";
+import normalizeTourStopRoute from "@/shared/normalizeTourStopRoute";
 
 /**
- * Strips the start/end anchors from a drawn polyline to recover
- * the interior waypoints.
+ * Cleans up a drawn polyline into the canonical interior-only
+ * waypoint list.
  *
- * Why this exists: when the user edits a polyline through Mapbox
- * Draw, the resulting LineString carries every vertex — including
- * the locked endpoints we set as the start and end anchors.
- * Downstream callers of the editor want only the interior; the
- * endpoints are already known from props.
+ * Three things happen, in one pass:
  *
- * Match-by-value is defensive: mapbox-gl-draw-waypoint locks the
- * endpoints under normal use, so the first and last drawn
- * coordinates should equal `startPoint` and `endPoint`. If they
- * don't (different draw lib, a bug, a degenerate edit), we treat
- * the unmatched ends as interior data and preserve them rather
- * than silently dropping points.
+ *   1. Endpoint stripping. The line is sandwiched with the known
+ *      `startPoint` and `endPoint` and then deduped, so any drawn
+ *      bookend that already matches an anchor collapses away.
+ *      Duplicate bookends (`[start, start, …]`) collapse too.
+ *
+ *   2. Consecutive deduplication. Dragging a vertex onto an
+ *      adjacent one — or any other edit that produces identical
+ *      neighbors — leaves redundant points. Drop them.
+ *
+ *   3. Endpoints removed. After (1) and (2) we slice off the
+ *      bookends, leaving only the interior waypoints the editor
+ *      actually owns.
+ *
+ * If Mapbox somehow emits a drawn line whose head/tail doesn't
+ * equal the known anchors (e.g., a future draw lib that allows
+ * dragging endpoints), the unmatched ends survive as interior data
+ * — no silent point loss.
  */
 export default function stripAnchors(
   drawnLine: LngLat[],
   startPoint: LngLat,
   endPoint: LngLat,
 ): LngLat[] {
-  if (drawnLine.length === 0) return [];
-
-  const headIsStart = lngLatEquals(drawnLine[0], startPoint);
-  const tailIsEnd = lngLatEquals(drawnLine[drawnLine.length - 1], endPoint);
-
-  const startIdx = headIsStart ? 1 : 0;
-  const endIdx = tailIsEnd ? drawnLine.length - 1 : drawnLine.length;
-  if (startIdx >= endIdx) return [];
-
-  return drawnLine.slice(startIdx, endIdx);
+  const normalized = normalizeTourStopRoute(startPoint, drawnLine, endPoint);
+  return normalized.slice(1, -1);
 }

@@ -115,7 +115,7 @@ import {
   Maybe,
   type TourMapStop as TourMapStopType,
 } from "@/types";
-import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 import TourMapStop from "./TourMapStop.vue";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
@@ -143,7 +143,7 @@ const canCreateMap = computed(
   () =>
     trekkerStore.tour &&
     trekkerStore.tour.stops &&
-    trekkerStore.tour.start_location
+    trekkerStore.tour.start_location,
 );
 const mapStyleChoices = [
   MapboxMapStyle.dark,
@@ -175,23 +175,23 @@ const mapStops = computed((): TourMapStopType[] => {
 });
 
 const allButCurrentAndPrevStops = computed((): TourMapStopType[] =>
-  mapStops.value.filter((s) => !s.isActive && !s.preceedsActive)
+  mapStops.value.filter((s) => !s.isActive && !s.preceedsActive),
 );
 
 const currentMapStop = computed(
-  (): Maybe<TourMapStopType> => mapStops.value.find((s) => s.isActive) ?? null
+  (): Maybe<TourMapStopType> => mapStops.value.find((s) => s.isActive) ?? null,
 );
 const preceedingMapStop = computed(
   (): Maybe<TourMapStopType> =>
-    mapStops.value.find((s) => s.preceedsActive) ?? null
+    mapStops.value.find((s) => s.preceedsActive) ?? null,
 );
 
 const startLocation = computed(
-  (): Maybe<LngLat> => trekkerStore.tour?.start_location ?? null
+  (): Maybe<LngLat> => trekkerStore.tour?.start_location ?? null,
 );
 
 const fullTourRoute = computed((): LngLat[] =>
-  getFullTourRoute(trekkerStore.tour)
+  getFullTourRoute(trekkerStore.tour),
 );
 
 // BOUNDS

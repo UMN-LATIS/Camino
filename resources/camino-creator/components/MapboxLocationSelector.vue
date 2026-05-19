@@ -68,7 +68,7 @@ import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
 import { UMN_LNGLAT } from "@/shared/constants";
 import LngLatDisplay from "./LngLatDisplay.vue";
-import { getStopPolyline } from "@/shared/tourGeometry";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 
 const props = withDefaults(
   defineProps<{
@@ -136,7 +136,7 @@ const toMappedStop = (stop: TourStop, index: number): Maybe<MappedStop> => {
     // Use the derived polyline so stop 0's leg redraws when the
     // user drags the tour's start_location. The legacy `stage.route`
     // would be frozen at the value from last fetch+normalize.
-    route: getStopPolyline(tour.value, index),
+    route: getStopRouteByIndex(tour.value, index),
   };
 };
 

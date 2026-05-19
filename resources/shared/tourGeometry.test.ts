@@ -19,7 +19,7 @@ import {
   getTourStartPoint,
   getStopStartPoint,
   getStopEndPoint,
-  getStopPolyline,
+  getStopRouteByIndex,
   getNavStageStartPoint,
 } from "./tourGeometry";
 import { buildTour, buildStop, buildNavStage, P } from "./__fixtures__/tour";
@@ -138,13 +138,17 @@ describe("getStopEndPoint", () => {
   });
 });
 
-describe("getStopPolyline", () => {
+describe("getStopRouteByIndex", () => {
+  it("returns [] when tour is null", () => {
+    expect(getStopRouteByIndex(null, 0)).toEqual([]);
+  });
+
   it("is [start, target] when there are no waypoints", () => {
     const tour = buildTour({
       startLocation: P.origin,
       stops: [buildStop({ id: 1, targetPoint: P.firstTarget })],
     });
-    expect(getStopPolyline(tour, 0)).toEqual([P.origin, P.firstTarget]);
+    expect(getStopRouteByIndex(tour, 0)).toEqual([P.origin, P.firstTarget]);
   });
 
   it("interleaves waypoints between start and target", () => {
@@ -158,7 +162,7 @@ describe("getStopPolyline", () => {
         }),
       ],
     });
-    expect(getStopPolyline(tour, 0)).toEqual([
+    expect(getStopRouteByIndex(tour, 0)).toEqual([
       P.origin,
       P.waypointA,
       P.waypointB,
@@ -177,7 +181,7 @@ describe("getStopPolyline", () => {
         }),
       ],
     });
-    expect(getStopPolyline(tour, 1)).toEqual([
+    expect(getStopRouteByIndex(tour, 1)).toEqual([
       P.firstTarget,
       P.waypointC,
       P.secondTarget,
@@ -195,7 +199,7 @@ describe("getStopPolyline", () => {
         }),
       ],
     });
-    expect(getStopPolyline(tour, 0)).toEqual([P.origin, P.waypointA]);
+    expect(getStopRouteByIndex(tour, 0)).toEqual([P.origin, P.waypointA]);
   });
 
   it("omits a null derived start rather than blowing up", () => {
@@ -209,12 +213,12 @@ describe("getStopPolyline", () => {
         }),
       ],
     });
-    expect(getStopPolyline(tour, 0)).toEqual([P.waypointA, P.firstTarget]);
+    expect(getStopRouteByIndex(tour, 0)).toEqual([P.waypointA, P.firstTarget]);
   });
 
   it("returns [] for an out-of-range index", () => {
     const tour = buildTour({ stops: [buildStop({ id: 1 })] });
-    expect(getStopPolyline(tour, 99)).toEqual([]);
+    expect(getStopRouteByIndex(tour, 99)).toEqual([]);
   });
 });
 

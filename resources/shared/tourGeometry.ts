@@ -75,10 +75,14 @@ export function getStopEndPoint(tour: Tour, stopIndex: number): Maybe<LngLat> {
 /**
  * The polyline to draw for the stop: `[start, ...waypoints, end]`.
  * Null endpoints drop out so a partially-edited stop still renders a
- * partial line instead of blowing up. Returns `[]` for an out-of-
- * range index.
+ * partial line instead of blowing up. Returns `[]` for a null tour
+ * or out-of-range index.
  */
-export function getStopPolyline(tour: Tour, stopIndex: number): LngLat[] {
+export function getStopRouteByIndex(
+  tour: Maybe<Tour>,
+  stopIndex: number,
+): LngLat[] {
+  if (!tour) return [];
   const stop = tour.stops[stopIndex];
   if (!stop) return [];
 

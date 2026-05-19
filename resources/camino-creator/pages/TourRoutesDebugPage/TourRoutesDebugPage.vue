@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
+import { computed, onMounted, onBeforeUnmount } from "vue";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import {
   type Tour,
@@ -132,6 +132,18 @@ onMounted(async () => {
   if (!creatorStore.isReady) {
     await creatorStore.init();
   }
+
+  // Test seam: expose the store while this debug-only route is
+  // mounted so Cypress can drive mutations directly instead of
+  // synthesizing canvas drags on Mapbox Draw vertices.
+  (
+    window as unknown as { __creatorStore?: typeof creatorStore }
+  ).__creatorStore = creatorStore;
+});
+
+onBeforeUnmount(() => {
+  delete (window as unknown as { __creatorStore?: typeof creatorStore })
+    .__creatorStore;
 });
 </script>
 

@@ -59,12 +59,16 @@
             <dl class="small mb-0">
               <dt>startPoint (route[0])</dt>
               <dd>
-                <pre class="mb-2">{{ formatLngLat(startPoint) }}</pre>
+                <pre class="mb-2" data-cy="stop-route-card-start">{{
+                  formatLngLat(startPoint)
+                }}</pre>
               </dd>
 
               <dt>targetPoint</dt>
               <dd>
-                <pre class="mb-2">{{ formatLngLat(navStage.targetPoint) }}</pre>
+                <pre class="mb-2" data-cy="stop-route-card-target">{{
+                  formatLngLat(navStage.targetPoint)
+                }}</pre>
               </dd>
 
               <dt>
@@ -72,7 +76,7 @@
                 {{ (navStage.route?.length ?? 0) === 1 ? "point" : "points" }})
               </dt>
               <dd>
-                <pre class="route-pre mb-0">{{
+                <pre class="route-pre mb-0" data-cy="stop-route-card-route">{{
                   formatRoute(navStage.route)
                 }}</pre>
               </dd>

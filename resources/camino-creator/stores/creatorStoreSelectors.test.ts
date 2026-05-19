@@ -83,6 +83,31 @@ describe("selectTourStopStartPoint — derives from prior stops at read time", (
   });
 });
 
+describe("selectTourStopStartPoint — survives a reorder", () => {
+  it("reflects the new prior stop after the array is moved", () => {
+    // Build [A→firstTarget, B→secondTarget, C→thirdTarget].
+    // C's derived start is B's targetPoint (secondTarget).
+    const tour = buildTour({
+      startLocation: P.origin,
+      stops: [
+        buildStop({ id: 1, targetPoint: P.firstTarget }),
+        buildStop({ id: 2, targetPoint: P.secondTarget }),
+        buildStop({ id: 3, targetPoint: P.thirdTarget }),
+      ],
+    });
+    const state = stateOf(tour);
+
+    // Mimic moveTourStopByIndex: [A, B, C] → [C, A, B].
+    // C is now first; its derived start should be tour.start_location.
+    const stops = state.tours.value[0].stops;
+    state.tours.value[0].stops = [stops[2], stops[0], stops[1]];
+
+    expect(selectTourStopStartPoint(state, tour.id, 3)).toEqual(P.origin);
+    expect(selectTourStopStartPoint(state, tour.id, 1)).toEqual(P.thirdTarget);
+    expect(selectTourStopStartPoint(state, tour.id, 2)).toEqual(P.firstTarget);
+  });
+});
+
 describe("selectNextTourStopStartPoint", () => {
   it("returns the next stop's derived start", () => {
     const tour = buildTour({

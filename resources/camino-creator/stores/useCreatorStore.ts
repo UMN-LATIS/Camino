@@ -229,7 +229,10 @@ export const useCreatorStore = defineStore("creator", () => {
     },
 
     /**
-     * moves a tour stop to a new position
+     * moves a tour stop to a new position. Re-normalizes the tour
+     * afterwards so the derived start chain (and the legacy
+     * bookended `route` field that some consumers still read) both
+     * reflect the new order.
      */
     moveTourStopByIndex(
       tourId: number,
@@ -240,6 +243,9 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = move(oldStopIndex, newStopIndex, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
+      state.tours.value[tourIndex.value] = normalizeTour(
+        state.tours.value[tourIndex.value],
+      );
     },
 
     /**
@@ -250,6 +256,9 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = insert(index, stop, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
+      state.tours.value[tourIndex.value] = normalizeTour(
+        state.tours.value[tourIndex.value],
+      );
     },
 
     /**

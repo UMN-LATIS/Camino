@@ -21,12 +21,17 @@
             mapStyle="streets"
             :accessToken="mapBoxToken"
           >
+            <!--
+              Derived start — not editable from this card (it's set
+              on the previous stop, or via InitialLocation for stop
+              0). Render in default gray to make that obvious.
+            -->
             <MapMarker
               v-if="startPoint"
               :lng="startPoint.lng"
               :lat="startPoint.lat"
             >
-              <MapMarkerLabel color="orange">
+              <MapMarkerLabel color="default">
                 {{ index === 0 ? "★" : index }}
               </MapMarkerLabel>
             </MapMarker>

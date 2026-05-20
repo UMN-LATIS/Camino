@@ -13,7 +13,7 @@ import {
 } from "@/types";
 
 /** Named lng/lat points so assertions read like prose. */
-export const P = {
+export const Points = {
   origin: { lng: -93.0, lat: 44.0 },
   firstTarget: { lng: -93.1, lat: 44.1 },
   secondTarget: { lng: -93.2, lat: 44.2 },
@@ -81,7 +81,9 @@ interface TourOptions {
 export function buildTour(options: TourOptions = {}): Tour {
   // `??` would collapse an explicit null back into the default; use `in` to distinguish.
   const startLocation: Maybe<LngLat> =
-    "startLocation" in options ? (options.startLocation ?? null) : P.origin;
+    "startLocation" in options
+      ? (options.startLocation ?? null)
+      : Points.origin;
 
   return {
     id: options.id ?? 1,

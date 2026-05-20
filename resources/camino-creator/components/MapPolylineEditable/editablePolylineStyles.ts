@@ -1,19 +1,8 @@
-// based on styles in "@mapbox/mapbox-gl-draw/src/lib/theme";
+// Based on styles in "@mapbox/mapbox-gl-draw/src/lib/theme".
 
-// Colors
 const orange = "#FF9D25";
 const pink = "#ff295d";
-// const pinkLight = "rgba(255, 190, 206, 0.5)";
 
-// Hide the start/end anchor vertices and the phantom midpoints
-// immediately adjacent to them. The endpoints are derived from
-// prior stops — the user doesn't own them and shouldn't be able to
-// select them or create new waypoints clustered against them.
-//
-// The first anchor's coord_path is statically "0" so it lives in
-// the style filter. The last anchor's coord_path changes with
-// waypoint count, so MapPolylineEditable adds dynamic `coord_path
-// != "<last>"` clauses via `map.setFilter` after each render.
 export default [
   {
     id: "gl-draw-polygon-midpoint",
@@ -22,6 +11,10 @@ export default [
       "all",
       ["==", "$type", "Point"],
       ["==", "meta", "midpoint"],
+      // Hide the midpoint adjacent to the start anchor (coord_path "0"). The
+      // user doesn't own the derived endpoints. The end-side coord_path
+      // changes with waypoint count and is filtered dynamically in
+      // MapPolylineEditable's setFilter call.
       ["!=", "coord_path", "0"],
     ],
     paint: {
@@ -75,10 +68,9 @@ export default [
       "line-width": 3,
     },
   },
-  // Vertex circles. Two stacked layers — a white halo and a pink
-  // inner — render every waypoint. When the user clicks a vertex
-  // it gets `active == "true"`; we grow both layers and add a dark
-  // ring around the inner so it reads as "selected, about to act on."
+  // Each waypoint renders as a white halo behind a pink inner. When the user
+  // selects a vertex it gets `active == "true"`; both layers grow and the
+  // inner gains a dark ring so it reads as "selected."
   {
     id: "gl-draw-polygon-and-line-vertex-stroke-inactive",
     type: "circle",
@@ -87,6 +79,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      // Hide the start-anchor vertex; user doesn't own it.
       ["!=", "coord_path", "0"],
     ],
     paint: {
@@ -102,6 +95,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      // Hide the start-anchor vertex; user doesn't own it.
       ["!=", "coord_path", "0"],
     ],
     paint: {

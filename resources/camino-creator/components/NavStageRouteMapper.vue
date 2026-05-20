@@ -98,7 +98,7 @@ import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
 import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarkerLabel.vue";
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
-import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+import MapPolylineEditable from "./MapPolylineEditable/MapPolylineEditable.vue";
 import BButton from "./BButton.vue";
 import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
@@ -121,9 +121,6 @@ const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
 const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
-/**
- * last target point set before this stop
- */
 const lastValuedTargetPoint = computed((): LngLat => {
   const prevStop = store.getPrevTourStop(props.tourId, props.stopId).value;
   return store.findValuedTargetPoint(props.tourId, prevStop?.id).value;
@@ -152,11 +149,8 @@ const toMappedStop = (stop: TourStop, index: number): MappedStop => ({
   route: getStopRouteByIndex(tour, index),
 });
 
-// to avoid triggering unnecessary rerenders, avoid
-// using `computed`, and just get the mappedStops
-// at setup time
-// similarly, no need to get a ref to the tour
-// a plain object with suffives since it's only used by mappedStops
+// Snapshot mappedStops at setup time; `computed` would re-render on every
+// store mutation when only the active stop's data ever changes here.
 const tour = unref(store.getTour(props.tourId));
 const mappedStops = tour.stops.map(toMappedStop);
 

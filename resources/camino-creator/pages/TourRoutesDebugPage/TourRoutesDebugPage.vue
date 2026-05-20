@@ -133,7 +133,8 @@ onMounted(async () => {
     await creatorStore.init();
   }
 
-  // Cypress seam: drive mutations directly instead of synthesizing canvas drags.
+  // Expose the store on window so Cypress can drive mutations directly
+  // instead of synthesizing canvas drags on Mapbox Draw vertices.
   (
     window as unknown as { __creatorStore?: typeof creatorStore }
   ).__creatorStore = creatorStore;

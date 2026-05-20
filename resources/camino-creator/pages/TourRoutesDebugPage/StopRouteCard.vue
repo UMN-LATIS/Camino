@@ -95,7 +95,7 @@ import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@trekker/components/MapMarker/MapMarker.vue";
 import MapMarkerLabel from "@trekker/components/MapMarkerLabel/MapMarkerLabel.vue";
-import MapPolylineEditable from "@trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+import MapPolylineEditable from "@creator/components/MapPolylineEditable/MapPolylineEditable.vue";
 import {
   type TourStop,
   type NavigationStage,

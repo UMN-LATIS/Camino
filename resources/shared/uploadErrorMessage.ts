@@ -1,4 +1,4 @@
-/** Turns an axios-style upload error into a user-facing string. @pure */
+/** Turns an axios-style upload error into a user-facing string. */
 
 const MAX_UPLOAD_MB = 8;
 

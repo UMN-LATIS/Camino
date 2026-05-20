@@ -1,5 +1,3 @@
-/** Pure tour-geometry derivations: stop endpoints derived at read time from neighbors. */
-
 import {
   type Tour,
   type TourStop,
@@ -15,7 +13,6 @@ function getNavigationStages(stop: TourStop): NavigationStage[] {
   );
 }
 
-/** @pure */
 function getLastDefinedTarget(stop: TourStop): Maybe<LngLat> {
   const navStages = getNavigationStages(stop);
   for (let i = navStages.length - 1; i >= 0; i--) {
@@ -24,12 +21,11 @@ function getLastDefinedTarget(stop: TourStop): Maybe<LngLat> {
   return null;
 }
 
-/** @pure */
 export function getTourStartPoint(tour: Tour): Maybe<LngLat> {
   return tour.start_location;
 }
 
-/** Derived start: nearest prior stop's last-defined targetPoint, falling back to `tour.start_location`. @pure */
+/** Nearest prior stop's last-defined targetPoint, falling back to `tour.start_location`. */
 export function getStopStartPoint(
   tour: Tour,
   stopIndex: number,
@@ -41,14 +37,13 @@ export function getStopStartPoint(
   return tour.start_location;
 }
 
-/** End anchor: the stop's last non-null nav-stage targetPoint. @pure */
 export function getStopEndPoint(tour: Tour, stopIndex: number): Maybe<LngLat> {
   const stop = tour.stops[stopIndex];
   if (!stop) return null;
   return getLastDefinedTarget(stop);
 }
 
-/** Full polyline `[start, ...route, end]`; null endpoints drop out so partial edits still render. @pure */
+/** Full polyline `[start, ...route, end]`; null endpoints drop out so partial edits still render. */
 export function getStopRouteByIndex(
   tour: Maybe<Tour>,
   stopIndex: number,
@@ -66,7 +61,6 @@ export function getStopRouteByIndex(
   );
 }
 
-/** Start anchor for a specific nav stage: prior stages' targetPoints, falling back to the stop's derived start. @pure */
 export function getNavStageStartPoint(
   tour: Tour,
   stopIndex: number,

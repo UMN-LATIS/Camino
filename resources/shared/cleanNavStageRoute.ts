@@ -1,4 +1,4 @@
-/** Canonicalizes a stored `route` into the interior-only shape. Idempotent. @pure */
+/** Canonicalizes a stored `route` into the interior-only shape. Idempotent. */
 
 import { type LngLat, type Maybe } from "@/types";
 import lngLatEquals from "./lngLatEquals";

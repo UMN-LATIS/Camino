@@ -14,7 +14,7 @@ import { toGeoJsonLineString } from "@/camino-trekker/components/MapPolyline/toG
 import * as MapboxDrawWaypoint from "mapbox-gl-draw-waypoint";
 import { Feature, LineString } from "geojson";
 import editablePolylineStyles from "./editablePolylineStyles";
-import stripAnchors from "./stripAnchors";
+import lngLatEquals from "@/shared/lngLatEquals";
 
 /** Editable polyline locked between two derived endpoints; emits interior-only `route`. */
 interface Props {
@@ -128,10 +128,11 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
 
   const linestrings = event.features as Feature<LineString>[];
   const drawnLine = toLngLats(linestrings[0]);
-  emit(
-    "update:route",
-    stripAnchors(drawnLine, props.startPoint, props.endPoint),
+  const sandwiched = [props.startPoint, ...drawnLine, props.endPoint];
+  const deduped = sandwiched.filter(
+    (point, i) => i === 0 || !lngLatEquals(point, sandwiched[i - 1]),
   );
+  emit("update:route", deduped.slice(1, -1));
 }
 
 function initDrawOnMapLoad() {

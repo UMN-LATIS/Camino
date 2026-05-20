@@ -17,25 +17,20 @@ import editablePolylineStyles from "./editablePolylineStyles";
 import stripAnchors from "./stripAnchors";
 
 /**
- * An editable polyline anchored between two derived endpoints
- * (`startPoint` and `endPoint`). The user can add, drag, or remove
- * interior `waypoints`; the endpoints themselves are locked by
- * mapbox-gl-draw-waypoint.
- *
- * The contract is interior-only. `update:waypoints` emits the
- * waypoints between the anchors — never the anchors themselves.
- * Callers don't need to slice or bookend the emitted array.
+ * Editable polyline locked between two derived endpoints. The user
+ * edits the interior `route`; `update:route` emits the interior-only
+ * point list (anchors stripped, consecutive duplicates collapsed).
  */
 interface Props {
   startPoint: LngLat;
-  waypoints: LngLat[];
+  route: LngLat[];
   endPoint: LngLat;
   id: string;
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  (eventName: "update:waypoints", waypoints: LngLat[]);
+  (eventName: "update:route", route: LngLat[]);
 }>();
 
 const isReady = ref<boolean>(false);
@@ -66,7 +61,7 @@ const midpoint = computed(
 );
 
 const renderedInterior = computed((): LngLat[] =>
-  props.waypoints.length ? props.waypoints : [midpoint.value],
+  props.route.length ? props.route : [midpoint.value],
 );
 
 function renderLine() {
@@ -145,7 +140,7 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
   const linestrings = event.features as Feature<LineString>[];
   const drawnLine = toLngLats(linestrings[0]);
   emit(
-    "update:waypoints",
+    "update:route",
     stripAnchors(drawnLine, props.startPoint, props.endPoint),
   );
 }
@@ -162,12 +157,7 @@ function initDrawOnMapLoad() {
 }
 
 watch(
-  [
-    () => props.startPoint,
-    () => props.endPoint,
-    () => props.waypoints,
-    isReady,
-  ],
+  [() => props.startPoint, () => props.endPoint, () => props.route, isReady],
   () => {
     renderLine();
   },

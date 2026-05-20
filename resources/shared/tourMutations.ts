@@ -1,14 +1,7 @@
 /**
- * Pure tour mutations. Each one takes a Tour and returns a new Tour
- * — no shared state, no Vue, no store. The store dispatches these
- * after a user gesture and replaces its state with the result.
- *
- * `moveStartAnchor` is the interesting one: dragging the start
- * point of stop N>0 is *not* a mutation on stop N. It mutates
- * stop N-1's last-nav-stage `targetPoint` (or `tour.start_location`
- * for stop 0). The derivation rules in `tourGeometry.ts` decide
- * which prior stop "owns" the anchor; this function mirrors that
- * logic so the data and the visual stay in sync.
+ * Pure tour mutations: Tour in, Tour out. `moveStartAnchor` follows
+ * the same cascade as `getStopStartPoint` — dragging stop N's visual
+ * start writes onto stop N-1's target (or `tour.start_location`).
  */
 
 import {
@@ -20,6 +13,7 @@ import {
   StageType,
 } from "@/types";
 
+/** @pure */
 export function setWaypoint(
   tour: Tour,
   stopId: number,
@@ -28,14 +22,14 @@ export function setWaypoint(
   point: LngLat,
 ): Tour {
   return updateNavStage(tour, stopId, stageId, (stage) => {
-    const waypoints = stage.waypoints ?? [];
-    if (index < 0 || index >= waypoints.length) return stage;
-    const next = [...waypoints];
-    next[index] = point;
-    return { ...stage, waypoints: next };
+    if (index < 0 || index >= stage.route.length) return stage;
+    const route = [...stage.route];
+    route[index] = point;
+    return { ...stage, route };
   });
 }
 
+/** @pure */
 export function insertWaypoint(
   tour: Tour,
   stopId: number,
@@ -44,16 +38,16 @@ export function insertWaypoint(
   point: LngLat,
 ): Tour {
   return updateNavStage(tour, stopId, stageId, (stage) => {
-    const waypoints = stage.waypoints ?? [];
-    const next = [
-      ...waypoints.slice(0, index),
+    const route = [
+      ...stage.route.slice(0, index),
       point,
-      ...waypoints.slice(index),
+      ...stage.route.slice(index),
     ];
-    return { ...stage, waypoints: next };
+    return { ...stage, route };
   });
 }
 
+/** @pure */
 export function removeWaypoint(
   tour: Tour,
   stopId: number,
@@ -61,13 +55,16 @@ export function removeWaypoint(
   index: number,
 ): Tour {
   return updateNavStage(tour, stopId, stageId, (stage) => {
-    const waypoints = stage.waypoints ?? [];
-    if (index < 0 || index >= waypoints.length) return stage;
-    const next = [...waypoints.slice(0, index), ...waypoints.slice(index + 1)];
-    return { ...stage, waypoints: next };
+    if (index < 0 || index >= stage.route.length) return stage;
+    const route = [
+      ...stage.route.slice(0, index),
+      ...stage.route.slice(index + 1),
+    ];
+    return { ...stage, route };
   });
 }
 
+/** @pure */
 export function setTargetPoint(
   tour: Tour,
   stopId: number,
@@ -81,12 +78,10 @@ export function setTargetPoint(
 }
 
 /**
- * Moves the visual start anchor of `stopId` to `point`. For stop 0
- * this writes `tour.start_location`. For any later stop it writes
- * the previous stop's last-nav-stage `targetPoint`, cascading back
- * through earlier stops with null targets — the same cascade
- * `getStopStartPoint` uses to *read* the anchor. If the cascade
- * finds no prior target, the write lands on `tour.start_location`.
+ * Writes `point` where `getStopStartPoint` would *read* the anchor
+ * from — the prior stop's last-defined target, falling back to
+ * `tour.start_location`.
+ * @pure
  */
 export function moveStartAnchor(
   tour: Tour,
@@ -104,6 +99,7 @@ export function moveStartAnchor(
   return { ...tour, start_location: point };
 }
 
+/** @pure */
 function updateNavStage(
   tour: Tour,
   stopId: number,
@@ -129,6 +125,7 @@ function updateNavStage(
   };
 }
 
+/** @pure */
 function lastNavStageTargetPoint(stop: TourStop): Maybe<LngLat> {
   const navStages = stop.stop_content.stages.filter(
     (stage): stage is NavigationStage => stage.type === StageType.Navigation,
@@ -140,10 +137,10 @@ function lastNavStageTargetPoint(stop: TourStop): Maybe<LngLat> {
 }
 
 /**
- * Writes `point` onto the last-defined-target nav stage in
- * `stopIndex`. If no nav stage has a target yet, falls back to
- * writing the *last* nav stage's target. If the stop has no nav
- * stages at all, the tour is returned unchanged.
+ * Writes `point` onto the last-defined-target nav stage in the stop,
+ * falling back to the last stage if none have a target. No-op if the
+ * stop has no nav stages.
+ * @pure
  */
 function setLastNavStageTargetPoint(
   tour: Tour,

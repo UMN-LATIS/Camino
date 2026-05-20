@@ -66,9 +66,6 @@ export const useCreatorStore = defineStore("creator", () => {
         selectors.selectStageIndexById(state, tourId, stopId, stageId),
       ),
 
-    getTourStopRoute: (tourId: number, stopId: number) =>
-      computed(() => selectors.selectTourStopRoute(state, tourId, stopId)),
-
     getTourStopTargetPoint: (tourId: number, stopId: number) =>
       computed(() =>
         selectors.selectTourStopTargetPoint(state, tourId, stopId),
@@ -79,9 +76,6 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getPrevTourStop: (tourId: number, stopId: number) =>
       computed(() => selectors.selectPrevTourStop(state, tourId, stopId)),
-
-    getNextTourStopRoute: (tourId: number, stopId: number) =>
-      computed(() => selectors.selectNextTourStopRoute(state, tourId, stopId)),
 
     getTourStopStartPoint: (tourId: number, stopId: number) =>
       computed(() => selectors.selectTourStopStartPoint(state, tourId, stopId)),

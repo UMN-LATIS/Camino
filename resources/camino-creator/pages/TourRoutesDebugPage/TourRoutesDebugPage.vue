@@ -44,9 +44,7 @@
           :stop="entry.stop"
           :navStage="entry.navStage"
           :index="index"
-          @update:waypoints="
-            (waypoints) => handleWaypointsUpdate(entry, waypoints)
-          "
+          @update:route="(route) => handleRouteUpdate(entry, route)"
           @update:targetPoint="(point) => handleTargetUpdate(entry, point)"
         />
       </li>
@@ -113,11 +111,8 @@ function formatLngLat(point: Maybe<LngLat>): string {
   return JSON.stringify(point, null, 2);
 }
 
-function handleWaypointsUpdate(
-  entry: EditableStopEntry,
-  waypoints: LngLat[],
-): void {
-  const updatedStage: NavigationStage = { ...entry.navStage, waypoints };
+function handleRouteUpdate(entry: EditableStopEntry, route: LngLat[]): void {
+  const updatedStage: NavigationStage = { ...entry.navStage, route };
   creatorStore.updateTourStopStage(props.tourId, entry.stop.id, updatedStage);
 }
 

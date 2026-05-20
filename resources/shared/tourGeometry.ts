@@ -1,15 +1,7 @@
 /**
- * Pure derivations over a tour's geometry under the new model.
- *
- * A tour is a chain of named anchor points (the tour's
- * `start_location` and each stop's `targetPoint`) connected by
- * polylines made of interior waypoints only. Stop endpoints are
- * never stored on a stop — they are derived from neighboring stops
- * at read time. This file is where that derivation lives.
- *
- * Everything here is pure: take a Tour, return geometry. Recompute
- * freely; nothing can drift because there is no second copy to
- * drift from.
+ * Pure tour-geometry derivations. Stop endpoints are derived from
+ * neighboring stops at read time — `tour.start_location` for stop 0,
+ * the prior stop's `targetPoint` for any later stop.
  */
 
 import {
@@ -28,8 +20,8 @@ function getNavigationStages(stop: TourStop): NavigationStage[] {
 }
 
 /**
- * The last non-null `targetPoint` across the stop's nav stages, or
- * null if every nav stage has a null target.
+ * Last non-null `targetPoint` across the stop's nav stages.
+ * @pure
  */
 function getLastDefinedTarget(stop: TourStop): Maybe<LngLat> {
   const navStages = getNavigationStages(stop);
@@ -39,17 +31,15 @@ function getLastDefinedTarget(stop: TourStop): Maybe<LngLat> {
   return null;
 }
 
+/** @pure */
 export function getTourStartPoint(tour: Tour): Maybe<LngLat> {
   return tour.start_location;
 }
 
 /**
- * The starting point of the stop at the given index.
- *
- * Stop 0 starts at `tour.start_location`. A later stop starts at the
- * most recent prior stop whose last nav stage has a non-null
- * `targetPoint`; if every prior stop is missing one we cascade all
- * the way back to `tour.start_location`.
+ * Derived start for `stopIndex`: nearest prior stop's last-defined
+ * targetPoint, cascading back to `tour.start_location`.
+ * @pure
  */
 export function getStopStartPoint(
   tour: Tour,
@@ -63,8 +53,8 @@ export function getStopStartPoint(
 }
 
 /**
- * The ending point of the stop — its last nav stage's targetPoint,
- * or null if no nav stage has one set.
+ * End anchor for the stop: its last non-null nav-stage targetPoint.
+ * @pure
  */
 export function getStopEndPoint(tour: Tour, stopIndex: number): Maybe<LngLat> {
   const stop = tour.stops[stopIndex];
@@ -73,10 +63,9 @@ export function getStopEndPoint(tour: Tour, stopIndex: number): Maybe<LngLat> {
 }
 
 /**
- * The polyline to draw for the stop: `[start, ...waypoints, end]`.
- * Null endpoints drop out so a partially-edited stop still renders a
- * partial line instead of blowing up. Returns `[]` for a null tour
- * or out-of-range index.
+ * Full polyline `[start, ...route, end]` for the stop. Null endpoints
+ * drop out so partial edits still render. `[]` for null tour / bad index.
+ * @pure
  */
 export function getStopRouteByIndex(
   tour: Maybe<Tour>,
@@ -88,21 +77,17 @@ export function getStopRouteByIndex(
 
   const start = getStopStartPoint(tour, stopIndex);
   const end = getStopEndPoint(tour, stopIndex);
-  const waypoints = getNavigationStages(stop).flatMap(
-    (stage) => stage.waypoints ?? [],
-  );
+  const interior = getNavigationStages(stop).flatMap((stage) => stage.route);
 
-  return [start, ...waypoints, end].filter(
+  return [start, ...interior, end].filter(
     (point): point is LngLat => point !== null,
   );
 }
 
 /**
- * The starting point for a specific nav stage within a stop. The
- * first nav stage starts at the stop's derived start. A later nav
- * stage starts at the previous nav stage's `targetPoint`, or, if
- * that's null, cascades back through earlier stages and ultimately
- * to the stop's derived start.
+ * Start anchor for a specific nav stage. Cascades back through
+ * prior stages' targetPoints, ultimately to the stop's derived start.
+ * @pure
  */
 export function getNavStageStartPoint(
   tour: Tour,

@@ -1,15 +1,14 @@
 /**
- * Test fixtures for the new tour geometry model.
+ * Test fixtures for the canonical tour geometry model.
  *
- * The new model treats a nav stage's interior waypoints and its
- * `targetPoint` as the only stored geometry. A stop's start point is
- * always derived from prior stops (or `tour.start_location` for stop
- * zero) — never stored on the stage. Fixtures here produce that
- * in-memory shape directly so tests stay focused on the chain
- * behavior instead of the legacy wire format.
+ * A nav stage's stored geometry is `{ route, targetPoint }` where
+ * `route` is interior waypoints only — the derived start is computed
+ * at read time from prior stops (or `tour.start_location` for stop
+ * zero) and never stored. Fixtures produce that canonical shape
+ * directly so tests stay focused on chain behavior.
  *
  * `buildTour({ stops: [...] })` is the entry point. Stops carry one
- * nav stage by default with the `waypoints` and `targetPoint` you
+ * nav stage by default with the `route` and `targetPoint` you
  * provide; pass `stages` to override that for multi-stage cases.
  */
 
@@ -43,16 +42,16 @@ export const P = {
 
 interface NavStageOptions {
   id?: string;
-  waypoints?: LngLat[];
+  route?: LngLat[];
   targetPoint?: Maybe<LngLat>;
 }
 
 let navIdCounter = 0;
 /**
- * Builds a navigation stage in the canonical post-translation shape:
- * `waypoints` is interior-only, `route` is left unset. Wire-shape
- * stages (with `route`) are built ad-hoc in the translator tests
- * since that's the only place they're constructed by hand.
+ * Builds a navigation stage in the canonical shape: `route` is
+ * interior-only (defaulting to `[]`). Stages with legacy bookended
+ * routes are built ad-hoc inside the few tests that need to assert
+ * normalization behavior on legacy inputs.
  */
 export function buildNavStage(options: NavStageOptions = {}): NavigationStage {
   navIdCounter += 1;
@@ -60,16 +59,15 @@ export function buildNavStage(options: NavStageOptions = {}): NavigationStage {
     id: options.id ?? `nav-${navIdCounter}`,
     type: StageType.Navigation,
     text: { [Locale.en]: "" },
-    route: null,
-    waypoints: options.waypoints ?? [],
+    route: options.route ?? [],
     targetPoint: options.targetPoint ?? null,
   };
 }
 
 interface StopOptions {
   id: number;
-  /** Convenience: a single-nav-stage stop with these waypoints. */
-  waypoints?: LngLat[];
+  /** Convenience: a single-nav-stage stop with this interior route. */
+  route?: LngLat[];
   /** Convenience: that single nav stage's targetPoint. */
   targetPoint?: Maybe<LngLat>;
   /** Escape hatch for multi-stage stops. */
@@ -79,7 +77,7 @@ interface StopOptions {
 export function buildStop(options: StopOptions): TourStop {
   const stages: Stage[] = options.stages ?? [
     buildNavStage({
-      waypoints: options.waypoints ?? [],
+      route: options.route ?? [],
       targetPoint: options.targetPoint ?? null,
     }),
   ];

@@ -73,34 +73,20 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- 
-        Draw a dotted line between current stop target and next route 
-        to indicate the change
-      -->
-      <MapPolyline
-        v-if="routeToNextRoute"
-        id="route-to-next-route"
-        :positions="routeToNextRoute"
-        color="#ccc"
-        variant="dashed"
-      />
-
       <!-- Current Stop Route (Editable) -->
       <MapPolylineEditable
         id="current-stop-route"
         :startPoint="lastValuedTargetPoint"
-        :waypoints="waypoints ?? []"
+        :route="route"
         :endPoint="currentValuedTargetPoint"
-        @update:waypoints="
-          (waypoints: LngLat[]) => $emit('update:waypoints', waypoints)
-        "
+        @update:route="(next: LngLat[]) => $emit('update:route', next)"
       />
     </Map>
     <Alert v-if="geolocationError" class="my-2" variant="warning">
       {{ geolocationError.message }}
     </Alert>
     <div class="route-mapper__button-group d-flex justify-content-end p-3">
-      <BButton variant="tertiary" @click="$emit('update:waypoints', [])"
+      <BButton variant="tertiary" @click="$emit('update:route', [])"
         >Clear Route</BButton
       >
       <BButton variant="tertiary" @click="handleClearTargetPoint"
@@ -114,7 +100,8 @@
 import { ref, computed, nextTick, unref } from "vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
-import { LngLat, Maybe, TourStop, TourStopRoute } from "@/types";
+import { LngLat, Maybe, TourStop } from "@/types";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
@@ -129,13 +116,13 @@ import getOffsetPointFrom from "@/shared/getOffsetPointFrom";
 const props = defineProps<{
   tourId: number;
   stopId: number;
-  waypoints: Maybe<LngLat[]>;
+  route: LngLat[];
   targetPoint: Maybe<LngLat>;
 }>();
 
 const emit = defineEmits<{
   (eventName: "update:targetPoint", lnglat: LngLat);
-  (eventName: "update:waypoints", waypoints: LngLat[]);
+  (eventName: "update:route", route: LngLat[]);
 }>();
 
 const store = useCreatorStore();
@@ -163,16 +150,15 @@ interface MappedStop {
   id: number;
   index: number;
   targetPoint: Maybe<LngLat>;
-  route: Maybe<TourStopRoute>;
-  lastValuedTargetPoint?: LngLat;
-  currentValuedTargetPoint?: LngLat;
+  route: LngLat[];
 }
 
 const toMappedStop = (stop: TourStop, index: number): MappedStop => ({
   id: stop.id,
   index,
   targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
-  route: store.getTourStopRoute(props.tourId, stop.id).value,
+  // Full polyline (start..interior..end) for inactive-stop preview.
+  route: getStopRouteByIndex(tour, index),
 });
 
 // to avoid triggering unnecessary rerenders, avoid
@@ -196,31 +182,6 @@ const previousStop = computed((): Maybe<MappedStop> => {
 
 const otherStops = computed((): MappedStop[] => {
   return mappedStops.filter((stop) => stop.id !== props.stopId);
-});
-
-const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
-  if (!props.targetPoint) return null;
-
-  const currentState = store.getState();
-  const nextStop = store.selectNextTourStop(
-    currentState,
-    props.tourId,
-    props.stopId,
-  );
-
-  if (!nextStop) return null;
-  const nextStopRoute = store.selectTourStopRoute(
-    currentState,
-    props.tourId,
-    nextStop.id,
-  );
-
-  if (!nextStopRoute || !nextStopRoute.length) {
-    return null;
-  }
-
-  const routeToRoute = [props.targetPoint, nextStopRoute[0]];
-  return routeToRoute;
 });
 
 function handleMapLoad(map: MapboxMap) {

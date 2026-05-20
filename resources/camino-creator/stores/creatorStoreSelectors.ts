@@ -4,7 +4,6 @@ import {
   TourStop,
   Tour,
   Locale,
-  TourStopRoute,
   Maybe,
   NavigationStage,
   StageType,
@@ -161,28 +160,6 @@ export const selectStageIndexById = (
 };
 
 /**
- * selects tour stop route by tour id and stop id
- */
-export const selectTourStopRoute = (
-  currentState: CreatorStoreState,
-  tourId: number,
-  stopId: number,
-): Maybe<TourStopRoute> => {
-  const stop = selectTourStop(currentState, tourId, stopId);
-  const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
-    "type",
-    StageType.Navigation,
-    stop,
-  );
-
-  const fullStopRoute = navStagesAtStop
-    .flatMap((stage) => stage.route ?? [])
-    .filter((x): x is LngLat => Boolean(x));
-
-  return fullStopRoute;
-};
-
-/**
  * select the target point set at a given stop
  * if no target point is set, returns null
  *
@@ -240,21 +217,6 @@ export const selectPrevTourStop = (
     stopId,
   );
   return currentState.tours.value[tourIndex].stops[stopIndex - 1] ?? null;
-};
-
-/**
- * selecst the next stop route in the tour
- */
-export const selectNextTourStopRoute = (
-  currentState: CreatorStoreState,
-  tourId: number,
-  stopId: number,
-): Maybe<TourStopRoute> => {
-  const nextStop = selectNextTourStop(currentState, tourId, stopId);
-  if (!nextStop) {
-    return null;
-  }
-  return selectTourStopRoute(currentState, tourId, nextStop.id);
 };
 
 /**

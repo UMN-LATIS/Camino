@@ -31,7 +31,7 @@ function navStageOnStop(tour: Tour, stopId: number): NavigationStage {
 describe("setWaypoint", () => {
   it("replaces the waypoint at the given index", () => {
     const stage = buildNavStage({
-      waypoints: [P.waypointA, P.waypointB],
+      route: [P.waypointA, P.waypointB],
       targetPoint: P.firstTarget,
     });
     const tour = buildTour({
@@ -40,19 +40,16 @@ describe("setWaypoint", () => {
 
     const next = setWaypoint(tour, 1, stage.id, 1, P.waypointC);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointC,
-    ]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA, P.waypointC]);
   });
 
   it("does not touch adjacent stops or stages", () => {
     const stage1 = buildNavStage({
-      waypoints: [P.waypointA],
+      route: [P.waypointA],
       targetPoint: P.firstTarget,
     });
     const stage2 = buildNavStage({
-      waypoints: [P.waypointB],
+      route: [P.waypointB],
       targetPoint: P.secondTarget,
     });
     const tour = buildTour({
@@ -64,26 +61,26 @@ describe("setWaypoint", () => {
 
     const next = setWaypoint(tour, 1, stage1.id, 0, P.waypointC);
 
-    expect(navStageOnStop(next, 2).waypoints).toEqual([P.waypointB]);
+    expect(navStageOnStop(next, 2).route).toEqual([P.waypointB]);
     expect(navStageOnStop(next, 2).targetPoint).toEqual(P.secondTarget);
   });
 
   it("returns the tour unchanged when the index is out of range", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointA] });
+    const stage = buildNavStage({ route: [P.waypointA] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });
 
     const next = setWaypoint(tour, 1, stage.id, 5, P.waypointC);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([P.waypointA]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA]);
   });
 });
 
 describe("insertWaypoint", () => {
   it("inserts at the given index", () => {
     const stage = buildNavStage({
-      waypoints: [P.waypointA, P.waypointC],
+      route: [P.waypointA, P.waypointC],
       targetPoint: P.firstTarget,
     });
     const tour = buildTour({
@@ -92,7 +89,7 @@ describe("insertWaypoint", () => {
 
     const next = insertWaypoint(tour, 1, stage.id, 1, P.waypointB);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
+    expect(navStageOnStop(next, 1).route).toEqual([
       P.waypointA,
       P.waypointB,
       P.waypointC,
@@ -100,38 +97,32 @@ describe("insertWaypoint", () => {
   });
 
   it("inserts at the front when index is 0", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointB] });
+    const stage = buildNavStage({ route: [P.waypointB] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });
 
     const next = insertWaypoint(tour, 1, stage.id, 0, P.waypointA);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointB,
-    ]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA, P.waypointB]);
   });
 
   it("appends when index equals length", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointA] });
+    const stage = buildNavStage({ route: [P.waypointA] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });
 
     const next = insertWaypoint(tour, 1, stage.id, 1, P.waypointB);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointB,
-    ]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA, P.waypointB]);
   });
 });
 
 describe("removeWaypoint", () => {
   it("removes the waypoint at the given index", () => {
     const stage = buildNavStage({
-      waypoints: [P.waypointA, P.waypointB, P.waypointC],
+      route: [P.waypointA, P.waypointB, P.waypointC],
     });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
@@ -139,32 +130,29 @@ describe("removeWaypoint", () => {
 
     const next = removeWaypoint(tour, 1, stage.id, 1);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointC,
-    ]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA, P.waypointC]);
   });
 
   it("results in an empty array when removing the last waypoint", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointA] });
+    const stage = buildNavStage({ route: [P.waypointA] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });
 
     const next = removeWaypoint(tour, 1, stage.id, 0);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([]);
+    expect(navStageOnStop(next, 1).route).toEqual([]);
   });
 
   it("leaves the tour unchanged when the index is out of range", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointA] });
+    const stage = buildNavStage({ route: [P.waypointA] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });
 
     const next = removeWaypoint(tour, 1, stage.id, 5);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([P.waypointA]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA]);
   });
 });
 
@@ -191,9 +179,9 @@ describe("setTargetPoint", () => {
     expect(navStageOnStop(next, 1).targetPoint).toBeNull();
   });
 
-  it("does not touch the stage's waypoints", () => {
+  it("does not touch the stage's route", () => {
     const stage = buildNavStage({
-      waypoints: [P.waypointA, P.waypointB],
+      route: [P.waypointA, P.waypointB],
       targetPoint: P.firstTarget,
     });
     const tour = buildTour({
@@ -202,10 +190,7 @@ describe("setTargetPoint", () => {
 
     const next = setTargetPoint(tour, 1, stage.id, P.secondTarget);
 
-    expect(navStageOnStop(next, 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointB,
-    ]);
+    expect(navStageOnStop(next, 1).route).toEqual([P.waypointA, P.waypointB]);
   });
 });
 
@@ -221,13 +206,13 @@ describe("moveStartAnchor — edits the source of the derivation, not this stop"
     expect(next.start_location).toEqual(P.outlier);
     // The stop being "started from" is untouched.
     expect(navStageOnStop(next, 1).targetPoint).toEqual(P.firstTarget);
-    expect(navStageOnStop(next, 1).waypoints).toEqual([]);
+    expect(navStageOnStop(next, 1).route).toEqual([]);
   });
 
   it("for stop N>0, mutates stop N-1's last-nav-stage targetPoint", () => {
     const stage1 = buildNavStage({ targetPoint: P.firstTarget });
     const stage2 = buildNavStage({
-      waypoints: [P.waypointA],
+      route: [P.waypointA],
       targetPoint: P.secondTarget,
     });
     const tour = buildTour({
@@ -242,7 +227,7 @@ describe("moveStartAnchor — edits the source of the derivation, not this stop"
     // Stop 1's target moved.
     expect(navStageOnStop(next, 1).targetPoint).toEqual(P.outlier);
     // Stop 2's own data is untouched.
-    expect(navStageOnStop(next, 2).waypoints).toEqual([P.waypointA]);
+    expect(navStageOnStop(next, 2).route).toEqual([P.waypointA]);
     expect(navStageOnStop(next, 2).targetPoint).toEqual(P.secondTarget);
     // Tour-level start is untouched.
     expect(next.start_location).toEqual(P.origin);
@@ -290,7 +275,7 @@ describe("moveStartAnchor — edits the source of the derivation, not this stop"
 
 describe("immutability", () => {
   it("setWaypoint returns a new Tour, leaving the original untouched", () => {
-    const stage = buildNavStage({ waypoints: [P.waypointA] });
+    const stage = buildNavStage({ route: [P.waypointA] });
     const tour = buildTour({
       stops: [buildStop({ id: 1, stages: [stage] })],
     });

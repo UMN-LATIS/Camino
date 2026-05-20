@@ -1,25 +1,40 @@
 /**
- * Tests for the fetch-time normalizer. Pins two things:
+ * Behavior tests for `normalizeTour` that complement the route-shape
+ * contract in `normalizeTour.routeContract.test.ts`. Focus here:
  *
- *   1. Existing behavior — `route` is rewritten to
- *      `[start, ...interior, target]`, dedupes consecutive
- *      duplicates, falls back through prior stop targets when a
- *      target is missing.
- *
- *   2. New behavior — every navigation stage also gets `waypoints`
- *      populated with interior-only points. `waypoints` and `route`
- *      stay in sync so consumers can migrate one at a time without
- *      ever seeing a stale or contradictory pair.
+ *   - `targetPoint` is filled in (offset from the prior anchor) when
+ *     a stage has none.
+ *   - The cascade — stop N>0's derived start is the prior stop's
+ *     last-defined targetPoint, walking back through stops with null
+ *     targets until one defines a value, ultimately falling back to
+ *     `tour.start_location`.
+ *   - Each stop's normalization is isolated from its neighbors.
  */
 
 import { describe, it, expect } from "vitest";
 import normalizeTour from "./normalizeTour";
 import { buildTour, buildStop, P } from "./__fixtures__/tour";
-import { type NavigationStage, type Tour, StageType, Locale } from "@/types";
+import {
+  type NavigationStage,
+  type LngLat,
+  type Tour,
+  StageType,
+  Locale,
+} from "@/types";
 
-function legacyStop(
+function navStage(tour: Tour, stopId: number): NavigationStage {
+  const stop = tour.stops.find((s) => s.id === stopId);
+  if (!stop) throw new Error(`stop ${stopId} missing from normalized tour`);
+  const stage = stop.stop_content.stages.find(
+    (s) => s.type === StageType.Navigation,
+  );
+  if (!stage) throw new Error(`stop ${stopId} has no nav stage`);
+  return stage as NavigationStage;
+}
+
+function stopWithRoute(
   id: number,
-  route: NavigationStage["route"],
+  route: LngLat[],
   targetPoint: NavigationStage["targetPoint"],
 ) {
   return buildStop({
@@ -36,150 +51,61 @@ function legacyStop(
   });
 }
 
-function navStage(tour: Tour, stopId: number): NavigationStage {
-  const stop = tour.stops.find((s) => s.id === stopId);
-  if (!stop) throw new Error(`stop ${stopId} missing from normalized tour`);
-  const stage = stop.stop_content.stages.find(
-    (s) => s.type === StageType.Navigation,
-  );
-  if (!stage) throw new Error(`stop ${stopId} has no nav stage`);
-  return stage as NavigationStage;
-}
-
-describe("normalizeTour — existing legacy `route` behavior", () => {
-  it("rewrites a stage's route to start at the prior stop's target", () => {
+describe("normalizeTour — fills in missing targetPoints", () => {
+  it("offsets from the derived start when a stage has no target", () => {
     const tour = buildTour({
       startLocation: P.origin,
-      stops: [
-        legacyStop(1, [P.waypointA], P.firstTarget),
-        legacyStop(2, [P.waypointB], P.secondTarget),
-      ],
-    });
-
-    const normalized = normalizeTour(tour);
-
-    // Stop 1's route starts at the tour's start_location.
-    expect(navStage(normalized, 1).route?.[0]).toEqual(P.origin);
-    // Stop 2's route starts at stop 1's target.
-    expect(navStage(normalized, 2).route?.[0]).toEqual(P.firstTarget);
-  });
-
-  it("rewrites a stage's route to end at its targetPoint", () => {
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [legacyStop(1, [P.waypointA], P.firstTarget)],
+      stops: [stopWithRoute(1, [], null)],
     });
 
     const stage = navStage(normalizeTour(tour), 1);
-    expect(stage.route?.[stage.route.length - 1]).toEqual(P.firstTarget);
+    expect(stage.targetPoint).not.toBeNull();
+    // The exact offset is `getOffsetPointFrom`'s contract — we just
+    // verify it's *defined* and distinct from the derived start.
+    expect(stage.targetPoint).not.toEqual(P.origin);
   });
 
-  it("preserves interior waypoints between the bookends", () => {
+  it("keeps a defined targetPoint as-is", () => {
     const tour = buildTour({
       startLocation: P.origin,
-      stops: [legacyStop(1, [P.waypointA, P.waypointB], P.firstTarget)],
+      stops: [stopWithRoute(1, [], P.firstTarget)],
     });
 
-    expect(navStage(normalizeTour(tour), 1).route).toEqual([
-      P.origin,
-      P.waypointA,
-      P.waypointB,
-      P.firstTarget,
-    ]);
+    expect(navStage(normalizeTour(tour), 1).targetPoint).toEqual(P.firstTarget);
   });
 });
 
-describe("normalizeTour — populates `waypoints` on every nav stage", () => {
-  it("sets waypoints to [] when the legacy route has no interior points", () => {
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [legacyStop(1, [], P.firstTarget)],
-    });
-
-    expect(navStage(normalizeTour(tour), 1).waypoints).toEqual([]);
-  });
-
-  it("sets waypoints to the interior slice of the normalized route", () => {
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [legacyStop(1, [P.waypointA, P.waypointB], P.firstTarget)],
-    });
-
-    expect(navStage(normalizeTour(tour), 1).waypoints).toEqual([
-      P.waypointA,
-      P.waypointB,
-    ]);
-  });
-
-  it("strips bookends that legacy data already carries", () => {
-    // Stored route already has its start/target prepended/appended
-    // by an earlier normalize pass. After this pass, `waypoints`
-    // should still be interior-only, not include the bookends.
+describe("normalizeTour — cascade and isolation", () => {
+  it("keeps each stop's route isolated from its neighbors", () => {
     const tour = buildTour({
       startLocation: P.origin,
       stops: [
-        legacyStop(1, [P.origin, P.waypointA, P.firstTarget], P.firstTarget),
-      ],
-    });
-
-    expect(navStage(normalizeTour(tour), 1).waypoints).toEqual([P.waypointA]);
-  });
-
-  it("uses prior stop's target as the start anchor for waypoints math", () => {
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [
-        legacyStop(1, [], P.firstTarget),
-        legacyStop(2, [P.waypointC], P.secondTarget),
-      ],
-    });
-
-    expect(navStage(normalizeTour(tour), 2).waypoints).toEqual([P.waypointC]);
-  });
-
-  it("prefers existing `waypoints` over the (possibly stale) legacy `route`", () => {
-    // Once the editor starts writing only `waypoints`, the stored
-    // `route` field can be stale relative to `waypoints`. On the
-    // next fetch+normalize, the fresh waypoints must win — both
-    // the resulting `waypoints` and the rebuilt `route` come from
-    // them.
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [
-        buildStop({
-          id: 1,
-          stages: [
-            {
-              id: "nav-1",
-              type: StageType.Navigation,
-              text: { [Locale.en]: "" },
-              route: [P.origin, P.outlier, P.firstTarget],
-              waypoints: [P.waypointA],
-              targetPoint: P.firstTarget,
-            } satisfies NavigationStage,
-          ],
-        }),
-      ],
-    });
-
-    const stage = navStage(normalizeTour(tour), 1);
-    expect(stage.waypoints).toEqual([P.waypointA]);
-    expect(stage.route).toEqual([P.origin, P.waypointA, P.firstTarget]);
-  });
-
-  it("keeps each stop's waypoints isolated from neighbors", () => {
-    const tour = buildTour({
-      startLocation: P.origin,
-      stops: [
-        legacyStop(1, [P.waypointA], P.firstTarget),
-        legacyStop(2, [P.waypointB], P.secondTarget),
-        legacyStop(3, [P.waypointC], P.thirdTarget),
+        stopWithRoute(1, [P.waypointA], P.firstTarget),
+        stopWithRoute(2, [P.waypointB], P.secondTarget),
+        stopWithRoute(3, [P.waypointC], P.thirdTarget),
       ],
     });
 
     const normalized = normalizeTour(tour);
-    expect(navStage(normalized, 1).waypoints).toEqual([P.waypointA]);
-    expect(navStage(normalized, 2).waypoints).toEqual([P.waypointB]);
-    expect(navStage(normalized, 3).waypoints).toEqual([P.waypointC]);
+    expect(navStage(normalized, 1).route).toEqual([P.waypointA]);
+    expect(navStage(normalized, 2).route).toEqual([P.waypointB]);
+    expect(navStage(normalized, 3).route).toEqual([P.waypointC]);
+  });
+
+  it("uses the prior stop's targetPoint as the derived start", () => {
+    // Stop 2's bookended legacy data starts at stop 1's target.
+    const tour = buildTour({
+      startLocation: P.origin,
+      stops: [
+        stopWithRoute(1, [], P.firstTarget),
+        stopWithRoute(
+          2,
+          [P.firstTarget, P.waypointC, P.secondTarget],
+          P.secondTarget,
+        ),
+      ],
+    });
+
+    expect(navStage(normalizeTour(tour), 2).route).toEqual([P.waypointC]);
   });
 });

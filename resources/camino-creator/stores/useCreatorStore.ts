@@ -150,7 +150,10 @@ export const useCreatorStore = defineStore("creator", () => {
         // rollback
         state.tours.value[tourIndex.value] = previousTour;
       }
-      actions.fetchTours();
+      // Await: the server may mutate fields the client didn't send (e.g.
+      // `geocoded` on a start-location change), and callers awaiting
+      // updateTour expect the store to reflect the post-save state.
+      await actions.fetchTours();
     },
 
     /**

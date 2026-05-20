@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, onBeforeRouteLeave } from "vue-router";
 // import draggable from "vuedraggable";
 import QrCode from "qrcode.vue";
 import ErrorDisplay from "../../components/ErrorDisplay.vue";
@@ -130,11 +130,17 @@ const creatorStore = useCreatorStore();
 const tour = ref<Maybe<Tour>>(null);
 const validationErrors = ref<string[]>([]);
 const router = useRouter();
+const isSaving = ref(false);
+const lastSavedTourJson = ref("");
 
 const tourURL = computed(() => {
   const { origin } = window.location;
   return `${origin}/trekker/tours/${props.tourId}`;
 });
+
+function pageHasUnsavedChanges(): boolean {
+  return lastSavedTourJson.value !== JSON.stringify(tour.value);
+}
 
 onMounted(async () => {
   // load existing tour info
@@ -143,6 +149,12 @@ onMounted(async () => {
   }
 
   tour.value = creatorStore.getTour(props.tourId).value;
+  lastSavedTourJson.value = JSON.stringify(tour.value);
+});
+
+onBeforeRouteLeave(() => {
+  if (isSaving.value || !pageHasUnsavedChanges()) return true;
+  return confirm("Leave without saving?");
 });
 
 function validate(tour: Tour): boolean {
@@ -174,11 +186,18 @@ async function save() {
   error.value = "";
   if (!tour.value || !validate(tour.value)) return;
 
-  // create new tour if this doesn't have id yet
-  !tour.value.id
-    ? createNewTourAndGo(tour.value)
-    : creatorStore.updateTour(tour.value);
-  showAlert.value = true;
+  isSaving.value = true;
+  try {
+    if (!tour.value.id) {
+      await createNewTourAndGo(tour.value);
+    } else {
+      await creatorStore.updateTour(tour.value);
+    }
+    lastSavedTourJson.value = JSON.stringify(tour.value);
+    showAlert.value = true;
+  } finally {
+    isSaving.value = false;
+  }
 }
 </script>
 

@@ -12,7 +12,7 @@ import type {
   RecursivePartial,
 } from "@/types";
 import * as selectors from "./creatorStoreSelectors";
-import normalizeTour from "@/shared/normalizeTour";
+import reconcileTour from "@/shared/reconcileTour";
 
 export interface CreatorStoreState {
   tours: Ref<Tour[]>;
@@ -103,12 +103,11 @@ export const useCreatorStore = defineStore("creator", () => {
      */
     async fetchTours(): Promise<Tour[]> {
       const res = await axios.get<Tour[]>("/creator");
-      const tours = res.data;
-      // make tours continous
-      const normalizedTours = tours.map(normalizeTour);
+      // Reconcile to fill in derived targetPoints and clean waypoint bookends.
+      const tours = res.data.map(reconcileTour);
 
-      state.tours.value = normalizedTours;
-      return res.data;
+      state.tours.value = tours;
+      return tours;
     },
 
     /**
@@ -116,13 +115,12 @@ export const useCreatorStore = defineStore("creator", () => {
      */
     async createTour(tour: Partial<Tour>): Promise<Tour> {
       try {
-        const res = await axios.post<Tour>(
-          "/creator/edit",
-          mergeDeepRight(createDefaultTour(), tour),
-        );
-        state.tours.value.push(res.data);
+        const merged = mergeDeepRight(createDefaultTour(), tour) as Tour;
+        const res = await axios.post<Tour>("/creator/edit", merged);
+        const reconciled = reconcileTour(res.data);
+        state.tours.value.push(reconciled);
 
-        return res.data;
+        return reconciled;
       } catch (err) {
         console.error(`Cannot create tour ${tour}`, err);
         throw err;
@@ -174,19 +172,30 @@ export const useCreatorStore = defineStore("creator", () => {
       tourId: number,
       stop: RecursivePartial<TourStop>,
     ): Promise<TourStop> {
-      const newStop = mergeDeepRight(createDefaultStop(), stop);
+      const newStop = mergeDeepRight(createDefaultStop(), stop) as TourStop;
 
       try {
         const res = await axios.post<TourStop>(
           `/creator/edit/${tourId}/stop/`,
           newStop,
         );
-        actions.fetchTours();
-        return res.data;
+        // Refetch so the store reflects any server-side derived fields
+        // (e.g. timestamps) that the optimistic insert wouldn't have.
+        await actions.fetchTours();
+        const createdId = res.data.id;
+        const refreshed = state.tours.value
+          .find((t) => t.id === tourId)
+          ?.stops.find((s) => s.id === createdId);
+        if (!refreshed) {
+          throw new Error(
+            `created stop ${createdId} missing from store after refetch`,
+          );
+        }
+        return refreshed;
       } catch (err) {
         console.error(`Could not create new stop in tour ${tourId}`, err);
         // update tour cache
-        actions.fetchTours();
+        await actions.fetchTours();
         throw err;
       }
     },
@@ -207,22 +216,31 @@ export const useCreatorStore = defineStore("creator", () => {
 
       state.tours.value[tourIndex].stops[stopIndex] = stop;
 
-      return axios
-        .put(`/creator/edit/${tourId}/stop/${stop.id}`, stop)
-        .then((res) => {
-          actions.fetchTours();
-          return res.data;
-        })
-        .catch((err) => {
-          console.error(
-            `Cannot update tour stop. tourId: ${tourId}, stopId: ${stop.id}`,
-            err,
-          );
-
-          // rollback
-          state.tours.value[tourIndex].stops[stopIndex] = oldStop;
-          actions.fetchTours();
-        });
+      try {
+        await axios.put<TourStop>(
+          `/creator/edit/${tourId}/stop/${stop.id}`,
+          stop,
+        );
+        // Refetch so callers see any server-side derived fields (timestamps etc.)
+        // rather than just the optimistic write.
+        await actions.fetchTours();
+        const refreshed = state.tours.value[tourIndex]?.stops.find(
+          (s) => s.id === stop.id,
+        );
+        if (!refreshed) {
+          throw new Error(`stop ${stop.id} missing from store after refetch`);
+        }
+        return refreshed;
+      } catch (err) {
+        console.error(
+          `Cannot update tour stop. tourId: ${tourId}, stopId: ${stop.id}`,
+          err,
+        );
+        // rollback
+        state.tours.value[tourIndex].stops[stopIndex] = oldStop;
+        await actions.fetchTours();
+        throw err;
+      }
     },
 
     /** Moves a tour stop and re-normalizes so the derived chain reflects the new order. */
@@ -235,7 +253,7 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = move(oldStopIndex, newStopIndex, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
-      state.tours.value[tourIndex.value] = normalizeTour(
+      state.tours.value[tourIndex.value] = reconcileTour(
         state.tours.value[tourIndex.value],
       );
     },
@@ -248,7 +266,7 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = insert(index, stop, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
-      state.tours.value[tourIndex.value] = normalizeTour(
+      state.tours.value[tourIndex.value] = reconcileTour(
         state.tours.value[tourIndex.value],
       );
     },

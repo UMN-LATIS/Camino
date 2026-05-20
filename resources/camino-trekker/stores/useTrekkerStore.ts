@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { toursService } from "../common/api.service";
 import { Maybe, Tour, Locale, BottomNavSheet } from "@/types";
 import { useRoute } from "vue-router";
-import normalizeTour from "@/shared/normalizeTour";
+import reconcileTour from "@/shared/reconcileTour";
 import { useStorage } from "@vueuse/core";
 import { reactive, computed, toRefs } from "vue";
 
@@ -44,7 +44,7 @@ export const useTrekkerStore = defineStore("trekker", () => {
     return allStops.value[stopIndex.value - 1];
   });
   const supportedLocales = computed(
-    () => state.tour?.tour_content?.languages ?? []
+    () => state.tour?.tour_content?.languages ?? [],
   );
 
   const isActiveSheet = (sheetKey: Maybe<BottomNavSheet>): boolean => {
@@ -58,7 +58,7 @@ export const useTrekkerStore = defineStore("trekker", () => {
         .get(tourId)
         .then((tour) => {
           state.isLoading = false;
-          state.tour = normalizeTour(tour);
+          state.tour = reconcileTour(tour);
         })
         .catch((err) => {
           console.error(err);

@@ -7,16 +7,7 @@ export default [
   {
     id: "gl-draw-polygon-midpoint",
     type: "circle",
-    filter: [
-      "all",
-      ["==", "$type", "Point"],
-      ["==", "meta", "midpoint"],
-      // Hide the midpoint adjacent to the start anchor (coord_path "0"). The
-      // user doesn't own the derived endpoints. The end-side coord_path
-      // changes with waypoint count and is filtered dynamically in
-      // MapPolylineEditable's setFilter call.
-      ["!=", "coord_path", "0"],
-    ],
+    filter: ["all", ["==", "$type", "Point"], ["==", "meta", "midpoint"]],
     paint: {
       "circle-radius": 4,
       "circle-color": orange,
@@ -79,7 +70,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
-      // Hide the start-anchor vertex; user doesn't own it.
+      // Hide the start-anchor vertex; it's derived from previous end pt
       ["!=", "coord_path", "0"],
     ],
     paint: {
@@ -95,7 +86,7 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
-      // Hide the start-anchor vertex; user doesn't own it.
+      // Hide the start-anchor vertex; it's derived from previous end pt
       ["!=", "coord_path", "0"],
     ],
     paint: {

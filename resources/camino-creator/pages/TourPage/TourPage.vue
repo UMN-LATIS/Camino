@@ -127,29 +127,45 @@ const props = defineProps<Props>();
 const showAlert = ref(false);
 const error = ref("");
 const creatorStore = useCreatorStore();
-const tour = ref<Maybe<Tour>>(null);
 const validationErrors = ref<string[]>([]);
 const router = useRouter();
 const isSaving = ref(false);
-const lastSavedTourJson = ref("");
+const lastSavedSnapshot = ref("");
+
+// Reactive to the store: stays current when actions like createTourStop
+// trigger a refetch that swaps out the tour reference under us.
+const tour = computed((): Maybe<Tour> => {
+  if (!creatorStore.isReady) return null;
+  try {
+    return creatorStore.getTour(props.tourId).value;
+  } catch {
+    return null;
+  }
+});
 
 const tourURL = computed(() => {
   const { origin } = window.location;
   return `${origin}/trekker/tours/${props.tourId}`;
 });
 
+// Tour-level fields only. Each stop add/move/delete has its own server
+// roundtrip, so the stops array changing doesn't mean *this page* has
+// unsaved work.
+function tourFieldsSnapshot(t: Maybe<Tour>): string {
+  if (!t) return "";
+  const { stops: _stops, ...rest } = t;
+  return JSON.stringify(rest);
+}
+
 function pageHasUnsavedChanges(): boolean {
-  return lastSavedTourJson.value !== JSON.stringify(tour.value);
+  return lastSavedSnapshot.value !== tourFieldsSnapshot(tour.value);
 }
 
 onMounted(async () => {
-  // load existing tour info
   if (!creatorStore.isReady) {
     await creatorStore.init();
   }
-
-  tour.value = creatorStore.getTour(props.tourId).value;
-  lastSavedTourJson.value = JSON.stringify(tour.value);
+  lastSavedSnapshot.value = tourFieldsSnapshot(tour.value);
 });
 
 onBeforeRouteLeave(() => {
@@ -193,7 +209,7 @@ async function save() {
     } else {
       await creatorStore.updateTour(tour.value);
     }
-    lastSavedTourJson.value = JSON.stringify(tour.value);
+    lastSavedSnapshot.value = tourFieldsSnapshot(tour.value);
     showAlert.value = true;
   } finally {
     isSaving.value = false;

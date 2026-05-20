@@ -47,9 +47,11 @@
               v-if="startPoint"
               :id="`stop-${stop.id}-route`"
               :startPoint="startPoint"
-              :route="navStage.route"
+              :waypoints="navStage.waypoints"
               :endPoint="effectiveTargetPoint"
-              @update:route="(route) => $emit('update:route', route)"
+              @update:waypoints="
+                (waypoints) => $emit('update:waypoints', waypoints)
+              "
             />
           </Map>
         </div>
@@ -71,13 +73,15 @@
               </dd>
 
               <dt>
-                route ({{ routeLength }}
-                {{ routeLength === 1 ? "point" : "points" }})
+                waypoints ({{ waypointsLength }}
+                {{ waypointsLength === 1 ? "point" : "points" }})
               </dt>
               <dd>
-                <pre class="route-pre mb-0" data-cy="stop-route-card-route">{{
-                  formatPoints(navStage.route)
-                }}</pre>
+                <pre
+                  class="route-pre mb-0"
+                  data-cy="stop-route-card-waypoints"
+                  >{{ formatPoints(navStage.waypoints) }}</pre
+                >
               </dd>
             </dl>
           </div>
@@ -113,7 +117,7 @@ interface Props {
 const props = defineProps<Props>();
 
 defineEmits<{
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
   (eventName: "update:targetPoint", point: LngLat);
 }>();
 
@@ -144,7 +148,7 @@ const mapCenter = computed((): LngLat => {
   );
 });
 
-const routeLength = computed((): number => props.navStage.route.length);
+const waypointsLength = computed((): number => props.navStage.waypoints.length);
 
 function formatLngLat(point: Maybe<LngLat>): string {
   if (!point) return "null";

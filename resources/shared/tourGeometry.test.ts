@@ -148,7 +148,7 @@ describe("getStopRouteByIndex", () => {
       stops: [
         buildStop({
           id: 1,
-          route: [Points.waypointA, Points.waypointB],
+          waypoints: [Points.waypointA, Points.waypointB],
           targetPoint: Points.firstTarget,
         }),
       ],
@@ -167,7 +167,7 @@ describe("getStopRouteByIndex", () => {
         buildStop({ id: 1, targetPoint: Points.firstTarget }),
         buildStop({
           id: 2,
-          route: [Points.waypointC],
+          waypoints: [Points.waypointC],
           targetPoint: Points.secondTarget,
         }),
       ],
@@ -185,7 +185,7 @@ describe("getStopRouteByIndex", () => {
       stops: [
         buildStop({
           id: 1,
-          route: [Points.waypointA],
+          waypoints: [Points.waypointA],
           targetPoint: null,
         }),
       ],
@@ -202,7 +202,7 @@ describe("getStopRouteByIndex", () => {
       stops: [
         buildStop({
           id: 1,
-          route: [Points.waypointA],
+          waypoints: [Points.waypointA],
           targetPoint: Points.firstTarget,
         }),
       ],

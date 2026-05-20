@@ -45,7 +45,7 @@ const factories = {
     id: crypto.randomUUID(),
     text: createEmptyLocalizedText(languages),
     targetPoint: null,
-    route: [],
+    waypoints: [],
   }),
 
   [StageType.Separator]: ({ languages }) => ({

@@ -24,28 +24,31 @@ export const Points = {
   outlier: { lng: -120.0, lat: 47.0 },
 } as const satisfies Record<string, LngLat>;
 
+let navIdCounter = 0;
+function nextNavId(): string {
+  navIdCounter += 1;
+  return `nav-${navIdCounter}`;
+}
+
 interface NavStageOptions {
   id?: string;
-  route?: LngLat[];
+  waypoints?: LngLat[];
   targetPoint?: Maybe<LngLat>;
 }
 
-let navIdCounter = 0;
-/** Builds a nav stage in the canonical interior-only shape. */
 export function buildNavStage(options: NavStageOptions = {}): NavigationStage {
-  navIdCounter += 1;
   return {
-    id: options.id ?? `nav-${navIdCounter}`,
+    id: options.id ?? nextNavId(),
     type: StageType.Navigation,
     text: { [Locale.en]: "" },
-    route: options.route ?? [],
+    waypoints: options.waypoints ?? [],
     targetPoint: options.targetPoint ?? null,
   };
 }
 
 interface StopOptions {
   id: number;
-  route?: LngLat[];
+  waypoints?: LngLat[];
   targetPoint?: Maybe<LngLat>;
   stages?: Stage[];
 }
@@ -53,7 +56,7 @@ interface StopOptions {
 export function buildStop(options: StopOptions): TourStop {
   const stages: Stage[] = options.stages ?? [
     buildNavStage({
-      route: options.route ?? [],
+      waypoints: options.waypoints ?? [],
       targetPoint: options.targetPoint ?? null,
     }),
   ];

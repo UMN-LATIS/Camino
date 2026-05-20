@@ -16,17 +16,17 @@ import { Feature, LineString } from "geojson";
 import editablePolylineStyles from "./editablePolylineStyles";
 import lngLatEquals from "@/shared/lngLatEquals";
 
-/** Editable polyline locked between two derived endpoints; emits interior-only `route`. */
+/** Editable polyline locked between two derived endpoints; emits interior-only `waypoints`. */
 interface Props {
   startPoint: LngLat;
-  route: LngLat[];
+  waypoints: LngLat[];
   endPoint: LngLat;
   id: string;
 }
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
 }>();
 
 const isReady = ref<boolean>(false);
@@ -54,7 +54,7 @@ const midpoint = computed(
 );
 
 const renderedInterior = computed((): LngLat[] =>
-  props.route.length ? props.route : [midpoint.value],
+  props.waypoints.length ? props.waypoints : [midpoint.value],
 );
 
 function renderLine() {
@@ -91,7 +91,7 @@ function handleUpdate(event: MapboxDraw.DrawUpdateEvent) {
   const deduped = sandwiched.filter(
     (point, i) => i === 0 || !lngLatEquals(point, sandwiched[i - 1]),
   );
-  emit("update:route", deduped.slice(1, -1));
+  emit("update:waypoints", deduped.slice(1, -1));
 }
 
 function initDrawOnMapLoad() {
@@ -106,7 +106,12 @@ function initDrawOnMapLoad() {
 }
 
 watch(
-  [() => props.startPoint, () => props.endPoint, () => props.route, isReady],
+  [
+    () => props.startPoint,
+    () => props.endPoint,
+    () => props.waypoints,
+    isReady,
+  ],
   () => {
     renderLine();
   },

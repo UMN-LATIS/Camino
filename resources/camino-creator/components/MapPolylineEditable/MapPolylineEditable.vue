@@ -73,47 +73,6 @@ function renderLine() {
   draw.changeMode("direct_select", {
     featureId: draw.getAll().features[0].id as string,
   });
-
-  hideEndAnchorAndAdjacentMidpoint();
-}
-
-/**
- * Dynamically hides end-anchor vertex + adjacent midpoint. The start side is
- * filtered statically in editablePolylineStyles (coord_path == "0"); end-side
- * coord_paths depend on waypoint count so we re-filter after every render.
- */
-function hideEndAnchorAndAdjacentMidpoint() {
-  if (!map?.value) return;
-  const mapboxMap = map.value;
-  const lastVertexIdx = String(renderedInterior.value.length + 1);
-  const lastMidpointIdx = String(renderedInterior.value.length);
-
-  const vertexLayers = [
-    "gl-draw-polygon-and-line-vertex-stroke-inactive",
-    "gl-draw-polygon-and-line-vertex-inactive",
-  ];
-  for (const layerId of vertexLayers) {
-    if (!mapboxMap.getLayer(layerId)) continue;
-    mapboxMap.setFilter(layerId, [
-      "all",
-      ["==", "meta", "vertex"],
-      ["==", "$type", "Point"],
-      ["!=", "mode", "static"],
-      ["!=", "coord_path", "0"],
-      ["!=", "coord_path", lastVertexIdx],
-    ]);
-  }
-
-  const midpointLayer = "gl-draw-polygon-midpoint";
-  if (mapboxMap.getLayer(midpointLayer)) {
-    mapboxMap.setFilter(midpointLayer, [
-      "all",
-      ["==", "$type", "Point"],
-      ["==", "meta", "midpoint"],
-      ["!=", "coord_path", "0"],
-      ["!=", "coord_path", lastMidpointIdx],
-    ]);
-  }
 }
 
 function toLngLats(geojson: Feature<LineString>): LngLat[] {

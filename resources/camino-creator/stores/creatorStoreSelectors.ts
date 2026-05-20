@@ -219,13 +219,7 @@ export const selectPrevTourStop = (
   return currentState.tours.value[tourIndex].stops[stopIndex - 1] ?? null;
 };
 
-/**
- * Selects the starting point for a given tour stop. Derived at
- * read time from prior stops (and ultimately `tour.start_location`)
- * via `getStopStartPoint`. Mutations to a prior stop's targetPoint
- * are visible immediately — there's no second copy of the anchor
- * to keep in sync.
- */
+/** Derived start: read-time delegation to `getStopStartPoint`. */
 export const selectTourStopStartPoint = (
   currentState: CreatorStoreState,
   tourId: number,

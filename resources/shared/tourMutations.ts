@@ -1,8 +1,4 @@
-/**
- * Pure tour mutations: Tour in, Tour out. `moveStartAnchor` follows
- * the same cascade as `getStopStartPoint` — dragging stop N's visual
- * start writes onto stop N-1's target (or `tour.start_location`).
- */
+/** Pure tour mutations: Tour in, Tour out. */
 
 import {
   type Tour,
@@ -77,12 +73,7 @@ export function setTargetPoint(
   }));
 }
 
-/**
- * Writes `point` where `getStopStartPoint` would *read* the anchor
- * from — the prior stop's last-defined target, falling back to
- * `tour.start_location`.
- * @pure
- */
+/** Writes the visual start anchor onto whichever upstream slot `getStopStartPoint` reads from. @pure */
 export function moveStartAnchor(
   tour: Tour,
   stopId: number,
@@ -136,12 +127,7 @@ function lastNavStageTargetPoint(stop: TourStop): Maybe<LngLat> {
   return null;
 }
 
-/**
- * Writes `point` onto the last-defined-target nav stage in the stop,
- * falling back to the last stage if none have a target. No-op if the
- * stop has no nav stages.
- * @pure
- */
+/** Writes `point` onto the last-defined-target nav stage (or the last stage if none have a target). @pure */
 function setLastNavStageTargetPoint(
   tour: Tour,
   stopIndex: number,

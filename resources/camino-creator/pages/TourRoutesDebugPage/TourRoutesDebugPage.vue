@@ -133,9 +133,7 @@ onMounted(async () => {
     await creatorStore.init();
   }
 
-  // Test seam: expose the store while this debug-only route is
-  // mounted so Cypress can drive mutations directly instead of
-  // synthesizing canvas drags on Mapbox Draw vertices.
+  // Cypress seam: drive mutations directly instead of synthesizing canvas drags.
   (
     window as unknown as { __creatorStore?: typeof creatorStore }
   ).__creatorStore = creatorStore;

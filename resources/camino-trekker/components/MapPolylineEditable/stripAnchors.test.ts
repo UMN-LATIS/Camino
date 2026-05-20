@@ -1,9 +1,4 @@
-/**
- * The pure helper that turns a drawn polyline back into the
- * canonical interior-only waypoint list. This is the load-bearing
- * piece of MapPolylineEditable's `update:waypoints` contract —
- * everything else in the component is plumbing around Mapbox Draw.
- */
+/** Drawn polyline → canonical interior-only waypoint list. */
 
 import { describe, it, expect } from "vitest";
 import stripAnchors from "./stripAnchors";
@@ -31,8 +26,6 @@ describe("stripAnchors", () => {
   });
 
   it("preserves a head that doesn't match the start anchor", () => {
-    // Defensive: if a future draw lib stops locking endpoints, an
-    // unmatched head is interior data and must not be dropped.
     expect(
       stripAnchors(
         [P.outlier, P.waypointA, P.firstTarget],
@@ -49,16 +42,10 @@ describe("stripAnchors", () => {
   });
 
   it("returns [] when stripping both ends leaves a negative slice", () => {
-    // A single point that happens to equal the start gets stripped
-    // away entirely — there's nothing left to be interior.
     expect(stripAnchors([P.origin], P.origin, P.firstTarget)).toEqual([]);
   });
 
   it("dedupes consecutive duplicate waypoints", () => {
-    // Some Mapbox edit operations (especially dragging a vertex
-    // onto an adjacent one) leave behind interior duplicates.
-    // Clean them up at the boundary so the canonical waypoint
-    // list stays minimal.
     expect(
       stripAnchors(
         [P.origin, P.waypointA, P.waypointA, P.waypointB, P.firstTarget],
@@ -69,9 +56,6 @@ describe("stripAnchors", () => {
   });
 
   it("collapses duplicate bookends at both ends", () => {
-    // Defensive: if the drawn line somehow has the anchor
-    // duplicated against itself, strip both copies. Dedupe + strip
-    // composed once gives the right result.
     expect(
       stripAnchors(
         [P.origin, P.origin, P.waypointA, P.firstTarget, P.firstTarget],
@@ -82,9 +66,6 @@ describe("stripAnchors", () => {
   });
 
   it("dedupes a waypoint that coincides with an adjacent anchor", () => {
-    // If a user drags an interior waypoint onto the start anchor,
-    // the drawn line has the start point twice in a row. After
-    // cleanup the extra interior copy is gone.
     expect(
       stripAnchors(
         [P.origin, P.origin, P.waypointA, P.firstTarget],

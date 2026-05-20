@@ -1,16 +1,4 @@
-/**
- * Test fixtures for the canonical tour geometry model.
- *
- * A nav stage's stored geometry is `{ route, targetPoint }` where
- * `route` is interior waypoints only — the derived start is computed
- * at read time from prior stops (or `tour.start_location` for stop
- * zero) and never stored. Fixtures produce that canonical shape
- * directly so tests stay focused on chain behavior.
- *
- * `buildTour({ stops: [...] })` is the entry point. Stops carry one
- * nav stage by default with the `route` and `targetPoint` you
- * provide; pass `stages` to override that for multi-stage cases.
- */
+/** Test fixtures producing the canonical interior-only tour geometry shape. */
 
 import {
   type Tour,
@@ -24,11 +12,7 @@ import {
   TourStyle,
 } from "@/types";
 
-/**
- * A small library of named lng/lat points used throughout the tests.
- * Naming is deliberately suggestive so assertions read like prose
- * ("expect derivedStart of stop 2 to equal P.firstTarget").
- */
+/** Named lng/lat points so assertions read like prose. */
 export const P = {
   origin: { lng: -93.0, lat: 44.0 },
   firstTarget: { lng: -93.1, lat: 44.1 },
@@ -47,12 +31,7 @@ interface NavStageOptions {
 }
 
 let navIdCounter = 0;
-/**
- * Builds a navigation stage in the canonical shape: `route` is
- * interior-only (defaulting to `[]`). Stages with legacy bookended
- * routes are built ad-hoc inside the few tests that need to assert
- * normalization behavior on legacy inputs.
- */
+/** Builds a nav stage in the canonical interior-only shape. */
 export function buildNavStage(options: NavStageOptions = {}): NavigationStage {
   navIdCounter += 1;
   return {
@@ -66,11 +45,8 @@ export function buildNavStage(options: NavStageOptions = {}): NavigationStage {
 
 interface StopOptions {
   id: number;
-  /** Convenience: a single-nav-stage stop with this interior route. */
   route?: LngLat[];
-  /** Convenience: that single nav stage's targetPoint. */
   targetPoint?: Maybe<LngLat>;
-  /** Escape hatch for multi-stage stops. */
   stages?: Stage[];
 }
 
@@ -103,9 +79,7 @@ interface TourOptions {
 }
 
 export function buildTour(options: TourOptions = {}): Tour {
-  // Distinguish "not provided" (default to P.origin) from "explicitly
-  // null" (test wants a tour with no start_location). The `??` operator
-  // would collapse the latter back into the default.
+  // `??` would collapse an explicit null back into the default; use `in` to distinguish.
   const startLocation: Maybe<LngLat> =
     "startLocation" in options ? (options.startLocation ?? null) : P.origin;
 

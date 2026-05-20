@@ -21,11 +21,7 @@
             mapStyle="streets"
             :accessToken="mapBoxToken"
           >
-            <!--
-              Derived start — not editable from this card (it's set
-              on the previous stop, or via InitialLocation for stop
-              0). Render in default gray to make that obvious.
-            -->
+            <!-- Derived start; not editable from this card. -->
             <MapMarker
               v-if="startPoint"
               :lng="startPoint.lng"

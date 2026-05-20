@@ -1,73 +1,16 @@
-/**
- * Safety net for the tour-routes geometry model.
- *
- * The debug page is a deterministic test harness: it renders every
- * nav-bearing stop in a static card with the stage's start, target,
- * and route printed as text. We assert the chain-integrity
- * invariants the model promises:
- *
- *   • Each card displays start, target, and route values.
- *   • Stop N+1's displayed start equals stop N's displayed target
- *     (derived-start cascade).
- *   • Editing stop N's target through the store seam moves stop
- *     N+1's displayed start to the new value (re-derivation on
- *     state change).
- *
- * These run against the seeded Stone Arch Bridge tour. We drive
- * mutations through `window.__creatorStore` rather than synthesizing
- * canvas drags — Mapbox Draw vertices live in a WebGL canvas, not
- * the DOM, so click/drag assertions there would be flaky and slow.
- *
- * The chain invariant currently holds because `normalizeTour`
- * prepends each stop's start to its `route` at fetch time. After
- * the translator is wired in, the same invariant must keep holding
- * — at which point these tests are the alarm.
- */
+/** End-to-end chain-integrity check for the derived-start tour geometry model. */
 
-// Inline shapes — see the stashed spec for the full rationale.
-// Importing from `@/types` pulls in the Pinia store at runtime,
-// which transitively imports axios and document. None of those
-// exist in the Cypress spec compiler context.
-interface LngLat {
-  lng: number;
-  lat: number;
-}
+// Type-only import: erased at compile time, so the runtime side-effects of
+// @/types (Pinia store, axios) never reach the Cypress browser context.
+import type {
+  LngLat,
+  NavigationStage,
+  Stage,
+  Tour,
+  TourStop,
+} from "../../../resources/types";
 
-interface NavigationStage {
-  id: string;
-  type: "navigation";
-  text: Record<string, string | undefined>;
-  route: LngLat[] | null;
-  waypoints?: LngLat[];
-  targetPoint: LngLat | null;
-}
-
-interface Stage {
-  id?: string;
-  type: string;
-  [key: string]: unknown;
-}
-
-interface TourStop {
-  id: number;
-  tour_id: number;
-  sort_order: number;
-  stop_content: {
-    title: Record<string, string>;
-    subtitle: Record<string, string>;
-    header_image: { src: string; alt: string } | null;
-    stages: Stage[];
-  };
-  created_at: string;
-}
-
-interface Tour {
-  id: number;
-  start_location: LngLat | null;
-  stops: TourStop[];
-}
-
-interface CreatorStoreSeam {
+interface CreatorStoreTestApi {
   updateTourStopStage(
     tourId: number,
     stopId: number,
@@ -77,16 +20,27 @@ interface CreatorStoreSeam {
   fetchTours(): Promise<Tour[]>;
 }
 
-interface WindowWithSeam extends Window {
-  __creatorStore?: CreatorStoreSeam;
+interface WindowWithCreatorStore extends Window {
+  __creatorStore?: CreatorStoreTestApi;
 }
 
 const seededTourTitle = "Stone Arch Bridge";
 
+// The app's Stage union doesn't discriminate on `type` (it's the StageType enum,
+// not a literal), so equality checks don't narrow on their own. A user-defined
+// guard gives us the narrowing without a cast.
+function isNavigationStage(stage: Stage): stage is NavigationStage {
+  return stage.type === "navigation";
+}
+
 function navStageOfStop(stop: TourStop): NavigationStage {
-  const stage = stop.stop_content.stages.find((s) => s.type === "navigation");
+  const stage = stop.stop_content.stages.find(isNavigationStage);
   if (!stage) throw new Error(`stop ${stop.id} has no navigation stage`);
-  return stage as unknown as NavigationStage;
+  return stage;
+}
+
+function isNavBearing(stop: TourStop): boolean {
+  return stop.stop_content.stages.some(isNavigationStage);
 }
 
 function formatLngLat(point: LngLat | null): string {
@@ -114,13 +68,13 @@ function visitDebugPageForSeededTour() {
 }
 
 function withStore(
-  callback: (store: CreatorStoreSeam, tourId: number) => void,
+  callback: (store: CreatorStoreTestApi, tourId: number) => void,
 ) {
   cy.get<number>("@tourId").then((tourId) => {
     cy.window().then((win) => {
-      const store = (win as WindowWithSeam).__creatorStore;
-      expect(store, "creator store seam").to.exist;
-      callback(store as CreatorStoreSeam, tourId);
+      const store = (win as WindowWithCreatorStore).__creatorStore;
+      if (!store) throw new Error("creator store not exposed on window");
+      callback(store, tourId);
     });
   });
 }
@@ -136,9 +90,7 @@ describe("Tour routes debug page", () => {
   it("renders one card per nav-bearing stop", () => {
     withStore((store, tourId) => {
       const tour = store.getTour(tourId).value;
-      const navBearingCount = tour.stops.filter((stop) =>
-        stop.stop_content.stages.some((s) => s.type === "navigation"),
-      ).length;
+      const navBearingCount = tour.stops.filter(isNavBearing).length;
       cy.get("[data-cy=stop-route-card]").should(
         "have.length",
         navBearingCount,
@@ -178,9 +130,7 @@ describe("Tour routes debug page", () => {
         if (start) startValues.push(start);
       });
 
-      // The chain: each card's start should equal the previous card's
-      // target. We can't say anything about the first card's start
-      // (it's anchored on tour.start_location, not a prior target).
+      // Skip i=0: the first card's start anchors on tour.start_location, not a prior target.
       for (let i = 1; i < $cards.length; i++) {
         expect(
           startValues[i],
@@ -193,25 +143,24 @@ describe("Tour routes debug page", () => {
   it("editing stop N's targetPoint updates stop N's displayed target", () => {
     withStore((store, tourId) => {
       const tour = store.getTour(tourId).value;
-      const navBearingStop = tour.stops.find((stop) =>
-        stop.stop_content.stages.some((s) => s.type === "navigation"),
-      );
-      expect(navBearingStop, "at least one nav-bearing stop").to.exist;
+      const navBearingStop = tour.stops.find(isNavBearing);
+      if (!navBearingStop)
+        throw new Error("expected at least one nav-bearing stop");
 
-      const navStage = navStageOfStop(navBearingStop as TourStop);
+      const navStage = navStageOfStop(navBearingStop);
       const baseTarget = navStage.targetPoint ?? { lng: -93, lat: 45 };
       const movedTarget: LngLat = {
         lng: baseTarget.lng + 0.01,
         lat: baseTarget.lat + 0.01,
       };
 
-      store.updateTourStopStage(tourId, (navBearingStop as TourStop).id, {
+      store.updateTourStopStage(tourId, navBearingStop.id, {
         ...navStage,
         targetPoint: movedTarget,
       });
 
       cy.get(
-        `[data-cy=stop-route-card][data-cy-stop-id="${(navBearingStop as TourStop).id}"]`,
+        `[data-cy=stop-route-card][data-cy-stop-id="${navBearingStop.id}"]`,
       )
         .find("[data-cy=stop-route-card-target]")
         .should("have.text", formatLngLat(movedTarget));
@@ -221,13 +170,10 @@ describe("Tour routes debug page", () => {
   it("editing stop N's targetPoint cascades to stop N+1's displayed start", () => {
     withStore((store, tourId) => {
       const tour = store.getTour(tourId).value;
-      const navBearingStops = tour.stops.filter((stop) =>
-        stop.stop_content.stages.some((s) => s.type === "navigation"),
-      );
-      expect(
-        navBearingStops.length,
-        "at least two nav-bearing stops",
-      ).to.be.at.least(2);
+      const navBearingStops = tour.stops.filter(isNavBearing);
+      if (navBearingStops.length < 2) {
+        throw new Error("expected at least two nav-bearing stops");
+      }
 
       const stopN = navBearingStops[0];
       const navStage = navStageOfStop(stopN);

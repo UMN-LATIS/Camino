@@ -1,8 +1,4 @@
-/**
- * Contract tests for `NavigationStage.route` after `normalizeTour`:
- * interior-only (no derived start, no targetPoint), no consecutive
- * duplicates, idempotent.
- */
+/** Contract: `NavigationStage.route` post-normalize is interior-only, dedup'd, idempotent. */
 
 import { describe, it, expect } from "vitest";
 import normalizeTour from "./normalizeTour";
@@ -25,7 +21,6 @@ function navStage(tour: Tour, stopId: number): NavigationStage {
   return stage as NavigationStage;
 }
 
-/** Build a stop whose sole nav stage carries the given raw `route`. */
 function stopWithRoute(
   id: number,
   route: LngLat[],
@@ -47,9 +42,6 @@ function stopWithRoute(
 
 describe("normalizeTour — `route` is interior-only", () => {
   it("strips a leading point that matches the derived start", () => {
-    // Stop 1's derived start is tour.start_location (P.origin).
-    // A stored route that begins with P.origin is legacy bookended
-    // data; the leading anchor must be removed.
     const tour = buildTour({
       startLocation: P.origin,
       stops: [stopWithRoute(1, [P.origin, P.waypointA], P.firstTarget)],
@@ -86,9 +78,6 @@ describe("normalizeTour — `route` is interior-only", () => {
   });
 
   it("uses the prior stop's targetPoint as the derived start for stop N>0", () => {
-    // Stop 2's derived start is stop 1's targetPoint (P.firstTarget).
-    // A stored route on stop 2 that begins with P.firstTarget is
-    // bookended legacy data and must lose that leading point.
     const tour = buildTour({
       startLocation: P.origin,
       stops: [
@@ -105,9 +94,6 @@ describe("normalizeTour — `route` is interior-only", () => {
   });
 
   it("leaves a route alone when neither end matches an anchor", () => {
-    // If the head doesn't equal the derived start and the tail
-    // doesn't equal the targetPoint, the points are interior data —
-    // don't drop them.
     const tour = buildTour({
       startLocation: P.origin,
       stops: [
@@ -160,9 +146,6 @@ describe("normalizeTour — `route` has no consecutive duplicates", () => {
   });
 
   it("collapses a waypoint that coincides with an adjacent anchor", () => {
-    // User drags an interior point onto the start anchor — the
-    // stored route has the start anchor present twice in a row.
-    // After cleanup both copies of the anchor are gone.
     const tour = buildTour({
       startLocation: P.origin,
       stops: [

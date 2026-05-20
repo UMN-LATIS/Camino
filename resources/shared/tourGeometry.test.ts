@@ -1,18 +1,4 @@
-/**
- * Read-side derivations over a tour. Pins the new model's invariants:
- *
- *   • A stop's start point is derived, never stored.
- *   • Stop 0's start comes from `tour.start_location`.
- *   • Stop N>0's start comes from the most recent prior stop whose
- *     last nav stage has a non-null `targetPoint`. If every prior
- *     stop is missing one, fall through to `tour.start_location`.
- *   • A stop's polyline is `[start, ...waypoints, end]` where `end`
- *     is the stop's last nav-stage `targetPoint`. Nulls drop out so
- *     a partially-edited stop still draws a partial line.
- *
- * Stop-internal multi-nav-stage chaining is covered separately by
- * the tests that exercise `getNavStageStartPoint`.
- */
+/** Read-side derivations: stop endpoints, cascade, and polyline assembly. */
 
 import { describe, it, expect } from "vitest";
 import {
@@ -65,7 +51,6 @@ describe("getStopStartPoint", () => {
         buildStop({ id: 4, targetPoint: P.thirdTarget }),
       ],
     });
-    // stop index 3 looks back: index 2 (null), index 1 (null), index 0 — found.
     expect(getStopStartPoint(tour, 3)).toEqual(P.firstTarget);
   });
 

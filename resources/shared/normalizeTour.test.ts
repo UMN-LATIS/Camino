@@ -1,15 +1,4 @@
-/**
- * Behavior tests for `normalizeTour` that complement the route-shape
- * contract in `normalizeTour.routeContract.test.ts`. Focus here:
- *
- *   - `targetPoint` is filled in (offset from the prior anchor) when
- *     a stage has none.
- *   - The cascade — stop N>0's derived start is the prior stop's
- *     last-defined targetPoint, walking back through stops with null
- *     targets until one defines a value, ultimately falling back to
- *     `tour.start_location`.
- *   - Each stop's normalization is isolated from its neighbors.
- */
+/** `normalizeTour` behavior: targetPoint fill-in, cascade, and per-stop isolation. */
 
 import { describe, it, expect } from "vitest";
 import normalizeTour from "./normalizeTour";
@@ -60,8 +49,6 @@ describe("normalizeTour — fills in missing targetPoints", () => {
 
     const stage = navStage(normalizeTour(tour), 1);
     expect(stage.targetPoint).not.toBeNull();
-    // The exact offset is `getOffsetPointFrom`'s contract — we just
-    // verify it's *defined* and distinct from the derived start.
     expect(stage.targetPoint).not.toEqual(P.origin);
   });
 
@@ -93,7 +80,6 @@ describe("normalizeTour — cascade and isolation", () => {
   });
 
   it("uses the prior stop's targetPoint as the derived start", () => {
-    // Stop 2's bookended legacy data starts at stop 1's target.
     const tour = buildTour({
       startLocation: P.origin,
       stops: [

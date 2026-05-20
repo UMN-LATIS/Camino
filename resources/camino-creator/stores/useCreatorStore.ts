@@ -222,12 +222,7 @@ export const useCreatorStore = defineStore("creator", () => {
         });
     },
 
-    /**
-     * moves a tour stop to a new position. Re-normalizes the tour
-     * afterwards so the derived start chain (and the legacy
-     * bookended `route` field that some consumers still read) both
-     * reflect the new order.
-     */
+    /** Moves a tour stop and re-normalizes so the derived chain reflects the new order. */
     moveTourStopByIndex(
       tourId: number,
       oldStopIndex: number,

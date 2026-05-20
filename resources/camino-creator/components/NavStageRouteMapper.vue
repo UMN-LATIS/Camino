@@ -29,12 +29,7 @@
         </MapMarker>
       </div>
 
-      <!--
-        Tour Start Location — derived start for stop 0, or just a
-        reference marker for later stops. Either way it's not
-        editable from this view (InitialLocation owns it), so
-        always render in the default gray to make that obvious.
-      -->
+      <!-- Tour start; not editable here (InitialLocation owns it). -->
       <MapMarker
         v-if="tour.start_location"
         :lng="tour.start_location.lng"
@@ -45,11 +40,7 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!--
-        Previous Stop Target — derived start for the current stop.
-        Not editable here (set on the previous stop's own editor),
-        so render in default gray.
-      -->
+      <!-- Previous stop's target = derived start for this stop; edit it on the previous stop. -->
       <MapMarker
         v-if="previousStop && previousStop.targetPoint"
         :lng="previousStop.targetPoint.lng"

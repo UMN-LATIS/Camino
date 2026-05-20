@@ -16,11 +16,7 @@ import { Feature, LineString } from "geojson";
 import editablePolylineStyles from "./editablePolylineStyles";
 import stripAnchors from "./stripAnchors";
 
-/**
- * Editable polyline locked between two derived endpoints. The user
- * edits the interior `route`; `update:route` emits the interior-only
- * point list (anchors stripped, consecutive duplicates collapsed).
- */
+/** Editable polyline locked between two derived endpoints; emits interior-only `route`. */
 interface Props {
   startPoint: LngLat;
   route: LngLat[];
@@ -49,10 +45,7 @@ const draw = new MapboxDraw({
   styles: editablePolylineStyles,
 });
 
-// When there are no waypoints, seed a single midpoint vertex so
-// the user has something draggable to start sketching with. This
-// seed is rendered but not stored — only the user's edits make it
-// into the emitted waypoint list.
+// Seed a draggable midpoint when route is empty; rendered only, never emitted.
 const midpoint = computed(
   (): LngLat => ({
     lng: (props.startPoint.lng + props.endPoint.lng) / 2,
@@ -76,8 +69,7 @@ function renderLine() {
   draw.deleteAll();
   draw.add(lineFeature);
 
-  // direct_select mode shows vertex handles and prevents dragging
-  // the whole line as a single object.
+  // direct_select shows vertex handles and prevents whole-line dragging.
   draw.changeMode("direct_select", {
     featureId: draw.getAll().features[0].id as string,
   });
@@ -86,12 +78,9 @@ function renderLine() {
 }
 
 /**
- * Hides the END anchor vertex and the phantom midpoint between the
- * last interior vertex and that anchor. The START anchor and its
- * adjacent midpoint are filtered out statically in
- * editablePolylineStyles (coord_path == "0"); the end-side
- * coord_paths depend on waypoint count so we update the filters
- * here after every render.
+ * Dynamically hides end-anchor vertex + adjacent midpoint. The start side is
+ * filtered statically in editablePolylineStyles (coord_path == "0"); end-side
+ * coord_paths depend on waypoint count so we re-filter after every render.
  */
 function hideEndAnchorAndAdjacentMidpoint() {
   if (!map?.value) return;

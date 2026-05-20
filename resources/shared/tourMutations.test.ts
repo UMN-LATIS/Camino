@@ -1,15 +1,4 @@
-/**
- * Tour mutation operations. Each one takes a Tour and returns a new
- * Tour — no shared state, no Vue, no store. They're the building
- * blocks the UI hands to the store after a user gesture.
- *
- * The interesting one is `moveStartAnchor`: dragging the start point
- * of stop N>0 is *not* a mutation on stop N. It mutates stop N-1's
- * `targetPoint` (or `tour.start_location` for stop 0). Pinning this
- * down is most of the point of these tests — the current code
- * conflates "start of this stop" with "data stored on this stop" and
- * that confusion is where most of the route-editing bugs live.
- */
+/** Pure Tour-in/Tour-out mutations. `moveStartAnchor` writes upstream, not onto the stop being dragged. */
 
 import { describe, it, expect } from "vitest";
 import {
@@ -204,7 +193,6 @@ describe("moveStartAnchor — edits the source of the derivation, not this stop"
     const next = moveStartAnchor(tour, 1, P.outlier);
 
     expect(next.start_location).toEqual(P.outlier);
-    // The stop being "started from" is untouched.
     expect(navStageOnStop(next, 1).targetPoint).toEqual(P.firstTarget);
     expect(navStageOnStop(next, 1).route).toEqual([]);
   });
@@ -224,19 +212,13 @@ describe("moveStartAnchor — edits the source of the derivation, not this stop"
 
     const next = moveStartAnchor(tour, 2, P.outlier);
 
-    // Stop 1's target moved.
     expect(navStageOnStop(next, 1).targetPoint).toEqual(P.outlier);
-    // Stop 2's own data is untouched.
     expect(navStageOnStop(next, 2).route).toEqual([P.waypointA]);
     expect(navStageOnStop(next, 2).targetPoint).toEqual(P.secondTarget);
-    // Tour-level start is untouched.
     expect(next.start_location).toEqual(P.origin);
   });
 
   it("cascades back when stop N-1 has a null target", () => {
-    // Stop 3's start derives from stop 1 (because stop 2's target is
-    // null). Dragging stop 3's start anchor should therefore edit
-    // stop 1, not stop 2.
     const stage1 = buildNavStage({ targetPoint: P.firstTarget });
     const stage2 = buildNavStage({ targetPoint: null });
     const stage3 = buildNavStage({ targetPoint: P.thirdTarget });
@@ -300,8 +282,6 @@ describe("immutability", () => {
 });
 
 describe("unrelated waypoint helper imports", () => {
-  // Compile-time check: these are pure data manipulators, no LngLat
-  // helpers are smuggled in from elsewhere.
   it("exists as a sanity probe for the eventual implementation", () => {
     const noop: LngLat = P.origin;
     expect(noop).toEqual(P.origin);

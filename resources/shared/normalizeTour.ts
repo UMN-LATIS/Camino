@@ -16,13 +16,7 @@ import findValuedTargetPointFromTour from "./findValuedTargetPointFromTour";
 const getNavStagesFromStop = (stop: TourStop): NavigationStage[] =>
   getStagesFromStopWhere<NavigationStage>("type", StageType.Navigation, stop);
 
-/**
- * Normalizes nav stages within one stop: fills in missing
- * `targetPoint`s (offset from the prior anchor) and cleans each
- * `route` into the interior-only shape. The derived start cascades
- * from `stopStartPoint` through each stage's `targetPoint`.
- * @pure
- */
+/** Fills in missing `targetPoint`s and cleans each `route` to interior-only. @pure */
 function toNormalizedNavStages(
   navStages: NavigationStage[],
   stopStartPoint = UMN_LNGLAT,
@@ -50,17 +44,11 @@ function toNormalizedNavStages(
   });
 }
 
-/**
- * Cleans every nav stage in `tour`: `route` becomes interior-only,
- * missing `targetPoint`s get filled in. The fetch-boundary chokepoint
- * for shape enforcement.
- * @pure
- */
+/** Fetch-boundary chokepoint: interior-only routes, filled-in targetPoints. @pure */
 export default function normalizeTour(tour: Tour): Tour {
   const updatedTour = structuredClone(tour);
 
-  // In-place so each stop sees its predecessor's resolved targetPoint
-  // when computing its own derived start.
+  // Mutate in place so each stop sees its predecessor's resolved targetPoint.
   updatedTour.stops.forEach((stop, index) => {
     const stopStartPoint = findValuedTargetPointFromTour(updatedTour, {
       stopIndex: index - 1,

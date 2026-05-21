@@ -29,29 +29,24 @@
         </MapMarker>
       </div>
 
-      <!-- Tour Start Location -->
+      <!-- Tour start; not editable here (InitialLocation owns it). -->
       <MapMarker
         v-if="tour.start_location"
         :lng="tour.start_location.lng"
         :lat="tour.start_location.lat"
       >
-        <!-- 
-          If no previousStop exists, then the start point is the
-          previous stop so color it orange 
-        -->
-        <MapMarkerLabel :color="!previousStop ? 'orange' : 'default'">
+        <MapMarkerLabel color="default">
           <i class="fas fa-star"></i>
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- Previous Stop Target-->
+      <!-- Previous stop's target = derived start for this stop; edit it on the previous stop. -->
       <MapMarker
         v-if="previousStop && previousStop.targetPoint"
         :lng="previousStop.targetPoint.lng"
         :lat="previousStop.targetPoint.lat"
-        @drag="handleMapMarkerDrag"
       >
-        <MapMarkerLabel color="orange">
+        <MapMarkerLabel color="default">
           {{ previousStop.index + 1 }}
         </MapMarkerLabel>
       </MapMarker>
@@ -69,26 +64,13 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- 
-        Draw a dotted line between current stop target and next route 
-        to indicate the change
-      -->
-      <MapPolyline
-        v-if="routeToNextRoute"
-        id="route-to-next-route"
-        :positions="routeToNextRoute"
-        color="#ccc"
-        variant="dashed"
-      />
-
       <!-- Current Stop Route (Editable) -->
       <MapPolylineEditable
-        v-if="route"
         id="current-stop-route"
         :startPoint="lastValuedTargetPoint"
         :route="route"
         :endPoint="currentValuedTargetPoint"
-        @update:route="(route: LngLat[]) => $emit('update:route', route)"
+        @update:route="(next: LngLat[]) => $emit('update:route', next)"
       />
     </Map>
     <Alert v-if="geolocationError" class="my-2" variant="warning">
@@ -109,13 +91,14 @@
 import { ref, computed, nextTick, unref } from "vue";
 import useConfig from "@/shared/useConfig";
 import { Map as MapboxMap } from "mapbox-gl";
-import { LngLat, Maybe, TourStop, TourStopRoute } from "@/types";
+import { LngLat, Maybe, TourStop } from "@/types";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 import { useCreatorStore } from "@creator/stores/useCreatorStore";
 import Map from "@trekker/components/Map/Map.vue";
 import MapMarker from "@/camino-trekker/components/MapMarker/MapMarker.vue";
 import MapMarkerLabel from "@/camino-trekker/components/MapMarkerLabel/MapMarkerLabel.vue";
 import MapPolyline from "@/camino-trekker/components/MapPolyline/MapPolyline.vue";
-import MapPolylineEditable from "@/camino-trekker/components/MapPolylineEditable/MapPolylineEditable.vue";
+import MapPolylineEditable from "./MapPolylineEditable/MapPolylineEditable.vue";
 import BButton from "./BButton.vue";
 import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
@@ -124,7 +107,7 @@ import getOffsetPointFrom from "@/shared/getOffsetPointFrom";
 const props = defineProps<{
   tourId: number;
   stopId: number;
-  route: Maybe<LngLat[]>;
+  route: LngLat[];
   targetPoint: Maybe<LngLat>;
 }>();
 
@@ -138,16 +121,13 @@ const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
 const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
-/**
- * last target point set before this stop
- */
 const lastValuedTargetPoint = computed((): LngLat => {
   const prevStop = store.getPrevTourStop(props.tourId, props.stopId).value;
   return store.findValuedTargetPoint(props.tourId, prevStop?.id).value;
 });
 
 const offsetPointFromLastTarget = computed(
-  (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value)
+  (): LngLat => getOffsetPointFrom(lastValuedTargetPoint.value),
 );
 
 const currentValuedTargetPoint = computed((): LngLat => {
@@ -158,29 +138,25 @@ interface MappedStop {
   id: number;
   index: number;
   targetPoint: Maybe<LngLat>;
-  route: Maybe<TourStopRoute>;
-  lastValuedTargetPoint?: LngLat;
-  currentValuedTargetPoint?: LngLat;
+  route: LngLat[];
 }
 
 const toMappedStop = (stop: TourStop, index: number): MappedStop => ({
   id: stop.id,
   index,
   targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
-  route: store.getTourStopRoute(props.tourId, stop.id).value,
+  // Full polyline (start..interior..end) for inactive-stop preview.
+  route: getStopRouteByIndex(tour, index),
 });
 
-// to avoid triggering unnecessary rerenders, avoid
-// using `computed`, and just get the mappedStops
-// at setup time
-// similarly, no need to get a ref to the tour
-// a plain object with suffives since it's only used by mappedStops
+// Snapshot mappedStops at setup time; `computed` would re-render on every
+// store mutation when only the active stop's data ever changes here.
 const tour = unref(store.getTour(props.tourId));
 const mappedStops = tour.stops.map(toMappedStop);
 
 const currentStop = computed(
   (): Maybe<MappedStop> =>
-    mappedStops.find((s) => s.id === props.stopId) ?? null
+    mappedStops.find((s) => s.id === props.stopId) ?? null,
 );
 
 const previousStop = computed((): Maybe<MappedStop> => {
@@ -191,31 +167,6 @@ const previousStop = computed((): Maybe<MappedStop> => {
 
 const otherStops = computed((): MappedStop[] => {
   return mappedStops.filter((stop) => stop.id !== props.stopId);
-});
-
-const routeToNextRoute = computed((): Maybe<TourStopRoute> => {
-  if (!props.targetPoint) return null;
-
-  const currentState = store.getState();
-  const nextStop = store.selectNextTourStop(
-    currentState,
-    props.tourId,
-    props.stopId
-  );
-
-  if (!nextStop) return null;
-  const nextStopRoute = store.selectTourStopRoute(
-    currentState,
-    props.tourId,
-    nextStop.id
-  );
-
-  if (!nextStopRoute || !nextStopRoute.length) {
-    return null;
-  }
-
-  const routeToRoute = [props.targetPoint, nextStopRoute[0]];
-  return routeToRoute;
 });
 
 function handleMapLoad(map: MapboxMap) {

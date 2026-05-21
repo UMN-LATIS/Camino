@@ -158,7 +158,8 @@ export type LanguageSelectorStage = CoreStage;
 export type TourStopRoute = LngLat[];
 export interface NavigationStage extends CoreStage {
   text: LocalizedText;
-  route: Maybe<TourStopRoute>;
+  /** Interior waypoints only; cleaned at fetch by `normalizeTour`. */
+  route: TourStopRoute;
   targetPoint: Maybe<LngLat>;
 }
 

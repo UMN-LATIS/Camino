@@ -1,9 +1,7 @@
-// based on styles in "@mapbox/mapbox-gl-draw/src/lib/theme";
+// Based on styles in "@mapbox/mapbox-gl-draw/src/lib/theme".
 
-// Colors
 const orange = "#FF9D25";
 const pink = "#ff295d";
-// const pinkLight = "rgba(255, 190, 206, 0.5)";
 
 export default [
   {
@@ -61,6 +59,9 @@ export default [
       "line-width": 3,
     },
   },
+  // Each waypoint renders as a white halo behind a pink inner. When the user
+  // selects a vertex it gets `active == "true"`; both layers grow and the
+  // inner gains a dark ring so it reads as "selected."
   {
     id: "gl-draw-polygon-and-line-vertex-stroke-inactive",
     type: "circle",
@@ -69,9 +70,11 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      // Hide the start-anchor vertex; it's derived from previous end pt
+      ["!=", "coord_path", "0"],
     ],
     paint: {
-      "circle-radius": 7,
+      "circle-radius": ["case", ["==", ["get", "active"], "true"], 11, 7],
       "circle-color": "#fff",
     },
   },
@@ -83,10 +86,14 @@ export default [
       ["==", "meta", "vertex"],
       ["==", "$type", "Point"],
       ["!=", "mode", "static"],
+      // Hide the start-anchor vertex; it's derived from previous end pt
+      ["!=", "coord_path", "0"],
     ],
     paint: {
-      "circle-radius": 5,
+      "circle-radius": ["case", ["==", ["get", "active"], "true"], 8, 5],
       "circle-color": pink,
+      "circle-stroke-width": ["case", ["==", ["get", "active"], "true"], 2, 0],
+      "circle-stroke-color": "#111",
     },
   },
   {

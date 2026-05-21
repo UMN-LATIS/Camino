@@ -4,13 +4,13 @@ import {
   TourStop,
   Tour,
   Locale,
-  TourStopRoute,
   Maybe,
   NavigationStage,
   StageType,
   LngLat,
 } from "@/types";
 import { UMN_LNGLAT } from "@/shared/constants";
+import { getStopStartPoint } from "@/shared/tourGeometry";
 
 /**
  * Selectors are:
@@ -24,7 +24,7 @@ import { UMN_LNGLAT } from "@/shared/constants";
  */
 export const selectTour = (
   currentState: CreatorStoreState,
-  tourId: number
+  tourId: number,
 ): Tour => {
   const tour = currentState.tours.value.find((tour) => tour.id === tourId);
   if (!tour) {
@@ -39,13 +39,13 @@ export const selectTour = (
 export const selectTourStop = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): TourStop => {
   const tour = selectTour(currentState, tourId);
   const stop = tour.stops.find((stop) => stop.id === stopId);
   if (!stop) {
     throw new Error(
-      `tour stop with tour id ${tourId} and stop id $${stopId} does not exist in the`
+      `tour stop with tour id ${tourId} and stop id $${stopId} does not exist in the`,
     );
   }
   return stop;
@@ -56,7 +56,7 @@ export const selectTourStop = (
  */
 export const selectTourIndex = (
   currentState: CreatorStoreState,
-  tourId: number
+  tourId: number,
 ): number => {
   const index = currentState.tours.value.findIndex((t) => t.id === tourId);
   if (index === -1) {
@@ -74,14 +74,14 @@ export const selectTourIndex = (
 export const selectTourAndStopIndex = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): {
   tourIndex: number;
   stopIndex: number;
 } => {
   const tourIndex = selectTourIndex(currentState, tourId);
   const stopIndex = currentState.tours.value[tourIndex].stops.findIndex(
-    (stop) => stop.id === stopId
+    (stop) => stop.id === stopId,
   );
   if (stopIndex === -1) {
     throw new Error(`stop with id ${stopId} does not exist`);
@@ -95,7 +95,7 @@ export const selectTourAndStopIndex = (
 export const selectStopIndex = (
   currentState: CreatorStoreState,
   tourId,
-  stopId
+  stopId,
 ): number => {
   return selectTourAndStopIndex(currentState, tourId, stopId).stopIndex;
 };
@@ -105,7 +105,7 @@ export const selectStopIndex = (
  **/
 export const selectTourTitle = (
   currentState: CreatorStoreState,
-  tourId: number
+  tourId: number,
 ): string => selectTour(currentState, tourId).title;
 
 /**
@@ -113,7 +113,7 @@ export const selectTourTitle = (
  */
 export const selectTourLanguages = (
   currentState: CreatorStoreState,
-  tourId: number
+  tourId: number,
 ): Locale[] => selectTour(currentState, tourId).tour_content.languages;
 
 /**
@@ -122,7 +122,7 @@ export const selectTourLanguages = (
  */
 export const selectDefaultTourLanguage = (
   currentState: CreatorStoreState,
-  tourId: number
+  tourId: number,
 ): Locale =>
   selectTour(currentState, tourId).tour_content.languages[0] || Locale.en;
 
@@ -133,7 +133,7 @@ export const selectStageIndexById = (
   currentState: CreatorStoreState,
   tourId: number,
   stopId: number,
-  stageId: string
+  stageId: string,
 ): {
   tourIndex: number;
   stopIndex: number;
@@ -142,7 +142,7 @@ export const selectStageIndexById = (
   const { tourIndex, stopIndex } = selectTourAndStopIndex(
     currentState,
     tourId,
-    stopId
+    stopId,
   );
   const stageIndex = currentState.tours.value[tourIndex].stops[
     stopIndex
@@ -160,28 +160,6 @@ export const selectStageIndexById = (
 };
 
 /**
- * selects tour stop route by tour id and stop id
- */
-export const selectTourStopRoute = (
-  currentState: CreatorStoreState,
-  tourId: number,
-  stopId: number
-): Maybe<TourStopRoute> => {
-  const stop = selectTourStop(currentState, tourId, stopId);
-  const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
-    "type",
-    StageType.Navigation,
-    stop
-  );
-
-  const fullStopRoute = navStagesAtStop
-    .flatMap((stage) => stage.route ?? [])
-    .filter((x): x is LngLat => Boolean(x));
-
-  return fullStopRoute;
-};
-
-/**
  * select the target point set at a given stop
  * if no target point is set, returns null
  *
@@ -191,13 +169,13 @@ export const selectTourStopRoute = (
 export const selectTourStopTargetPoint = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): Maybe<LngLat> => {
   const stop = selectTourStop(currentState, tourId, stopId);
   const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
     "type",
     StageType.Navigation,
-    stop
+    stop,
   );
 
   if (!navStagesAtStop.length) {
@@ -215,12 +193,12 @@ export const selectTourStopTargetPoint = (
 export const selectNextTourStop = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): Maybe<TourStop> => {
   const { tourIndex, stopIndex } = selectTourAndStopIndex(
     currentState,
     tourId,
-    stopId
+    stopId,
   );
   return currentState.tours.value[tourIndex].stops[stopIndex + 1] ?? null;
 };
@@ -231,47 +209,26 @@ export const selectNextTourStop = (
 export const selectPrevTourStop = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): Maybe<TourStop> => {
   const { tourIndex, stopIndex } = selectTourAndStopIndex(
     currentState,
     tourId,
-    stopId
+    stopId,
   );
   return currentState.tours.value[tourIndex].stops[stopIndex - 1] ?? null;
 };
 
-/**
- * selecst the next stop route in the tour
- */
-export const selectNextTourStopRoute = (
-  currentState: CreatorStoreState,
-  tourId: number,
-  stopId: number
-): Maybe<TourStopRoute> => {
-  const nextStop = selectNextTourStop(currentState, tourId, stopId);
-  if (!nextStop) {
-    return null;
-  }
-  return selectTourStopRoute(currentState, tourId, nextStop.id);
-};
-
-/**
- * selects the starting point for a given tour stop
- */
+/** Derived start: read-time delegation to `getStopStartPoint`. */
 export const selectTourStopStartPoint = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): Maybe<LngLat> => {
-  const stop = selectTourStop(currentState, tourId, stopId);
-  const navStagesAtStop = getStagesFromStopWhere<NavigationStage>(
-    "type",
-    StageType.Navigation,
-    stop
-  );
-
-  return navStagesAtStop?.[0]?.route?.[0] ?? null;
+  const tour = selectTour(currentState, tourId);
+  const stopIndex = tour.stops.findIndex((stop) => stop.id === stopId);
+  if (stopIndex === -1) return null;
+  return getStopStartPoint(tour, stopIndex);
 };
 
 /**
@@ -280,7 +237,7 @@ export const selectTourStopStartPoint = (
 export const selectNextTourStopStartPoint = (
   currentState: CreatorStoreState,
   tourId: number,
-  stopId: number
+  stopId: number,
 ): Maybe<LngLat> => {
   const nextStop = selectNextTourStop(currentState, tourId, stopId);
   if (!nextStop) {
@@ -299,7 +256,7 @@ export const selectNextTourStopStartPoint = (
 export const findValuedTargetPoint = (
   currentState: CreatorStoreState,
   tourId: number | null | undefined,
-  stopId: number | null | undefined
+  stopId: number | null | undefined,
 ): LngLat => {
   const DEFAULT_TARGET_POINT = UMN_LNGLAT;
 
@@ -323,7 +280,7 @@ export const findValuedTargetPoint = (
     const prevStop = selectPrevTourStop(currentState, tourId, stopId);
     return prevStop
       ? findValuedTargetPoint(currentState, tourId, prevStop.id)
-      : tour.start_location ?? DEFAULT_TARGET_POINT;
+      : (tour.start_location ?? DEFAULT_TARGET_POINT);
   } catch (e) {
     // if tour or stop not found, return default
     return DEFAULT_TARGET_POINT;

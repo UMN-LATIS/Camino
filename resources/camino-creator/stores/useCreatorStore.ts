@@ -66,9 +66,6 @@ export const useCreatorStore = defineStore("creator", () => {
         selectors.selectStageIndexById(state, tourId, stopId, stageId),
       ),
 
-    getTourStopRoute: (tourId: number, stopId: number) =>
-      computed(() => selectors.selectTourStopRoute(state, tourId, stopId)),
-
     getTourStopTargetPoint: (tourId: number, stopId: number) =>
       computed(() =>
         selectors.selectTourStopTargetPoint(state, tourId, stopId),
@@ -79,9 +76,6 @@ export const useCreatorStore = defineStore("creator", () => {
 
     getPrevTourStop: (tourId: number, stopId: number) =>
       computed(() => selectors.selectPrevTourStop(state, tourId, stopId)),
-
-    getNextTourStopRoute: (tourId: number, stopId: number) =>
-      computed(() => selectors.selectNextTourStopRoute(state, tourId, stopId)),
 
     getTourStopStartPoint: (tourId: number, stopId: number) =>
       computed(() => selectors.selectTourStopStartPoint(state, tourId, stopId)),
@@ -156,7 +150,10 @@ export const useCreatorStore = defineStore("creator", () => {
         // rollback
         state.tours.value[tourIndex.value] = previousTour;
       }
-      actions.fetchTours();
+      // Await: the server may mutate fields the client didn't send (e.g.
+      // `geocoded` on a start-location change), and callers awaiting
+      // updateTour expect the store to reflect the post-save state.
+      await actions.fetchTours();
     },
 
     /**
@@ -228,9 +225,7 @@ export const useCreatorStore = defineStore("creator", () => {
         });
     },
 
-    /**
-     * moves a tour stop to a new position
-     */
+    /** Moves a tour stop and re-normalizes so the derived chain reflects the new order. */
     moveTourStopByIndex(
       tourId: number,
       oldStopIndex: number,
@@ -240,6 +235,9 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = move(oldStopIndex, newStopIndex, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
+      state.tours.value[tourIndex.value] = normalizeTour(
+        state.tours.value[tourIndex.value],
+      );
     },
 
     /**
@@ -250,6 +248,9 @@ export const useCreatorStore = defineStore("creator", () => {
       const prevTourStops = state.tours.value[tourIndex.value].stops;
       const updatedTourStops = insert(index, stop, prevTourStops);
       state.tours.value[tourIndex.value].stops = updatedTourStops;
+      state.tours.value[tourIndex.value] = normalizeTour(
+        state.tours.value[tourIndex.value],
+      );
     },
 
     /**

@@ -47,7 +47,7 @@ function handleUpdateTargetPoint(newTargetPoint: LngLat) {
   });
 }
 
-function handleUpdateRoute(route) {
+function handleUpdateRoute(route: LngLat[]) {
   emit("update", {
     ...props.stage,
     route,

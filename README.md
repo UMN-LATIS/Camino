@@ -1,52 +1,62 @@
-# Camino
-
 [![CI](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml/badge.svg)](https://github.com/UMN-LATIS/Camino/actions/workflows/ci.yml)
+
+# Camino
 
 > Create and share media-rich educational tours
 
-## Set Up
+## Introduction
 
-Camino uses Laravel's docker environment, [Laravel Sail](https://laravel.com/docs/8.x/sail) for development.
+Camino is a free platform for creating and sharing interactive, location-based educational tours with rich media content.
 
-You will also need certs for your local dev environment. Recommended install: [mkcert](https://github.com/FiloSottile/mkcert).
+- Sign in: [camino.cla.umn.edu](https://camino.cla.umn.edu)
 
-To get started:
+## Getting Started with Local Development
+
+Prereqs:
+
+- Docker
+- NodeJS
+- [mkcert](https://github.com/FiloSottile/mkcert) (for local SSL certs)
 
 ```sh
 # Create a .env file
 cp .env.example .env
 
-# Set up local certs with `mkcert`
+# Set up local certs with mkcert
 # Run `mkcert -install` first if this is your first time using mkcert
-yarn cert
+npm run cert
 
-# Instal php deps
+# Install php dependencies
 docker run --rm \
     -u "$(id -u):$(id -g)" \
-    -v $(pwd):/var/www/html \
+    -v "$(pwd):/var/www/html" \
     -w /var/www/html \
-    laravelsail/php81-composer:latest \
+    laravelsail/php85-composer:latest \
     composer install --ignore-platform-reqs
 
 # Build docker image
-# Assuming you have `sail` aliased to `./vendor/bin/sail`
-sail build --no-cache
+sail build
 
 # Start Sail
 sail up
 
-# create app key, link storage, etc
-sail exec laravel.test ./bin/ci.sh
+# Setup Laravel
+sail artisan key:generate
+sail artisan storage:link
+chmod -R 777 storage bootstrap/cache
+sail artisan config:clear
 
-# migrate the database
+# Migrate the database
 sail artisan migrate:fresh --seed
 
 # Install node modules
-yarn
+npm ci
 
-# Start in watch or hot module replacement mode
-yarn hot
+# Start dev server
+npm run dev
 
+# (optional) add laravel boost helpers
+sail artisan boost:install
 ```
 
 ## Using the Application
@@ -62,16 +72,18 @@ Additional users can be configured in `config/shibboleth.php`.
 
 Stop the application: `sail down`.
 
-## Deploy
+## Deploying
 
-| Enviroment Name | URL                                  |
-| --------------- | ------------------------------------ |
-| `dev`           | <https://cla-camino-dev.oit.umn.edu> |
-| `stage`         | <https://cla-camino-tst.oit.umn.edu> |
-| `prod`          | <https://camino.cla.umn.edu>         |
+We use [deployer](https://deployer.org/) to deploy to an environment:
 
 ```sh
-./vendor/bin/dep deploy <environment name>
+dep deploy <environment>
 ```
 
-See: `deploy.php` for environments.
+| Environment | URL                                                              |
+| ----------- | ---------------------------------------------------------------- |
+| dev         | [cla-camino-dev.oit.umn.edu](https://cla-camino-dev.oit.umn.edu) |
+| stage       | [cla-camino-tst.oit.umn.edu](https://cla-camino-tst.oit.umn.edu) |
+| prod        | [camino.cla.umn.edu](https://camino.cla.umn.edu)                 |
+
+See `deploy.php` for environment configuration.

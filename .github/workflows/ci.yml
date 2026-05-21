@@ -6,6 +6,7 @@ env:
   WWWGROUP: 1000
   WWWUSER: 1000
   MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
+  VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
   DB_HOST: 127.0.0.1
 
 jobs:
@@ -34,11 +35,11 @@ jobs:
       - name: Setup PHP to match server
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "8.5"
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install Composer dependencies
         run: |

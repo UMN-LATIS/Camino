@@ -10,12 +10,7 @@ describe("Home Page", () => {
     cy.get('[data-cy="find-tour-link"]').click();
     cy.url().should("eq", Cypress.config().baseUrl + "/findTours");
 
-    // show a tour map with tiles
-    // cy.get("#map .leaflet-tile img")
-    //   .should("be.visible")
-    //   .and(($img) => {
-    //     expect($img[0].naturalWidth).to.be.greaterThan(0);
-    //   });
+    cy.get(".mapboxgl-canvas").should("exist");
 
     // list public tours
     cy.get(".find-tour-page > .container")

@@ -13,6 +13,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  @vite(['resources/sass/app.scss', 'resources/js/app.ts'])
 </head>
 
 <body>
@@ -22,73 +23,46 @@
         <a class="navbar-brand" href="{{ url('/') }}">
           {{ config('app.name', 'Laravel') }}
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <!-- Left Side Of Navbar -->
-          <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav me-auto">
 
           </ul>
 
           <!-- Right Side Of Navbar -->
-          <ul class="navbar-nav ml-auto">
+          <ul class="navbar-nav ms-auto">
             <!-- Authentication Links -->
             @if (!Auth::check())
               <li><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
               <li><a class="nav-link" href="{{ url('/register') }}">Register</a></li>
             @else
               <li class="nav-item dropdown">
-                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   {{ Auth::user()->name }} <span class="caret"></span>
                 </a>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <!-- Left Side Of Navbar -->
-                  <ul class="navbar-nav me-auto">
-
-                  </ul>
-
-                  <!-- Right Side Of Navbar -->
-                  <ul class="navbar-nav ms-auto">
-                    <!-- Authentication Links -->
-                    @if (!Auth::check())
-                      <li><a class="nav-link" href="{{ url('/login') }}">Login</a></li>
-                      <li><a class="nav-link" href="{{ url('/register') }}">Register</a></li>
-                    @else
-                      <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          {{ Auth::user()->name }} <span class="caret"></span>
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="{{ url('/logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                            Logout
-                          </a>
-
-                          <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                            @csrf
-                          </form>
-                        </div>
-                      </li>
-                    @endif
-                  </ul>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="{{ url('/logout') }}">
+                    Logout
+                  </a>
                 </div>
+              </li>
+            @endif
+          </ul>
         </div>
+      </div>
     </nav>
 
     <main class="py-4">
       @yield('content')
     </main>
   </div>
-
-  <!-- Scripts -->
-  <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>

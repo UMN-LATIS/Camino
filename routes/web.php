@@ -25,6 +25,7 @@ Route::get('/findTours', 'HomeController@findTours');
 
 // Admin
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'permission:administer site']], function () {
+  Route::redirect('/', '/admin/users');
   Route::resource('users', 'Admin\\UsersController');
 });
 
@@ -36,7 +37,7 @@ Route::post('/feedback/{tour}', 'HomeController@storeFeedback');
 
 // Camino Trekker App
 Route::get('/trekker/{all?}', [CaminoTrekkerController::class, 'index'])->where(['all' => '.*']);
-Route::get('/ar/{tour}/{stopIndex}/{locale}/{simulateLocation?}', "HomeController@ar")->where([ 'stopIndex' => '[0-9]+']);
+Route::get('/ar/{tour}/{stopIndex}/{locale}/{simulateLocation?}', "HomeController@ar")->where(['stopIndex' => '[0-9]+']);
 
 // Camino Creator App
 Route::group(['prefix' => 'creator', 'middleware' => ['auth']], function () {
@@ -46,7 +47,7 @@ Route::group(['prefix' => 'creator', 'middleware' => ['auth']], function () {
   ]);
 
   Route::post('/image/store', 'ImageController@store');
-  Route::delete('/image/{filename}', 'ImageController@delete');
+  Route::delete('/image/{filename}', 'ImageController@destroy')->where('filename', '[A-Za-z0-9]+\.jpg');
   Route::post("/edit/{tour}/stop", "TourEditController@createStop");
   Route::put("/edit/{tour}/stop/{stop}", "TourEditController@updateStop");
   Route::delete("/edit/{tour}/stop/{stop}", "TourEditController@deleteStop");

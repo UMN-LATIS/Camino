@@ -8,8 +8,24 @@
       :accessToken="config.mapBox.accessToken"
       @load="handleMapLoad"
     >
-      <div v-for="stop in otherStops" v-once :key="stop.id">
+      <div v-for="stop in otherStops" :key="stop.id">
+        <!-- 
+          next stop needs to connect to current stop
+          so we use the recomputed route where the first
+          point is the current stop's target
+        -->
         <MapPolyline
+          v-if="stop.id === nextStop?.id"
+          :id="`otherStopRoute-${stop.id}`"
+          :positions="nextStop.route || []"
+          :variant="
+            currentStop?.index === stop.index
+              ? 'gradient-active'
+              : 'gradient-inactive'
+          "
+        />
+        <MapPolyline
+          v-else
           :id="`otherStopRoute-${stop.id}`"
           :positions="stop.route || []"
           :variant="
@@ -64,20 +80,20 @@
         </MapMarkerLabel>
       </MapMarker>
 
-      <!-- Current Stop Route (Editable) -->
+      <!-- Current Stop Waypoints (Editable) -->
       <MapPolylineEditable
         id="current-stop-route"
         :startPoint="lastValuedTargetPoint"
-        :route="route"
+        :waypoints="waypoints"
         :endPoint="currentValuedTargetPoint"
-        @update:route="(next: LngLat[]) => $emit('update:route', next)"
+        @update:waypoints="(next: LngLat[]) => $emit('update:waypoints', next)"
       />
     </Map>
     <Alert v-if="geolocationError" class="my-2" variant="warning">
       {{ geolocationError.message }}
     </Alert>
     <div class="route-mapper__button-group d-flex justify-content-end p-3">
-      <BButton variant="tertiary" @click="$emit('update:route', [])"
+      <BButton variant="tertiary" @click="$emit('update:waypoints', [])"
         >Clear Route</BButton
       >
       <BButton variant="tertiary" @click="handleClearTargetPoint"
@@ -107,13 +123,13 @@ import getOffsetPointFrom from "@/shared/getOffsetPointFrom";
 const props = defineProps<{
   tourId: number;
   stopId: number;
-  route: LngLat[];
+  waypoints: LngLat[];
   targetPoint: Maybe<LngLat>;
 }>();
 
 const emit = defineEmits<{
   (eventName: "update:targetPoint", lnglat: LngLat);
-  (eventName: "update:route", route: LngLat[]);
+  (eventName: "update:waypoints", waypoints: LngLat[]);
 }>();
 
 const store = useCreatorStore();
@@ -163,6 +179,21 @@ const previousStop = computed((): Maybe<MappedStop> => {
   const currentStopIndex = currentStop.value?.index;
   if (!currentStopIndex) return null;
   return mappedStops.find((s) => s.index === currentStopIndex - 1) ?? null;
+});
+
+// recompute the next stop's derived start (current stop's target) on every render to reflect edits here
+const nextStop = computed((): Maybe<MappedStop> => {
+  const currentStopIndex = currentStop.value?.index;
+  if (currentStopIndex === undefined) return null;
+  const next =
+    mappedStops.find((s) => s.index === currentStopIndex + 1) ?? null;
+  if (!next) return null;
+
+  const nextDerivedStart = currentValuedTargetPoint.value;
+  return {
+    ...next,
+    route: [nextDerivedStart, ...next.route.slice(1)],
+  };
 });
 
 const otherStops = computed((): MappedStop[] => {

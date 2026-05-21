@@ -43,7 +43,7 @@ export function getStopEndPoint(tour: Tour, stopIndex: number): Maybe<LngLat> {
   return getLastDefinedTarget(stop);
 }
 
-/** Full polyline `[start, ...route, end]`; null endpoints drop out so partial edits still render. */
+/** Full polyline `[start, ...interior waypoints, end]`; null endpoints drop out so partial edits still render. */
 export function getStopRouteByIndex(
   tour: Maybe<Tour>,
   stopIndex: number,
@@ -54,7 +54,9 @@ export function getStopRouteByIndex(
 
   const start = getStopStartPoint(tour, stopIndex);
   const end = getStopEndPoint(tour, stopIndex);
-  const interior = getNavigationStages(stop).flatMap((stage) => stage.route);
+  const interior = getNavigationStages(stop).flatMap(
+    (stage) => stage.waypoints,
+  );
 
   return [start, ...interior, end].filter(
     (point): point is LngLat => point !== null,

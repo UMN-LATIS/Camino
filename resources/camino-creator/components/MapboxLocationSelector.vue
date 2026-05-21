@@ -134,8 +134,8 @@ const toMappedStop = (stop: TourStop, index: number): Maybe<MappedStop> => {
     index,
     targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
     // Use the derived polyline so stop 0's leg redraws when the
-    // user drags the tour's start_location. The legacy `stage.route`
-    // would be frozen at the value from last fetch+normalize.
+    // user drags the tour's start_location. Reading `stage.waypoints`
+    // alone would be frozen at the value from last fetch+normalize.
     route: getStopRouteByIndex(tour.value, index),
   };
 };

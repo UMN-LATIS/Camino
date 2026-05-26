@@ -69,16 +69,19 @@
         variant="gradient-active"
       />
 
-      <!-- 
-        mark the tour start location 
-        if there's no preceeding point,
-        then making this the it
+      <!--
+        Mark the tour's start location. Render in orange while the
+        user is reading the start stop or the first navigation stop
+        — in both contexts the tour-start point is where the user
+        is coming from and they need to be able to find it. After
+        that, the user has moved on and a gray reference marker is
+        plenty.
       -->
       <TourMapStarMarker
         v-if="startLocation"
         :lng="startLocation.lng"
         :lat="startLocation.lat"
-        :color="trekkerStore.stopIndex === 0 ? 'orange' : 'default'"
+        :color="trekkerStore.stopIndex <= 1 ? 'orange' : 'default'"
       />
 
       <!-- preceeding point -->
@@ -115,7 +118,7 @@ import {
   Maybe,
   type TourMapStop as TourMapStopType,
 } from "@/types";
-import { getStopRouteByIndex } from "@/camino-trekker/utils/getStopRouteByIndex";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 import TourMapStop from "./TourMapStop.vue";
 import { getCenterOfBoundingBox } from "@trekker/utils/getCenterOfBoundingBox";
 import getFullTourRoute from "@/camino-trekker/utils/getFullTourRoute";
@@ -143,7 +146,7 @@ const canCreateMap = computed(
   () =>
     trekkerStore.tour &&
     trekkerStore.tour.stops &&
-    trekkerStore.tour.start_location
+    trekkerStore.tour.start_location,
 );
 const mapStyleChoices = [
   MapboxMapStyle.dark,
@@ -175,23 +178,23 @@ const mapStops = computed((): TourMapStopType[] => {
 });
 
 const allButCurrentAndPrevStops = computed((): TourMapStopType[] =>
-  mapStops.value.filter((s) => !s.isActive && !s.preceedsActive)
+  mapStops.value.filter((s) => !s.isActive && !s.preceedsActive),
 );
 
 const currentMapStop = computed(
-  (): Maybe<TourMapStopType> => mapStops.value.find((s) => s.isActive) ?? null
+  (): Maybe<TourMapStopType> => mapStops.value.find((s) => s.isActive) ?? null,
 );
 const preceedingMapStop = computed(
   (): Maybe<TourMapStopType> =>
-    mapStops.value.find((s) => s.preceedsActive) ?? null
+    mapStops.value.find((s) => s.preceedsActive) ?? null,
 );
 
 const startLocation = computed(
-  (): Maybe<LngLat> => trekkerStore.tour?.start_location ?? null
+  (): Maybe<LngLat> => trekkerStore.tour?.start_location ?? null,
 );
 
 const fullTourRoute = computed((): LngLat[] =>
-  getFullTourRoute(trekkerStore.tour)
+  getFullTourRoute(trekkerStore.tour),
 );
 
 // BOUNDS

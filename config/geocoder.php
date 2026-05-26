@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+use Geocoder\Laravel\Http\LaravelHttpClient;
 use Geocoder\Provider\Chain\Chain;
 use Geocoder\Provider\GeoPlugin\GeoPlugin;
 use Geocoder\Provider\Mapbox\Mapbox;
-use Http\Client\Curl\Client;
 
 return [
     'cache' => [
@@ -51,6 +53,19 @@ return [
     | can explicitly call subsequently listed providers by
     | alias: `app('geocoder')->using('google_maps')`.
     |
+    | Providers that require a static factory method (e.g. `Nominatim::
+    | withOpenStreetMapServer()`, `GoogleMaps::business()`) can be bound
+    | in your AppServiceProvider — they'll be resolved via the container.
+    | Configure the provider here with an empty args array:
+    |
+    |   // AppServiceProvider::register()
+    |   $this->app->bind(Nominatim::class, fn ($app) => Nominatim::
+    |       withOpenStreetMapServer($app->make(LaravelHttpClient::class),
+    |       'MyApp/1.0'));
+    |
+    |   // config/geocoder.php
+    |   Nominatim::class => [],
+    |
     | Please consult the official Geocoder documentation for more info.
     | https://github.com/geocoder-php/Geocoder#providers
     |
@@ -69,16 +84,29 @@ return [
     | Adapter
     |---------------------------------------------------------------------------
     |
-    | You can specify which PSR-7-compliant HTTP adapter you would like to use.
-    | There are multiple options at your disposal: CURL, Guzzle, and others.
+    | The HTTP adapter to use when communicating with geocoding services. By
+    | default this package ships a PSR-18 client that delegates to Laravel's
+    | `Http` facade — this gives you `Http::fake()` in tests, native retry
+    | and timeout configuration, and any HTTP middleware you've registered.
     |
-    | Please consult the official Geocoder documentation for more info.
-    | https://github.com/geocoder-php/Geocoder#usage
+    | Provide any class that implements `Psr\Http\Client\ClientInterface` to
+    | swap in a different adapter (e.g., `Http\Client\Curl\Client` from
+    | `php-http/curl-client`, which you would need to install separately).
     |
-    | Default: Client::class (FQCN for CURL adapter)
+    | To pass constructor arguments (timeouts, proxies, client options, etc.)
+    | use the array form `[Class => [args]]`. Arguments are forwarded to the
+    | adapter's constructor — it's on you to match its signature. Named args
+    | are supported: `[Class => ['timeout' => 10]]`.
+    |
+    | Default: LaravelHttpClient::class
+    |
+    | Examples:
+    |   'adapter' => LaravelHttpClient::class,
+    |   'adapter' => [LaravelHttpClient::class => ['timeout' => 10, 'retry' => [3, 100]]],
+    |   'adapter' => [Http\Client\Curl\Client::class => [null, null, [CURLOPT_PROXY => '...']]],
     |
     */
-    'adapter'  => Client::class,
+    'adapter'  => LaravelHttpClient::class,
 
     /*
     |---------------------------------------------------------------------------

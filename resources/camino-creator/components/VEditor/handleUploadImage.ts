@@ -1,4 +1,5 @@
 import axios from "@/shared/axios";
+import uploadErrorMessage from "@/shared/uploadErrorMessage";
 
 export default (file) => {
   const imageUploadUrl = "/creator/image/store";
@@ -13,5 +14,8 @@ export default (file) => {
     })
     .catch((err) => {
       console.error(err);
+      // Reject so the quill-image-uploader plugin surfaces the
+      // failure inline instead of leaving a broken placeholder.
+      return Promise.reject(new Error(uploadErrorMessage(err)));
     });
 };

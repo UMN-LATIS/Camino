@@ -202,7 +202,9 @@ function pageHasUnsavedChanges(): boolean {
 }
 
 onMounted(async () => {
-  await creatorStore.fetchTours();
+  if (!creatorStore.isReady) {
+    await creatorStore.init();
+  }
 
   stop.value = creatorStore.getTourStop(props.tourId, props.stopId).value;
   lastSavedStopJson.value = JSON.stringify(stop.value);
@@ -224,7 +226,7 @@ onBeforeRouteLeave((to, from, next) => {
 const previewLink = computed(() =>
   stop.value
     ? `/trekker/tours/${props.tourId}/stops/${stop.value.sort_order}`
-    : `/trekker/tours/${props.tourId}`
+    : `/trekker/tours/${props.tourId}`,
 );
 
 function handleImageUpload(imgSrc) {
@@ -244,7 +246,7 @@ function handleStageUpdate(stageId, updatedStage) {
   }
 
   const stageIndex = stop.value.stop_content.stages.findIndex(
-    (s) => s.id === stageId
+    (s) => s.id === stageId,
   );
 
   stop.value.stop_content.stages[stageIndex] = updatedStage;
@@ -256,7 +258,7 @@ function handleDeleteStage(stageId) {
   }
 
   stop.value.stop_content.stages = stop.value.stop_content.stages.filter(
-    (s) => s.id !== stageId
+    (s) => s.id !== stageId,
   );
 }
 

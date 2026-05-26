@@ -49,6 +49,7 @@
 import { ref } from "vue";
 import type { Image, Maybe } from "@/types";
 import { axiosClient as axios } from "@/shared/axios";
+import uploadErrorMessage from "@/shared/uploadErrorMessage";
 
 interface Props {
   imageSrc: Maybe<string>;
@@ -97,7 +98,7 @@ function onFileChange(e: Event) {
     })
     .catch((error) => {
       console.error({ error });
-      errorText.value = error.message;
+      errorText.value = uploadErrorMessage(error);
       isUploading.value = false;
     });
 }

@@ -1,5 +1,5 @@
 import type { LngLat, Tour, Maybe } from "../../types";
-import { getStopRouteByIndex } from "./getStopRouteByIndex";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 
 /**
  * gets all route points from a given tour, including

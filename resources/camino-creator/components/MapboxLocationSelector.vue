@@ -68,6 +68,7 @@ import { useGeolocation } from "@vueuse/core";
 import Alert from "./Alert.vue";
 import { UMN_LNGLAT } from "@/shared/constants";
 import LngLatDisplay from "./LngLatDisplay.vue";
+import { getStopRouteByIndex } from "@/shared/tourGeometry";
 
 const props = withDefaults(
   defineProps<{
@@ -76,7 +77,7 @@ const props = withDefaults(
   }>(),
   {
     tourId: null,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -87,7 +88,7 @@ const store = useCreatorStore();
 const config = useConfig();
 const mapRef = ref<MapboxMap | null>(null);
 const tour = computed(() =>
-  props.tourId ? store.getTour(props.tourId).value : null
+  props.tourId ? store.getTour(props.tourId).value : null,
 );
 const { coords: geolocationCoords, error: geolocationError } = useGeolocation();
 
@@ -127,12 +128,15 @@ interface MappedStop {
 }
 
 const toMappedStop = (stop: TourStop, index: number): Maybe<MappedStop> => {
-  if (!props.tourId) return null;
+  if (!props.tourId || !tour.value) return null;
   return {
     id: stop.id,
     index,
     targetPoint: store.getTourStopTargetPoint(props.tourId, stop.id).value,
-    route: store.getTourStopRoute(props.tourId, stop.id).value,
+    // Use the derived polyline so stop 0's leg redraws when the
+    // user drags the tour's start_location. Reading `stage.waypoints`
+    // alone would be frozen at the value from last fetch+normalize.
+    route: getStopRouteByIndex(tour.value, index),
   };
 };
 

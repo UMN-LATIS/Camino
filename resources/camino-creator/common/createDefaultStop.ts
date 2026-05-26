@@ -25,7 +25,7 @@ export default (): Partial<TourStop> => ({
         },
         type: StageType.Navigation,
         targetPoint: null,
-        route: [],
+        waypoints: [],
       },
       {
         id: crypto.randomUUID(),

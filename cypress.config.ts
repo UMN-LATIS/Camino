@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { defineConfig } from "cypress";
 
 export default defineConfig({
@@ -13,7 +14,7 @@ export default defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   e2e: {
-    baseUrl: "https://localhost",
+    baseUrl: process.env.APP_URL ?? "https://localhost",
     specPattern: "cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}",
     supportFile: "cypress/support/index.ts",
     experimentalRunAllSpecs: true,

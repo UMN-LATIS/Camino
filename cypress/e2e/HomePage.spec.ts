@@ -10,7 +10,9 @@ describe("Home Page", () => {
     cy.get('[data-cy="find-tour-link"]').click();
     cy.url().should("eq", Cypress.config().baseUrl + "/findTours");
 
-    cy.get(".mapboxgl-canvas").should("exist");
+    // Mapbox can take a while to initialize in headless Chrome; the default
+    // 15s timeout is sometimes not enough for the first paint on a cold run.
+    cy.get(".mapboxgl-canvas", { timeout: 60000 }).should("exist");
 
     // list public tours
     cy.get(".find-tour-page > .container")
